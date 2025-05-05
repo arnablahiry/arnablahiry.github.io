@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Documentation on Arnab Lahiry</title>
+    <link>http://localhost:1313/series/documentation/</link>
+    <description>Recent content in Documentation on Arnab Lahiry</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <managingEditor>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</managingEditor>
+    <webMaster>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</webMaster>
+    <copyright>© 2025 Hello / নমস্কার / Γεια σας / こんにちは</copyright>
+    <atom:link href="http://localhost:1313/series/documentation/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Welcome to Blowfish</title>
+      <link>http://localhost:1313/docs/welcome/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/welcome/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/welcome/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Installation</title>
+      <link>http://localhost:1313/docs/installation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/installation/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/installation/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Getting Started</title>
+      <link>http://localhost:1313/docs/getting-started/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/getting-started/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/getting-started/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Configuration</title>
+      <link>http://localhost:1313/docs/configuration/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/configuration/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/configuration/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Homepage Layout</title>
+      <link>http://localhost:1313/docs/homepage-layout/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/homepage-layout/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/homepage-layout/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Shortcodes</title>
+      <link>http://localhost:1313/docs/shortcodes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/shortcodes/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/shortcodes/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Front Matter</title>
+      <link>http://localhost:1313/docs/front-matter/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/front-matter/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/front-matter/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Multiple Authors</title>
+      <link>http://localhost:1313/docs/multi-author/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/multi-author/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/multi-author/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Partials</title>
+      <link>http://localhost:1313/docs/partials/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/partials/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/partials/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Thumbnails</title>
+      <link>http://localhost:1313/docs/thumbnails/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/thumbnails/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/thumbnails/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Content Examples</title>
+      <link>http://localhost:1313/docs/content-examples/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/content-examples/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/content-examples/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Series</title>
+      <link>http://localhost:1313/docs/series/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/series/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/series/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Advanced Customisation</title>
+      <link>http://localhost:1313/docs/advanced-customisation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/advanced-customisation/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/advanced-customisation/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Hosting &amp; Deployment</title>
+      <link>http://localhost:1313/docs/hosting-deployment/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/hosting-deployment/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/hosting-deployment/featured.svg" />
+    </item>
+    
+    <item>
+      <title>Firebase: Views &amp; Likes</title>
+      <link>http://localhost:1313/docs/firebase-views/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>arnablahiry08@gmail.com (Hello / নমস্কার / Γεια σας / こんにちは)</author>
+      <guid>http://localhost:1313/docs/firebase-views/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:1313/docs/firebase-views/featured.svg" />
+    </item>
+    
+  </channel>
+</rss>
