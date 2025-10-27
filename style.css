@@ -377,17 +377,18 @@ footer {
     font-size: 0.9rem;
   }
 
-  /* Crawl text smaller */
   .about {
-    font-size: 180%;   /* smaller crawl text for mobile */
+    font-size: 240%;          /* smaller text for mobile */
     letter-spacing: 2px;
     line-height: 140%;
-    padding: 0 10px;   /* small side padding */
+    width: 100vw;              /* make text box take 90% of viewport width */
+    margin: 0 auto;           /* center it horizontally */
+    padding: 0 5vw;           /* even side padding (5% each side) */
     text-align: justify;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-word; /* fallback for very long words */
-    hyphens: auto; /* optional, adds nice hyphenation when needed */
+    word-break: break-word;   /* fallback for long words */
+    hyphens: auto;            /* smooth hyphenation */
   }
 
   /* Skip + audio buttons smaller and closer in */
