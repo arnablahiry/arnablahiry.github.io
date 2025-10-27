@@ -3,7 +3,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
+
 
 /* Make sure page fills screen and no scrollbars cause offsets */
 html, body {
@@ -181,6 +184,8 @@ nav a:hover {
 .about {
   display: flex;
   justify-content: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   height: 100vh;
   width: 100vw;
   perspective: 400px;
@@ -191,7 +196,10 @@ nav a:hover {
   letter-spacing: 0.5vw;
   line-height: 150%;
   text-align: justify;
-}
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word; /* fallback for very long words */
+  hyphens: auto; /* optional, adds nice hyphenation when needed */}
 
 .about p {
   margin-top: 5em;
@@ -330,4 +338,133 @@ footer {
   text-align: center;
   margin: 0;
   padding: 1vh 0;
+}
+
+
+
+
+
+/* ================================================
+   📱 MOBILE OPTIMIZATION
+   For screens up to 768px wide
+   ================================================ */
+@media (max-width: 768px) {
+
+  /* General text scaling */
+  body {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  /* Header adjustments */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  nav {
+    gap: 15px;
+    margin-right: 0;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+  }
+
+  /* Crawl text smaller */
+  .about {
+    font-size: 180%;   /* smaller crawl text for mobile */
+    letter-spacing: 2px;
+    line-height: 140%;
+    padding: 0 10px;   /* small side padding */
+    text-align: justify;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word; /* fallback for very long words */
+    hyphens: auto; /* optional, adds nice hyphenation when needed */
+  }
+
+  /* Skip + audio buttons smaller and closer in */
+  #skip-button,
+  #audio-player button {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  #skip-button {
+    top: 28%;
+    right: 15px;
+  }
+
+  #audio-player {
+    right: 15px;
+  }
+
+  /* Intro section adjustments */
+  .intro-section {
+    width: 90%;
+  }
+
+  .intro-photo {
+    width: 180px;
+    height: 180px;
+  }
+
+  .intro-text {
+    font-size: 1.3rem;
+  }
+
+  h2, h3 {
+    font-size: 1.8rem;
+  }
+
+  #tagline {
+    font-size: 1rem;
+  }
+
+  #tagline2 {
+    font-size: 0.8rem;
+  }
+
+  footer {
+    font-size: 0.8rem;
+    padding: 8px 0;
+  }
+}
+
+/* ================================================
+   📱 EXTRA SMALL DEVICES (phones ≤ 480px)
+   ================================================ */
+@media (max-width: 480px) {
+
+  .about {
+    font-size: 140%;   /* even smaller crawl for very small screens */
+    letter-spacing: 1.5px;
+    line-height: 130%;
+  }
+
+  .intro-photo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .intro-text {
+    font-size: 1.1rem;
+  }
+
+  h2, h3 {
+    font-size: 1.5rem;
+  }
+
+  #skip-button {
+    top: 25%;
+    right: 10px;
+  }
 }
