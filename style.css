@@ -377,26 +377,27 @@ footer {
     font-size: 0.9rem;
   }
 
+  /* Crawl text smaller */
   .about {
-    font-size: 240%;          /* smaller text for mobile */
+    font-size: 160%;   /* smaller crawl text for mobile */
     letter-spacing: 2px;
     line-height: 140%;
-    width: 100vw;              /* make text box take 90% of viewport width */
-    margin: 0 auto;           /* center it horizontally */
-    padding: 0 5vw;           /* even side padding (5% each side) */
+    padding: 0 10px;   /* small side padding */
+    width: 140%;        /* reduce width to fit better */
+    margin-left: -20%; /* center the 140% width (half of the extra 40%) */
     text-align: justify;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-word;   /* fallback for long words */
-    hyphens: auto;            /* smooth hyphenation */
+    word-break: break-word; /* fallback for very long words */
+    hyphens: auto; /* optional, adds nice hyphenation when needed */}
   }
 
   /* Skip + audio buttons smaller and closer in */
   #skip-button,
   #audio-player button {
-    width: 45px;
-    height: 45px;
-    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
   }
 
   #skip-button {
