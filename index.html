@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <img id="bg-image" src="images/background.jpg" alt="Background" />
+
+
+    <div id="image-overlay"></div>
+
+    <header>
+        <div class="logo-container">
+            <img src="images/logo.png" alt="Logo" class="logo">
+        </div>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+
+    <div class="fade"></div>
+
+    <!-- Skip Button -->
+    <div id="skip-button">⏭</div>
+
+
+    <!-- Floating audio player -->
+    <div id="audio-player">
+    <audio id="my-audio" loop>
+        <source src="audio/swtheme.mp3" type="audio/mpeg">
+    </audio>
+    <button id="play-pause">♫</button>
+    </div>
+
+    <section class="about">
+
+        <div class="crawl" id="crawl">
+
+            <div class="title">
+                <p>Episode IV</p>
+                <h1>A New Website</h1>
+            </div>
+            
+            <p style="margin-top: 20px;">
+            After years of careful procrastination, and a few moments of inspiration, I’ve finally decided to bring this website to life. It’s a personal corner of a galaxy not so far away where I can share my life, research, portfolio, projects, posts, photos, and random thoughts—all built from scratch, bit by bit.
+            </p>
+
+            <p style="margin-top: 20px;">
+            I didn’t aim for anything grandiose, just a place that feels like me. A little professional, a little goofy, and a lot of personal touch.
+            </p>
+
+            <p style="margin-top: 20px;">
+            P.S. You can play the music… ;)
+            </p>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- Fade-in section -->
+    <div class="intro-section", id="photo-container">
+        <img src="images/pfp.jpeg" alt="My Photo" class="intro-photo" id="intro-photo">
+        <div class="intro-text" id="intro-text">
+            <h2>Hi there,</h2> <h3>I’m Arnab</h3>
+            <p id="tagline">Welcome to my website!</p>
+            <p id="tagline2">There is no escape</p>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <p>&copy; 2025 Arnab Lahiry</p>
+    </footer>
+
+
+<script src="audio-player.js"></script>
+<script src="skip-button.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+/* Remove browser default spacing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Make sure page fills screen and no scrollbars cause offsets */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    color: white;
+    line-height: 1.6;
+}
+
+/* Background image */
+#bg-image {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: -2;
+}
+
+/* Dark overlay */
+#image-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1; /* between image and content */
+}
+
+/* Content on top */
+body, header, section, footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Transparent glass header */
+header {
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* Logo + text */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+}
+
+/* Navigation bar on right, slightly in from edge */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-right: 50px; /* adjust to control distance from right edge */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #feda4a;
+}
+
+.fade {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  top: -25px;
+  background-image: linear-gradient(0deg, transparent, black 99%);
+  z-index: 1;
+}
+
+/* Container for the floating audio player */
+#audio-player {
+  position: fixed;               /* Stay fixed on the screen while scrolling */
+  top: 50%;                      /* Vertical center */
+  right: 20px;                   /* Distance from the right edge */
+  transform: translateY(-50%);   /* Adjust for true vertical center */
+  z-index: 50;                   /* Above most other content */
+  
+  background-color: rgba(0,0,0,0.7);  /* Dark semi-transparent background */
+  padding: 15px;                 /* Space inside container */
+  border-radius: 50%;            /* Makes the container circular */
+  display: flex;                 /* Flexbox to center the button */
+  align-items: center;           
+  justify-content: center;
+  
+  transition: opacity 0.5s ease, transform 0.3s ease; /* Smooth fade/hover animations */
+  opacity: 0.7;                  /* Slightly transparent by default */
+}
+
+/* Hover effect: player becomes more visible and slightly scales up */
+#audio-player:hover {
+  opacity: 1;                    /* Fully visible on hover */
+  transform: translateY(-50%) scale(1.1); /* Slightly enlarge */
+}
+
+/* Hide the native audio controls */
+#audio-player audio {
+  display: none;
+}
+
+/* Play/pause button styling */
+#audio-player button {
+  background-color: #343128;     /* Dark background color */
+  color: white;
+  border: 0.5px solid gold;                  /* Remove default button border */
+  border-radius: 50%;            /* Make button circular */
+  width: 60px;                   /* Button width */
+  height: 60px;                  /* Button height */
+  cursor: pointer;               /* Show pointer on hover */
+  font-size: 24px;               /* Icon size */
+  display: flex;                 /* Center icon inside button */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 1px rgba(254, 218, 74, 0.6); /* Glow effect */
+  transition: transform 0.2s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+/* Button hover effect: slightly bigger glow */
+#audio-player button:hover {
+  transform: scale(1.1);         /* Slightly enlarge button */
+  box-shadow: 0 0 2px rgba(254, 218, 74, 0.8); /* Brighter glow */
+}
+
+
+
+/* Skip button styling */
+#skip-button {
+  position: fixed;
+  background-color: #343128;     /* Dark background color */
+  color: white;
+  border: 0.5px solid gold;                  /* Remove default button border */
+  border-radius: 50%;            /* Make button circular */
+  top: 34%;              
+  right: 35px;           
+  width: 60px;                   /* Button width */
+  height: 60px;                  /* Button height */
+  cursor: pointer;               /* Show pointer on hover */
+  font-size: 24px;               /* Icon size */
+  display: flex;                 /* Center icon inside button */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 1px rgba(254, 218, 74, 0.6); /* Glow effect */
+  transition: transform 0.2s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+  z-index: 50;
+  transition: opacity 0.5s ease, transform 0.3s ease; /* Smooth fade/hover animations */
+  opacity: 0.7;                  /* Slightly transparent by default */
+}
+
+#skip-button:hover {
+  opacity: 1;                    /* Fully visible on hover */
+  transform: scale(1.1);         /* Slightly enlarge button */
+  box-shadow: 0 0 2px rgba(254, 218, 74, 0.8); /* Brighter glow */
+}
+
+
+.about {
+  /* Flexbox to center the entire element on the screen */
+  display: flex;
+  justify-content: center;
+  /* This is a magic number based on the context in which this snippet is used and effects the perspective */
+  height: 100vh;
+  width: 100vw;
+  /* This sets allows us to transform the text on a 3D plane, and is somewhat a magic number */
+  perspective: 400px;
+  /* The rest is totally up to personal styling preferences */
+  color: #feda4a;
+  font-family: 'Pathway Gothic One', sans-serif;
+  font-size: 400%;
+  font-weight: 600;
+  letter-spacing: 6px;
+  line-height: 150%;
+  text-align: justify;
+}
+
+/* Add spacing between paragraphs */
+.about p {
+  margin-top: 5em;              /* gap before each paragraph */
+}
+
+
+
+/* We're calling this animation "crawl" */
+@keyframes crawl {
+  0% {
+    /* The element starts below the screen */
+    top: 0;
+    /* Rotate the text 20 degrees but keep it close to the viewer */
+    transform: rotateX(25deg) translateZ(0);
+  }
+
+  100% { 
+    /* This is a magic number, but using a big one to make sure the text is fully off the screen at the end */
+    top: -6000px;
+    /* Slightly increasing the rotation at the end and moving the text far away from the viewer */
+    transform: rotateX(25deg) translateZ(-2000px);
+    opacity: 0; /* fade out at the end */
+  }
+}
+
+
+
+.crawl {
+  position: relative;
+  top: 9999px;
+  transform-origin: 50% 100%;
+  animation: crawl 40s linear forwards;
+  transition: opacity 2s ease-in-out;  /* ✅ enables fading */
+  opacity: 1;                         /* ✅ start fully visible */
+}
+
+
+
+.crawl > .title {
+  font-size: 90%;
+  text-align: center;
+}
+
+.crawl > .title h1 {
+  margin: 0 0 100px;
+  text-transform: uppercase;
+}
+
+
+
+
+/* Centered fade-in section */
+.intro-section {
+  position: fixed;                 /* stays fixed in the center */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* true centering */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  opacity: 0;                      /* hidden at start */
+  animation: fadeInContainer 2s ease forwards;
+  animation-delay: 24s;            /* ~80% of 30s crawl */
+  z-index: 5;                      /* above background, below header */
+}
+
+/* Circular photo */
+.intro-photo {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 2px solid #b39935;
+  object-fit: cover;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeInPhoto 2s ease forwards;
+  animation-delay: 24s;            /* same delay as container */
+}
+
+/* Text below photo */
+.intro-text {
+  color: #feda4a;
+  font-family: 'Pathway Gothic One', sans-serif;
+  font-size: 200%;
+  line-height: 1.5;
+  opacity: 0;
+  animation: fadeInText 2s ease forwards;
+  animation-delay: 26s;            /* fades in slightly after photo */
+}
+
+/* Fade-in animations */
+@keyframes fadeInContainer {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInPhoto {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+h2, h3 {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+h2 {
+  font-size: 2.5rem;
+  color: #feda4a;
+  font-weight: 1000;
+  margin-right: 10px; /* space between them */
+}
+
+h3 {
+  font-size: 2.5rem;
+  font-weight: 200;
+  color: feda4a;
+}
+
+#tagline {
+  font-family: monospace;
+  font-size: 1.5rem;
+  margin-top: 15px;
+  color: white;
+  font-weight: 200;
+}
+
+#tagline2 {
+  font-family: monospace;
+  font-size: 1rem;
+  margin-top: 15px;
+  color: rgb(124, 124, 124);
+  font-weight: 200;
+}
+
+
+/* Footer */
+footer {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+}
