@@ -105,62 +105,27 @@ nav a:hover {
   z-index: 1;
 }
 
-/* Audio player */
-#audio-player {
+/* Container for both buttons */
+#audio-controls {
   position: fixed;
   top: 50%;
-  right: 2vw;
-  transform: translateY(-50%);
-  z-index: 50;
-  background-color: rgba(0,0,0,0.7);
-  padding: 1.2rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.5s ease, transform 0.3s ease;
-  opacity: 0.7;
-}
-
-#audio-player:hover {
-  opacity: 1;
-  transform: translateY(-50%) scale(1.1);
-}
-
-#audio-player audio {
-  display: none;
-}
-
-#audio-player button {
-  background-color: #343128;
-  color: white;
-  border: 0.05rem solid gold;
-  border-radius: 50%;
-  width: 8vh;
-  height: 8vh;
-  cursor: pointer;
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0.1rem rgba(254, 218, 74, 0.6);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-#audio-player button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8);
-}
-
-/* Skip button */
-#skip-button {
-  position: fixed;
-  background-color: #343128;
-  color: white;
-  border: 0.05rem solid gold;
-  border-radius: 50%;
-  top: 34%;
   right: 3vw;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  align-items: center;
+  gap: 1rem;               /* space between buttons */
+  z-index: 50;
+}
+
+/* Shared button style */
+#audio-player button,
+#restart-button,
+#skip-button {
+  background-color: #343128;
+  color: white;
+  border: 0.05rem solid gold;
+  border-radius: 50%;
   width: 8vh;
   height: 8vh;
   cursor: pointer;
@@ -169,16 +134,23 @@ nav a:hover {
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 0.1rem rgba(254, 218, 74, 0.6);
-  transition: opacity 0.5s ease, transform 0.3s ease;
-  z-index: 50;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, opacity 0.3s ease;
   opacity: 0.7;
 }
 
+#audio-player button:hover,
+#restart-button:hover,
 #skip-button:hover {
   opacity: 1;
   transform: scale(1.1);
   box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8);
 }
+
+/* Hide the <audio> tag itself */
+#audio-player audio {
+  display: none;
+}
+
 
 /* Crawl section */
 .about {
@@ -392,22 +364,18 @@ footer {
     hyphens: auto; /* optional, adds nice hyphenation when needed */}
   }
 
-  /* Skip + audio buttons smaller and closer in */
+  /* Skip + audio + restart buttons smaller and closer in */
   #skip-button,
-  #audio-player button {
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
+  #audio-player button,
+  #restart-button {
+    width: 50px;
+    height: 50px;
+    font-size: 16px;
   }
 
-  #skip-button {
-    top: 28%;
-    right: 15px;
-  }
-
-  #audio-player {
-    right: 15px;
-  }
+  .no-underline {
+  text-decoration: none;
+}
 
   /* Intro section adjustments */
   .intro-section {
@@ -439,7 +407,6 @@ footer {
     font-size: 0.8rem;
     padding: 8px 0;
   }
-}
 
 /* ================================================
    📱 EXTRA SMALL DEVICES (phones ≤ 480px)
