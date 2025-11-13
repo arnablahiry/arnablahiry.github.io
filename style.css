@@ -73,8 +73,25 @@ header {
 }
 
 .logo {
-  height: 10vh;
+  height: 8vh;
   width: auto;
+}
+
+/* Make the logo anchor keyboard-focusable and visually obvious when focused */
+.logo-container a {
+  display: inline-block;
+  border-radius: 100%;
+  line-height: 0;
+}
+
+.logo-container a:focus-visible,
+.logo-container a:hover {
+  box-shadow: 0 0 0 4px rgba(254, 218, 74, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.logo-container a:focus {
+  outline: none; /* rely on focus-visible above */
 }
 
 /* Navigation bar */
@@ -119,6 +136,7 @@ nav a:hover {
 }
 
 /* Shared button style */
+
 #audio-player button,
 #restart-button,
 #skip-button {
@@ -247,6 +265,92 @@ nav a:hover {
   opacity: 0;
   animation: fadeInText 2s ease forwards;
   animation-delay: 26s;
+}
+
+/* Social buttons stacked vertically below the tagline */
+.social-buttons {
+  display: flex;
+  flex-direction: row; /* horizontal layout */
+  gap: 1px;
+  margin-top: 1rem;
+  justify-content: center; /* center the icons under the photo/tagline */
+  align-items: center;
+}
+
+.social-link {
+  display: inline-flex;
+  width: 65px;
+  height: 65px;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.social-link img {
+  width: 60%;
+  height: auto;
+  display: block;
+  filter: invert(1) brightness(1.2); /* works for dark icons; remove if your icons are colored */
+}
+
+.social-link:hover,
+.social-link:focus {
+  transform: scale(1.0);
+  filter: brightness(0.8);
+  outline: none;
+}
+
+/* Site navigation buttons under social icons */
+.site-links {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  align-items: center;
+}
+
+.site-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8rem; /* wide enough for labels */
+  height: 4.5rem;
+  padding: 0 0.6rem;
+  background: rgba(52, 49, 40, 0.45); /* semi-transparent fill */
+  color: white;
+  text-decoration: none;
+  border: 0.05rem solid gold;
+  border-radius: 6px;
+  font-family: "Poppins", "Montserrat", sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  box-shadow: 0 0 0.08rem rgba(254, 218, 74, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.15s ease;
+}
+
+.site-link:hover,
+.site-link:focus {
+  box-shadow: 0 0 0.18rem rgba(254, 218, 74, 0.9);
+  background: rgba(52, 49, 40, 0.6);
+  border: 0.5rem solid gold(0, 0, 0);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border 0.15s ease;
+
+}
+
+@media (max-width: 768px) {
+  .site-link {
+    width: 8.5rem;
+    height: 2.4rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Make social buttons slightly smaller on narrow screens */
+@media (max-width: 768px) {
+  .social-link {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 /* Fade-in animations */

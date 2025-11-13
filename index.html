@@ -8,6 +8,8 @@
 </head>
 <body>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@500;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+
     <img id="bg-image" src="images/background.jpg" alt="Background" />
 
 
@@ -15,11 +17,16 @@
 
     <header>
         <div class="logo-container">
-            <img src="images/logo.png" alt="Logo" class="logo">
+            <a href="index.html" aria-label="Home">
+                <img src="images/logo.png" alt="Logo" class="logo">
+            </a>
         </div>
         <nav>
             <a href="index.html">Home</a>
+            <a href="about.html">About</a>
             <a href="timeline.html">Timeline</a>
+            <a href="research.html">Research</a>
+            <a href="publications.html">Publications</a>
             <a href="contact.html">Contact</a>
         </nav>
     </header>
@@ -82,6 +89,42 @@
             <h2>Hi there,</h2> <h3>I’m Arnab</h3>
             <p id="tagline">Welcome to my website!</p>
             <p id="tagline2">There is no escape</p>
+
+            <!-- Social buttons: replace href="#" with your profile URLs and
+                 replace src with your icon filenames (e.g. images/social/github.svg) -->
+            <div class="social-buttons" aria-label="Social links">
+                <a href="https://github.com/arnablahiry" class="social-link" aria-label="GitHub" target="_blank" rel="noopener">
+                    <img src="images/icons/github.png" alt="GitHub">
+                </a>
+                <a href="https://www.linkedin.com/in/arnablahiry/" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+                    <img src="images/icons/linkedin.png" alt="LinkedIn">
+                </a>
+                <a href="https://x.com/lahiryarnab" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+                    <img src="images/icons/twitter.png" alt="Twitter">
+                </a>
+                <a href="https://www.cosmostat.org/people/arnab-lahiry" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+                    <img src="images/icons/cosmostat.png" alt="CosmoStat">
+                </a>
+                <a href="https://www.ia.forth.gr/people/Lahiry" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+                    <img src="images/icons/ia.png" alt="IA-FORTH">
+                </a>
+                <a href="https://spl.ics.forth.gr/titan/people/arnab-lahiry.html" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+                    <img src="images/icons/titan.png" alt="TITAN">
+                </a>
+                <a href="https://www.facebook.com/arnablahiry" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+                    <img src="images/icons/facebook.png" alt="Facebook">
+                </a>
+                <a href="https://www.instagram.com/arnab_lahiry/" class="social-link" aria-label="Twitter" target="_blank" rel="noopener">
+                    <img src="images/icons/instagram.png" alt="Instagram">
+                </a>
+            </div>
+            <!-- Site navigation buttons (rectangular) -->
+            <div class="site-links" aria-label="Site navigation">
+                <a href="about.html" class="site-link">About Me</a>
+                <a href="timeline.html" class="site-link">My Career Timeline</a>
+                <a href="research.html" class="site-link">Research & Projects</a>
+                <a href="publications.html" class="site-link">Publications</a>
+            </div>
         </div>
     </div>
 

@@ -40,7 +40,7 @@ header {
 }
 
 .logo {
-  height: 10vh;
+  height: 8vh;
   width: auto;
 }
 
@@ -84,7 +84,9 @@ h2{
         #ee0979
     );
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .inline-block{
@@ -133,6 +135,68 @@ h2{
     margin-right: auto;
 }
 
+/* Meme reveal overlay styles */
+.meme-wrapper{
+    position: relative;
+    display: block;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.meme-wrapper img.timeline-hero-image{
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: pointer; /* show pointer when hovering the image */
+}
+
+.meme-overlay{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.809);
+    backdrop-filter: blur(10px);
+    transition: opacity 300ms ease, visibility 300ms ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+.meme-overlay.revealed{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.reveal-btn{
+    background: rgba(255,255,255,0.06);
+    color: white;
+    border: 2px solid transparent;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.reveal-btn:focus,
+.reveal-btn:hover{
+    box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8);
+    background: rgba(160, 138, 65, 0.179);
+    transition: transform 0.15s ease, background 0.3s ease, box-shadow 0.3s ease, border 0.15s ease;
+
+}
+
+/* Hero image used under the main timeline heading */
+.timeline-hero-image{
+    display: block;
+    max-width: 640px;
+    width: 100%;
+    height: auto;
+    margin: 1.2rem auto 0 auto;
+}
+
 .timeline-component{
     flex-direction: column;
     justify-content: center;
@@ -176,6 +240,11 @@ h2{
     line-height: 1.2;
     position: sticky;
     top: 50vh;
+}
+
+/* Lift only the timeline bar and items upward while keeping the heading spacing unchanged */
+.timeline-component{
+    margin-top: -40px; /* adjust this value to move the bar up more/less */
 }
 
 

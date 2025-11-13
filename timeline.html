@@ -10,11 +10,16 @@
 
     <header>
         <div class="logo-container">
-            <img src="images/logo.png" alt="Logo" class="logo">
+            <a href="index.html" aria-label="Home">
+                <img src="images/logo.png" alt="Logo" class="logo">
+            </a>
         </div>
         <nav>
             <a href="index.html">Home</a>
+            <a href="about.html">About</a>
             <a href="timeline.html">Timeline</a>
+            <a href="research.html">Research</a>
+            <a href="publications.html">Publications</a>
             <a href="contact.html">Contact</a>
         </nav>
     </header>
@@ -28,9 +33,15 @@
                         <div class="margin-bottom-medium">
                             <h2 class="intro-heading">My Career Timeline</h2>
                         </div>
-                        <p class="intro-text">
-                            A series of fortunate events.
-                        </p>
+                        <!-- Replace intro text with a timeline image -->
+                        <div class="intro-text">
+                            <div class="meme-wrapper" id="meme-wrapper">
+                                <img src="images/timeline.png" alt="Career timeline overview" class="timeline-hero-image" loading="lazy" id="meme-image">
+                                <div class="meme-overlay" id="meme-overlay">
+                                    <button class="reveal-btn" id="reveal-btn" aria-label="Reveal image">Reveal meme ;)</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -247,8 +258,9 @@
                             </div>
                             <div class="timeline-image-wrapper">
                                 <img src="images/flatiron_institute.png" alt="Flatiron Institute"
-                                loading="lazy" width="480""/>
-                            </div>
+                            <script src="audio-player.js"></script>
+                            <script src="skip-button.js"></script>
+                            <script src="reveal-meme.js"></script>
                             <div class="timeline-image-wrapper">
                                 <img src="images/iiser_tpt.png" alt="IISER Tirupati"
                                 loading="lazy" width="480"/>
