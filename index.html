@@ -21,7 +21,12 @@
                 <img src="images/logo.png" alt="Logo" class="logo">
             </a>
         </div>
-        <nav>
+        <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
+            <span class="bar bar1"></span>
+            <span class="bar bar2"></span>
+            <span class="bar bar3"></span>
+        </button>
+        <nav id="site-nav">
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
             <a href="timeline.html">Timeline</a>
@@ -44,11 +49,29 @@
             </audio>
         <button id="play-pause">♫</button>
         </div>
-       <!-- Skip Button -->
-        <button id="skip-button">⏭</button>
-        <a href="index.html" class="no-underline">
-            <button id="restart-button">↻</button>
-        </a>
+                                <!-- Pause / Play scroll button: pauses the Star Wars crawl animation -->
+                                <button id="pause-scroll" aria-label="Pause scroll">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                                        <rect x="6" y="4" width="4" height="16" fill="currentColor" />
+                                        <rect x="14" y="4" width="4" height="16" fill="currentColor" />
+                                    </svg>
+                                </button>
+             <!-- Skip Button -->
+                <button id="skip-button" aria-label="Skip crawl">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <!-- First triangle -->
+                        <polygon points="3,4 13,12 3,20" fill="currentColor" />
+                        <!-- Second triangle -->
+                        <polygon points="11,4 19,12 11,20" fill="currentColor" />
+                        <!-- Vertical bar to indicate "skip to end" style -->
+                        <rect x="20" y="4" width="2" height="16" fill="currentColor" />
+                    </svg>
+                </button>
+                <a href="index.html" class="no-underline">
+                        <button id="restart-button" aria-label="Restart crawl">
+                            <img src="images/restart.svg" alt="Restart">
+                        </button>
+                </a>
 
 
     </div>
@@ -137,6 +160,8 @@
 
 <script src="audio-player.js"></script>
 <script src="skip-button.js"></script>
+<script src="pause-scroll.js"></script>
+<script src="nav-toggle.js"></script>
 
 
 
