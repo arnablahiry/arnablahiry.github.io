@@ -3,7 +3,7 @@
 }
 
 html{
-    height: 100%;
+/* Removed accidental code fence markers */
 }
 
 body{
@@ -16,7 +16,14 @@ body{
 }
 
 
-/* Transparent glass header */
+/* Footer (match repositories styling) */
+footer {
+    background: transparent;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    padding: 28px 0;
+}
 header {
     background-color: rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(8px);

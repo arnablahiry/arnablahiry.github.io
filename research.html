@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research</title>
+    <link rel="stylesheet" href="timeline_style.css">
+    <link rel="stylesheet" href="research_style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html" aria-label="Home">
+                <img src="images/logo.png" alt="Logo" class="logo">
+            </a>
+        </div>
+        <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
+            <span class="bar bar1"></span>
+            <span class="bar bar2"></span>
+            <span class="bar bar3"></span>
+        </button>
+        <nav id="site-nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="timeline.html">Timeline</a>
+            <a href="research.html">Research</a>
+            <a href="publications.html">Publications</a>
+            <a href="repositories.html">Repositories</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <div class="page-wrapper">
+        <div class="section-timeline-heading">
+            <div class="container">
+                <div class="padding-vertical-xlarge">
+                    <div class="timeline-main-heading-wrapper">
+                        <div class="margin-bottom-medium">
+                            <h2 class="intro-heading">My Scientific Research</h2>
+                        </div>
+                        <div class="margin-bottom-medium">
+                            <p style="color: #ffffff; font-size: 2.2vh;">I work at the intersection of machine learning and astrophysical research. I design end‑to‑end AI workflows - from data curation and denoising to model design, training, and deployment - with a strong emphasis on interpretability, reproducibility, and physically informed methods. My focus is on building robust, production‑ready ML/AI tools that bridge computer‑science practice and scientific research so models provide reliable, testable scientific insight rather than black‑box predictions.</p>
+                        </div>
+                        <!-- Optional subtitle or hero image could go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-timeline">
+            <div class="container">
+                <!-- Projects grid: each card has an image + subtitle; clicking expands details -->
+                <div class="projects-grid" id="projects-grid">
+                    <article class="project-card">
+                        <img class="project-image" src="images/research/galprop.svg" alt="Project image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Beyond Moment0: Galaxy Property Inference</h3>
+                            <p class="project-subtitle">Using simulated mock IFUs to use the full emission spectrum per-pixel to infer physical galaxy properties.</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
+                        <div class="project-full" hidden>
+                            <h4>Overview</h4>
+                            <p>This project builds end-to-end AI workflows for scientific datasets. It includes data preprocessing and augmentation, denoising stages, model architecture search, uncertainty quantification, and a deployment-ready pipeline that includes validation, monitoring and reproducibility tooling.</p>
+                            <h4>Highlights</h4>
+                            <ul>
+                                <li>Interpretable model outputs and diagnostic visualisations</li>
+                                <li>Automated training pipelines with reproducible experiments</li>
+                                <li>Integration with evaluation suites and uncertainty estimators</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <img class="project-image" src="images/research/3d_denoising.svg" alt="Project image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Deep and Sparse Denoising of high-z Galaxy Spectral Cubes</h3>
+                            <p class="project-subtitle">Tiered three-dimensional de-noising comparitive study - toy data, simulations and ALMA observations.</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-2-desc">Learn more</button>
+        
+                        <div class="project-full" hidden>
+                            <p>We embed physically motivated constraints and preprocessing into model training to ensure learned representations respect domain structure. The work focuses on diagnostic tools that reveal why models behave a certain way and how predictions relate to known physics.</p>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <img class="project-image" src="images/research/cnn_cosmo.svg" alt="Project image">
+                        <div class="project-meta">
+                            <h3 class="project-title">CNN and Simulation-based Cosmological Interpretability</h3>
+                            <p class="project-subtitle">Exploring the scales and morphology of the cosmic web to interpret the origin of cosmological information.</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-3-desc">Learn more</button>
+                        <div class="project-full" hidden>
+                            <p>This work focuses on robust denoising methods that adapt to different noise regimes and preserve scientific signal. Evaluation emphasises measurable failure modes and calibration of uncertainties so downstream science can use results with confidence.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Arnab Lahiry</p>
+    </footer>
+
+    <script src="nav-toggle.js"></script>
+    <script src="research.js"></script>
+</body>
+</html>

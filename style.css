@@ -578,14 +578,13 @@ h3 {
   font-weight: 200;
 }
 
-/* Footer */
+/* Footer (match repositories styling for consistent look across pages) */
 footer {
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  color: white;
+  background: transparent;
+  color: #ffffff;
   text-align: center;
   margin: 0;
-  padding: 1vh 0;
+  padding: 28px 0;
 }
 
 
