@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications</title>
+    <link rel="stylesheet" href="css/timeline_style.css">
+    <link rel="stylesheet" href="css/publications_style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html" aria-label="Home">
+                <img src="images/logo.png" alt="Logo" class="logo">
+            </a>
+        </div>
+        <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
+            <span class="bar bar1"></span>
+            <span class="bar bar2"></span>
+            <span class="bar bar3"></span>
+        </button>
+        <nav id="site-nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="timeline.html">Timeline</a>
+            <a href="research.html">Research</a>
+            <a href="publications.html">Publications</a>
+            <a href="repositories.html">Repositories</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <div class="page-wrapper">
+        <div class="section-timeline-heading">
+            <div class="container">
+                <div class="padding-vertical-xlarge">
+                    <div class="timeline-main-heading-wrapper">
+                        <div class="margin-bottom-medium">
+                            <h2 class="intro-heading">Publications</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-timeline">
+            <div class="container">
+                <div class="projects-grid" id="projects-grid">
+                    <article class="project-card">
+                        <img class="project-image" src="images/publications/galprop.svg" alt="Publication image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Beyond Moment-0: Harnessing the Spectral Dimension to Infer high-z Galaxy Properties</h3>
+                            <p class="project-authors">A. Lahiry, T. Díaz-Santos, J.-L. Starck, N. C. Roy, D. Anglés-Alcázar</p>
+                            <p class="project-journal">[ In Preparation ]</p>
+                            <!-- Added arXiv button -->
+            
+                            <button class="project-toggle" aria-expanded="false" aria-controls="pub-1-desc">Show Abstract</button>
+                            <div class="project-full" id="pub-1-desc" aria-expanded="false">
+                                <p>Far-infrared and sub-millimetre emission lines such as [C II] and [O II] are widely used to trace the ISM, star formation, and gas reservoirs in galaxies. Empirical calibrations between line luminosity and physical properties, usually derived from integrated or moment-0 fluxes, risk discarding valuable information encoded in line profiles and kinematics. We aim to test whether incorporating the full per-pixel spectral information (across multiple lines and velocity channels) can improve the prediction of spatially resolved physical properties—namely star-formation rate (SFR), gas mass, stellar mass, gas temperature, and metallicity—beyond what is possible with classical scaling relations. We generate mock IFU cubes via radiative transfer applied to cosmological galaxy simulations, spanning a variety of redshifts, inclinations, and spatial resolutions. First, we calibrate per-pixel moment-0 relations mapping line fluxes to the five physical quantities. Next, we train supervised machine-learning models that take full per-pixel spectra as input and output predictions of the same quantities. We compare map-level residuals, biases, and scatter for the two methods.</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <img class="project-image" src="images/publications/denoising3d.svg" alt="Publication image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Deep and Sparse Denoising Benchmarks for Spectral Data Cubes of High-z Galaxies: From Simulations to ALMA observations</h3>
+                            <p class="project-authors">A. Lahiry, T. Díaz-Santos, J.-L. Starck, N. C. Roy, D. Anglés-Alcázar, G. Tsagkatakis, P. Tsakalides</p>
+                            <p class="project-journal">Submitted to: Astronomy & Astrophysics (2025)</p>
+                            <!-- Added arXiv button -->
+            
+                            <button class="project-toggle" aria-expanded="false" aria-controls="pub-1-desc">Show Abstract</button>
+                            <div class="project-full" id="pub-2-desc" aria-expanded="false">
+                                <p>ABeyond cosmic noon, galaxies usually appear as faint whispers amid overwhelming noise, yet this epoch is key to understanding massive galaxy assembly. ALMA’s sensitivity to cold dust and [C II] emission allows us to probe their interstellar medium, but faint signals are still challenging, rendering robust denoising essential. We evaluate denoising strategies, including classical statistical methods, sparse unsupervised representations, and supervised deep learning, to identify techniques that suppress noise while preserving flux and spectral-spatial morphology. We develop a physically motivated synthetic dataset of spectral cubes simulating rotating disk galaxies for training and evaluation. We benchmark Principal Component Analysis (PCA), Independent Component Analysis (ICA), iterative soft thresholding with 2D-1D wavelets (IST), and a supervised 3D U-Net across peak SNRs of ∼2.5–8, applied to (i) toy cubes, (ii) synthetic II] IFU cubes from FIRE simulations, and (iii) ALMA observations of z ∼ 5 galaxies from the CRISTAL sample and the quasar W2246−0526. Performance is assessed via RMSE, flux conservation, morphology, and SNR improvement. PCA and ICA provide limited noise reduction and struggle with correlated noise. IST reduces noise at moderate SNRs but suppresses emission at low SNRs. The 3D U-Net outperforms all methods, generalizing well to unseen data, though it slightly overestimates flux at very low SNRs and may hallucinate signal. In ALMA-CRISTAL cubes, IST and U-Net conserve ≥ 95% of flux and increase SNR by ≥ 6. For the extreme case of W2246–0526, the U-Net recovers ∼ 60% of flux at moderate SNR, whereas IST robustly conserves flux and improves SNR by ≥ 2.5. Deep learning trained on synthetic data generalizes effectively, though flux bias and interpretability challenges remain at low SNR. The addition of physically motivated priors and uncertainty quantification will enhance robustness. This framework of synthetic, simulated, and real datasets offers a pathway for transferable denoising in surveys with ALMA, VLT/MUSE, and JWST IFUs.</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <img class="project-image" src="images/publications/cosmo-cnn.svg" alt="Publication image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Interpreting Cosmological Information from Neural Networks in the Hydrodynamic Universe</h3>
+                            <p class="project-authors">A. Lahiry, F. Villaescusa-Navarro, A. E. Bayer</p>
+                            <p class="project-journal">Accepted at: The Astrophysical Journal (2025)</p>
+                            <!-- Added arXiv button -->
+                            <button class="arxiv-button" onclick="window.open('https://arxiv.org/abs/2504.17839', '_blank')">
+                                <img src="images/icons/arxiv-logo.svg" alt="arXiv logo">
+                            </button>
+                            <button class="project-toggle" aria-expanded="false" aria-controls="pub-1-desc">Show Abstract</button>
+                            <div class="project-full" id="pub-3-desc" aria-expanded="false">
+                                <p>What happens when a black box (neural network) meets a black box (simulation of the Universe)? Recent work has shown that convolutional neural networks (CNNs) can infer cosmological parameters from the matter density field in the presence of complex baryonic processes. A key question that arises is, which parts of the cosmic web is the neural network obtaining information from? We shed light on the matter by identifying the Fourier scales, density scales, and morphological features of the cosmic web that CNNs pay most attention to. We find that CNNs extract cosmological information from both high and low density regions: overdense regions provide the most information per pixel, while underdense regions -- particularly deep voids and their surroundings -- contribute significantly due to their large spatial extent and coherent spatial features. Remarkably, we demonstrate that there is negligible degradation in cosmological constraining power after aggressive cutting in both maximum Fourier scale and density. Furthermore, we find similar results when considering both hydrodynamic and gravity-only simulations, implying that neural networks can marginalize over baryonic effects with minimal loss in cosmological constraining power. Our findings point to practical strategies for optimal and robust field-level cosmological inference in the presence of uncertainly modeled astrophysics.</p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Arnab Lahiry</p>
+    </footer>
+
+    <script src="scripts/nav-toggle.js"></script>
+    <script src="scripts/publications.js"></script>
+</body>
+</html>
