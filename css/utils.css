@@ -118,9 +118,23 @@ nav .theme-toggle{
 nav .theme-toggle svg{ display: block; }
 nav .theme-toggle:hover{ box-shadow: 0 0 0.2rem rgba(254,218,74,0.35); transition: 200ms ease;}
 
-/* On very small screens where nav collapses, make toggle match the mobile nav items */
+/* On very small screens where nav collapses, hide the inline toggle in the
+   header and surface it as the first item inside the slide-in mobile nav panel
+   when the menu is opened. This keeps the header clean (only hamburger)
+   while making the theme toggle easily available in the mobile menu. */
 @media (max-width: 768px){
-    nav .theme-toggle{ display: inline-block; width: auto; }
+    /* hide the standalone toggle in the header bar */
+    nav .theme-toggle{ display: none !important; }
+
+    /* when the mobile nav panel is open, show the toggle as the first item */
+    header.nav-open nav .theme-toggle{
+        display: inline-flex !important;
+        order: -1; /* place at the top */
+        margin-bottom: 0.6rem;
+        width: auto;
+        align-items: center;
+        justify-content: flex-start;
+    }
 }
 
 /* -----------------------------
@@ -226,10 +240,84 @@ h2{
     .paragraph-large{ font-size: 18px; }
     .padding-vertical-xlarge{ padding-top: 80px; padding-bottom: 50px; }
     .hamburger{ display: block; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); }
+
+    /* Mobile slide-in nav panel (hidden by default, slides in when
+       header.nav-open is set by the hamburger script). This mirrors the
+       vertical nav used on timeline.html. */
+    nav{
+        /* panel overlay anchored to the right */
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 82vw;
+        max-width: 360px;
+        background: rgba(6,6,6,0.98);
+        transform: translateX(100%);
+        transition: transform 260ms cubic-bezier(.2,.9,.2,1), opacity 200ms ease;
+        opacity: 0;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* center items horizontally */
+        justify-content: flex-start;
+        padding: 8vh 4vw;
+        gap: 0.6rem;
+        z-index: 40;
+        text-align: center;
+    }
+
+    /* Show the panel when nav is opened */
+    header.nav-open nav{
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Make nav links vertical, larger tappable targets; remove underline
+       decoration (no border-bottom) and center the link text. */
+    nav a{
+        display: block;
+        padding: 0.9rem 0;
+        font-size: 1.05rem;
+        color: white;
+        text-decoration: none;
+        border-bottom: none;
+        width: 100%;
+        text-align: center;
+    }
+    nav a:hover{ color: #feda4a; }
+
+    /* Theme toggle: hidden in the header bar, revealed as the first item
+       inside the slide-in panel using order so the DOM order need not change.
+       Make it look identical to the desktop pill (same background, padding,
+       and circular shape) and center it inside the panel. */
+    nav .theme-toggle{ display: none !important; }
+    header.nav-open nav .theme-toggle{
+        display: inline-flex !important;
+        order: -1; /* place at the top */
+        margin: 0 auto 0.8rem auto;
+        width: auto;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.04);
+        color: white;
+        border: 1px solid rgba(254,218,74,0.18);
+        padding: 10px 10px;
+        border-radius: 100%;
+        font-weight: 700;
+        font-size: 0.9rem;
+        gap: 0.4rem;
+    }
 }
 
 /* Mobile-friendly heading size consistency */
-@media (max-width: 520px){ h2.intro-heading, h2{ font-size: 5.2vh !important; } }
+@media (max-width: 520px){
+    h2.intro-heading, h2{ font-size: 5.2vh !important; }
+    /* Reduce the base body font-size slightly on very small screens so
+       paragraph/body text is less large and more comfortable to read. */
+    body{ font-size: 1.6vh; }
+}
 
 /* Project card defaults (dark-mode) — page rules may override for light-mode */
 body:not(.light-mode) .project-card{

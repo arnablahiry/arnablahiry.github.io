@@ -10,8 +10,19 @@
         <span class="bar bar3"></span>
     </button>
     <nav id="site-nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
         <a href="timeline.html">Timeline</a>
+        <a href="research.html">Research</a>
+        <a href="publications.html">Publications</a>
+        <a href="repositories.html">Repositories</a>
         <a href="contact.html">Contact</a>
-        <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+        <!-- Theme toggle lives inside the nav so we can reorder it visually for
+             mobile (CSS will place it first inside the slide-in menu). The
+             button is visually present in desktop nav too. -->
+        <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">
+            <!-- SVG inserted dynamically by scripts/theme-toggle.js -->
+            <span class="sr-only">Toggle theme</span>
+        </button>
     </nav>
 </header>

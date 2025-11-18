@@ -146,6 +146,36 @@ h2.intro-heading{
     }
 }
 
+/* Mobile reflow: place the meme above the intro text, then the project cards
+   (meme -> text -> cards) on narrow screens. This keeps the visual focus
+   on the image when users scroll on phones. */
+@media (max-width: 768px){
+    .research-heading-row{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* Move meme to the top of the column */
+    .research-meme{ order: -1; flex: 0 0 auto; width: 100%; max-width: 420px; }
+    .research-meme .meme-wrapper{ width: 100%; height: auto; display: flex; justify-content: center; }
+    .research-meme .timeline-hero-image{
+        /* reduce the meme size on phones to avoid visual dominance */
+        max-height: 180px;
+        width: auto;
+        transform: none;
+        margin: 0 auto;
+    }
+
+    /* Intro text flows under the meme and uses full width */
+    .research-intro-text{ width: 100%; }
+    .research-intro-text .research-intro{ text-align: left; }
+
+    /* Increase spacing between the fixed header and the heading on phones */
+    .padding-vertical-xlarge{ padding-top: 100px; padding-bottom: 40px; }
+}
+
 /* Projects grid and card styles */
 .projects-grid{
     display: grid;

@@ -314,10 +314,15 @@ body.light-mode .project-full{
 body.light-mode .project-toggle{
     background: transparent !important; /* keep button visually transparent */
     color: #aa7e00 !important; /* dark-yellow text */
-    border: 0 !important;
-    padding: 8px 0 !important; /* keep vertical spacing but no horizontal padding */
+    /* Restore the top divider so 'Show Abstract' matches dark mode on desktop */
+    border-top: 1px solid #e6e6e6 !important;
+    /* match desktop padding so layout/spacing are identical */
+    padding-top: 16px !important;
+    padding-left: 0 !important;
+    padding-right: 16px !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+    text-align: left !important;
 }
 body.light-mode .project-toggle:hover,
 body.light-mode .project-toggle:focus{
@@ -342,6 +347,99 @@ body.light-mode .arxiv-button:hover{
 }
 body.light-mode .arxiv-button:active{
     background-color: #f2f2f2 !important; /* very light grey overlay when pressed */
+}
+
+/* Mobile: ensure light-mode cards keep the same layout/padding as dark-mode
+   (only colors inverted). This prevents the 'Learn more' area from appearing
+   squished on phones where we earlier reduced horizontal padding. */
+@media (max-width: 768px){
+    body.light-mode #projects-grid .project-toggle{
+        padding: 12px 16px !important; /* match dark-mode padding */
+        border-top: 1px solid #e6e6e6 !important; /* visible divider like dark-mode */
+        text-align: left !important; /* same alignment as dark-mode */
+        background: transparent !important;
+        color: #aa7e00 !important; /* keep the accent color */
+    }
+
+    /* Match card box-shadow / border and padding so the card proportions
+       stay identical to dark mode on mobile */
+    body.light-mode #projects-grid .project-card{
+        box-shadow: 0 4px 18px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e6e6e6 !important;
+        background: #ffffff !important;
+        padding-top: 12px !important;
+        padding-right: 12px !important;
+        padding-left: 12px !important;
+    }
+
+    /* Ensure the image area keeps the same sizing as dark-mode mobile so
+       content doesn't reflow and card heights match exactly. */
+    body.light-mode #projects-grid .project-image{
+        width: 100% !important;
+        height: auto !important;
+        max-height: 200px !important;
+        object-fit: cover !important;
+        margin: 0 0 12px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    /* Ensure arXiv button keeps desktop look in light mode on phones */
+    body.light-mode #projects-grid .arxiv-button{
+        width: auto !important;
+        padding: 6px 10px !important;
+        min-width: 56px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Force the toggle to be full-width even if other styles try to shrink it */
+    body.light-mode #projects-grid .project-toggle{
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 12px 16px !important;
+        text-align: left !important;
+        border-top: 1px solid #e6e6e6 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Ensure all mobile card metrics exactly mirror the dark-mode mobile rules
+       so height, padding, and alignment are identical (only colors inverted). */
+    body.light-mode #projects-grid .project-meta{
+        padding: 0 4px 12px 4px !important;
+    }
+
+    body.light-mode #projects-grid .project-title{
+        font-size: 2.4vh !important;
+        margin: 0 0 8px 0 !important;
+    }
+
+    body.light-mode #projects-grid .project-authors{
+        font-size: 2vh !important;
+        margin: 0 !important;
+        color: #444444 !important;
+    }
+
+    body.light-mode #projects-grid .project-journal{
+        font-size: 1.8vh !important;
+        margin-top: 0 !important;
+        margin-bottom: 10px !important;
+        color: #666666 !important;
+    }
+
+    body.light-mode #projects-grid .project-full{
+        padding: 12px 16px 20px 16px !important;
+        font-size: 1.9vh !important;
+        line-height: 2 !important;
+    }
+
+    /* Ensure the arXiv button keeps spacing so it doesn't push the toggle */
+    body.light-mode #projects-grid .arxiv-button{
+        margin-right: 10px !important;
+        margin-bottom: 8px !important;
+    }
 }
 
 

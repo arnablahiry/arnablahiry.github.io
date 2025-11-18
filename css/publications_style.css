@@ -177,3 +177,53 @@ body{
     width: 40px; /* Small icon size */
     height: 40px;
 }
+
+/* Mobile: stack publication card image above the text and controls */
+@media (max-width: 768px){
+    .project-card{
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 12px;
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .project-image{
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+        object-fit: cover;
+        margin: 0 0 12px 0;
+        border-radius: 8px;
+    }
+
+    .project-meta{
+        padding: 0 4px 12px 4px;
+    }
+
+    .project-title{ font-size: 2.4vh; }
+
+    .project-toggle{ padding-top: 12px; padding-left: 0; }
+    /* Make arXiv button match desktop sizing on mobile (no tiny vw-based width) */
+    .arxiv-button{
+        width: auto !important;
+        padding: 6px 10px !important;
+        min-width: 56px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+
+    /* Ensure the show-abstract control is block-level and full width so it
+       doesn't get squished by floating buttons; match desktop padding and
+       border so layout is identical across themes. */
+    .project-toggle{
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 16px !important;
+        text-align: left;
+        border-top: 1px solid #222;
+    }
+}
