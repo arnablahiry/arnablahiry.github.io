@@ -12,8 +12,10 @@
 }
 
 .padding-vertical-xlarge{
-    padding-top: 120px;
-    padding-bottom: 120px;
+    /* tightened spacing so the heading is closer to the fixed nav and
+       the cards sit closer beneath the heading */
+    padding-top: 90px;
+    padding-bottom: 0px;
 }
 
 .timeline-main-heading-wrapper{
@@ -30,8 +32,8 @@
 }
 
 .section-timeline-heading .padding-vertical-xlarge{
-    /* Reduced bottom padding so the projects grid sits closer to the heading */
-    padding-bottom: 4vh;
+    /* keep projects grid close to the heading */
+    padding-bottom: 2vh;
 }
 
 h2.intro-heading{

@@ -1,0 +1,348 @@
+/* Shared light-mode rules (page-agnostic). Include this stylesheet on pages
+   that want a per-page or site-wide light mode. Styles are applied when the
+   document root has the `light-mode` class on <body>. */
+
+/* Base light/dark inversion */
+body.light-mode{
+    background-color: #ffffff !important;
+    color: #111111 !important;
+}
+body.light-mode a{ color: #0b57a4; }
+
+/* Header / nav become black bars with light text in light-mode (per request) */
+body.light-mode header,
+body.light-mode nav#site-nav{
+    background: #000000 !important;
+}
+body.light-mode .logo-container a,
+body.light-mode nav#site-nav a{
+    color: #ffffff !important;
+}
+/* Hamburger bars (three lines) usually use .bar; ensure they're visible */
+body.light-mode .hamburger .bar{
+    background-color: #ffffff !important;
+}
+
+/* Footer styling for light mode */
+body.light-mode footer{
+    background: #ffffff !important;
+    color: #111111 !important;
+}
+
+/* Generic card / panel adjustments */
+body.light-mode .project-card{
+    background: #ffffff !important;
+    border-color: #e6e6e6 !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+}
+body.light-mode .project-title{ color: #111 !important; }
+body.light-mode .project-subtitle{ color: #444 !important; }
+
+/* Meme reveal overlay: dark overlay in normal (dark) mode; in light mode use
+   a pale overlay so the button remains readable against a white page. */
+.meme-overlay{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    transition: background 220ms ease, opacity 220ms ease;
+}
+body.light-mode .meme-overlay{
+    background: rgba(255,255,255,0.85) !important;
+}
+
+.meme-overlay .reveal-btn{
+    background: rgba(254,218,74,0.96);
+    color: #000;
+    border: 0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+body.light-mode .meme-overlay .reveal-btn{
+    background: #f5d85a !important;
+    color: #111 !important;
+}
+
+/* For Research page specifically, invert the reveal button colors in light mode
+   so it is the inverse of the dark-mode button above. */
+body.light-mode #meme-wrapper .reveal-btn,
+body.light-mode .research-meme #meme-wrapper .reveal-btn{
+    /* Slight dark translucent overlay so the button sits on white but remains visible */
+    background: rgba(0,0,0,0.06) !important;
+    color: #111 !important; /* black text */
+    border-color: rgba(0,0,0,0.06) !important;
+    transition: background 180ms ease, box-shadow 180ms ease, color 120ms ease !important;
+}
+
+body.light-mode #meme-wrapper .reveal-btn:hover,
+body.light-mode .research-meme #meme-wrapper .reveal-btn:hover,
+body.light-mode #meme-wrapper .reveal-btn:focus,
+body.light-mode .research-meme #meme-wrapper .reveal-btn:focus{
+    /* Slight dark yellow overlay on hover to match the requested accent */
+    background: rgba(160,138,65,0.12) !important; /* subtle dark yellow */
+    box-shadow: 0 0 0.2rem rgba(160,138,65,0.28) !important;
+    color: #111 !important;
+}
+
+
+/* Ensure text inputs / forms are legible */
+body.light-mode input,
+body.light-mode textarea,
+body.light-mode select{
+    background: #fff;
+    color: #111;
+    border: 1px solid #ddd;
+}
+
+/* Slight tweak for site logo when placed on the dark header in light-mode */
+body.light-mode .logo{ filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12)); }
+
+/* Utility: prefer-contrast adjustments for badges or small UI elements */
+body.light-mode .project-toggle{ color: #f5d85a !important; }
+
+/* Timeline & section overrides so dark sections don't stay black in light mode */
+body.light-mode .section-timeline,
+body.light-mode .section-timeline-heading{
+    background: #ffffff !important;
+}
+body.light-mode .timeline-text,
+body.light-mode .timeline-date-text,
+body.light-mode .timeline_link,
+body.light-mode .timeline_link a,
+body.light-mode .text-color-lightgrey{
+    color: #111111 !important;
+}
+body.light-mode .text-color-lightgrey{ color: #666666 !important; }
+body.light-mode .timeline-progress{ background-color: #e6e6e6 !important; }
+body.light-mode .timeline-progress-bar{ background: linear-gradient(to bottom, gold, #cc3d6a) !important; }
+
+/* Ensure the main page wrapper and sections also flip to light background
+   — this prevents specific section backgrounds from staying black. */
+body.light-mode .page-wrapper,
+body.light-mode main,
+body.light-mode .container,
+body.light-mode .section-timeline,
+body.light-mode .section-timeline-heading{
+    background: #ffffff !important;
+}
+
+/* Research intro and other subtitle text should be dark in light mode */
+body.light-mode .research-intro-text .research-intro{ color: #111111 !important; }
+body.light-mode .project-subtitle{ color: #222222 !important; }
+
+/* Invert the meme image colors for light mode so it reads on white */
+body.light-mode .meme-wrapper img,
+body.light-mode img.timeline-hero-image{
+    filter: invert(1) hue-rotate(180deg) contrast(0.95);
+}
+
+
+
+/* Header in light mode: white, blurred, no page-dimming; nav links are dark
+   with a bark-yellow highlight on hover/focus. This keeps the header light
+   while preserving readability and the blur effect. */
+body.light-mode header,
+body.light-mode nav#site-nav{
+    background: rgba(255,255,255,0.85) !important;
+    backdrop-filter: blur(8px) !important;
+    color: #111111 !important;
+}
+body.light-mode header.nav-open{
+    background: rgba(255,255,255,0.92) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* Nav link colors and highlight */
+/* Nav links in light mode: use dark-yellow highlight and no underline */
+body.light-mode nav#site-nav a{ color: #111111 !important; text-decoration: none !important; }
+body.light-mode nav#site-nav a:hover,
+body.light-mode nav#site-nav a:focus,
+body.light-mode nav#site-nav a:active{
+    color: #aa7e00 !important; /* dark yellow accent in light mode */
+    text-decoration: none !important;
+    box-shadow: inset 0 -2px 0 #aa7e00 !important;
+}
+
+/* Hamburger bars should be dark on the light header */
+body.light-mode .hamburger .bar{ background-color: #111 !important; }
+
+/* Disable the dark page-dim overlay when the nav is open in light mode */
+body.light-mode header.nav-open ~ .page-wrapper::before{
+    background: rgba(255,255,255,0) !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+}
+
+/* Invert SVG icons that live inside project cards when in light mode so
+   vector icons retain visible contrast on white card backgrounds. This
+   targets both inline <svg> and <img src="*.svg"> to cover common cases. */
+body.light-mode .project-card svg,
+body.light-mode .project-card img[src$=".svg"]{
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+/* Invert full-bleed contact/location and social images in light mode so
+   thumbnails and icons read on white backgrounds. Scoped to common contact
+   selectors used on the contact page. */
+body.light-mode .contact-photos img,
+body.light-mode .contact-card img,
+body.light-mode .contact-photos .contact-btn img,
+body.light-mode .social-card img{
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+/* Force social icons to render black in light mode (overrides the above
+   inversion for social icons so they appear as solid black glyphs). */
+body.light-mode .social-card img{
+    filter: brightness(0) saturate(100%) !important;
+}
+
+/* Slightly reduce hover opacity for social icons in light mode to give a
+   subtle feedback without making them too faint on white backgrounds. */
+body.light-mode .social-card:hover{
+    opacity: 0.9 !important;
+}
+
+/* Contact form card (light mode): make it white with dark text and a
+   light-yellow submit button so the form reads on a white page. */
+body.light-mode .contact-form-card{
+    background: #ffffff !important;
+    border-color: #e6e6e6 !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+    color: #111111 !important;
+}
+/* Make the contact form heading a dark yellow in light mode so it reads as
+    an accent while keeping good contrast on white backgrounds. */
+body.light-mode .contact-form-card .form-heading{ color: #aa7e00 !important; }
+body.light-mode .contact-form-card label{ color: #222222 !important; }
+body.light-mode .contact-form-card input,
+body.light-mode .contact-form-card textarea{
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #ddd !important;
+}
+body.light-mode .contact-form-card input:focus,
+body.light-mode .contact-form-card textarea:focus{
+    box-shadow: 0 0 0 4px rgba(245,216,90,0.08) !important;
+    border-color: rgba(245,216,90,0.85) !important;
+}
+body.light-mode .btn-submit{
+    background: linear-gradient(180deg,#ffe270d5,#ffe270d5) !important;
+    color: #111111 !important;
+    border: 1px solid #d6b84a !important;
+}
+body.light-mode .btn-submit:hover{ background: linear-gradient(180deg,#ffdc5c,#ffdc5c) !important; }
+
+/* Contact overlays & hover states in light mode
+   - Make the contact-card hover overlay light and the revealed details
+     overlay white with dark text and dark-yellow accents for links/actions. */
+body.light-mode .contact-card:hover .contact-hover{
+    background: rgba(255,255,255,0.88) !important;
+    color: #111111 !important;
+    opacity: 1 !important;
+}
+body.light-mode .contact-card .hover-text .question{
+    color: #111111 !important;
+}
+body.light-mode .contact-card .hover-text .action{
+    color: #aa7e00 !important; /* dark yellow accent */
+}
+
+body.light-mode .contact-card.revealed .contact-details{
+    background: rgba(169, 231, 150, 0.96) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    backdrop-filter: blur(6px) !important;
+    color: #000000 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+body.light-mode .contact-card.revealed .details-text{
+    color: #111111 !important;
+}
+body.light-mode .contact-card.revealed .details-text .contact-links a{
+    color: #147407 !important;
+}
+body.light-mode .contact-card.revealed .contact-close{
+    color: #111111 !important;
+}
+
+/* Wrong state: pale red overlay but readable text */
+body.light-mode .contact-card.wrong .contact-details{
+    background: rgba(255, 167, 167, 0.95) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    backdrop-filter: blur(6px) !important;
+    color: #550000 !important;
+}
+
+/* Contact details address text should be black in light mode */
+body.light-mode .contact-card .details-text .addr{
+    color: #111111 !important;
+}
+
+/* Make the 'correct' label a darker, more readable green in light mode
+   (overrides the lighter green used in dark mode). */
+body.light-mode .details-text .correct,
+body.light-mode .contact-card .details-text .correct{
+    color: #0b8a2a !important; /* darker green */
+}
+
+/* Theme toggle in the nav should invert in light mode: slight dark overlay
+   with black text, and a subtle dark-yellow hover to match the site accent. */
+body.light-mode nav .theme-toggle{
+    background: rgba(0,0,0,0.06) !important;
+    color: #111111 !important;
+    border-color: rgba(0,0,0,0.08) !important;
+}
+body.light-mode nav .theme-toggle:hover,
+body.light-mode nav .theme-toggle:focus{
+    background: rgba(160,138,65,0.12) !important; /* slight dark-yellow */
+    box-shadow: 0 0 0.2rem rgba(160,138,65,0.28) !important;
+}
+
+/* Publications page: make authors darker grey, abstracts black, and
+   the 'Show Abstract' toggle use a dark-yellow accent in light mode. */
+body.light-mode .project-authors{
+    color: #444444 !important; /* dark grey for author list */
+}
+body.light-mode .project-full{
+    color: #111111 !important; /* abstract text should be black in light mode */
+}
+body.light-mode .project-toggle{
+    background: transparent !important; /* keep button visually transparent */
+    color: #aa7e00 !important; /* dark-yellow text */
+    border: 0 !important;
+    padding: 8px 0 !important; /* keep vertical spacing but no horizontal padding */
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+body.light-mode .project-toggle:hover,
+body.light-mode .project-toggle:focus{
+    color: #b98d14 !important; /* slightly darker yellow on hover */
+    text-decoration: underline !important;
+}
+
+/* Publications: journal line and arXiv button styling in light mode */
+body.light-mode .project-journal{
+    color: #666666 !important; /* dark grey for journal/venue */
+}
+
+body.light-mode .arxiv-button{
+    background-color: #ffffff !important;
+    border: 1px solid #e6e6e6 !important; /* light grey border */
+    box-shadow: none !important;
+}
+
+/* Hover and active states for arXiv button in light mode */
+body.light-mode .arxiv-button:hover{
+    background-color: #fbfbfb !important; /* very subtle lighter background */
+}
+body.light-mode .arxiv-button:active{
+    background-color: #f2f2f2 !important; /* very light grey overlay when pressed */
+}
+
+
+

@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact</title>
-    <link rel="stylesheet" href="css/timeline_style.css">
+    <link href="css/utils.css" rel="stylesheet">
     <link rel="stylesheet" href="css/contact_style.css">
+    <link rel="stylesheet" href="css/light_mode.css">
 </head>
 <body>
 
@@ -28,6 +29,7 @@
             <a href="publications.html">Publications</a>
             <a href="repositories.html">Repositories</a>
             <a href="contact.html">Contact</a>
+            <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
         </nav>
     </header>
 
@@ -46,23 +48,7 @@
             <!-- Full-bleed location thumbnails (extend edge-to-edge) -->
             <div class="contact-photos full-bleed" aria-hidden="false">
                 <div class="contact-photos-inner">
-                    <div class="contact-card" data-id="kolkata" data-address="If I am here, then the most likely scenario is that I came home to visit my family....which means i am busy having biryani and may not be very active professionally. Still, feel free to reach out to me, as I am always checking my phone ;)" data-email1="alahiry@ics.forth.gr" data-email2="arnablahiry08@gmail.com" data-phone="+91 82407 85329">
-                        <div class="contact-btn" role="button" tabindex="0" aria-label="Kolkata location">
-                            <img src="images/contact/kolkata.png" alt="Kolkata" />
-                            <div class="contact-hover">
-                                <div class="hover-text">
-                                    <div class="question">Are you sure? ;)</div>
-                                    <div class="action">Click to get contact details</div>
-                                </div>
-                            </div>
-                            <div class="contact-details" aria-hidden="true">
-                                <button class="contact-close" aria-label="Close">×</button>
-                                <div class="details-text" role="status"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="contact-card" data-id="heraklion" data-address="If I am here, then I am at my main workplace :)<br>Feel free to reach me via any available<br>contact option/social media<br><br>100 Nikolaou Plastira str., Vassilika Vouton<br>Heraklion, Crete, GR 700 13<br>Greece" data-email1="alahiry@ics.forth.gr" data-email2="alahiry@physics.uoc.gr" data-phone="+30 698 218 0321">
+                    <div class="contact-card" data-id="heraklion" data-address="If I am here, then I am at my main workplace :)<br>Feel free to reach me via any available<br>contact option/social media<br><br><a href='https://maps.app.goo.gl/xMfmcS1E8tr3zg9DA' target='_blank' rel='noopener'>Office 108β, Department of Physics,<br>University of Crete (Voutes Campus),<br>Heraklion, Greece 700 13</a>" data-email1="alahiry@ics.forth.gr" data-email2="alahiry@physics.uoc.gr" data-phone="+30 698 218 0321">
                         <div class="contact-btn" role="button" tabindex="0" aria-label="Heraklion location">
                             <img src="images/contact/heraklion.png" alt="Heraklion" />
                             <div class="contact-hover">
@@ -81,6 +67,22 @@
                     <div class="contact-card" data-id="paris" data-address="10 Rue de Rivoli\n75001 Paris\nFrance" data-email1="arnab@domain.com" data-email2="office@lahiry.org" data-phone="+33 1 23 45 67 89">
                         <div class="contact-btn" role="button" tabindex="0" aria-label="Paris location">
                             <img src="images/contact/paris.png" alt="Paris" />
+                            <div class="contact-hover">
+                                <div class="hover-text">
+                                    <div class="question">Are you sure? ;)</div>
+                                    <div class="action">Click to get contact details</div>
+                                </div>
+                            </div>
+                            <div class="contact-details" aria-hidden="true">
+                                <button class="contact-close" aria-label="Close">×</button>
+                                <div class="details-text" role="status"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-card" data-id="kolkata" data-address="If I am here, then the most likely scenario is that I came home to visit my family....which means i am busy having biryani and may not be very active professionally. Still, feel free to reach out to me, as I am always checking my phone ;)" data-email1="alahiry@ics.forth.gr" data-email2="arnablahiry08@gmail.com" data-phone="+91 82407 85329">
+                        <div class="contact-btn" role="button" tabindex="0" aria-label="Kolkata location">
+                            <img src="images/contact/kolkata.png" alt="Kolkata" />
                             <div class="contact-hover">
                                 <div class="hover-text">
                                     <div class="question">Are you sure? ;)</div>
@@ -167,5 +169,6 @@
 
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/contact.js"></script>
+    <script src="scripts/theme-toggle.js"></script>
 </body>
 </html>

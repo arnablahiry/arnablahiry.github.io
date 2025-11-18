@@ -6,6 +6,16 @@
     background-color: black;
 }
 
+/* Defensive: ensure the main sections and containers on the Research page
+   remain dark in non-light-mode (prevent accidental white background). */
+body:not(.light-mode) .section-timeline,
+body:not(.light-mode) .section-timeline-heading,
+body:not(.light-mode) .page-wrapper,
+body:not(.light-mode) .container{
+    background: #000000 !important;
+    color: #e6e6e6 !important;
+}
+
 /* Container and spacing to match timeline page */
 .container{
     width: 90vw;
@@ -15,8 +25,9 @@
 }
 
 .padding-vertical-xlarge{
-    padding-top: 120px;
-    padding-bottom: 120px;
+    /* Nudge the whole page content a bit closer to the fixed header */
+    padding-top: 80px;
+    padding-bottom: 80px;
 }
 
 .timeline-main-heading-wrapper{
@@ -26,10 +37,82 @@
     max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
+    position: relative; /* allow absolute-positioned controls (theme toggle) inside */
+}
+
+/* Research page: place a small meme to the right of the intro paragraph.
+   The meme wrapper stretches to match the height of the intro text column.
+   Keep the meme visually small via a constrained width so it doesn't dominate. */
+.research-heading-row{
+    display: flex;
+    gap: 1.6rem;
+    align-items: stretch; /* ensure children match height */
+    justify-content: center;
+}
+.research-intro-text{
+    flex: 1 1 60%;
+}
+/* Intro paragraph styling (dark-mode defaults). Light mode overrides live in css/light_mode.css */
+.research-intro-text .research-intro{
+    color: #ffffff;
+    font-size: 2.2vh;
+    line-height: 1.45;
+}
+.research-meme{
+    flex: 0 0 250px; /* slightly narrower so it sits closer to text */
+    display: flex;
+    align-items: center;
+}
+.research-meme .meme-wrapper{ /* stretch the wrapper to the full height of the text column */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start; /* move meme slightly up */
+    justify-content: center;
+}
+.research-meme .timeline-hero-image{
+    height: 100%;
+    width: auto;
+    max-height: 360px; /* an extra safety cap so the meme stays reasonably small */
+    object-fit: contain;
+    transform: translateY(-8%); /* nudge image upward a bit */
+}
+
+/* Ensure the reveal button styling on Research matches Timeline in dark mode
+   (use higher specificity so other page rules don't accidentally change it). */
+/* Reveal button styling for research page: keep parity with timeline but
+   let the shared utils.css handle the base look. Additional per-page
+   adjustments can remain scoped or be removed if unnecessary. */
+.research-meme #meme-wrapper .reveal-btn{ padding: 0.6rem 0.95rem; border-radius: 8px; }
+.research-meme #meme-wrapper .reveal-btn:focus,
+.research-meme #meme-wrapper .reveal-btn:hover{ transform: translateY(-1px); }
+
+/* Force exact parity with the timeline reveal button in dark mode. We scope
+   to non-light-mode pages so light-mode rules (in css/light_mode.css) still
+   apply when the user enables light mode. */
+body:not(.light-mode) .research-meme #meme-wrapper .reveal-btn,
+body:not(.light-mode) #meme-wrapper .reveal-btn{
+    background: rgba(255,255,255,0.06) !important;
+    color: #ffffff !important;
+    border: 2px solid transparent !important;
+    padding: 0.6rem 1rem !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+}
+
+body:not(.light-mode) .research-meme #meme-wrapper .reveal-btn:focus,
+body:not(.light-mode) .research-meme #meme-wrapper .reveal-btn:hover,
+body:not(.light-mode) #meme-wrapper .reveal-btn:focus,
+body:not(.light-mode) #meme-wrapper .reveal-btn:hover{
+    box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8) !important;
+    background: rgba(160, 138, 65, 0.179) !important;
+    transition: transform 0.15s ease, background 0.3s ease, box-shadow 0.3s ease, border 0.15s ease !important;
 }
 
 .margin-bottom-medium{
-    margin-top: -4vh; /* reset any negative lift to avoid unexpected overlaps */
+    margin-top: -3vh; /* small upward lift so stacked elements sit closer */
     margin-bottom: 1vh; /* keep a small gap between stacked elements */
 }
 
@@ -37,7 +120,7 @@
    project cards sit closer to the subtitle. We scope to the heading section
    to avoid changing other pages that use the same utility class. */
 .section-timeline-heading .padding-vertical-xlarge{
-    padding-bottom: 10vh;
+    padding-bottom: 6vh;
 }
 
 /* Exact gradient text styling copied from timeline_style.css but scoped to the
@@ -55,10 +138,6 @@ h2.intro-heading{
     display: inline-block;
 }
 
-/* Make sure body text on this page is readable on black background */
-body{
-    background-color: black;
-}
 
 /* Small responsive tweak: allow the font to shrink slightly on very narrow screens */
 @media (max-width: 420px){
@@ -71,8 +150,8 @@ body{
 .projects-grid{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    margin-top: 0vh; /* bring cards closer to subtitle */
+    gap: 20px;
+    margin-top: -2vh; /* pull cards slightly upward to sit closer to the heading */
 }
 
 .project-card{
@@ -85,6 +164,16 @@ body{
     flex-direction: column;
     box-shadow: 0 4px 18px rgba(0,0,0,0.6);
 }
+
+/* Defensive: ensure Research page cards stay dark unless light-mode is active. */
+body:not(.light-mode) .project-card{
+    background: #0f0f10 !important;
+    border: 1px solid #232325 !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+    color: #e6e6e6 !important;
+}
+body:not(.light-mode) .project-card .project-title{ color: #ffffff !important; }
+body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important; }
 
 .project-image{
     width: 100%;
@@ -266,4 +355,18 @@ body.project-modal-open .project-toggle:focus{
    hide toggles on the page while a modal is active so the UI doesn't duplicate. */
 .project-clone .project-toggle{ display: none !important; }
 body.project-modal-open .project-toggle{ visibility: hidden !important; pointer-events: none !important; }
+
+/* Research-specific light-mode tweaks (kept minimal here). Global light-mode
+    rules live in css/light_mode.css which can be included on other pages too. */
+body.light-mode .timeline-main-heading-wrapper{ color: #111; }
+body.light-mode .research-intro-text p{ color: #222; }
+
+/* Research page: in light mode, make the divider line between the
+   project subtitle and the "Learn more" control a light grey so it
+   reads on a white card background. Scoped to #projects-grid to avoid
+   changing other pages. */
+body.light-mode #projects-grid .project-toggle{
+    border-top-color: #e6e6e6 !important;
+}
+
 

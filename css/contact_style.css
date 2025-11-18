@@ -13,8 +13,10 @@
 
 .padding-vertical-xlarge{
     /* move the page heading up a bit so content is tighter under the fixed header */
-    padding-top: 80px;
-    padding-bottom: 40px; /* slightly smaller so content sits closer */
+     /* tuned spacing: slightly increase gap between nav and heading while
+         keeping the cards close to the heading. */
+     padding-top: 75px;
+    padding-bottom: 20px;
 }
 
 .timeline-main-heading-wrapper{
@@ -88,9 +90,16 @@ body{
     background: rgba(0,0,0,0); color: #fff; opacity: 0; transition: background 180ms ease, opacity 180ms ease;
 }
 .contact-card:hover .contact-hover{ background: rgba(0, 0, 0, 0.632); opacity: 1; }
-.hover-text{ text-align: center; }
+.hover-text{ text-align: center; transition: transform 160ms ease; }
 .hover-text .question{ font-size: 2vh; font-weight: 700; margin-bottom: 6px; }
 .hover-text .action{ font-size: 1.6vh; color: #feda4a; }
+
+/* Move the hover overlay text slightly upwards when the overlay appears
+   so the copy feels visually centred over the image. */
+.contact-card:hover .hover-text,
+.contact-card:focus-within .hover-text{
+    transform: translateY(-30px);
+}
 
 .contact-details{
     position: absolute; inset: 0; display:flex; align-items:center; justify-content:center;
@@ -105,8 +114,13 @@ body{
     opacity: 1;
     pointer-events: auto;
     cursor: text;
+    z-index: 3; /* ensure details sits above hover overlay so text can be selected */
 }
-.contact-card.revealed .contact-hover{ opacity: 0; }
+.contact-card.revealed .contact-hover{
+    opacity: 0;
+    pointer-events: none; /* allow pointer interaction (selection) to reach the details */
+    z-index: 1; /* keep hover visually below details */
+}
 .details-text{ color: #e6e6e6; font-size: 1.9vh; white-space: pre-wrap; text-align: center; margin: 0 12px; }
 
 /* Close button inside details */
@@ -133,7 +147,12 @@ body{
     opacity: 1;
     pointer-events: none;
 }
-.contact-card.wrong .details-text{ color: #ffd7d7; font-weight: 700; }
+.contact-card.wrong .details-text{ color: #8b0000; font-weight: 700; }
+
+/* In dark mode, make the 'Wrong' text a lighter red for better contrast */
+body:not(.light-mode) .contact-card.wrong .details-text{
+    color: #ff8a8a !important;
+}
 
 /* Animations for wrong and revealed states */
 @keyframes wrongPulse {
@@ -156,16 +175,59 @@ body{
     animation: revealedFade 220ms ease;
 }
 
+/* When details are revealed, default the details text to black so the
+   copy reads on light overlays. Dark-mode will override this below to keep
+   white text on dark revealed overlays. */
+.contact-card.revealed .details-text{
+    color: #000000;
+}
+
+/* Ensure revealed details and their children remain selectable so the
+   selection highlight doesn't disappear when the overlay is active. */
+.contact-card.revealed .details-text,
+.contact-card.revealed .details-text *{
+    user-select: text !important;
+    -webkit-user-select: text !important;
+}
+
+/* Ensure dark-mode keeps the revealed details readable (light text on dark bg) */
+body:not(.light-mode) .contact-card.revealed .details-text{
+    color: #e6e6e6 !important;
+}
+
+
+
 /* Correct label & links inside details */
 .details-text .correct{
     font-weight: 700;
     font-size: 1.9vh;
-    color: #c7ffd0; /* light green */
+    color: #74ec92; /* dark green for correct */
     margin-bottom: 8px;
 }
 .details-text .addr{ color: #e6e6e6; margin-bottom: 8px; white-space: pre-wrap; }
 .details-text .contact-links a{ color: #adffa5; text-decoration: none; }
 .details-text .contact-links a:hover{ text-decoration: underline; }
+
+/* If the address is wrapped in an <a> (to make it a clickable link),
+   keep the text color the same as the surrounding .addr and only show
+   an underline on hover/focus. Also ensure visited links don't change
+   the color. This keeps the address visually consistent while making
+   it interactive. */
+.details-text .addr a{
+    color: inherit !important; /* keep same color (black in light-mode) */
+    text-decoration: none !important;
+    border-bottom: 1px solid transparent; /* prevents layout shift on hover in some browsers */
+    cursor: pointer;
+}
+.details-text .addr a:visited{
+    color: inherit !important;
+}
+.details-text .addr a:hover,
+.details-text .addr a:focus{
+    text-decoration: underline !important;
+    border-bottom-color: transparent;
+    outline: none;
+}
 
 /* small screens: make each card stack horizontally (one-per-row) */
 @media (max-width: 420px){
@@ -218,7 +280,9 @@ body{
 
 /* Tighter spacing and smaller heading on small screens for contact page */
 @media (max-width: 520px){
-    .padding-vertical-xlarge{ padding-top: 56px; padding-bottom: 28px; }
+    /* small screens: keep a slightly smaller top gap to accommodate the
+       fixed header while keeping cards visually close to heading */
+    .padding-vertical-xlarge{ padding-top: 48px; padding-bottom: 18px; }
     h2.intro-heading{ font-size: 5.2vh; }
     .timeline-main-heading-wrapper{ max-width: 90vw; }
     .margin-bottom-medium{ margin-bottom: 2vh; }
@@ -243,6 +307,12 @@ body{
 }
 .social-card img{ width: auto; height: 64px; display:block; filter: grayscale(1) brightness(0) invert(1); object-fit: contain; }
 .social-card:hover{ opacity: 0.85; }
+
+/* Specific hover opacity for Facebook and Instagram icons */
+.social-card[aria-label="Facebook"]:hover,
+.social-card[aria-label="Instagram"]:hover{
+    opacity: 0.8 !important;
+}
 
 @media (max-width: 900px){
     .social-cards{ justify-content: space-between; }

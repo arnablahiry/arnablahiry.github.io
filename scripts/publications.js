@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // ensure element can transition from 0 to measured height
                 const target = projectFull.scrollHeight;
                 projectFull.style.maxHeight = target + 'px';
-                toggle.textContent = 'Condense';
+                toggle.textContent = 'Hide Abstract';
 
                 // After transition, clear inline maxHeight so content can grow naturally
                 const onTransitionEnd = (e) => {
