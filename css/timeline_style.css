@@ -421,7 +421,7 @@ h2{
     .paragraph-large{font-size: 18px;}
     .padding-vertical-xlarge{
         padding-top: 80px;
-        padding-bottom: 80px;
+        padding-bottom: 50px;
     }
     .timeline-item{
         grid-template-columns: 64px 1fr;
@@ -448,7 +448,7 @@ h2{
     }
 
     .timeline-text{
-        font-size: 24;
+        font-size: 17px;
     }
 
     .timeline-progress{
@@ -494,4 +494,10 @@ h2{
     .margin-bottom-xlarge{
         margin-bottom: 48px;
     }
+}
+
+/* Ensure consistent mobile heading size across timeline, repositories, publications, research */
+@media (max-width: 520px) {
+    h2.intro-heading,
+    h2 { font-size: 5.2vh !important; }
 }

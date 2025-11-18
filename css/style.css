@@ -384,9 +384,10 @@ nav a:hover {
   max-width: 300px;
   max-height: 300px;
   border-radius: 50%;
-  border: 0.2rem solid #b39935;
+  border: 0.25rem solid #ffffff; /* white border */
   object-fit: cover;
-  margin-bottom: 2vh;
+  margin-bottom: 4vh; /* increased space between photo and intro text */
+  /* no glow - keep the border clean and white */
   opacity: 0;
   animation: fadeInPhoto 2s ease forwards;
   animation-delay: 24s;
@@ -401,7 +402,6 @@ nav a:hover {
   animation: fadeInText 2s ease forwards;
   animation-delay: 26s;
 }
-
 /* Social buttons stacked vertically below the tagline */
 .social-buttons {
   display: flex;
@@ -412,10 +412,37 @@ nav a:hover {
   align-items: center;
 }
 
+/* Photo wrapper positions the sunglasses overlay */
+.photo-wrapper{
+  position: relative;
+  display: inline-block;
+}
+
+/* Sunglasses overlay (hidden by default) */
+.sunglasses{
+  position: absolute;
+  left:47%;
+  top: 46%;
+  transform: translate(-50%, -50%) scale(0.9) rotate(-6deg);
+  width: 45%;
+  max-width: 220px;
+  pointer-events: none;
+  opacity: 0;
+  /* slow fade for hover reveal; transform snaps slightly faster for a gentle pop */
+  transition: opacity 1.2s ease-in-out, transform 420ms cubic-bezier(.2,.9,.2,1);
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.45));
+}
+
+/* Hover only: slowly fade in sunglasses on hover */
+.photo-wrapper:hover .sunglasses {
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  opacity: 1;
+}
+
 .social-link {
   display: inline-flex;
-  width: 65px;
-  height: 65px;
+  width: 48px;
+  height: 48px;
   align-items: center;
   justify-content: center;
   transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
@@ -507,13 +534,12 @@ nav a:hover {
 
 
 
-/* On phones: keep social icons their original size but lay them out
-   in 2 rows of 4 (4 columns) centered under the intro. */
+/* On phones and small tablets: show social icons in a single centered row */
 @media (max-width: 768px) {
   .social-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 37px);
-    gap: 0.2rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.4rem;
     justify-content: center;
     align-items: center;
     margin-top: 1rem;
@@ -524,6 +550,7 @@ nav a:hover {
     height: 40px;
   }
 }
+
 
 /* Fade-in animations */
 @keyframes fadeInContainer {
@@ -687,6 +714,8 @@ footer {
   .intro-photo {
     width: 180px;
     height: 180px;
+  margin-bottom: 3vh;
+  border: 0.22rem solid #ffffff;
   }
 
   .intro-text {
@@ -698,7 +727,7 @@ footer {
   }
 
   #tagline {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   #tagline2 {
@@ -724,6 +753,8 @@ footer {
   .intro-photo {
     width: 140px;
     height: 140px;
+  margin-bottom: 2.5vh;
+  border: 0.18rem solid #ffffff;
   }
 
   /* extra-small phones: increase the shift a bit more */
@@ -739,9 +770,28 @@ footer {
     font-size: 1.5rem;
   }
 
+  /* Reduce the tagline (PhD Candidate line) on very small phones for better fit */
+  #tagline {
+    font-size: 0.85rem;
+  }
+
   #skip-button {
     top: 25%;
     right: 10px;
+  }
+  /* On very small phones, show social icons in a single centered row */
+  .social-buttons {
+    display: flex !important;
+    flex-direction: row;
+    gap: 0.4rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.6rem;
+  }
+
+  .social-link {
+    width: 36px !important;
+    height: 36px !important;
   }
 }
 

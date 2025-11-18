@@ -37,7 +37,7 @@
                 <div class="padding-vertical-xlarge">
                     <div class="timeline-main-heading-wrapper">
                         <div class="margin-bottom-medium">
-                            <h2 class="intro-heading">Where can you find me?</h2>
+                            <h2 class="intro-heading">Where can <span class="line-break">you find me?</span></h2>
                         </div>
                         <!-- Location thumbnails: removed here; will be shown full-bleed below -->
                     </div>
@@ -115,12 +115,47 @@
 
         <div class="section-timeline">
             <div class="container">
-                <div class="contact-list">
-                    <ul>
-                        <li>Email: <a href="mailto:arnab@example.com">arnab@example.com</a></li>
-                        <li>GitHub: <a href="https://github.com/arnablahiry" target="_blank">github.com/arnablahiry</a></li>
-                        <li>Twitter: <a href="https://twitter.com/arnab" target="_blank">@arnab</a></li>
-                    </ul>
+                <!-- Contact form card: matches the dark card theme with gold accent -->
+                <div class="contact-form-wrap">
+                    <div class="contact-form-card">
+                        <form id="contact-form" novalidate>
+                            <h3 class="form-heading">Or if you want the easy way out...</h3>
+                            <div class="form-row">
+                                <label for="cf-name">Name</label>
+                                <input id="cf-name" name="name" type="text" required />
+                            </div>
+                            <div class="form-row">
+                                <label for="cf-email">Email</label>
+                                <input id="cf-email" name="email" type="email" required />
+                            </div>
+                            <div class="form-row">
+                                <label for="cf-subject">Subject</label>
+                                <input id="cf-subject" name="subject" type="text" />
+                            </div>
+                            <div class="form-row">
+                                <label for="cf-message">Message</label>
+                                <textarea id="cf-message" name="message" rows="6" required></textarea>
+                            </div>
+                            <div class="form-row form-actions">
+                                <button type="submit" class="btn-submit">Send Message</button>
+                                <div class="form-msg" aria-live="polite"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="social-cards">
+                    <a class="social-card" href="https://facebook.com/arnablahiry" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <img src="images/contact/facebook.png" alt="Facebook" />
+                    </a>
+                    <a class="social-card" href="https://instagram.com/arnab_lahiry" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <img src="images/contact/instagram.png" alt="Instagram" />
+                    </a>
+                    <a class="social-card" href="https://x.com/lahiryarnab" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                        <img src="images/contact/x.png" alt="X" />
+                    </a>
+                    <a class="social-card" href="https://linkedin.com/in/arnablahiry" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <img src="images/contact/linkedin.png" alt="LinkedIn" />
+                    </a>
                 </div>
             </div>
         </div>

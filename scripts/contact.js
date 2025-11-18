@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Valid ids: 'kolkata', 'heraklion', 'paris', 'world'
   const WINNER = 'heraklion';
 
+  // If you have a server endpoint to receive contact form submissions, set it here.
+  // Example (Formspree): 'https://formspree.io/f/yourFormId'
+  // Example (custom API): 'https://example.com/api/contact'
+  // Leave empty to fall back to opening the user's email client.
+  const CONTACT_ENDPOINT = 'https://formspree.io/f/myzozydb';
+
   // Localizable/overridable messages
   const MESSAGES = {
     wrong: 'Wrong! try again T_T',
@@ -104,6 +110,88 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
+  // Contact form handling (simple client-side feedback)
+  const contactForm = document.getElementById('contact-form');
+  if (contactForm) {
+    const msgEl = contactForm.querySelector('.form-msg');
+    const submitBtn = contactForm.querySelector('.btn-submit');
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (submitBtn) submitBtn.disabled = true;
+      const name = (contactForm.elements['name'] || {}).value || '';
+      const email = (contactForm.elements['email'] || {}).value || '';
+      const message = (contactForm.elements['message'] || {}).value || '';
+      // basic validation
+      if (!name.trim() || !email.trim() || !message.trim()) {
+        if (msgEl) { msgEl.textContent = 'Please fill name, email and message.'; msgEl.classList.remove('success'); msgEl.classList.add('error'); }
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+      }
+
+      const to = 'alahiry@ics.forth.gr';
+      const subj = (contactForm.elements['subject'] || {}).value || 'Message from website';
+
+      // If a CONTACT_ENDPOINT is configured, POST the data there. Support both Formspree (form endpoint)
+      // and generic JSON APIs. Otherwise fall back to mailto behavior.
+      if (CONTACT_ENDPOINT && CONTACT_ENDPOINT.trim().length > 0) {
+        try {
+          if (msgEl) { msgEl.textContent = 'Sending...'; msgEl.classList.remove('error','success'); }
+
+          let resp;
+          // Formspree endpoints typically accept form-encoded data. Detect by hostname pattern.
+          const isFormspree = CONTACT_ENDPOINT.includes('formspree.io');
+          if (isFormspree) {
+            const fd = new FormData();
+            fd.append('name', name);
+            fd.append('email', email);
+            fd.append('_replyto', email);
+            fd.append('subject', subj);
+            fd.append('message', message);
+            // Formspree supports CORS; request JSON response by requesting Accept: application/json.
+            resp = await fetch(CONTACT_ENDPOINT, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' }, mode: 'cors' });
+          } else {
+            const payload = { to, name, email, subject: subj, message };
+            resp = await fetch(CONTACT_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          }
+
+          if (resp && resp.ok) {
+            if (msgEl) { msgEl.textContent = 'Thanks — your message has been sent.'; msgEl.classList.remove('error'); msgEl.classList.add('success'); }
+            contactForm.reset();
+          } else {
+            const text = resp && typeof resp.text === 'function' ? await resp.text() : '';
+            if (msgEl) { msgEl.textContent = `Submission failed${text ? ': '+text : ''}`; msgEl.classList.remove('success'); msgEl.classList.add('error'); }
+          }
+        } catch (err) {
+          // Show a helpful message and automatically fall back to mailto: so user can still send the message.
+          console.error('Contact form send error:', err);
+          if (msgEl) {
+            msgEl.innerHTML = 'Network error while sending message. Falling back to opening your email client.\nPlease check your CONTACT_ENDPOINT or CORS settings.';
+            msgEl.classList.remove('success');
+            msgEl.classList.add('error');
+          }
+          // Attempt mailto fallback so the user can still send their message
+          try {
+            const bodyRawFb = `${message}\r\n\r\n${name}\r\n${email}`;
+            const mailtoFb = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(bodyRawFb)}`;
+            window.location.href = mailtoFb;
+          } catch (err2) {
+            console.error('Mailto fallback failed:', err2);
+          }
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+        }
+        return;
+      }
+
+      // No CONTACT_ENDPOINT configured: fall back to opening mail client but notify the user.
+      if (msgEl) { msgEl.textContent = 'No server endpoint configured — opening your email client as fallback.'; msgEl.classList.remove('error'); msgEl.classList.add('success'); }
+      const bodyRaw = `${message}\r\n\r\n${name}\r\n${email}`;
+      const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(bodyRaw)}`;
+      window.location.href = mailto;
+      setTimeout(() => { if (submitBtn) submitBtn.disabled = false; }, 900);
+    });
+  }
 });
 
 

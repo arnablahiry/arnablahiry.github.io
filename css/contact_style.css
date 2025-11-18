@@ -12,7 +12,8 @@
 }
 
 .padding-vertical-xlarge{
-    padding-top: 120px;
+    /* move the page heading up a bit so content is tighter under the fixed header */
+    padding-top: 80px;
     padding-bottom: 40px; /* slightly smaller so content sits closer */
 }
 
@@ -176,4 +177,91 @@ body{
     .contact-photos-inner{
         grid-template-columns: 1fr; /* stack on small screens */
     }
+}
+
+/* Contact form card styling (black with gold accents) */
+.contact-form-wrap{ width: 90vw; max-width: 920px; margin: 36px auto 24px; }
+.contact-form-card{
+    background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(10,10,10,0.95));
+    border: 1px solid rgba(255, 255, 255, 0.307);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.6);
+    padding: 22px; border-radius: 12px;
+}
+.contact-form-card .form-heading{
+    margin: 0 0 12px 0; color: #fff0b2; font-size: 2.6vh; font-weight: 800; text-align: left; padding-bottom: 15px;
+}
+.contact-form-card .form-row{ margin-bottom: 12px; }
+.contact-form-card label{ display:block; font-size: 1.6vh; color: #e6e6e6; margin-bottom: 6px; }
+.contact-form-card input[type="text"],
+.contact-form-card input[type="email"],
+.contact-form-card textarea{
+    width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.192);
+    background: rgba(255,255,255,0.02); color: #e6e6e6; font-size: 1.8vh; resize: vertical;
+    transition: box-shadow 140ms ease, border-color 140ms ease;
+}
+.contact-form-card input:focus, .contact-form-card textarea:focus{ outline: none; border-color: rgba(254,218,74,0.85); box-shadow: 0 0 0 4px rgba(254,218,74,0.06); }
+.contact-form-card .form-actions{ display:flex; align-items:center; gap: 12px; }
+.btn-submit{
+    background: linear-gradient(180deg,#524306d5,#4e3b07); color: #ffffff; border: 1px solid #9e8419; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight:700; font-size:1.8vh;
+    transition: background 200ms ease-in, transform 220ms ease;
+}
+.btn-submit:hover{ background: linear-gradient(180deg,#766009d5,#766009d5); }
+.btn-submit:active{ transform: translateY(1px); }
+.form-msg{ color: #cbd9c4; font-size: 1.7vh; }
+.form-msg.success{ color: #b7ffd0; }
+.form-msg.error{ color: #ffd7d7; }
+
+@media (max-width: 520px){
+    .contact-form-card{ padding: 16px; }
+    .contact-form-card .form-heading{ font-size: 2.4vh; }
+}
+
+/* Tighter spacing and smaller heading on small screens for contact page */
+@media (max-width: 520px){
+    .padding-vertical-xlarge{ padding-top: 56px; padding-bottom: 28px; }
+    h2.intro-heading{ font-size: 5.2vh; }
+    .timeline-main-heading-wrapper{ max-width: 90vw; }
+    .margin-bottom-medium{ margin-bottom: 2vh; }
+}
+
+/* Force a line break in the main contact heading on small screens */
+.intro-heading .line-break{ display: inline; }
+@media (max-width: 520px){
+    .intro-heading .line-break{ display: block; }
+}
+
+/* Social cards using the same visual language as contact-form-card */
+.social-cards{ display:flex; gap: 16px; width: 90vw; max-width: 920px; margin: 28px auto; flex-wrap: wrap; align-items: stretch; justify-content: center; }
+.social-card{
+    display:flex; align-items:center; justify-content:center;
+    background: transparent; /* no card background */
+    border: none;
+    padding: 8px 14px; text-align:center; text-decoration:none; color: #e6e6e6;
+    transition: opacity 140ms ease;
+    height: 72px; /* consistent height */
+    min-width: 72px; /* allow width to vary */
+}
+.social-card img{ width: auto; height: 64px; display:block; filter: grayscale(1) brightness(0) invert(1); object-fit: contain; }
+.social-card:hover{ opacity: 0.85; }
+
+@media (max-width: 900px){
+    .social-cards{ justify-content: space-between; }
+}
+@media (max-width: 520px){
+    .social-cards{ gap: 12px; }
+    .social-card{ height: 64px; min-width: 64px; padding: 8px; }
+        .social-card img{ height: 56px; }
+}
+
+/* Per-network fine-tuning: make X and LinkedIn slightly smaller, nudge Instagram down 1px */
+.social-card[aria-label="X (Twitter)"] img{ height: 32px; }
+.social-card[aria-label="Facebook"] img{ height: 45px; }
+.social-card[aria-label="LinkedIn"] img{ height: 32px; }
+.social-card[aria-label="Instagram"] img{  height: 45px; transform: translateY(3px); }
+
+@media (max-width: 520px){
+    .social-card[aria-label="Facebook"] img{ height: 35px; }
+    .social-card[aria-label="X (Twitter)"] img,
+    .social-card[aria-label="LinkedIn"] img{ height: 25px; }
+    .social-card[aria-label="Instagram"] img{ height: 35px; transform: translateY(1px); }
 }
