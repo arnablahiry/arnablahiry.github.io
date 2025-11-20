@@ -56,6 +56,30 @@ header{
     backdrop-filter: blur(8px);
 }
 
+/* Site-wide mobile header adjustments: move logo to left, reduce header
+   padding, make the logo slightly smaller and narrow the navbar spacing so
+   mobile headers feel tighter across all pages. These are site-wide defaults
+   and can be overridden by page-scoped CSS when necessary. */
+@media screen and (max-width: 768px){
+    header{
+        padding: 0.6rem 1rem !important; /* narrower header */
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .logo{ height: 6vh !important; width: auto !important; }
+
+    .logo-container{ margin-left: 0 !important; }
+
+    /* Narrow the inline nav spacing so the visible navbar area is tighter */
+    nav{ gap: 1rem !important; margin-right: 2vw !important; }
+
+    /* Ensure hamburger remains absolutely positioned to the right and vertically centered */
+    .hamburger{ display: block !important; position: absolute !important; right: 1rem !important; top: 50% !important; transform: translateY(-50%) !important; }
+}
+
 .hamburger{ display: none; background: transparent; border: 0; padding: 6px; width: 32px; height: 32px; position: relative; cursor: pointer; z-index: 50; }
 .hamburger .bar{ display: block; height: 2px; background: white; width: 86%; transition: transform 240ms ease, opacity 180ms ease, top 200ms ease; position: absolute; left: 50%; transform: translateX(-50%); }
 .hamburger .bar1{ top: 4px; } .hamburger .bar2{ top: 50%; transform: translateX(-50%) translateY(-50%); } .hamburger .bar3{ bottom: 4px; }
@@ -67,8 +91,11 @@ header.nav-open{ background-color: rgba(0,0,0,0.42); backdrop-filter: blur(6px);
 
 /* When mobile nav opens, slide-in nav panel overlay behavior should dim the page;
    these baseline rules are used by pages that implement the mobile nav. */
+/* Ensure open-state uses the site-wide mobile nudge so pages render the
+   same expanded nav layout. Pages may override, but this baseline keeps
+   behavior consistent across the site. */
 header.nav-open nav{
-    transform: translateX(0);
+    transform: translateX(15px);
     opacity: 1;
     pointer-events: auto;
 }
@@ -81,7 +108,8 @@ footer{ background: #000000; color: #ffffff; text-align: center; margin: 0; padd
     content: '';
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.75);
+    /* Use a CSS variable to control dim opacity when the mobile nav opens */
+    background: rgba(0,0,0,var(--page-dim-opacity));
     opacity: 0;
     pointer-events: none;
     transition: opacity 220ms ease;
@@ -113,6 +141,13 @@ nav .theme-toggle{
     justify-content: center;
     gap: 0.4rem;
     line-height: 1;
+}
+/* Disabled state for theme toggle (homepage uses a disabled toggle during the intro) */
+nav .theme-toggle[disabled],
+nav .theme-toggle[aria-disabled="true"]{
+    opacity: 0.45 !important;
+    pointer-events: none !important;
+    cursor: default !important;
 }
 /* SVGs are block-level inside the button so flex centering works reliably */
 nav .theme-toggle svg{ display: block; }
@@ -245,10 +280,13 @@ h2{
        header.nav-open is set by the hamburger script). This mirrors the
        vertical nav used on timeline.html. */
     nav{
-        /* panel overlay anchored to the right */
+        /* panel overlay anchored to the right; use the same visual
+           layout on every page so the mobile experience is consistent. */
         position: fixed;
         top: 0;
-        right: 0;
+        /* offset by header horizontal padding so the panel sits flush
+           with the page edge */
+        right: calc(-2vw);
         height: 100vh;
         width: 82vw;
         max-width: 360px;
@@ -267,9 +305,11 @@ h2{
         text-align: center;
     }
 
-    /* Show the panel when nav is opened */
+    /* Show the panel when nav is opened. The 20px translate nudges the
+       expanded panel slightly to the right to visually align with the
+       header and page edges. */
     header.nav-open nav{
-        transform: translateX(0);
+        transform: translateX(15px);
         opacity: 1;
         pointer-events: auto;
     }

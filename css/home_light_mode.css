@@ -1,0 +1,225 @@
+
+/* Light-mode only: style audio buttons on the homepage with a very light
+   translucent yellow background and a subtle background-image for depth.
+   This applies only on the homepage because this file is loaded only on
+   `index.html`. We keep existing borders and only set fills/colour for
+   icons/text so contrast is preserved. */
+body.light-mode #audio-controls button,
+body.light-mode #audio-player button,
+body.light-mode #play-pause,
+body.light-mode #pause-scroll,
+body.light-mode #skip-button,
+body.light-mode #restart-button {
+  background-color: rgba(254,218,74,0.12) !important; /* very light yellow */
+  background-image: linear-gradient(180deg, rgba(254,218,74,0.10), rgba(254,218,74,0.03)) !important;
+  background-clip: padding-box !important;
+  color: #000000 !important;
+  border-color: rgba(149, 127, 38, 0.95) !important;
+}
+
+/* Ensure SVG icons and IMG inside these buttons are dark for contrast */
+body.light-mode #audio-controls button svg,
+body.light-mode #audio-controls button img,
+body.light-mode #audio-player button svg,
+body.light-mode #audio-player button img {
+  fill: #000000 !important;
+  stroke: #000000 !important;
+  color: #000000 !important;
+  filter: none !important;
+}
+
+/* Specifically invert the restart/reload icon so it reads properly on the
+   light yellow background — restart is an <img> inside #restart-button. */
+/* Restart icon: invert only in dark mode so it appears white on dark
+   backgrounds but stays normal in light mode. */
+/* Make restart icon white in LIGHT mode and normal/dark in dark mode.
+   Use a higher-specificity selector (include the audio-controls container)
+   so this overrides more generic image filter rules applied elsewhere. */
+body.light-mode #audio-controls #restart-button img,
+body.light-mode #restart-button img {
+  filter: invert(1) !important;
+  -webkit-filter: invert(1) !important;
+}
+
+body:not(.light-mode) #audio-controls #restart-button img,
+body:not(.light-mode) #restart-button img {
+  /* ensure no inversion in dark mode */
+  filter: invert(0) !important;
+  -webkit-filter: invert(0) !important;
+}
+
+
+
+
+/* Ensure site-link text and icons are black when the page is in light mode.
+   Cover both the `.site-link.light-mode` (if present) and the global
+   `body.light-mode .site-link` usage; force icon/SVG fills and remove
+   image filters that would invert them. */
+body.light-mode .site-links .site-link,
+body.light-mode .site-link,
+.site-link.light-mode {
+  color: #000000 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8rem; /* wide enough for labels */
+  height: 4.5rem;
+  padding: 0 0.6rem;
+  background: rgba(254, 252, 244, 0.544); /* semi-transparent fill */
+  text-decoration: none;
+  border: 0.05rem solid rgb(135, 122, 50);
+  border-radius: 6px;
+  font-family: "Poppins", "Montserrat", sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  box-shadow: 0 0 0.08rem rgba(254, 218, 74, 0.5);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.15s ease;
+}
+
+/* Ensure the mobile (phone) layout for site-links in light mode matches
+   the dark-mode mobile layout exactly. Style is duplicated from
+   `css/style.css` mobile rules but scoped to `body.light-mode` so the
+   visual/spacing alignment is identical on the homepage in light mode. */
+@media (max-width: 768px) {
+  body.light-mode .site-links {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(140px, 1fr)) !important;
+    gap: 0.7rem 0.8rem !important; /* vertical then horizontal spacing */
+    justify-content: center !important;
+    align-items: center !important;
+    width: 90% !important;
+    max-width: 480px !important;
+    margin: 0.8rem auto 0 !important;
+  }
+
+  body.light-mode .site-link,
+  .site-link.light-mode {
+    width: 100% !important;
+    height: 4rem !important; /* increased vertical length */
+    font-size: 0.8rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 0.8rem !important;
+  }
+}
+
+/* Homepage-only: ensure audio controls are centered on phone in both themes.
+   This is scoped to the homepage (this file) and applied only on small
+   viewports so the vertical offset already set elsewhere remains unchanged. */
+@media (max-width: 768px) {
+  #audio-controls {
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) translateY(60%)!important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    top: 64px !important; /* keep current vertical offset */
+  }
+}
+
+/* Hover: slightly yellowish background and a light shadow that matches
+   the border color for a subtle glow. Use !important to ensure this
+   wins over global hover rules. */
+body.light-mode .site-links .site-link:hover,
+body.light-mode .site-link:hover,
+.site-link.light-mode:hover {
+  background-color: rgba(255, 246, 211, 0.424) !important; /* subtle yellow on hover */
+  box-shadow: 0 0 0.12rem rgba(135,122,50,0.35) !important; /* light shadow with border color */
+  border-color: rgba(149,127,38,1) !important;
+}
+
+body.light-mode .social-link img {
+  width: 60%;
+  height: auto;
+  display: block;
+  filter: invert(0)  brightness(1.5); /* works for dark icons; remove if your icons are colored */
+}
+
+
+body.light-mode .social-link:hover,
+body.light-mode .social-link:focus {
+  transform: scale(1.0);
+  filter: brightness(1.0);
+  outline: none;
+}
+
+/* Homepage-specific hard override: force header into a horizontal row on
+   small screens so the logo sits flush-left and the hamburger/nav sit on
+   the right. This file is loaded last on index.html so these rules win. */
+@media (max-width: 768px) {
+  header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  header > .logo-container {
+    margin-left: 0 !important;
+    order: 0 !important;
+    align-self: center !important;
+  }
+
+  header > nav {
+    margin-left: auto !important; /* push nav/hamburger to the right */
+  }
+
+  .hamburger{
+    display: block !important;
+    position: absolute !important;
+    right: 1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+}
+
+/* Reapply homepage mobile header/logo left-alignment so the logo sits
+   flush-left on phones and the hamburger remains vertically centered.
+   Scoped to the homepage (this file) to avoid affecting other pages. */
+@media (max-width: 768px) {
+  header {
+    justify-content: space-between !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .logo-container {
+    order: 0 !important;
+    margin-left: 0 !important;
+    position: relative !important;
+    left: 0 !important;
+  }
+
+  .logo{
+    height: 6vh !important;
+    width: auto !important;
+  }
+
+  .hamburger{
+    display: block !important;
+    position: absolute !important;
+    right: 1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+}
+
+/* Homepage-only: white overlay and light-mode background-image transform.
+   These were intentionally moved from the global `light_mode.css` so that
+   other pages don't visually transition from dark -> light on initial load.
+   This file is only included on `index.html`, so the site-wide theme toggle
+   still works everywhere but the heavy visual effects are scoped to home. */
+:root{ --light-image-overlay-opacity: 0.75; --nav-bg-opacity: 0.0; --nav-open-opacity: 0.95; --hamburger-bg-opacity: 0.0; --hamburger-blur: 0px; }
+body.light-mode #image-overlay{
+    background: rgba(255,255,255,var(--light-image-overlay-opacity)) !important;
+}
+
+/* Light-mode: invert and tone the full background image for a light feel */
+body.light-mode #bg-image{
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.95) !important;
+}

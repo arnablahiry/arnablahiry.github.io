@@ -58,5 +58,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize button state
   updateButton(overlay.classList.contains('revealed'));
+
+  // If auto-skip is disabled across the site, auto-click any reveal buttons
+  // found on the page so memes are revealed automatically on load.
+  try {
+    const autoSkip = localStorage.getItem('auto:skip');
+    if (autoSkip === 'off') {
+      // Click all elements with the `.reveal-btn` selector if they are not
+      // already in the 'pressed' state. This triggers existing handlers.
+      document.querySelectorAll('.reveal-btn').forEach((b) => {
+        try {
+          if (b.getAttribute('aria-pressed') !== 'true') b.click();
+        } catch (e) {}
+      });
+    }
+  } catch (e) {}
 });
 

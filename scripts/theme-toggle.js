@@ -11,6 +11,19 @@
   const MOON_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/></svg>';
 
   function apply(theme){
+    // If a page requests the theme to be locked to dark (e.g. homepage while
+    // an intro/crawl is running) respect that lock and force dark mode.
+    if(document.body && document.body.dataset && document.body.dataset.themeLock === 'dark'){
+      theme = 'dark';
+    }
+
+    // Preserve nav-open state (if header/menu is currently open) so toggling
+    // the theme won't unexpectedly close the mobile nav. We'll reapply the
+    // header 'nav-open' class and hamburger state after changing the theme.
+    const header = document.querySelector('header');
+    const hamburger = document.querySelector('.hamburger');
+    const wasNavOpen = header && header.classList.contains('nav-open');
+
     if(theme === 'light'){
       document.body.classList.add('light-mode');
       if(btn){
@@ -26,7 +39,26 @@
         btn.innerHTML = SUN_SVG + '<span class="sr-only">Light</span>';
       }
     }
+
+    // Reapply nav-open if it was set before the theme change. This ensures the
+    // open navigation remains visible across theme toggles.
+    if(wasNavOpen && header){
+      header.classList.add('nav-open');
+      if(hamburger){
+        hamburger.classList.add('open');
+        hamburger.setAttribute('aria-expanded','true');
+      }
+    }
   }
+
+  // Re-apply stored theme when other parts of the app signal the lock state
+  // changed (e.g. homepage crawl started/stopped). The apply() function
+  // above will honor body.dataset.themeLock === 'dark' and force dark when
+  // required.
+  document.addEventListener('theme:lock-changed', () => {
+    const stored = localStorage.getItem(KEY) || 'dark';
+    apply(stored);
+  });
 
   // Initialize from storage (default dark)
   const stored = localStorage.getItem(KEY) || 'dark';
@@ -37,7 +69,19 @@
   // chosen preference.
   if(!btn) return;
 
-  btn.addEventListener('click', function(){
+  btn.addEventListener('click', function(e){
+    // Prevent this click from bubbling to document-level handlers that may
+    // close the navigation (the site has a document click listener which
+    // closes the nav on outside clicks). Stopping propagation ensures the
+    // theme toggle won't inadvertently trigger a nav-close.
+    if(e && typeof e.stopPropagation === 'function'){
+      e.stopPropagation();
+      e.stopImmediatePropagation && e.stopImmediatePropagation();
+    }
+
+    // If theme is locked (homepage during crawl), ignore clicks
+    if(document.body && document.body.dataset && document.body.dataset.themeLock === 'dark') return;
+
     const next = document.body.classList.contains('light-mode') ? 'dark' : 'light';
     localStorage.setItem(KEY, next);
     apply(next);

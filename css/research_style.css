@@ -138,6 +138,10 @@ h2.intro-heading{
     display: inline-block;
 }
 
+/* By default keep title on one line; the .break-after span will be turned
+   into a block on phones to create the requested line-break after "Scientific". */
+.intro-heading .break-after{ display: inline; }
+
 
 /* Small responsive tweak: allow the font to shrink slightly on very narrow screens */
 @media (max-width: 420px){
@@ -162,7 +166,7 @@ h2.intro-heading{
     .research-meme .meme-wrapper{ width: 100%; height: auto; display: flex; justify-content: center; }
     .research-meme .timeline-hero-image{
         /* reduce the meme size on phones to avoid visual dominance */
-        max-height: 180px;
+        max-height: 140px;
         width: auto;
         transform: none;
         margin: 0 auto;
@@ -171,6 +175,13 @@ h2.intro-heading{
     /* Intro text flows under the meme and uses full width */
     .research-intro-text{ width: 100%; }
     .research-intro-text .research-intro{ text-align: left; }
+
+    /* Reduce intro paragraph size slightly on phones */
+    .research-intro-text .research-intro{ font-size: 1.6vh !important; text-align: center;}
+
+    /* Force a line-break after the word "Scientific" by rendering the
+       wrapped span as block-level on phones. */
+    .intro-heading .break-after{ display: block !important; }
 
     /* Increase spacing between the fixed header and the heading on phones */
     .padding-vertical-xlarge{ padding-top: 100px; padding-bottom: 40px; }
@@ -210,13 +221,15 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
     height: 180px;
     object-fit: cover;
     display: block;
-    transition: transform 360ms cubic-bezier(.2,.9,.2,1);
+    /* enforce a soft zoom transition and ensure it wins over other rules */
+    transition: transform 480ms cubic-bezier(0.22, 0.1, 0.22, 1) !important;
     transform-origin: center center;
+    will-change: transform;
 }
 
 /* Slight zoom on hover for closed cards (avoid affecting the animated clone) */
 .project-card:not(.project-clone):hover .project-image{
-    transform: scale(1.06); /* slightly larger zoom */
+    transform: scale(1.05) !important; /* enforce softer zoom */
 }
 
 .project-meta{
@@ -255,7 +268,8 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
     background: rgba(254,218,74,0.10);
     pointer-events: none;
     opacity: 0; /* default hidden; shown only on hover */
-    transition: opacity 220ms cubic-bezier(.2,.9,.2,1);
+    /* make overlay fade a touch smoother */
+    transition: opacity 380ms cubic-bezier(0.22, 0.1, 0.22, 1);
     border-radius: 0;
 }
 /* show the subtle yellow overlay only when hovering the button or the card (closed state) */
@@ -280,7 +294,7 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
 
 /* Fullscreen animated clone used when opening a project */
 .project-clone{
-    transition: top 360ms cubic-bezier(.2,.9,.2,1), left 360ms cubic-bezier(.2,.9,.2,1), width 360ms cubic-bezier(.2,.9,.2,1), height 360ms cubic-bezier(.2,.9,.2,1), border-radius 260ms ease, box-shadow 260ms ease;
+    transition: top 480ms cubic-bezier(0.22, 0.1, 0.22, 1), left 480ms cubic-bezier(0.22, 0.1, 0.22, 1), width 480ms cubic-bezier(0.22, 0.1, 0.22, 1), height 480ms cubic-bezier(0.22, 0.1, 0.22, 1), border-radius 260ms ease, box-shadow 260ms ease;
     box-shadow: 0 18px 40px rgba(0,0,0,0.7);
     border-radius: 10px;
     background: #0b0b0b;
@@ -368,7 +382,7 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
 .project-clone .project-image{
     will-change: transform;
     transform: translateZ(0);
-    transition: transform 360ms cubic-bezier(.2,.9,.2,1);
+    transition: transform 480ms cubic-bezier(0.22, 0.1, 0.22, 1);
 }
 
 /* While a project modal is open, suppress focus outlines on cards and buttons */
@@ -397,6 +411,58 @@ body.light-mode .research-intro-text p{ color: #222; }
    changing other pages. */
 body.light-mode #projects-grid .project-toggle{
     border-top-color: #e6e6e6 !important;
+}
+
+/* Mobile: nudge the expanded navigation panel a few pixels to the right
+   on the Research page so it aligns visually with other pages that apply
+   the same transform. Uses !important to override the global rule if
+   necessary for this page's styles. */
+@media (max-width: 768px){
+    header.nav-open nav {
+        transform: translateX(15px) !important;
+    }
+}
+
+
+/* Desktop (PC) specific: fix light-mode 'Learn more' layout on Research page
+   so it mirrors the dark-mode desktop layout (full-width toggle, top border,
+   correct padding/alignment). Scoped to Research page using #projects-grid
+   and body.light-mode so it only affects Research in light mode. */
+@media (min-width: 769px){
+    body.light-mode #projects-grid .project-toggle{
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        /* Match dark-mode padding exactly for the learn-more control */
+        padding: 12px 16px !important;
+        text-align: left !important;
+        border: none !important;
+        border-top: 1px solid #e6e6e6 !important;
+        background: transparent !important;
+        margin: 0 !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+    }
+
+    /* Ensure the project card has expected padding so the toggle lines up */
+    /* Keep outer card padding 0 (matches dark-mode default) and put
+       the interior spacing on .project-meta so title/subtitle match */
+    body.light-mode #projects-grid .project-card{
+        padding: 0 !important;
+    }
+
+    body.light-mode #projects-grid .project-meta{
+        padding: 16px !important;
+    }
+
+    /* Ensure title/subtitle margins mirror dark-mode */
+    body.light-mode #projects-grid .project-title{
+        margin: 0 0 6px 0 !important;
+        font-size: 2.4vh !important;
+    }
+    body.light-mode #projects-grid .project-subtitle{
+        margin: 0 !important;
+    }
 }
 
 

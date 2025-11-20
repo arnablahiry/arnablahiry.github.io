@@ -158,13 +158,14 @@ body{
     background-color: #000000;
     border: none;
     border-radius: 6px; 
-    padding-right: 5px;              /* remove padding */
+    /* slightly more vertical and horizontal padding for a touch target */
+    padding: 6px 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 5vw;      /* shrink-wrap to the image */
+    width: auto;      /* let content size determine width */
     margin-bottom: 8px; /* gap between arXiv button and the toggle */
     margin-right: 10px; /* small horizontal gap if buttons appear inline */
 }
@@ -174,9 +175,34 @@ body{
 }
 
 .arxiv-button img {
-    width: 40px; /* Small icon size */
-    height: 40px;
+    height: 18px; /* smaller icon height to make the button feel smaller */
+    width: auto;
 }
+.action-buttons{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap; /* allow wrapping on very narrow screens */
+    margin-bottom: 6px;
+}
+
+/* APJ button: same visual treatment as arXiv button */
+.apj-button {
+    background-color: #000000;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto;
+    margin-bottom: 8px;
+    margin-right: 10px;
+}
+.apj-button:hover{ background-color: #232323; }
+.apj-button img{ height: 18px; width: auto; }
 
 /* Mobile: stack publication card image above the text and controls */
 @media (max-width: 768px){
@@ -189,26 +215,43 @@ body{
     }
 
     .project-image{
-        width: 100%;
-        height: auto;
-        max-height: 200px;
-        object-fit: cover;
-        margin: 0 0 12px 0;
-        border-radius: 8px;
+        /* Make the image part narrower on phones so the visual focus is
+           more on the text content. Center the image inside the card and
+           limit height to avoid very tall images. */
+        width: 100% !important;
+        max-width: 420px !important;
+        height: auto !important;
+        max-height: 120px !important;
+        object-fit: cover !important;
+        margin: 0 auto 12px auto !important;
+        border-radius: 8px !important;
     }
 
     .project-meta{
         padding: 0 4px 12px 4px;
     }
 
-    .project-title{ font-size: 2.4vh; }
+     /* Reduce the heading size on phones so card titles take up less vertical
+         space and better match the Publications page visual density. */
+     .project-title{ font-size: 2.0vh !important; }
 
     .project-toggle{ padding-top: 12px; padding-left: 0; }
     /* Make arXiv button match desktop sizing on mobile (no tiny vw-based width) */
     .arxiv-button{
         width: auto !important;
-        padding: 6px 10px !important;
-        min-width: 56px;
+        padding: 10px 14px !important;
+        min-width: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+
+    /* APJ button should behave the same on mobile */
+    .apj-button{
+        width: auto !important;
+        padding: 10px 14px !important;
+        min-width: 38px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -222,8 +265,39 @@ body{
         display: block;
         width: 100%;
         box-sizing: border-box;
-        padding: 12px 16px !important;
-        text-align: left;
-        border-top: 1px solid #222;
+        /* increase space between the top divider and text and remove left
+           inset so the text aligns flush with card content */
+        padding-top: 16px !important;
+        padding-left: 0 !important;
+        padding-right: 16px !important;
+        padding-bottom: 12px !important;
+        text-align: left !important;
+        /* only keep the top border */
+        border: none !important;
+        border-top: 1px solid #222 !important;
     }
 }
+
+/* Dark-mode parity: ensure buttons align exactly like light-mode and
+   make APJ button inverted (white background, black icon) in dark mode. */
+
+body:not(.light-mode) .arxiv-button,
+body:not(.light-mode) .apj-button{
+    padding: 8px 14px;
+    margin-right: 10px;
+    margin-bottom: 8px;
+    width: auto;
+}
+body:not(.light-mode) .arxiv-button img,
+body:not(.light-mode) .apj-button img{
+    height: 18px;
+    width: auto;
+}
+/* In dark mode, invert APJ button colors to white background with a black glyph */
+body:not(.light-mode) .apj-button, .arxiv-button{
+    background-color: #000000 !important;
+    border: 1px solid #353535 !important;
+    box-shadow: none !important;
+}
+body:not(.light-mode) .apj-button:hover, .arxiv-button:hover{ background-color: #242424 !important; }
+body:not(.light-mode) .apj-button img{ filter: invert(1) brightness(100%) !important; }

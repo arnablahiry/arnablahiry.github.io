@@ -3,12 +3,12 @@ const audio = document.getElementById('my-audio');
 const btn = document.getElementById('play-pause');
 const AUTO_PLAY_KEY = 'audio:playOnLoad';
 
-// If a previous action requested autoplay on next load (auto-skip toggle),
-// consume that request now and try to start playback after listeners attach.
-let _playOnLoadRequested = false;
+// Consume a request to autoplay (set by other UX like auto-skip toggle).
+// Read it now so we can remove it and act after listeners are attached.
+let _requestedPlayOnLoad = false;
 try {
-  _playOnLoadRequested = (localStorage.getItem(AUTO_PLAY_KEY) === 'on');
-  if (_playOnLoadRequested) localStorage.removeItem(AUTO_PLAY_KEY);
+  _requestedPlayOnLoad = (localStorage.getItem(AUTO_PLAY_KEY) === 'on');
+  if (_requestedPlayOnLoad) localStorage.removeItem(AUTO_PLAY_KEY);
 } catch (e) {}
 
 // Inline SVGs for music icon and crossed-music icon
@@ -42,7 +42,8 @@ if (btn && audio) {
 
   btn.addEventListener('click', () => {
     if (audio.paused) {
-      audio.play().then(() => renderPlayingIcon()).catch(() => renderPlayIcon());
+      audio.play();
+      renderPlayingIcon();
     } else {
       audio.pause();
       renderPlayIcon();
@@ -53,24 +54,13 @@ if (btn && audio) {
   audio.addEventListener('play', renderPlayingIcon);
   audio.addEventListener('pause', renderPlayIcon);
 
-  // If a play-on-load was requested, attempt to play now. This is best-effort;
-  // browsers may block autoplay without a user gesture. We attempt to call
-  // audio.play() directly and fall back to programmatically clicking the
-  // play button for consistency with the UI handlers.
-  if (_playOnLoadRequested) {
+  // If another script requested a play-on-load, trigger a click now that
+  // listeners are attached. Use a short timeout to ensure everything settled.
+  if (_requestedPlayOnLoad) {
     try {
-      const p = audio.play();
-      if (p && typeof p.then === 'function') {
-        p.then(() => renderPlayingIcon()).catch(() => {
-          // If direct play was blocked, try the UI click handler as a fallback
-          try { btn.click(); } catch (e) {}
-        });
-      } else {
-        // If play() isn't promise-based, still attempt click.
-        try { btn.click(); } catch (e) {}
-      }
-    } catch (e) {
-      try { btn.click(); } catch (ee) {}
-    }
+      setTimeout(() => {
+        try { btn.click(); } catch (e) { /* best-effort */ }
+      }, 50);
+    } catch (e) {}
   }
 }

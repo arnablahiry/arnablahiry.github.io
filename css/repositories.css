@@ -68,8 +68,10 @@ footer{ background: transparent; color: #ffffff; padding: 28px 0; text-align: ce
   gap: 1vh 12px; /* reduce vertical + horizontal gap between avatar/meta and action */
   align-items: start;
   padding: 18px;
-  border: 2px solid rgba(254,218,74,0.18);
+  border: 2px solid rgba(254,218,74,0.12); /* subtle yellow border in dark mode */
   background: linear-gradient(180deg, rgba(254,218,74,0.04), transparent);
+  /* reduced shadow to make the profile card subtler */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.06);
 }
 
 .profile-avatar{
@@ -124,6 +126,18 @@ footer{ background: transparent; color: #ffffff; padding: 28px 0; text-align: ce
   .profile-avatar{ width:80px; height:80px }
 }
 
+/* Mobile: reduce top spacing for the heading so it sits closer to the content */
+@media (max-width: 720px){
+  .section-timeline-heading .padding-vertical-xlarge{
+    padding-top: 4px !important;
+    padding-bottom: 10px !important;
+  }
+  .section-timeline-heading h2.intro-heading{
+    margin-top: 10vh !important; /* move up on phones */
+    margin-bottom: 30px !important; /* slightly reduce gap below */
+  }
+}
+
 /* Make repo grid 3 columns on wide screens */
 @media (min-width: 1000px){
   .repos-grid{
@@ -157,4 +171,59 @@ footer{ background: transparent; color: #ffffff; padding: 28px 0; text-align: ce
 .timeline-main-heading-wrapper{ margin-bottom: 0; }
 /* reduce the default large bottom margin used site-wide for this page */
 .section-timeline-heading .margin-bottom-medium{ margin-bottom: 8px !important; }
+
+/* Center the page heading for Repositories page */
+.timeline-main-heading-wrapper{ text-align: center; }
+.section-timeline-heading h2.intro-heading{ display: inline-block; margin-left: auto; margin-right: auto; }
+
+/* Light-mode parity: mirror Research/Publications light-mode card layout
+   and color treatment when body has .light-mode so the repositories page
+   visually matches the other pages under light mode. */
+body.light-mode html, body.light-mode body{ background: #ffffff !important; color: #111111 !important; }
+body.light-mode .page-wrapper, body.light-mode .section-timeline, body.light-mode .section-timeline-heading{ background: #ffffff !important; }
+body.light-mode .repo-card{
+  background: #ffffff !important;
+  border-color: #e6e6e6 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+  color: #111111 !important;
+}
+body.light-mode .repo-card .repo-name a{ color: #0b57a4 !important; }
+body.light-mode .repo-desc, body.light-mode .repo-subtitle, body.light-mode .repo-meta-row{ color: #444 !important; }
+body.light-mode .profile-card{
+  background: linear-gradient(180deg, rgba(254,218,74,0.04), transparent) !important;
+  border: 2px solid rgba(170,126,0,0.28) !important; /* darker yellow in light mode */
+}
+body.light-mode .profile-avatar{ border: 1px solid #e6e6e6 !important; }
+body.light-mode .btn{
+  background: transparent !important;
+  border: 1px solid #e6e6e6 !important;
+  color: #111111 !important;
+}
+body.light-mode .btn::before{ background: rgba(254,218,74,0.12) !important; }
+body.light-mode .repo-lang{ background: rgba(0,0,0,0.04) !important; color: #333 !important; }
+
+/* Light-mode: remove dark shadow on button hover and use a light yellow overlay */
+body.light-mode .btn:hover{
+  box-shadow: none !important; /* remove black shadow */
+  border-color: rgba(254,218,74,0.18) !important;
+}
+body.light-mode .btn:hover::before{
+  background: rgba(254,218,74,0.16) !important; /* slightly visible light yellow */
+  opacity: 0.36 !important;
+}
+
+/* In light mode: repository names should be black, tint to dark yellow on hover */
+body.light-mode .repo-card .repo-name a{ color: #111111 !important; }
+body.light-mode .repo-card .repo-name a:hover{ color: #aa7e00 !important; text-decoration: none !important; }
+
+/* Profile 'View profile' button hover in light mode: dark yellow border and no dark shadow */
+body.light-mode .profile-card .btn:hover{
+  border-color: #aa7e00 !important;
+  box-shadow: none !important;
+}
+
+/* Ensure small responsive tweaks remain legible in light mode */
+@media (max-width: 720px){
+  body.light-mode .profile-card{ background: #ffffff !important; }
+}
 

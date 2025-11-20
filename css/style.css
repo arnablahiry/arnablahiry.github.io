@@ -21,6 +21,9 @@ html, body {
 :root{
   /* default intro shift (no extra shift) */
   --intro-shift: 0px;
+  /* Background overlay opacities (0 = transparent, 1 = opaque) */
+  --bg-image-opacity: 0.60; /* controls #image-overlay on the homepage (darker by default for dark mode) */
+  --page-dim-opacity: 0.45; /* controls the global page dim used when nav opens */
 }
 
 /* Background image */
@@ -37,14 +40,16 @@ html, body {
   z-index: -2;
 }
 
-/* Dark overlay */
+/* Dark overlay sitting above the background image. Reduce opacity so the
+   background image reads through more. */
 #image-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  /* use a CSS variable so the background darkness can be tuned */
+  background: rgba(0, 0, 0, var(--bg-image-opacity));
   z-index: -1;
 }
 
@@ -119,8 +124,9 @@ header {
   header nav {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    right: 0;
+  position: absolute;
+  /* align panel with viewport edge by compensating for header padding */
+  right: calc(-2vw);
     top: 100%;
     left: auto;
     width: 85%;
@@ -139,7 +145,8 @@ header {
 
   header nav a { color: white; display: block; padding: 0.6rem 0.4rem; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
 
-  header.nav-open nav { transform: translateX(0); opacity: 1; pointer-events: auto; }
+  /* When open, nudge the panel slightly to the right to match the site-wide layout */
+  header.nav-open nav { transform: translateX(15px); opacity: 1; pointer-events: auto; }
   /* make header opaque and maintain blur when nav is open */
   header.nav-open {
     background-color: rgba(0,0,0,0.95);
@@ -155,6 +162,14 @@ header {
     z-index: 1001; /* ensure nav panel sits above the dim overlay/header and audio controls */
   }
 
+  /* Theme toggle disabled state (home page uses a disabled toggle while the crawl animates) */
+  nav .theme-toggle[disabled],
+  nav .theme-toggle[aria-disabled="true"]{
+    opacity: 0.45;
+    pointer-events: none;
+    cursor: default;
+  }
+
   /* While nav is open, send floating audio controls underneath the panel
      so they don't visually or interactively sit above the open menu. */
   header.nav-open ~ #audio-controls,
@@ -165,22 +180,6 @@ header {
   }
 }
 
-/* Make the logo anchor keyboard-focusable and visually obvious when focused */
-.logo-container a {
-  display: inline-block;
-  border-radius: 100%;
-  line-height: 0;
-}
-
-.logo-container a:focus-visible,
-.logo-container a:hover {
-  box-shadow: 0 0 0 4px rgba(254, 218, 74, 0.18);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.logo-container a:focus {
-  outline: none; /* rely on focus-visible above */
-}
 
 /* Navigation bar */
 nav {
@@ -206,7 +205,9 @@ nav a:hover {
   width: 100%;
   min-height: 60vh;
   top: -2vh;
-  background-image: linear-gradient(0deg, transparent, black 99%);
+  /* remove the heavy black gradient so page content isn't darkened
+     excessively; keep fully transparent to let the overlay/image show */
+  background-image: none;
   z-index: 1;
 }
 
@@ -228,7 +229,8 @@ nav a:hover {
 #audio-player button,
 #restart-button,
 #skip-button,
-#pause-scroll {
+#pause-scroll,
+#auto-skip-button {
   background-color: #343128;
   color: white;
   border: 0.05rem solid gold;
@@ -251,10 +253,12 @@ nav a:hover {
 #restart-button svg,
 #skip-button svg,
 #pause-scroll svg,
+#auto-skip-button svg,
 #audio-player button img,
 #restart-button img,
 #skip-button img,
-#pause-scroll img {
+#pause-scroll img,
+#auto-skip-button img {
   width: 50%;
   height: 50%;
   display: block;
@@ -264,10 +268,35 @@ nav a:hover {
 #audio-player button:hover,
 #restart-button:hover,
 #skip-button:hover,
-#pause-scroll:hover {
+#pause-scroll:hover,
+#auto-skip-button:hover {
   opacity: 1;
   transform: scale(1.1);
   box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8);
+}
+
+/* Ensure the Star Wars auto-skip button exactly matches the other control buttons
+   (explicit sizing/padding to avoid any browser defaults or overrides) */
+#auto-skip-button {
+  width: 8vh;
+  height: 8vh;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background-color: #343128;
+  border: 0.05rem solid gold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0.1rem rgba(254, 218, 74, 0.6);
+  font-size: 1.5rem;
+}
+
+#auto-skip-button img {
+  width: 50%;
+  height: 50%;
+  display: block;
+  object-fit: contain;
 }
 
 /* Disabled / grayed fast-forward (skip) button when photo is shown */
@@ -288,6 +317,203 @@ nav a:hover {
   transform: none !important;
   box-shadow: none !important;
   pointer-events: none;
+}
+
+/* When auto-skip is enabled, grey out and disable all controls except the Star Wars auto-skip button */
+/* When auto-skip is enabled, visually dim other controls but keep their
+   original colors (no grayscale). Also fully disable pointer events so
+   clicks cannot occur. The Star Wars auto-skip button remains active. */
+body.auto-skip-enabled #audio-controls button:not(#auto-skip-button) {
+  /* Slightly brighter dim for disabled controls */
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important; /* fully disable interactive behavior */
+  filter: none !important; /* keep original colors */
+}
+
+/* Also disable any anchor wrappers (e.g. restart link) inside the controls
+   so clicking the parent link cannot bypass the disabled button. Match the
+   same opacity so all deactivated controls look consistent. */
+/* Keep anchor wrappers non-interactive but avoid changing opacity so child
+   buttons don't compound opacity (which makes them much darker). */
+body.auto-skip-enabled #audio-controls a {
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important; /* keep anchor opacity neutral to avoid multiplying opacities */
+}
+
+/* Ensure the restart/reload control (which may be wrapped in an <a>)
+   matches the same dim/disabled look as the pause button. */
+body.auto-skip-enabled a.no-underline #restart-button,
+body.auto-skip-enabled #restart-button {
+  opacity: 0.45 !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* small pulse/flash when user attempts to click while disabled by auto-skip */
+.disabled-flash {
+  animation: disabledFlash 220ms ease;
+}
+@keyframes disabledFlash {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* Keep the auto-skip button active and visually prominent */
+body.auto-skip-enabled #auto-skip-button {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  transform: none !important;
+  box-shadow: 0 0 0.25rem rgba(254, 218, 74, 0.9) !important;
+}
+
+/* When auto-skip is enabled, allow a slightly larger hover zoom on the Star Wars button */
+body.auto-skip-enabled #auto-skip-button:hover {
+  transform: scale(1.12) !important;
+  box-shadow: 0 0 0.28rem rgba(254, 218, 74, 1) !important;
+  opacity: 1 !important;
+}
+
+/* Dark mode: invert the Star Wars SVG icon so it appears light on dark backgrounds */
+body:not(.light-mode) #auto-skip-button img {
+  filter: invert(1) brightness(1.05) contrast(1.1);
+}
+
+/* Ensure light mode keeps the original (non-inverted) icon */
+body.light-mode #auto-skip-button img {
+  filter: none;
+}
+
+/* Immersive hint box styling (appears after intro loads when auto-skip enabled) */
+/* compact hint box */
+/* place hint next to the Star Wars button using a local wrapper; wrapper sits inside #audio-controls */
+#audio-controls { position: fixed; }
+.hint-wrapper { position: relative; display: inline-block; }
+.hint-wrapper #immersive-hint{
+  position: absolute;
+  right: calc(100% + 18px); /* sit to the left of the controls stack */
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.6rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  width: 270px; /* force 3-line wrapping at this size */
+  text-align: left;
+  z-index: 2000; /* stay above most UI */
+  transition: opacity 260ms ease, transform 260ms ease, max-height 320ms ease;
+  opacity: 0;
+  pointer-events: none; /* only active when auto-skip enabled */
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.12);
+  white-space: normal;
+  word-break: break-word;
+  overflow: hidden;
+  max-height: 3.2rem; /* compact height (~3 lines) — keep alt-text hidden until hover */
+}
+
+/* animate in class */
+/* show and auto-hide after 10s using CSS animation; hover pauses animation */
+@keyframes hint-stay-hide {
+  0% { opacity: 0.6; transform: translateY(-50%); }
+  90% { opacity: 0.6; transform: translateY(-50%); }
+  100% { opacity: 0; transform: translateY(-40%); }
+}
+
+@keyframes hint-in {
+  from { opacity: 0; transform: translateY(-60%); }
+  to { opacity: 0.6; transform: translateY(-50%); }
+}
+
+/* when auto-skip enabled, display hint and start the entrance + hide animations
+   - entrance delayed by 3s, duration 800ms; then visible for 10s before hiding */
+body.auto-skip-enabled #audio-controls .hint-wrapper #immersive-hint{
+  opacity: 0; /* start hidden; hint-in brings to visible */
+  pointer-events: auto;
+  /* make hint appear 1s earlier: reduce entrance and hide delays by 1s */
+  /* delay entrance by 1s, animate in over 1s, then keep visible for 10s before hiding */
+  animation: hint-in 1000ms ease 1s forwards, hint-stay-hide 10000s linear 2s forwards;
+}
+
+/* pause hide animation while hovered */
+/* pause hide animation while hovered */
+#audio-controls .hint-wrapper #immersive-hint:hover{ animation-play-state: paused; }
+
+/* dark theme: translucent black overlay, light yellow border, white text */
+
+/* dark theme: translucent black overlay, light yellow border, white text */
+body:not(.light-mode) #audio-controls .hint-wrapper #immersive-hint{
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border-color: rgba(254, 218, 74, 0.9);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+
+/* light theme: translucent white overlay, dark yellow border, black text */
+body.light-mode #audio-controls .hint-wrapper #immersive-hint{
+  background: rgba(255,255,255,0.92);
+  color: #111;
+  border-color: rgba(140,102,12,0.95);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* Hover: small glow and pointer cursor */
+/* Only allow hover/focus interactions when auto-skip mode is enabled */
+body.auto-skip-enabled .hint-wrapper:hover #immersive-hint{ cursor: pointer; transform: translateY(-8px); box-shadow: 0 8px 28px rgba(0,0,0,0.35); }
+
+/* small hint line styling with smooth fade/slide */
+#audio-controls .hint-wrapper #immersive-hint .hint-line{
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+/* strike-fun default (no strike) */
+#audio-controls .hint-wrapper #immersive-hint .strike-fun{ text-decoration: none; }
+
+/* reveal expanded alt-text and full opacity when wrapper is hovered or focused */
+.hint-wrapper:focus-within #immersive-hint{ /* keep non-interactive when auto-skip off */
+  max-height: 3.2rem; opacity: 0.6; pointer-events: none;
+}
+body.auto-skip-enabled .hint-wrapper:hover #immersive-hint, body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint{
+  max-height: 240px; /* expand downward */
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+
+/* show the alt text smoothly; initially hidden */
+.hint-wrapper #immersive-hint .alt-text{
+  max-height: 0; opacity: 0; overflow: hidden; transition: max-height 260ms ease, opacity 260ms ease, transform 260ms ease;
+  margin-top: 6px; font-size: 0.82rem; color: inherit; transform: translateY(-6px);
+}
+
+/* On hover/focus: fade out the initial hint lines and fade in the alt text */
+.hint-wrapper:focus-within #immersive-hint .hint-line{ opacity: 1; transform: translateY(0); }
+.body-auto-skip-disabled .hint-wrapper #immersive-hint .hint-line{ opacity: 1; }
+body.auto-skip-enabled .hint-wrapper:hover #immersive-hint .hint-line,
+body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .hint-line{
+  opacity: 0; transform: translateY(-6px); pointer-events: none;
+}
+body.auto-skip-enabled .hint-wrapper:hover #immersive-hint .alt-text,
+body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .alt-text{
+  max-height: 160px; opacity: 1; transform: translateY(0);
+}
+
+/* Mobile placement: below and slightly left of the button */
+@media (max-width: 768px) {
+  #audio-controls .hint-wrapper #immersive-hint{
+    right: auto;
+    left: 0;
+    top: calc(100% + 8px);
+    transform: none;
+    width: 160px;
+  }
 }
 
 /* Hide the <audio> tag itself */
@@ -402,7 +628,7 @@ nav a:hover {
   animation: fadeInText 2s ease forwards;
   animation-delay: 26s;
 }
-/* Social buttons stacked vertically below the tagline */
+/* Social buttons stacked below the tagline */
 .social-buttons {
   display: flex;
   flex-direction: row; /* horizontal layout */
@@ -637,10 +863,6 @@ footer {
     padding: 10px 15px;
   }
 
-  .logo {
-    height: 50px;
-  }
-
   nav {
     gap: 15px;
     margin-right: 0;
@@ -670,7 +892,8 @@ footer {
   #skip-button,
   #audio-player button,
   #restart-button,
-  #pause-scroll {
+  #pause-scroll,
+  #auto-skip-button {
     width: 50px;
     height: 50px;
     font-size: 16px;
@@ -694,7 +917,8 @@ footer {
   #skip-button,
   #audio-player button,
   #restart-button,
-  #pause-scroll {
+  #pause-scroll,
+  #auto-skip-button {
     width: 35px;
     height: 35px;
     font-size: 14px;
@@ -823,9 +1047,109 @@ footer {
   #skip-button,
   #audio-player button,
   #pause-scroll,
-  #restart-button {
+  #restart-button,
+  #auto-skip-button {
     width: 7vh;
     height: 7vh;
     font-size: 1.5rem;
+  }
+}
+
+
+
+
+/* Home page-specific mobile nav overrides to match Research page
+   - Remove nav panel shadow
+   - Make the panel overlay the header (position: fixed; top: 0)
+   This file is intentionally narrow in scope and is only loaded on index.html.
+*/
+
+
+@media (max-width: 768px) {
+  button img,
+  nav .theme-toggle img {
+    filter: brightness(0) saturate(100%) !important;
+  }
+
+  header nav {
+    /* overlay the header instead of sitting under it */
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    height: 100vh !important;
+    /* keep the same width as the shared mobile nav */
+    width: 85% !important;
+    max-width: 360px !important;
+    /* start offscreen to the right */
+    transform: translateX(100%) !important;
+    z-index: 1002 !important; /* sit above header */
+  }
+
+  /* Remove the heavy open-state shadow to match Research page */
+  header.nav-open nav {
+    box-shadow: none !important;
+    transform: translateX(15px) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Home-specific visual tweaks requested by the user:
+     - Lower all elements inside the mobile nav by 20px so the links
+       sit visually lower on the page.
+     - Increase spacing between nav elements by 3px.
+     - Make the hamburger "cross" icon (when open) white in dark mode. */
+  header nav {
+    /* preserve existing padding but add 20px vertical offset */
+    padding-top: calc(1rem + 50px) !important;
+    /* increase gap between items by 3px (was 0.5rem in shared rules) */
+    gap: calc(0.5rem + 3px) !important;
+  }
+
+  /* Also increase each link's vertical padding slightly so the visual spacing
+     between touch targets grows by ~3px (top + bottom combined). */
+  header nav a {
+    padding: calc(0.6rem + 3px) 0.4rem !important;
+  }
+
+  /* Cross icon color in dark mode: ensure the close (X) is white when the
+     hamburger is open. This is scoped to dark-mode (when body does NOT have
+     the .light-mode class). */
+  body:not(.light-mode) header .hamburger.open .bar {
+    background-color: #ffffff !important;
+  }
+
+  /* Ensure the header itself doesn't get pushed above the panel while open */
+  header.nav-open { z-index: 1001 !important; }
+
+  /* Remove any box-shadow entirely and prevent box-shadow from animating
+     during the open/close transition. We explicitly limit transitions to
+     transform and opacity so no shadow interpolation appears. */
+  header,
+  header nav,
+  header.nav-open,
+  header.nav-open nav {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease !important;
+  }
+
+  /* Homepage-only: ensure the logo sits at the left edge on small screens
+     and the hamburger stays right. This forces a familiar left-logo layout
+     for the homepage similar to Research. */
+  header {
+    justify-content: space-between !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+
+
+  /* Lower audio controls so they appear below the header on mobile home page.
+     We remove the vertical centering transform and place controls beneath the
+     header height estimate (header ~ 8vh + 2rem padding) so they don't overlap. */
+  #audio-controls {
+    top: calc(8vh + 2rem + 8px) !important;
+    transform: none !important;
+    right: 3vw !important;
   }
 }

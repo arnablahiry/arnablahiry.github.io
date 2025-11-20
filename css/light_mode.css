@@ -1,6 +1,35 @@
 /* Shared light-mode rules (page-agnostic). Include this stylesheet on pages
    that want a per-page or site-wide light mode. Styles are applied when the
    document root has the `light-mode` class on <body>. */
+/* Smooth theme transitions
+     Apply gentle transitions to common visual properties when toggling
+     `body.light-mode` so switching between dark and light appears smooth.
+     Respects the user's `prefers-reduced-motion` setting by disabling
+     transitions when the user requests reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+    :root, body, header, nav, main, footer, .page-wrapper,
+    .project-card, .contact-card, .contact-details, .meme-overlay,
+    #image-overlay, #bg-image, .social-card img, .project-card img,
+    button, a, input, textarea, select {
+        transition: background-color 260ms ease, color 260ms ease,
+                                border-color 260ms ease, box-shadow 260ms ease,
+                                opacity 200ms ease, filter 300ms ease;
+    }
+
+    /* Images and svg filter transitions (slightly slower for a smoother feel) */
+    #bg-image, .meme-wrapper img, .project-card img, .social-card img {
+        transition: filter 360ms ease, opacity 260ms ease;
+        will-change: filter, opacity;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    :root, body, header, nav, main, footer, .page-wrapper,
+    .project-card, .contact-card, .contact-details, .meme-overlay,
+    #image-overlay, #bg-image, .social-card img, .project-card img,
+    button, a, input, textarea, select {
+        transition: none !important;
+    }
+}
 
 /* Base light/dark inversion */
 body.light-mode{
@@ -130,6 +159,10 @@ body.light-mode .section-timeline-heading{
     background: #ffffff !important;
 }
 
+/* Homepage-specific background-image / overlay styles were moved to
+    `css/home_light_mode.css` to avoid forcing a dark->light visual transition
+    on non-home pages when the stored theme is applied via JavaScript. */
+
 /* Research intro and other subtitle text should be dark in light mode */
 body.light-mode .research-intro-text .research-intro{ color: #111111 !important; }
 body.light-mode .project-subtitle{ color: #222222 !important; }
@@ -140,6 +173,36 @@ body.light-mode img.timeline-hero-image{
     filter: invert(1) hue-rotate(180deg) contrast(0.95);
 }
 
+/* h2 headings intentionally inherit their page styles; do not override here. */
+
+h2.light-mode{
+    font-size: 8vh;
+    background: linear-gradient(to right, rgb(169, 143, 0), #80003e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* Make the introductory "Hello there" and the tagline strong text black in
+   light mode so they remain readable against the white overlay. */
+body.light-mode .intro-text p strong,
+body.light-mode #tagline strong{
+    color: #111111 !important;
+}
+
+/* Make the entire tagline line black (including its children) in light mode */
+body.light-mode #tagline,
+body.light-mode #tagline *{
+    color: #111111 !important;
+}
+
+/* Also ensure the small "I'm" span next to "Hello there" is black in light mode */
+body.light-mode .intro-text p:first-of-type,
+body.light-mode .intro-text p:first-of-type *{
+    color: #111111 !important;
+}
+
 
 
 /* Header in light mode: white, blurred, no page-dimming; nav links are dark
@@ -147,13 +210,49 @@ body.light-mode img.timeline-hero-image{
    while preserving readability and the blur effect. */
 body.light-mode header,
 body.light-mode nav#site-nav{
-    background: rgba(255,255,255,0.85) !important;
+    /* Make the header completely white in light mode */
+    background: #ffffffcf !important;
     backdrop-filter: blur(8px) !important;
     color: #111111 !important;
 }
 body.light-mode header.nav-open{
-    background: rgba(255,255,255,0.92) !important;
+    background: rgba(255,255,255,var(--nav-open-opacity)) !important;
     backdrop-filter: blur(10px) !important;
+}
+
+/* Desktop: prefer transparent header/nav background so nav text sits
+   directly on the page content (removes opaque white strip on large screens) */
+@media (min-width: 769px){
+    /* Keep the semi-opaque white header with blur on desktop, but make
+       individual nav items transparent so link backgrounds don't create
+       a white strip over the page. Use the nav background variable so
+       the image overlay is decoupled from the header appearance. */
+    body.light-mode header,
+    body.light-mode nav#site-nav{
+        background: rgba(255,255,255,var(--nav-bg-opacity)) !important; /* keep the blurred white bar */
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+    }
+
+    /* Make nav items themselves transparent and remove underline/box-shadow
+       decorations on hover/focus so they don't draw a background or line. */
+    body.light-mode nav#site-nav a,
+    body.light-mode nav#site-nav a:link,
+    body.light-mode nav#site-nav a:visited{
+        background: transparent !important;
+    }
+    body.light-mode nav#site-nav a:hover,
+    body.light-mode nav#site-nav a:focus,
+    body.light-mode nav#site-nav a:active{
+        text-decoration: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    /* Ensure the theme toggle in the nav also stays visually transparent */
+    body.light-mode nav .theme-toggle{
+        background: transparent !important;
+    }
 }
 
 /* Nav link colors and highlight */
@@ -170,6 +269,9 @@ body.light-mode nav#site-nav a:active{
 /* Hamburger bars should be dark on the light header */
 body.light-mode .hamburger .bar{ background-color: #111 !important; }
 
+/* When nav is open, show a frosted overlay over the page content so the
+   navigation reads as an elevated layer. Uses the nav-open opacity and
+   applies a blur to the backdrop. This applies on mobile and desktop. */
 /* Disable the dark page-dim overlay when the nav is open in light mode */
 body.light-mode header.nav-open ~ .page-wrapper::before{
     background: rgba(255,255,255,0) !important;
@@ -327,7 +429,16 @@ body.light-mode .project-toggle{
 body.light-mode .project-toggle:hover,
 body.light-mode .project-toggle:focus{
     color: #b98d14 !important; /* slightly darker yellow on hover */
-    text-decoration: underline !important;
+}
+
+/* Desktop (PC) light-mode: ensure the 'Show Abstract' button has only a
+   top border and no other borders. The generic `body.light-mode button` rule
+   sets a full border, so we explicitly clear other sides here for desktop. */
+@media (min-width: 769px) {
+    body.light-mode .project-toggle{
+        border: none !important;
+        border-top: 1px solid #e6e6e6 !important;
+    }
 }
 
 /* Publications: journal line and arXiv button styling in light mode */
@@ -341,6 +452,13 @@ body.light-mode .arxiv-button{
     box-shadow: none !important;
 }
 
+/* APJ button mirrors arXiv button in light mode */
+body.light-mode .apj-button{
+    background-color: #ffffff !important;
+    border: 1px solid #e6e6e6 !important;
+    box-shadow: none !important;
+}
+
 /* Hover and active states for arXiv button in light mode */
 body.light-mode .arxiv-button:hover{
     background-color: #fbfbfb !important; /* very subtle lighter background */
@@ -349,13 +467,93 @@ body.light-mode .arxiv-button:active{
     background-color: #f2f2f2 !important; /* very light grey overlay when pressed */
 }
 
+/* Buttons: make primary buttons dark-yellow with white text in light mode
+   — includes audio controls, site-links, and generic buttons to ensure
+   consistent appearance. These overrides keep button text white even on
+   the light background, per the homepage design request. */
+body.light-mode button,
+body.light-mode .arxiv-button,
+body.light-mode .apj-button,
+body.light-mode button{
+    background: rgba(233, 210, 136, 0.047) !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+
 /* Mobile: ensure light-mode cards keep the same layout/padding as dark-mode
    (only colors inverted). This prevents the 'Learn more' area from appearing
    squished on phones where we earlier reduced horizontal padding. */
 @media (max-width: 768px){
+    /* Ensure DARK MODE (body:not(.light-mode)) uses the same card metrics
+       as light-mode so both themes are layout-identical. We only copy
+       sizing/spacing here (not colors) to keep dark-mode visuals intact. */
+    body:not(.light-mode) #projects-grid .project-toggle{
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding-top: 16px !important;
+        padding-left: 0 !important;
+        padding-right: 16px !important;
+        padding-bottom: 12px !important;
+        text-align: left !important;
+        border: none !important;
+        border-top: 1px solid rgba(34,34,34,0.75) !important;
+        margin-bottom: 0 !important;
+    }
+
+    body:not(.light-mode) #projects-grid .project-card{
+        padding-top: 12px !important;
+        padding-right: 12px !important;
+        padding-left: 12px !important;
+    }
+
+    body:not(.light-mode) #projects-grid .project-image{
+        width: 100% !important;
+        height: auto !important;
+        max-height: 120px !important;
+        object-fit: cover !important;
+        margin: 0 0 12px 0 !important;
+        border-radius: 8px !important;
+    }
+
+    body:not(.light-mode) #projects-grid .project-meta{
+        padding: 0 4px 12px 4px !important;
+    }
+
+    body:not(.light-mode) #projects-grid .project-title{
+        font-size: 2.0vh !important;
+        margin: 0 0 8px 0 !important;
+    }
+
+    body:not(.light-mode) #projects-grid .project-authors{
+        font-size: 2vh !important;
+        margin: 0 !important;
+    }
+
+    body:not(.light-mode) #projects-grid .project-journal{
+        font-size: 1.8vh !important;
+        margin-top: 0 !important;
+        margin-bottom: 10px !important;
+    }
+
+    body:not(.light-mode) #projects-grid .project-full{
+        padding: 12px 16px 20px 16px !important;
+        font-size: 1.9vh !important;
+        line-height: 2 !important;
+    }
+
     body.light-mode #projects-grid .project-toggle{
-        padding: 12px 16px !important; /* match dark-mode padding */
-        border-top: 1px solid #e6e6e6 !important; /* visible divider like dark-mode */
+        /* mirror dark-mode mobile metrics exactly */
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding-top: 16px !important; /* increased spacing from top border */
+        padding-left: 0 !important; /* remove left inset so text aligns flush */
+        padding-right: 16px !important;
+        padding-bottom: 12px !important;
+        border: none !important;
+        border-top: 1px solid #e6e6e6 !important; /* only top border */
         text-align: left !important; /* same alignment as dark-mode */
         background: transparent !important;
         color: #aa7e00 !important; /* keep the accent color */
@@ -377,7 +575,7 @@ body.light-mode .arxiv-button:active{
     body.light-mode #projects-grid .project-image{
         width: 100% !important;
         height: auto !important;
-        max-height: 200px !important;
+        max-height: 120px !important;
         object-fit: cover !important;
         margin: 0 0 12px 0 !important;
         border-radius: 8px !important;
@@ -386,8 +584,8 @@ body.light-mode .arxiv-button:active{
     /* Ensure arXiv button keeps desktop look in light mode on phones */
     body.light-mode #projects-grid .arxiv-button{
         width: auto !important;
-        padding: 6px 10px !important;
-        min-width: 56px !important;
+        padding: 10px 14px !important;
+        min-width: 48px !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -399,8 +597,13 @@ body.light-mode .arxiv-button:active{
         display: block !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        padding: 12px 16px !important;
+        /* match dark-mode mobile metrics exactly */
+        padding-top: 16px !important;
+        padding-left: 0 !important;
+        padding-right: 16px !important;
+        padding-bottom: 12px !important;
         text-align: left !important;
+        border: none !important;
         border-top: 1px solid #e6e6e6 !important;
         margin-bottom: 0 !important;
     }
@@ -412,7 +615,7 @@ body.light-mode .arxiv-button:active{
     }
 
     body.light-mode #projects-grid .project-title{
-        font-size: 2.4vh !important;
+        font-size: 2.0vh !important;
         margin: 0 0 8px 0 !important;
     }
 
@@ -442,5 +645,90 @@ body.light-mode .arxiv-button:active{
     }
 }
 
+/* Mobile: keep the hamburger/menu trigger visually transparent; the
+   expanded navigation will receive the frosted overlay when open. */
+@media (max-width: 768px){
+    body.light-mode .hamburger,
+    body.light-mode .hamburger-button,
+    body.light-mode .hamburger-btn,
+    body.light-mode .menu-toggle,
+    body.light-mode .nav-toggle,
+    body.light-mode header > button,
+    body.light-mode header button.menu-button,
+    body.light-mode header button[id*="menu"],
+    body.light-mode header button[class*="menu"],
+    body.light-mode header button[aria-label*="menu"],
+    body.light-mode header button[aria-label*="toggle"],
+    body.light-mode header button[aria-expanded],
+    body.light-mode button.hamburger,
+    body.light-mode .hamburger button,
+    body.light-mode .hamburger .hamburger-button{
+        background: transparent !important;
+        background-color: transparent !important;
+        border: none !important;
+        padding: 6px !important;
+        z-index: 10001 !important; /* keep the button above page content */
+    }
 
+    body.light-mode .hamburger:focus,
+    body.light-mode .hamburger-button:focus,
+    body.light-mode .hamburger-btn:focus,
+    body.light-mode .menu-toggle:focus,
+    body.light-mode .nav-toggle:focus,
+    body.light-mode .hamburger button:focus,
+    body.light-mode .hamburger .hamburger-button:focus,
+    body.light-mode header > button:focus,
+    body.light-mode header button.menu-button:focus,
+    body.light-mode header button[id*="menu"]:focus,
+    body.light-mode header button[class*="menu"]:focus,
+    body.light-mode header button[aria-label*="menu"]:focus,
+    body.light-mode header button[aria-label*="toggle"]:focus,
+    body.light-mode header button[aria-expanded]:focus{
+        outline: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+}
+
+/* Mobile: when the nav is expanded/open, give the expanded navigation a
+   semi-opaque frosted background and stronger blur so the menu reads as a
+   distinct layer above the page content. Targets common open-state selectors. */
+@media (max-width: 768px){
+    body.light-mode header.nav-open nav#site-nav,
+    body.light-mode header.nav-open > nav,
+    body.light-mode nav#site-nav.nav-open,
+    body.light-mode nav#site-nav.open,
+    body.light-mode .mobile-nav.open,
+    body.light-mode .nav-drawer.open,
+    body.light-mode .slide-in-nav.open{
+        background: rgba(255,255,255,var(--nav-open-opacity)) !important;
+        background-color: rgba(255,255,255,var(--nav-open-opacity)) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        backdrop-filter: blur(10px) !important;
+        z-index: 9998 !important;
+    }
+}
+
+/* Global override: reduce header opacity site-wide in light-mode so pages
+   like home/about don't show a heavy opaque white bar. Keep the blur so
+   the header reads as frosted glass while remaining transparent enough
+   to show the page content behind it. */
+body.light-mode header,
+body.light-mode nav#site-nav{
+    background: rgba(255,255,255,var(--nav-bg-opacity)) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Be sure nav-open state keeps a slightly stronger background so the
+   navigation remains readable when the menu is open on small screens. */
+body.light-mode header.nav-open,
+body.light-mode nav#site-nav.nav-open{
+    background: rgba(255,255,255,var(--nav-open-opacity)) !important;
+}
+
+/* When the nav is open, blur only the nav container (frosted effect).
+   This keeps the main page sharp but visually dims it via the ::before
+   overlay above. */
+/* (nav-open frosted blur removed — reverting to previous behavior) */
 

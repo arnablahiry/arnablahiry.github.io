@@ -14,6 +14,7 @@
         <div class="logo-container">
             <a href="index.html" aria-label="Home">
                 <img src="images/logo.png" alt="Logo" class="logo">
+        <script>/* early theme apply */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();</script>
             </a>
         </div>
         <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
@@ -83,10 +84,14 @@
                             <h3 class="project-title">Interpreting Cosmological Information from Neural Networks in the Hydrodynamic Universe</h3>
                             <p class="project-authors">A. Lahiry, F. Villaescusa-Navarro, A. E. Bayer</p>
                             <p class="project-journal">Accepted at: The Astrophysical Journal (2025)</p>
-                            <!-- Added arXiv button -->
-                            <button class="arxiv-button" onclick="window.open('https://arxiv.org/abs/2504.17839', '_blank')">
-                                <img src="images/icons/arxiv-logo.svg" alt="arXiv logo">
-                            </button>
+                            <div class="action-buttons">
+                                <button class="arxiv-button" onclick="window.open('https://arxiv.org/abs/2504.17839', '_blank')" aria-label="arXiv">
+                                    <img src="images/icons/arxiv-logo.svg" alt="arXiv logo">
+                                </button>
+                                <button class="apj-button" onclick="window.open('https://iopscience.iop.org/article/10.3847/1538-4357/ae0b5a', '_blank')" aria-label="ApJ">
+                                    <img src="images/icons/apj-logo.png" alt="ApJ logo">
+                                </button>
+                            </div>
                             <button class="project-toggle" aria-expanded="false" aria-controls="pub-1-desc">Show Abstract</button>
                             <div class="project-full" id="pub-3-desc" aria-expanded="false">
                                 <p>What happens when a black box (neural network) meets a black box (simulation of the Universe)? Recent work has shown that convolutional neural networks (CNNs) can infer cosmological parameters from the matter density field in the presence of complex baryonic processes. A key question that arises is, which parts of the cosmic web is the neural network obtaining information from? We shed light on the matter by identifying the Fourier scales, density scales, and morphological features of the cosmic web that CNNs pay most attention to. We find that CNNs extract cosmological information from both high and low density regions: overdense regions provide the most information per pixel, while underdense regions -- particularly deep voids and their surroundings -- contribute significantly due to their large spatial extent and coherent spatial features. Remarkably, we demonstrate that there is negligible degradation in cosmological constraining power after aggressive cutting in both maximum Fourier scale and density. Furthermore, we find similar results when considering both hydrodynamic and gravity-only simulations, implying that neural networks can marginalize over baryonic effects with minimal loss in cosmological constraining power. Our findings point to practical strategies for optimal and robust field-level cosmological inference in the presence of uncertainly modeled astrophysics.</p>

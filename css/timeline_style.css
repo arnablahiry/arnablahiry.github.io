@@ -241,7 +241,8 @@
         transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
     }
 
-    header.nav-open nav { transform: translateX(0); opacity: 1; pointer-events: auto; }
+    /* Ensure the open-state mirrors the global mobile layout (small nudge to the right) */
+    header.nav-open nav { transform: translateX(15px); opacity: 1; pointer-events: auto; }
     header.nav-open { background-color: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 1000; }
     header.nav-open nav { background: rgba(0,0,0,0.945); box-shadow: 0 18px 48px rgba(0,0,0,0.85); transition: background 220ms ease, backdrop-filter 220ms ease, box-shadow 220ms ease; z-index: 1001; }
 
