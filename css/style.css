@@ -1134,11 +1134,11 @@ footer {
 /* Medium-size phones and small tablets: slightly smaller than extra-small phones */
 @media (max-width: 768px) {
   .social-link {
-    width: 60px !important;
-    height: 60px !important;
+    width: 55px !important;
+    height: 55px !important;
   }
   .social-link img {
-    width: 72%;
+    width: 70%;
   }
 }
 

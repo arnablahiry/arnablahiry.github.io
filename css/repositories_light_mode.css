@@ -1,0 +1,19 @@
+/* repositories_light_mode.css
+   Force theme-related property transitions to be instantaneous on the
+   repositories page even when the transient .theme-animate class is present.
+   This ensures the page flips immediately while other pages (eg. home)
+   may animate during a user-initiated toggle.
+*/
+
+/* Target only theme-related properties so other animations (transforms,
+   keyframes, motion) remain unaffected. Use !important to override
+   any broader rules that may enable transitions during .theme-animate. */
+html.theme-animate *, body.theme-animate * {
+  transition-property: background-color, color, border-color, box-shadow, opacity, filter, -webkit-filter, backdrop-filter !important;
+  transition-duration: 0ms !important;
+  transition-delay: 0ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-animate *, body.theme-animate * { transition-duration: 0ms !important; }
+}

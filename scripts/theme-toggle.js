@@ -83,6 +83,17 @@
     if(document.body && document.body.dataset && document.body.dataset.themeLock === 'dark') return;
 
     const next = document.body.classList.contains('light-mode') ? 'dark' : 'light';
+    // Add a short-lived class that enables theme-related transitions.
+    // This ensures stored/theme-on-load changes remain instantaneous,
+    // and only user-initiated toggles animate.
+    try{
+      document.documentElement.classList.add('theme-animate');
+      // Remove after the expected longest transition (600ms) + buffer
+      setTimeout(()=>{
+        document.documentElement.classList.remove('theme-animate');
+      }, 800);
+    }catch(_){/* ignore */}
+
     localStorage.setItem(KEY, next);
     apply(next);
   });

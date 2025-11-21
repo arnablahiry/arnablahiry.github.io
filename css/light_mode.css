@@ -42,6 +42,24 @@
         transition: filter 520ms ease, opacity 420ms ease;
         will-change: filter, opacity;
     }
+    /* User-triggered theme animations: only enable smooth transitions for
+       theme-related properties while the temporary `.theme-animate` class is
+       present on the root. This keeps all other animations (transforms,
+       element-specific hover transitions, keyframes) unaffected. */
+        html.theme-animate *, body.theme-animate * {
+            transition: background-color 420ms ease, color 420ms ease,
+                        border-color 420ms ease, box-shadow 420ms ease,
+                        opacity 380ms ease, filter 420ms ease, backdrop-filter 420ms ease;
+        }
+
+        /* Image/filter transitions slightly slower for a pleasant cross-fade */
+        html.theme-animate #bg-image, body.theme-animate #bg-image,
+        html.theme-animate .meme-wrapper img, body.theme-animate .meme-wrapper img,
+        html.theme-animate .project-card img, body.theme-animate .project-card img,
+        html.theme-animate .social-card img, body.theme-animate .social-card img {
+            transition: filter 600ms ease, opacity 420ms ease;
+            will-change: filter, opacity;
+        }
 }
 @media (prefers-reduced-motion: reduce) {
     :root, body, header, nav, main, footer, .page-wrapper,

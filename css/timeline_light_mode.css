@@ -42,3 +42,16 @@ body.light-mode .timeline-circle {
   background-color: #000 !important; /* black fill */
   box-shadow: 0 0 0 4px #ffffff !important; /* white border ring */
 }
+
+/* Make theme property changes instantaneous on the timeline page, even when
+   the user-initiated `.theme-animate` class is present. This targets only
+   theme-related properties so other animations (transforms, keyframes,
+   hover effects) remain unaffected. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-animate *, body.theme-animate * {
+    transition-property: background-color, color, border-color, box-shadow, opacity, filter, -webkit-filter, backdrop-filter !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+    transition-timing-function: linear !important;
+  }
+}

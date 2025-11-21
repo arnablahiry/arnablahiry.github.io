@@ -1,0 +1,12 @@
+/* Publications page: ensure theme changes are instantaneous here.
+   Loaded only on `publications.html`. Targets only theme-related
+   properties so other animations (transforms, keyframes, hovers) remain.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-animate *, body.theme-animate * {
+    transition-property: background-color, color, border-color, box-shadow, opacity, filter, -webkit-filter, backdrop-filter !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+    transition-timing-function: linear !important;
+  }
+}

@@ -1,0 +1,14 @@
+/* Research page: ensure theme changes are instantaneous here.
+   This file is loaded only by `research.html` and overrides the
+   temporary `.theme-animate` used by the toggle so theme-related
+   properties update instantly on this page. It intentionally targets
+   only theme-related properties so other animations (transforms,
+   keyframes, hovers) are unaffected. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-animate *, body.theme-animate * {
+    transition-property: background-color, color, border-color, box-shadow, opacity, filter, -webkit-filter, backdrop-filter !important;
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+    transition-timing-function: linear !important;
+  }
+}
