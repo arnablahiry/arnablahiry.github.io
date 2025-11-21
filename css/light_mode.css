@@ -7,18 +7,39 @@
      Respects the user's `prefers-reduced-motion` setting by disabling
      transitions when the user requests reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
-    :root, body, header, nav, main, footer, .page-wrapper,
-    .project-card, .contact-card, .contact-details, .meme-overlay,
-    #image-overlay, #bg-image, .social-card img, .project-card img,
-    button, a, input, textarea, select {
-        transition: background-color 260ms ease, color 260ms ease,
-                                border-color 260ms ease, box-shadow 260ms ease,
-                                opacity 200ms ease, filter 300ms ease;
+    /* Smooth transitions for theme toggles on all pages EXCEPT the homepage.
+       Pages that should opt-out (homepage) add `body.no-theme-transition`. */
+    body:not(.no-theme-transition),
+    body:not(.no-theme-transition) header,
+    body:not(.no-theme-transition) nav,
+    body:not(.no-theme-transition) main,
+    body:not(.no-theme-transition) footer,
+    body:not(.no-theme-transition) .page-wrapper,
+    body:not(.no-theme-transition) .project-card,
+    body:not(.no-theme-transition) .contact-card,
+    body:not(.no-theme-transition) .contact-details,
+    body:not(.no-theme-transition) .meme-overlay,
+    body:not(.no-theme-transition) #image-overlay,
+    body:not(.no-theme-transition) #bg-image,
+    body:not(.no-theme-transition) .social-card img,
+    body:not(.no-theme-transition) .project-card img,
+    body:not(.no-theme-transition) button,
+    body:not(.no-theme-transition) a,
+    body:not(.no-theme-transition) input,
+    body:not(.no-theme-transition) textarea,
+    body:not(.no-theme-transition) select {
+        /* Slightly longer durations for a smooth, pleasant cross-fade */
+        transition: background-color 420ms ease, color 420ms ease,
+                    border-color 420ms ease, box-shadow 420ms ease,
+                    opacity 320ms ease, filter 420ms ease, backdrop-filter 420ms ease;
     }
 
-    /* Images and svg filter transitions (slightly slower for a smoother feel) */
-    #bg-image, .meme-wrapper img, .project-card img, .social-card img {
-        transition: filter 360ms ease, opacity 260ms ease;
+    /* Images and svg filter transitions (slower for smoother feel) */
+    body:not(.no-theme-transition) #bg-image,
+    body:not(.no-theme-transition) .meme-wrapper img,
+    body:not(.no-theme-transition) .project-card img,
+    body:not(.no-theme-transition) .social-card img {
+        transition: filter 520ms ease, opacity 420ms ease;
         will-change: filter, opacity;
     }
 }
@@ -147,7 +168,32 @@ body.light-mode .text-color-lightgrey{
 }
 body.light-mode .text-color-lightgrey{ color: #666666 !important; }
 body.light-mode .timeline-progress{ background-color: #e6e6e6 !important; }
-body.light-mode .timeline-progress-bar{ background: linear-gradient(to bottom, gold, #cc3d6a) !important; }
+/* Ensure timeline progress bar keeps the same colored gradient in light mode
+   (match dark-mode appearance). We explicitly set the same inverted gradient
+   used on the timeline page so the colored bar remains visible in light mode. */
+body.light-mode .timeline-progress-bar{
+    background: linear-gradient(to bottom, #ee0979, gold) !important;
+}
+
+/* Visibility fixes: in light mode the page background can sit above
+   negative-z-index elements. Ensure the timeline progress track and bar
+   use non-negative stacking so they remain visible but still sit under
+   timeline items (which use z-index: 2). */
+body.light-mode .timeline-progress{
+    z-index: 0 !important;
+}
+body.light-mode .timeline-progress-bar{
+    z-index: 0 !important;
+}
+
+/* Timeline overlay fades: when in light mode, use white->transparent so the
+   top/bottom fades read correctly on a white background instead of black. */
+body.light-mode .overlay-fade-top{
+    background-image: linear-gradient(white, rgba(255,255,255,0)) !important;
+}
+body.light-mode .overlay-fade-bottom{
+    background-image: linear-gradient(white, rgba(255,255,255,0)) !important;
+}
 
 /* Ensure the main page wrapper and sections also flip to light background
    — this prevents specific section backgrounds from staying black. */
@@ -211,7 +257,7 @@ body.light-mode .intro-text p:first-of-type *{
 body.light-mode header,
 body.light-mode nav#site-nav{
     /* Make the header completely white in light mode */
-    background: #ffffffcf !important;
+    background: #ffffffe6 !important;
     backdrop-filter: blur(8px) !important;
     color: #111111 !important;
 }
@@ -263,7 +309,8 @@ body.light-mode nav#site-nav a:focus,
 body.light-mode nav#site-nav a:active{
     color: #aa7e00 !important; /* dark yellow accent in light mode */
     text-decoration: none !important;
-    box-shadow: inset 0 -2px 0 #aa7e00 !important;
+    /* Remove bottom border/underline effect in light mode */
+    box-shadow: none !important;
 }
 
 /* Hamburger bars should be dark on the light header */
@@ -701,8 +748,11 @@ body.light-mode button{
     body.light-mode .mobile-nav.open,
     body.light-mode .nav-drawer.open,
     body.light-mode .slide-in-nav.open{
-        background: rgba(255,255,255,var(--nav-open-opacity)) !important;
-        background-color: rgba(255,255,255,var(--nav-open-opacity)) !important;
+        /* Ensure the open mobile nav in light mode uses a translucent white
+           frosted background (explicit alpha) so it is visible instead of
+           being fully transparent. Keep blur and stacking intact. */
+        background: rgba(255, 255, 255, 0.961) !important;
+        background-color: rgba(255,255,255,0.92) !important;
         -webkit-backdrop-filter: blur(10px) !important;
         backdrop-filter: blur(10px) !important;
         z-index: 9998 !important;

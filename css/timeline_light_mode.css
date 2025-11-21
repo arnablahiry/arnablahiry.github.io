@@ -1,0 +1,44 @@
+/* Timeline-specific light-mode overrides
+   Loaded only on timeline.html. This file makes the timeline page adopt the
+   same light-mode styling as other pages (via css/light_mode.css) but
+   intentionally prevents inversion of photos and the meme image on this page.
+
+   Rationale:
+   - `css/light_mode.css` inverts many images to make them readable on white
+     backgrounds site-wide. For the timeline page we want all other light-mode
+     styles but we do NOT want the photographs or the timeline/meme images to
+     be color-inverted.
+*/
+
+/* Reset any image inversion applied by the shared light mode for timeline images */
+body.light-mode .timeline-image-wrapper img,
+body.light-mode .timeline-right img,
+body.light-mode .timeline-left img,
+body.light-mode .timeline-hero-image,
+body.light-mode .meme-wrapper img,
+body.light-mode #meme-wrapper img,
+body.light-mode img.timeline-hero-image,
+body.light-mode .timeline-component img {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* Ensure any photo wrappers that might apply a different filter are neutralized */
+body.light-mode .timeline-image-wrapper,
+body.light-mode .meme-wrapper,
+body.light-mode #meme-wrapper {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* Keep the meme overlay and reveal button light-mode styles from shared file
+   (we intentionally don't override overlay/background here). If you want the
+   reveal button to look different on timeline, add rules here. */
+
+/* In light mode, invert the small timeline circle so it has a black fill and
+  a white outer ring (matches requested inversion). This keeps the circle
+  visible and consistent against a white page background. */
+body.light-mode .timeline-circle {
+  background-color: #000 !important; /* black fill */
+  box-shadow: 0 0 0 4px #ffffff !important; /* white border ring */
+}

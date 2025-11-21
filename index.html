@@ -6,13 +6,107 @@
     <title>My Website</title>
     <!-- Apply stored theme early to avoid a flash of the wrong theme on first paint -->
     <script>/* early theme apply: synchronous, runs before CSS to avoid flashes */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();</script>
+    <!-- Enforce auto-skip ON on small screens (phones): set storage and add the
+         auto-skip body class so the site behaves in auto-skip mode on phones. This
+         runs early and also listens for viewport changes. -->
+    <script>(function(){
+        try{
+            var mq = window.matchMedia && window.matchMedia('(max-width: 768px)');
+            function apply(m){
+                if(m && m.matches){
+                    try{ localStorage.setItem('auto:skip','on'); }catch(e){}
+                    if(document.body && document.body.classList){ document.body.classList.add('auto-skip-enabled'); }
+                }
+            }
+            apply(mq);
+            if(mq && mq.addEventListener) mq.addEventListener('change', function(e){ apply(e); });
+            else if(mq && mq.addListener) mq.addListener(function(e){ apply(e); });
+            document.addEventListener('DOMContentLoaded', function(){ apply(mq); });
+        }catch(e){}
+    })();</script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/utils.css">
     <link rel="stylesheet" href="css/light_mode.css">
         <link rel="stylesheet" href="css/mobile_nav.css">
         <link rel="stylesheet" href="css/home_light_mode.css">
+            <style>
+                /* Snitch slot: cover the full width of the viewport under the header.
+                   This lets the snitch roam across the entire page area. */
+                        #snitch-slot {
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            width: 100%;
+                            max-width: none;
+                            /* do not block clicks to underlying UI; the snitch image
+                               will enable pointer events only while clickable */
+                            pointer-events: none;
+                            /* sit below top-most UI by default */
+                            z-index: 99999;
+                            /* keep the slot present for layout but invisible until init */
+                            display: block;
+                            opacity: 0;
+                            transition: opacity 220ms ease;
+                        }
+
+                /* runner inside slot */
+                        #snitch-runner {
+                            position: absolute;
+                            width: 96px; /* slightly larger */
+                            height: auto;
+                            max-height: 80px;
+                            user-select: none;
+                            transition: transform 0.08s linear;
+                            transform-origin: center center;
+                            animation: snitch-twitch 50ms linear infinite;
+                            pointer-events: none;
+                            will-change: left, top, transform;
+                        }
+
+                @keyframes snitch-twitch{
+                    0% { transform: rotate(-10deg); }
+                    50% { transform: rotate(10deg); }
+                    100% { transform: rotate(-10deg); }
+                }
+                        /* Win popup shown when the snitch is clicked in slow mode */
+                        .snitch-win {
+                            /* minimal inline presence so external CSS controls visuals */
+                            position: absolute;
+                            pointer-events: auto;
+                            z-index: 1000000;
+                            transform: translateY(6px) scale(0.96);
+                            opacity: 0;
+                            transition: transform 220ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+                        }
+                        .snitch-win.show {
+                            transform: translateY(0) scale(1);
+                            opacity: 1;
+                        }
+                        /* Progress bar shown while the user is moving the mouse toward slow-mode */
+                        .snitch-progress {
+                            position: absolute;
+                            left: 8px;
+                            right: 8px;
+                            bottom: 8px;
+                            height: 8px;
+                            background: rgba(255,255,255,0.08);
+                            border-radius: 8px;
+                            overflow: hidden;
+                            opacity: 0;
+                            transition: opacity 180ms ease;
+                            pointer-events: none;
+                        }
+                        .snitch-progress.show { opacity: 1; }
+                        .snitch-progress-bar {
+                            height: 100%;
+                            width: 0%;
+                            background: linear-gradient(90deg, gold, #fc5b5b);
+                            transition: width 120ms linear;
+                            opacity: 0.6;
+                        }
+            </style>
 </head>
-<body>
+<body class="no-theme-transition">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@500;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
@@ -50,6 +144,9 @@
 
     <div class="fade"></div>
 
+
+                <!-- Snitch slot: hidden until activated by script (auto-skip must be OFF and intro visible) -->
+                <div id="snitch-slot" aria-hidden="true"></div>
  
     <!-- Floating audio player -->
 
@@ -193,6 +290,7 @@
     <script src="scripts/theme-toggle.js"></script>
     <script src="scripts/home/auto-skip.js"></script>
     <script src="scripts/bg-opacity.js"></script>
+    <script src="scripts/home-snitch.js"></script>
 
 
 </body>

@@ -52,9 +52,11 @@ header{
     z-index: 10;
     transition: background-color 180ms ease, backdrop-filter 180ms ease;
     /* subtle translucent header with blur to create dimmed navbar effect */
-    background-color: rgba(0,0,0,0.12);
+    background-color: rgba(0, 0, 0, 0.437);
     backdrop-filter: blur(8px);
 }
+
+
 
 /* Site-wide mobile header adjustments: move logo to left, reduce header
    padding, make the logo slightly smaller and narrow the navbar spacing so
@@ -186,6 +188,28 @@ h2{
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+}
+
+/* Light-mode: slightly darker gradient for h2 headings so they read well on
+   bright backgrounds while preserving the clipped-text effect and behavior. */
+body.light-mode h2{
+    background: linear-gradient(to right, #c79b2f, #c40066);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* Homepage hero heading (intro) — ensure the light-mode gradient matches other
+   light-mode h2 headings even if the element has an inline background. */
+body.light-mode .intro-text h2,
+body.light-mode .intro-section .intro-text h2{
+    background: -webkit-linear-gradient(to right, #c79b2f, #c40066) !important;
+    background: linear-gradient(to right, #c79b2f, #c40066) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
 }
 
 .inline-block{ max-width: 100%; display: inline-block; }

@@ -58,9 +58,41 @@
 
 .timeline-text{
     color: white;
-    font-size: 2.5vh;
+    /* slightly smaller for improved density on large screens */
+    font-size: 2vh;
     font-weight: 500;
     line-height: 1.3;
+}
+
+/* Ensure the reveal button on the timeline page matches Research page
+   dark-mode styling exactly. Scope to non-light-mode so light-mode rules
+   (in css/light_mode.css) still apply when the user enables light mode. */
+body:not(.light-mode) #meme-wrapper .reveal-btn{
+    background: rgba(255,255,255,0.06) !important;
+    color: #ffffff !important;
+    border: 2px solid transparent !important;
+    padding: 0.6rem 1rem !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+}
+
+body:not(.light-mode) #meme-wrapper .reveal-btn:focus,
+body:not(.light-mode) #meme-wrapper .reveal-btn:hover{
+    box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8) !important;
+    background: rgba(160, 138, 65, 0.179) !important;
+    transition: transform 0.15s ease, background 0.3s ease, box-shadow 0.3s ease, border 0.15s ease !important;
+}
+
+/* Dark-mode: make the meme overlay dimmer and add a subtle blur so the
+   revealed image stands out less before the user clicks. Scoped to non-
+   light-mode so light-mode overlay remains unchanged. */
+body:not(.light-mode) #meme-wrapper .meme-overlay{
+    background: rgba(0,0,0,0.78) !important; /* stronger dim */
+    backdrop-filter: blur(3px) !important;
+    -webkit-backdrop-filter: blur(3px) !important;
+    transition: background 220ms ease, backdrop-filter 220ms ease;
 }
 
 .timeline-circle{
@@ -87,17 +119,11 @@
 
 .timeline-progress-bar{
     z-index: -1;
-    background: gold;
-    background: -webkit-linear-gradient(
-        to bottom,
-        gold,
-        #ee0979
-    );
-    background: linear-gradient(
-        to bottom,
-        gold,
-        #ee0979
-    );
+    /* Inverted gradient: start with the richer pink at the top, transition to gold
+       so the progress bar appears to 'fill' from warm pink down to gold. */
+    background: #ee0979;
+    background: -webkit-linear-gradient(to bottom, #ee0979, gold);
+    background: linear-gradient(to bottom, #ee0979, gold);
     width: 3px;
     height: 50%;
     position: fixed;
@@ -210,7 +236,8 @@
     }
 
     .timeline-text{
-        font-size: 17px;
+        /* slightly reduced on small screens for better fit */
+        font-size: 15px;
     }
 
     .timeline-progress{
@@ -229,7 +256,9 @@
         left: auto;
         width: 85%;
         max-width: 360px;
-        background: rgba(0,0,0,0.12);
+          /* inherit the shared/mobile nav background so timeline matches Research
+              (do not force a nearly-transparent background here). */
+          background: inherit;
         backdrop-filter: blur(8px);
         padding: 1rem;
         gap: 0.5rem;
@@ -242,9 +271,14 @@
     }
 
     /* Ensure the open-state mirrors the global mobile layout (small nudge to the right) */
-    header.nav-open nav { transform: translateX(15px); opacity: 1; pointer-events: auto; }
-    header.nav-open { background-color: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 1000; }
-    header.nav-open nav { background: rgba(0,0,0,0.945); box-shadow: 0 18px 48px rgba(0,0,0,0.85); transition: background 220ms ease, backdrop-filter 220ms ease, box-shadow 220ms ease; z-index: 1001; }
+     /* Match Research page: keep the mobile open nav visually frosted but
+         without the heavy shadow or near-opaque background. This mirrors the
+         Research page behavior and keeps the nav panel readable while
+         preserving interactivity. */
+     header.nav-open nav { transform: translateX(15px); opacity: 1; pointer-events: auto; box-shadow: none !important; }
+     header.nav-open { background-color: rgba(0, 0, 0, 0.857); backdrop-filter: blur(6px); z-index: 1000; }
+    /* Let the nav background be provided by shared/global rules (matches Research). */
+    header.nav-open nav { background: inherit; transition: background 220ms ease, backdrop-filter 220ms ease; z-index: 1001; }
 
     /* When nav open, push floating audio controls (if present) underneath */
     header.nav-open ~ #audio-controls,
@@ -263,4 +297,33 @@
 @media (max-width: 520px) {
     h2.intro-heading,
     h2 { font-size: 5.2vh !important; }
+
+    /* Ensure dark-mode mobile open nav matches Research page behavior exactly: 
+       use the same frosted translucent backgrounds and remove heavy shadows. */
+    body:not(.light-mode) header.nav-open nav{
+        transform: translateX(15px) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        box-shadow: none !important;
+        background: rgba(0, 0, 0, 0.956) !important;
+    }
+    body:not(.light-mode) header.nav-open{
+        background-color: rgba(0,0,0,0.42) !important;
+        backdrop-filter: blur(6px) !important;
+        z-index: 1000 !important;
+    }
+
+/* Timeline page: make the header visually whiter on desktop so it reads as a
+   lighter frosted bar for this page specifically. Keep this scoped to
+   desktop to avoid mobile stacking changes and preserve functionality. */
+@media (min-width: 769px) {
+    header{
+        background-color: rgba(255,255,255,0.16) !important; /* subtle white tint */
+        backdrop-filter: blur(8px) !important;
+        color: #111 !important;
+    }
+    /* Ensure nav links and the theme toggle are readable against the whiter header */
+    header nav a{ color: #111 !important; }
+    header .theme-toggle{ background: rgba(0,0,0,0.04) !important; color: #111 !important; border-color: rgba(0,0,0,0.06) !important; }
+}
 }

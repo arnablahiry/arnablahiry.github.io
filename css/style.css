@@ -221,7 +221,8 @@ nav a:hover {
   flex-direction: column; /* stack vertically */
   align-items: center;
   gap: 1rem;               /* space between buttons */
-  z-index: 50;
+  /* Keep audio controls visually above everything else (snitch, overlays). */
+  z-index: 5000020;
 }
 
 /* Shared button style */
@@ -324,10 +325,10 @@ nav a:hover {
    original colors (no grayscale). Also fully disable pointer events so
    clicks cannot occur. The Star Wars auto-skip button remains active. */
 body.auto-skip-enabled #audio-controls button:not(#auto-skip-button) {
-  /* Slightly brighter dim for disabled controls */
+  /* Slightly dim other controls when auto-skip is enabled, but keep them interactive */
   opacity: 0.45 !important;
-  cursor: not-allowed !important;
-  pointer-events: none !important; /* fully disable interactive behavior */
+  cursor: pointer !important; /* allow clicks */
+  pointer-events: auto !important; /* keep interactive so audio controls still work */
   filter: none !important; /* keep original colors */
 }
 
@@ -337,8 +338,8 @@ body.auto-skip-enabled #audio-controls button:not(#auto-skip-button) {
 /* Keep anchor wrappers non-interactive but avoid changing opacity so child
    buttons don't compound opacity (which makes them much darker). */
 body.auto-skip-enabled #audio-controls a {
-  pointer-events: none !important;
-  cursor: not-allowed !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
   opacity: 1 !important; /* keep anchor opacity neutral to avoid multiplying opacities */
 }
 
@@ -347,8 +348,8 @@ body.auto-skip-enabled #audio-controls a {
 body.auto-skip-enabled a.no-underline #restart-button,
 body.auto-skip-enabled #restart-button {
   opacity: 0.45 !important;
-  pointer-events: none !important;
-  cursor: not-allowed !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -638,6 +639,102 @@ body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .alt-text{
   align-items: center;
 }
 
+  /* Snitch win box styles (match site link boxes) */
+  .snitch-win {
+    position: absolute;
+    z-index: 1000000;
+    pointer-events: auto;
+    padding: 14px 16px;
+    background: rgba(52, 49, 40, 0.45);
+    color: white;
+    border: 0.05rem solid gold;
+    border-radius: 6px;
+    box-shadow: 0 0 0.08rem rgba(254, 218, 74, 0.5);
+    font-family: "Poppins", "Montserrat", sans-serif;
+    font-weight: 200;
+    font-size: 15px;
+    line-height: 1.25;
+    max-width: calc(100% - 32px);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 180ms ease, transform 200ms ease, box-shadow 180ms ease;
+  }
+  .snitch-win.show { opacity: 1; transform: translateY(0); box-shadow: 0 0 0.18rem rgba(254,218,74,0.9); }
+  /* center content and style points */
+  .snitch-win .hint-line { margin-bottom: 8px; text-align: center; }
+  .snitch-win .hint-line .snitch-points { font-weight: 700; color: gold; display: inline-block; }
+
+  /* Play again button: center and style to match site-link visual weight */
+  .snitch-play-again {
+    display: inline-block;
+    margin: 12px auto 0;
+    padding: 8px 12px;
+    background: rgba(52, 49, 40, 0.6);
+    border: 0.05rem solid gold;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    display: block; /* ensure it centers via margin auto */
+    max-width: 160px;
+  }
+  .snitch-play-again:hover { box-shadow: 0 0 0.18rem rgba(254, 218, 74, 0.9); filter: brightness(.98); }
+
+  /* Light-mode variant: mirror dark-mode but match site-link light styling */
+  body.light-mode .snitch-win {
+    background: rgba(255,255,255,0.92);
+    color: #111;
+    border-color: rgba(140,102,12,0.95);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+  body.light-mode .snitch-win .hint-line { color: #111; }
+  body.light-mode .snitch-win .hint-line .snitch-points { color: rgba(140,102,12,0.95); }
+  body.light-mode .snitch-play-again {
+    background: rgba(255,255,255,0.92);
+    color: #111;
+    border-color: rgba(140,102,12,0.95);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    filter: none;
+  }
+
+/* Snitch smooth appear: fade + slight lift + deblur for a "thin air" effect */
+@keyframes snitch-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 0.92;
+    transform: translateY(-6px) scale(1.02);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* attach animation when the slot receives the class */
+#snitch-slot.snitch-appear {
+  animation: snitch-appear 520ms cubic-bezier(.2,.9,.2,1) both;
+  pointer-events: none; /* slot stays non-interactive; image controls pointer-events */
+}
+
+/* gentle image settle after appearing */
+@keyframes snitch-image-settle {
+  0% { transform: scale(1.06); }
+  60% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+#snitch-slot.snitch-appear img#snitch-runner {
+  /* run the one-off settle animation AND keep the ongoing twitch animation
+     so the snitch continues its twitching motion after appearing */
+  animation: snitch-image-settle 120ms ease 160ms both, snitch-twitch 5ms linear infinite;
+}
+
 /* Photo wrapper positions the sunglasses overlay */
 .photo-wrapper{
   position: relative;
@@ -659,8 +756,18 @@ body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .alt-text{
   filter: drop-shadow(0 6px 10px rgba(0,0,0,0.45));
 }
 
-/* Hover only: slowly fade in sunglasses on hover */
-.photo-wrapper:hover .sunglasses {
+/* When auto-skip is enabled we keep the sunglasses hidden/disabled. When
+   auto-skip is OFF (no body.auto-skip-enabled class) the normal hover reveal
+   behavior is active. This ensures the accessory only appears in immersive
+   (non-auto-skip) mode. */
+body.auto-skip-enabled .photo-wrapper .sunglasses {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate(-50%, -50%) scale(0.9) rotate(-6deg) !important;
+}
+
+/* Hover only: slowly fade in sunglasses on hover, but only when auto-skip is disabled */
+body:not(.auto-skip-enabled) .photo-wrapper:hover .sunglasses {
   transform: translate(-50%, -50%) scale(1) rotate(0deg);
   opacity: 1;
 }
@@ -936,10 +1043,10 @@ footer {
   }
 
   .intro-photo {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
   margin-bottom: 3vh;
-  border: 0.22rem solid #ffffff;
+  border: 0.26rem solid #ffffff;
   }
 
   .intro-text {
@@ -975,10 +1082,10 @@ footer {
   }
 
   .intro-photo {
-    width: 140px;
-    height: 140px;
+    width: 200px;
+    height: 200px;
   margin-bottom: 2.5vh;
-  border: 0.18rem solid #ffffff;
+  border: 0.22rem solid #ffffff;
   }
 
   /* extra-small phones: increase the shift a bit more */
@@ -1012,10 +1119,26 @@ footer {
     align-items: center;
     margin-top: 0.6rem;
   }
-
+  /* Larger touch targets for social icons on phones */
   .social-link {
-    width: 36px !important;
-    height: 36px !important;
+    width: 56px !important;
+    height: 56px !important;
+  }
+  .social-link img {
+    width: 85%;
+    height: auto;
+    display: block;
+  }
+}
+
+/* Medium-size phones and small tablets: slightly smaller than extra-small phones */
+@media (max-width: 768px) {
+  .social-link {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  .social-link img {
+    width: 72%;
   }
 }
 
@@ -1151,5 +1274,23 @@ footer {
     top: calc(8vh + 2rem + 8px) !important;
     transform: none !important;
     right: 3vw !important;
+  }
+}
+
+/* Index-page mobile overrides: hide audio controls and disable hover reveals on phones */
+@media (max-width: 768px) {
+  /* Hide floating audio controls on small screens (index page wants immersive only) */
+  #audio-controls {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Disable hover-based reveals (sunglasses) on mobile to avoid accidental reveals */
+  .photo-wrapper .sunglasses,
+  .photo-wrapper:hover .sunglasses {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate(-50%, -50%) scale(0.9) rotate(-6deg) !important;
   }
 }

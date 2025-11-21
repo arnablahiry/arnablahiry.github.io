@@ -6,6 +6,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="css/timeline_style.css" rel="stylesheet">
     <link href="css/utils.css" rel="stylesheet">
+    <!-- Include shared light-mode rules (match other pages: publications/research) -->
+    <link rel="stylesheet" href="css/light_mode.css">
+    <!-- Timeline-specific light-mode overrides: prevent photo/meme inversion on this page -->
+    <link rel="stylesheet" href="css/timeline_light_mode.css">
 </head>
 <body style="background-color: black;">
 
@@ -29,6 +33,7 @@
             <a href="publications.html">Publications</a>
             <a href="repositories.html">Repositories</a>
             <a href="contact.html">Contact</a>
+            <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
         </nav>
     </header>
 
@@ -292,5 +297,6 @@
     <script src="scripts/skip-button.js"></script>
     <script src="scripts/reveal-meme.js"></script>
     <script src="scripts/nav-toggle.js"></script>
+    <script src="scripts/theme-toggle.js"></script>
 </body>
 </html>
