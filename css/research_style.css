@@ -269,7 +269,7 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
     pointer-events: none;
     opacity: 0; /* default hidden; shown only on hover */
     /* make overlay fade a touch smoother */
-    transition: opacity 380ms cubic-bezier(0.22, 0.1, 0.22, 1);
+    transition: opacity 980ms cubic-bezier(0.22, 0.1, 0.22, 1);
     border-radius: 0;
 }
 /* show the subtle yellow overlay only when hovering the button or the card (closed state) */
