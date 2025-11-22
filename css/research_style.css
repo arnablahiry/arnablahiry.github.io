@@ -139,27 +139,10 @@ h2.intro-heading{
     color: transparent;
     white-space: nowrap; /* force single-line */
     overflow-wrap: normal;
-    display: inline-block;
-}
-
-/* When the heading wrapper becomes stuck to the top of the viewport,
-   allow the intro heading to wrap and reserve the right gutter so the
-   lines finish a few pixels before the top-right controls. The class
-   `stuck` is toggled from JS when the wrapper reaches the top. */
-.timeline-main-heading-wrapper.stuck h2.intro-heading{
-    white-space: normal;
-    max-width: calc(100% - 112px);
     display: block;
-}
-
-/* For cloned project meta (inside the fullscreen clone) do the same when
-   its sticky bar is pinned: allow the title/subtitle to wrap to avoid
-   overlapping the close/theme controls. The 'stuck' class is applied by
-   JS when the meta sentinel scrolls out of view. */
-.project-clone .project-meta.stuck .project-title,
-.project-clone .project-meta.stuck .project-subtitle{
-    white-space: normal;
-    max-width: calc(100% - 112px);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 /* By default keep title on one line; the .break-after span will be turned
@@ -198,7 +181,7 @@ h2.intro-heading{
 
     /* Intro text flows under the meme and uses full width */
     .research-intro-text{ width: 100%; }
-    .research-intro-text .research-intro{ text-align: left; }
+    .research-intro-text .research-intro{ text-align: center; }
 
     /* Reduce intro paragraph size slightly on phones */
     .research-intro-text .research-intro{ font-size: 1.6vh !important; text-align: center;}
@@ -206,21 +189,6 @@ h2.intro-heading{
     /* Force a line-break after the word "Scientific" by rendering the
        wrapped span as block-level on phones. */
     .intro-heading .break-after{ display: block !important; }
-
-     /* Ensure the main heading area (heading, meme, and intro/subtitle)
-         are visually centered on narrow screens. We force a column layout
-         and center children so the heading, the meme image and the
-         introductory subtitle remain centered in the viewport even when
-         a right-side control gutter is reserved. */
-     .timeline-main-heading-wrapper{
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          /* keep the small right gutter so top-right controls don't overlap
-              the text; child elements are centered within the wrapper */
-          padding-right: 96px;
-     }
 
     /* Increase spacing between the fixed header and the heading on phones */
     .padding-vertical-xlarge{ padding-top: 100px; padding-bottom: 40px; }
@@ -244,6 +212,100 @@ h2.intro-heading{
 }
 
 /* Projects grid and card styles */
+/* Phone layout: place meme above intro and make both fill the viewport
+   with equal left/right padding so they visually occupy the full phone
+   width. We use 5vw padding on each side to keep comfortable margins. */
+@media (max-width: 520px){
+    .timeline-main-heading-wrapper{
+        /* span the full viewport and center it */
+        width: 100vw;
+        left: 50%;
+        transform: translateX(-50%);
+        position: relative;
+        padding-left: 1vw;
+        padding-right: 1vw;
+        box-sizing: border-box;
+        max-width: none;
+    }
+
+    /* stack meme above intro and make them full-width with equal padding */
+    .research-heading-row{
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .research-meme{
+        order: -1;
+        width: 100%;
+        max-width: none;
+        display: block;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .research-meme .meme-wrapper{
+        width: 60%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .research-meme .timeline-hero-image{
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        max-height: 45vh; /* limit height so it doesn't dominate the viewport */
+        object-fit: contain;
+        margin: 0 auto;
+        transform: none;
+    }
+
+    .research-intro-text{
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .research-intro-text .research-intro{
+        text-align: center !important;
+        margin: 0 auto;
+    }
+}
+
+    /* Phone-specific: ensure the main heading row (h2, meme and intro paragraph)
+       remains horizontally centered in the viewport even when we reserve a
+       right gutter for top-right controls. We keep a small right gutter but
+       center the visible content by translating the inner elements to the
+       viewport center. This avoids visual offset when the wrapper itself is
+       constrained by container widths. */
+    @media (max-width: 520px){
+        /* Ensure the inner heading/row do not apply a second translate when
+           the wrapper is already centered relative to the viewport. Some
+           earlier rules applied left:50%/translateX(-50%) to both the
+           wrapper and the inner elements which caused the visible heading
+           to shift right — reset those inner transforms here. */
+        .timeline-main-heading-wrapper .intro-heading,
+        .timeline-main-heading-wrapper .research-heading-row{
+            position: relative;
+            left: auto !important;
+            transform: none !important;
+            width: 100% !important;
+            max-width: calc(100% - 96px);
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        /* Ensure the intro paragraph and meme content are centered inside the
+           row (image already constrained elsewhere). */
+        .research-intro-text .research-intro{ 
+            text-align: center !important;
+        }
+        .research-meme{ display: flex; justify-content: center; }
+    }
 .projects-grid{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -617,6 +679,15 @@ body.light-mode #projects-grid .project-toggle{
     body.light-mode #projects-grid .project-subtitle{
         margin: 0 !important;
     }
+
+    /* Desktop: keep heading centered via container centering (matches timeline)
+       Do not use viewport transforms here to avoid asymmetric gutters. */
+     h2.intro-heading{ display: block; margin-left: auto; margin-right: auto; }
+
+     /* Remove the right padding used on smaller screens so desktop heading
+         centering is symmetric like the Timeline page. Keep the padding on
+         mobile so controls don't overlap the heading there. */
+     .timeline-main-heading-wrapper{ padding-right: 0; }
 }
 
 

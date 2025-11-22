@@ -134,26 +134,6 @@
   }
 
   document.body.appendChild(clone);
-  // Setup observer inside the clone to detect when its sticky meta bar
-  // becomes pinned. When pinned, add a 'stuck' class so CSS can allow
-  // wrapping and reserve gutter space.
-  try{
-    var metaEl = clone.querySelector('.project-meta');
-    if(metaEl){
-      var metaObserver = new IntersectionObserver(function(entries){
-        entries.forEach(function(ent){
-          if(ent.intersectionRatio === 0){ metaEl.classList.add('stuck'); }
-          else { metaEl.classList.remove('stuck'); }
-        });
-      }, { root: clone, threshold: [0,1] });
-      // create a small sentinel just before metaEl to observe
-      var mSentinel = document.createElement('div'); mSentinel.style.height = '1px'; mSentinel.style.width = '1px'; mSentinel.style.margin = '0'; mSentinel.style.padding = '0';
-      metaEl.parentNode.insertBefore(mSentinel, metaEl);
-      metaObserver.observe(mSentinel);
-      // store on clone for cleanup
-      clone._metaObserver = metaObserver; clone._metaSentinel = mSentinel;
-    }
-  }catch(e){}
   // keep background scroll enabled so the main scrollbar remains available
   // (do not set document.body.style.overflow = 'hidden')
   // mark modal open so we can suppress focus outlines
@@ -298,10 +278,7 @@
       function doCleanup(){
         if(_cleanupDone) return; _cleanupDone = true;
         try{ if(overlay && overlay.parentNode) overlay.remove(); }catch(_){ }
-  try{ if(clone && clone.parentNode) clone.remove(); }catch(_){ }
-  // disconnect any clone-local observers
-  try{ if(clone && clone._metaObserver) { clone._metaObserver.disconnect(); } }catch(_){ }
-  try{ if(clone && clone._metaSentinel && clone._metaSentinel.parentNode) clone._metaSentinel.remove(); }catch(_){ }
+        try{ if(clone && clone.parentNode) clone.remove(); }catch(_){ }
         try{
           if(close){
             try{ if(close._rafHandle) cancelAnimationFrame(close._rafHandle); }catch(_){ }
@@ -378,31 +355,5 @@
         }
       });
     });
-  });
-
-  // Observe the page heading wrapper so we switch the heading from
-  // single-line to wrapped the moment it becomes stuck to the viewport.
-  // This prevents overlap with the top-right controls only while the
-  // heading is pinned.
-  document.addEventListener('DOMContentLoaded', function(){
-    try{
-      var wrapper = document.querySelector('.timeline-main-heading-wrapper');
-      if(!wrapper) return;
-      // create a sentinel before the wrapper to detect when it scrolls past
-      var sentinel = document.createElement('div');
-      sentinel.style.position = 'absolute'; sentinel.style.width = '1px'; sentinel.style.height = '1px'; sentinel.style.margin = '0'; sentinel.style.padding = '0'; sentinel.className = 'heading-sentinel';
-      wrapper.parentNode.insertBefore(sentinel, wrapper);
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(ent){
-          // when sentinel is not intersecting the viewport, the wrapper has
-          // scrolled up and the heading will stick — enable wrapping then.
-          if(ent.intersectionRatio === 0){ wrapper.classList.add('stuck'); }
-          else { wrapper.classList.remove('stuck'); }
-        });
-      }, { threshold: [0,1] });
-      io.observe(sentinel);
-      // store for potential future disconnect (not strictly needed)
-      wrapper._headingSentinel = sentinel; wrapper._headingObserver = io;
-    }catch(e){}
   });
 })();

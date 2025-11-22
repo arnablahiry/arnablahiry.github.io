@@ -151,7 +151,12 @@
                                 To optimize these predictions, the model minimizes a custom loss function designed for moment matching:
                             </p>
 
-                            $$ \mathcal{L}=\sum_{i=1}^{6}\log\left(\sum_{j\in batch}(\theta_{i,j}-\mu_{i,j})^{2}\right) + \sum_{i=1}^{6}\log\left(\sum_{j\in batch}((\theta_{i,j}-\mu_{i,j})^{2}-\sigma_{i,j}^{2})^{2}\right) $$
+                            $$
+                            \begin{aligned}
+                            \mathcal{L} &= \sum_{i=1}^{6}\log\left(\sum_{j\in \mathrm{batch}}(\theta_{i,j}-\mu_{i,j})^{2}\right) \\
+                            &\quad+ \sum_{i=1}^{6}\log\left(\sum_{j\in \mathrm{batch}}\big( (\theta_{i,j}-\mu_{i,j})^{2}-\sigma_{i,j}^{2} \big)^{2}\right)
+                            \end{aligned}
+                            $$
 
                             <p>
                                 To interpret <em>how</em> the model learns, the <strong>Integrated Gradients (IG)</strong> method was chosen for its mathematical robustness. IG calculates the path integral of the gradients from a baseline input $x'$ (noise) to the actual input $x$:
