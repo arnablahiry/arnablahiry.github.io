@@ -38,9 +38,122 @@
   close.className = 'project-close';
   close.setAttribute('aria-label','Close project');
   close.innerHTML = '✕';
-  clone.appendChild(close);
+  // Place the close button at the top-right corner of the cloned card
+  // (absolute positioning inside the clone). This keeps it visually fixed
+  // to the expanded card even while the clone scrolls or the page moves.
+  try{
+    // Append to body and position fixed at the clone's top-right so the
+    // button remains visually attached to the expanded card while the
+    // page or the clone content scrolls. We'll update its coordinates
+    // on scroll/resize/animation frames.
+    document.body.appendChild(close);
+      close.style.position = 'fixed';
+    close.style.zIndex = '10003';
+
+      // Create a theme toggle button that simply delegates to the main site toggle.
+      var themeBtn = document.createElement('button');
+      themeBtn.className = 'project-theme-toggle';
+      themeBtn.setAttribute('aria-label','Toggle theme');
+      try{
+        var siteToggle = document.getElementById('theme-toggle');
+        if(siteToggle && siteToggle.innerHTML && siteToggle.innerHTML.trim().length){
+          // copy markup if available so visuals match the site toggle
+          themeBtn.innerHTML = siteToggle.innerHTML;
+          // observe the main toggle so we mirror icon changes when theme updates
+          try{
+            var mo = new MutationObserver(function(){
+              try{ themeBtn.innerHTML = siteToggle.innerHTML; }catch(_){ }
+            });
+            mo.observe(siteToggle, { childList: true, subtree: true, characterData: true });
+            themeBtn._siteToggleObserver = mo;
+          }catch(_){ /* ignore observer failures */ }
+        } else {
+          // simple visible fallback
+          themeBtn.textContent = '☼';
+        }
+      }catch(e){ themeBtn.textContent = '☼'; }
+      // Click delegates to the site-wide toggle button if present; otherwise no-op
+      themeBtn.addEventListener('click', function(e){
+        e.stopPropagation && e.stopPropagation();
+        var siteToggle = document.getElementById('theme-toggle');
+        if(siteToggle && typeof siteToggle.click === 'function'){
+          siteToggle.click();
+        }
+      });
+      document.body.appendChild(themeBtn);
+
+    function updateClosePosition(){
+      try{
+        var rect = clone.getBoundingClientRect();
+        var btnW = (close.offsetWidth) || 40;
+        var top = rect.top + 12; // 12px inset from clone top
+        var left = rect.left + rect.width - btnW - 12; // align to clone right edge
+        // clamp within viewport
+        if(top < 8) top = 8;
+        if(left < 8) left = 8;
+        close.style.top = top + 'px';
+        close.style.left = left + 'px';
+        // position theme button to the left of the close button if present
+        try{
+          if(themeBtn && themeBtn.parentNode){
+            var tbw = themeBtn.offsetWidth || 40;
+            var spacing = 8; // gap between buttons
+            var themeLeft = left - tbw - spacing;
+            if(themeLeft < 8) themeLeft = 8;
+            themeBtn.style.top = top + 'px';
+            themeBtn.style.left = themeLeft + 'px';
+          }
+        }catch(e){}
+      }catch(e){}
+    }
+
+    // update on common events and using RAF for smoothness during animations
+    var rafHandle = null;
+    function rafLoop(){ updateClosePosition(); rafHandle = requestAnimationFrame(rafLoop); }
+    // start RAF loop
+    rafHandle = requestAnimationFrame(rafLoop);
+  window.addEventListener('resize', updateClosePosition);
+  window.addEventListener('scroll', updateClosePosition, {passive: true});
+
+    // store references so cleanup can remove listeners/raf
+    close._updateClosePosition = updateClosePosition;
+    close._rafHandle = rafHandle;
+    close._scrollHandler = updateClosePosition;
+    // store theme button refs for cleanup
+    if(themeBtn){
+      themeBtn._isProjectControl = true;
+      close._themeBtn = themeBtn;
+    }
+  }catch(e){
+    // fallback: append to body as fixed at a default corner
+    close.style.position = 'fixed';
+    close.style.top = '12px';
+    close.style.right = '12px';
+    close.style.zIndex = '10002';
+    document.body.appendChild(close);
+  }
 
   document.body.appendChild(clone);
+  // Setup observer inside the clone to detect when its sticky meta bar
+  // becomes pinned. When pinned, add a 'stuck' class so CSS can allow
+  // wrapping and reserve gutter space.
+  try{
+    var metaEl = clone.querySelector('.project-meta');
+    if(metaEl){
+      var metaObserver = new IntersectionObserver(function(entries){
+        entries.forEach(function(ent){
+          if(ent.intersectionRatio === 0){ metaEl.classList.add('stuck'); }
+          else { metaEl.classList.remove('stuck'); }
+        });
+      }, { root: clone, threshold: [0,1] });
+      // create a small sentinel just before metaEl to observe
+      var mSentinel = document.createElement('div'); mSentinel.style.height = '1px'; mSentinel.style.width = '1px'; mSentinel.style.margin = '0'; mSentinel.style.padding = '0';
+      metaEl.parentNode.insertBefore(mSentinel, metaEl);
+      metaObserver.observe(mSentinel);
+      // store on clone for cleanup
+      clone._metaObserver = metaObserver; clone._metaSentinel = mSentinel;
+    }
+  }catch(e){}
   // keep background scroll enabled so the main scrollbar remains available
   // (do not set document.body.style.overflow = 'hidden')
   // mark modal open so we can suppress focus outlines
@@ -80,8 +193,12 @@
     // show overlay fade
     overlay.style.transition = 'opacity 260ms ease';
     requestAnimationFrame(function(){ overlay.style.opacity = '1'; });
-    // fade in the close button after a short delay for nicer UX
-    setTimeout(function(){ close.style.opacity = '1'; close.focus(); }, 240);
+    // fade in the close button and the theme toggle after a short delay for nicer UX
+    setTimeout(function(){ 
+      close.style.opacity = '1'; 
+      try{ close.focus(); }catch(e){}
+      try{ if(themeBtn){ themeBtn.style.opacity = '1'; } }catch(e){}
+    }, 240);
 
     // If we have both original and final image rects, animate the image using FLIP
     if(img && origImgRect && finalImgRect){
@@ -112,7 +229,37 @@
 
     function closeHandler(){
       // Quick UX: fade the overlay and scale the clone down while fading it out.
-      try{ close.style.opacity = '0'; } catch(e){}
+      // Immediately hide both the close and theme buttons so they don't linger
+      // on-screen after the card is closed.
+      try{
+        // ensure a quick opacity transition then hide
+        if(close){ close.style.transition = close.style.transition || 'opacity 120ms ease'; close.style.opacity = '0'; }
+        if(themeBtn){ themeBtn.style.transition = themeBtn.style.transition || 'opacity 120ms ease'; themeBtn.style.opacity = '0'; }
+      }catch(e){}
+
+      // Stop updating button positions right away to avoid visual drift
+      try{ if(close && close._rafHandle) cancelAnimationFrame(close._rafHandle); }catch(e){}
+      try{ window.removeEventListener('resize', close._scrollHandler || close._updateClosePosition); }catch(e){}
+      try{ window.removeEventListener('scroll', close._scrollHandler || close._updateClosePosition); }catch(e){}
+
+      // Remove the esc handler immediately so keyboard won't interact after close
+      try{ document.removeEventListener('keydown', escHandler); }catch(e){}
+
+      // Make the overlay non-interactive immediately so page elements become
+      // clickable again even while the clone is animating. Keep the overlay
+      // in the DOM so its fade-out transition remains visible; removal will
+      // happen during the normal cleanup path.
+      try{ if(overlay){ overlay.style.pointerEvents = 'none'; } }catch(e){}
+      try{ document.body.classList.remove('project-modal-open'); }catch(e){}
+      try{ document.body.style.overflow = ''; }catch(e){}
+
+      // Remove the buttons from the DOM shortly after starting the fade so they
+      // don't remain interactive. onFastRemove will tolerate them already
+      // being removed.
+      setTimeout(function(){
+        try{ if(themeBtn && themeBtn.parentNode) themeBtn.remove(); }catch(_){ }
+        try{ if(close && close.parentNode) close.remove(); }catch(_){ }
+      }, 180);
 
       // Make the original card visible immediately so it isn't blank while the clone fades.
       try{ card.style.visibility = card.dataset._origVisibility || ''; }catch(e){}
@@ -129,9 +276,11 @@
         });
       }catch(e){}
 
-      // Prepare a short transition for a fast zoom-out + fade
-      clone.style.transition = 'transform 220ms ease, opacity 220ms ease, border-radius 180ms ease';
-      overlay.style.transition = 'opacity 180ms ease';
+  // Prepare a short transition for a fast zoom-out + fade. Use !important
+  // via setProperty to override page-level rules (eg. .theme-animate ->
+  // transition-duration:0ms !) that would otherwise cancel opacity fades.
+  try{ clone.style.setProperty('transition', 'transform 220ms ease, opacity 220ms ease, border-radius 180ms ease', 'important'); }catch(e){ clone.style.transition = 'transform 220ms ease, opacity 220ms ease, border-radius 180ms ease'; }
+  try{ overlay.style.setProperty('transition', 'opacity 180ms ease', 'important'); }catch(e){ overlay.style.transition = 'opacity 180ms ease'; }
 
       // Trigger the zoom-out & fade on the next frame for smoother compositing
       requestAnimationFrame(function(){
@@ -142,32 +291,53 @@
         clone.style.transform = 'scale(0.92)';
       });
 
-      // Remove and cleanup after the short transition
+      // Remove and cleanup after the short transition. We provide a transitionend
+      // handler plus a timed fallback in case transitionend doesn't fire
+      // (interruptions, theme reflows, or browser quirks). Cleanup is idempotent.
+      var _cleanupDone = false;
+      function doCleanup(){
+        if(_cleanupDone) return; _cleanupDone = true;
+        try{ if(overlay && overlay.parentNode) overlay.remove(); }catch(_){ }
+  try{ if(clone && clone.parentNode) clone.remove(); }catch(_){ }
+  // disconnect any clone-local observers
+  try{ if(clone && clone._metaObserver) { clone._metaObserver.disconnect(); } }catch(_){ }
+  try{ if(clone && clone._metaSentinel && clone._metaSentinel.parentNode) clone._metaSentinel.remove(); }catch(_){ }
+        try{
+          if(close){
+            try{ if(close._rafHandle) cancelAnimationFrame(close._rafHandle); }catch(_){ }
+            try{ window.removeEventListener('resize', close._scrollHandler || close._updateClosePosition); }catch(_){ }
+            try{ window.removeEventListener('scroll', close._scrollHandler || close._updateClosePosition); }catch(_){ }
+            try{ 
+              if(close._themeBtn){ 
+                try{ if(close._themeBtn._siteToggleObserver) close._themeBtn._siteToggleObserver.disconnect(); }catch(_){ }
+                if(close._themeBtn.parentNode) close._themeBtn.remove(); 
+              }
+            }catch(_){ }
+            try{ if(close.parentNode) close.remove(); }catch(_){ }
+          }
+        }catch(_){ }
+        try{ card.style.visibility = card.dataset._origVisibility || ''; delete card.dataset._origVisibility; }catch(_){ }
+        try{ document.body.style.overflow = ''; }catch(_){ }
+        try{ if(document.activeElement && typeof document.activeElement.blur === 'function') document.activeElement.blur(); } catch(_){ }
+        try{ document.body.classList.remove('project-modal-open'); }catch(_){ }
+        // fade the toggles in, then clear our inline overrides after the fade
+        try{
+          var toggles = card.querySelectorAll('.project-toggle');
+          toggles.forEach(function(t){ requestAnimationFrame(function(){ t.style.opacity = '1'; }); });
+          setTimeout(function(){ try{ toggles.forEach(function(t){ t.style.transition = ''; t.style.opacity = ''; t.style.visibility = ''; t.style.pointerEvents = ''; }); }catch(_){ } }, 480);
+        }catch(_){ }
+        // Ensure escHandler removed (defensive)
+        try{ document.removeEventListener('keydown', escHandler); }catch(_){ }
+      }
       var onFastRemove = function tt(ev){
-        // Some browsers fire multiple transitionend events; remove when opacity or transform finishes
-        if(ev && (ev.propertyName === 'opacity' || ev.propertyName === 'transform')){
+        if(!ev || (ev.propertyName === 'opacity' || ev.propertyName === 'transform')){
           clone.removeEventListener('transitionend', tt);
-          if(overlay && overlay.parentNode) overlay.remove();
-          if(clone && clone.parentNode) clone.remove();
-          try{ card.style.visibility = card.dataset._origVisibility || ''; delete card.dataset._origVisibility; }catch(e){}
-          document.body.style.overflow = '';
-          try{ if(document.activeElement && typeof document.activeElement.blur === 'function') document.activeElement.blur(); } catch(e){}
-          document.body.classList.remove('project-modal-open');
-          // fade the toggles in, then clear our inline overrides after the fade
-          try{
-            var toggles = card.querySelectorAll('.project-toggle');
-            toggles.forEach(function(t){
-              // trigger fade-in
-              requestAnimationFrame(function(){ t.style.opacity = '1'; });
-            });
-            // after the fade completes, clear the inline styles so page CSS regains control
-            setTimeout(function(){
-              try{ toggles.forEach(function(t){ t.style.transition = ''; t.style.opacity = ''; t.style.visibility = ''; t.style.pointerEvents = ''; }); }catch(e){}
-            }, 480);
-          }catch(e){}
+          doCleanup();
         }
       };
       clone.addEventListener('transitionend', onFastRemove);
+      // fallback cleanup in case transitionend doesn't fire
+      setTimeout(function(){ doCleanup(); }, 520);
       // detach keyboard handler
       document.removeEventListener('keydown', escHandler);
     }
@@ -208,5 +378,31 @@
         }
       });
     });
+  });
+
+  // Observe the page heading wrapper so we switch the heading from
+  // single-line to wrapped the moment it becomes stuck to the viewport.
+  // This prevents overlap with the top-right controls only while the
+  // heading is pinned.
+  document.addEventListener('DOMContentLoaded', function(){
+    try{
+      var wrapper = document.querySelector('.timeline-main-heading-wrapper');
+      if(!wrapper) return;
+      // create a sentinel before the wrapper to detect when it scrolls past
+      var sentinel = document.createElement('div');
+      sentinel.style.position = 'absolute'; sentinel.style.width = '1px'; sentinel.style.height = '1px'; sentinel.style.margin = '0'; sentinel.style.padding = '0'; sentinel.className = 'heading-sentinel';
+      wrapper.parentNode.insertBefore(sentinel, wrapper);
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(ent){
+          // when sentinel is not intersecting the viewport, the wrapper has
+          // scrolled up and the heading will stick — enable wrapping then.
+          if(ent.intersectionRatio === 0){ wrapper.classList.add('stuck'); }
+          else { wrapper.classList.remove('stuck'); }
+        });
+      }, { threshold: [0,1] });
+      io.observe(sentinel);
+      // store for potential future disconnect (not strictly needed)
+      wrapper._headingSentinel = sentinel; wrapper._headingObserver = io;
+    }catch(e){}
   });
 })();

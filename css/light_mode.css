@@ -352,6 +352,7 @@ body.light-mode .project-card img[src$=".svg"]{
     filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
 }
 
+
 /* Invert full-bleed contact/location and social images in light mode so
    thumbnails and icons read on white backgrounds. Scoped to common contact
    selectors used on the contact page. */

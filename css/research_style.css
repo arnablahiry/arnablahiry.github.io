@@ -40,6 +40,10 @@ body:not(.light-mode) .container{
     position: relative; /* allow absolute-positioned controls (theme toggle) inside */
 }
 
+/* Reserve a right gutter so heading text doesn't flow underneath the
+   top-right controls when the page scrolls or when a clone is open. */
+.timeline-main-heading-wrapper{ box-sizing: border-box; padding-right: 112px; }
+
 /* Research page: place a small meme to the right of the intro paragraph.
    The meme wrapper stretches to match the height of the intro text column.
    Keep the meme visually small via a constrained width so it doesn't dominate. */
@@ -138,6 +142,26 @@ h2.intro-heading{
     display: inline-block;
 }
 
+/* When the heading wrapper becomes stuck to the top of the viewport,
+   allow the intro heading to wrap and reserve the right gutter so the
+   lines finish a few pixels before the top-right controls. The class
+   `stuck` is toggled from JS when the wrapper reaches the top. */
+.timeline-main-heading-wrapper.stuck h2.intro-heading{
+    white-space: normal;
+    max-width: calc(100% - 112px);
+    display: block;
+}
+
+/* For cloned project meta (inside the fullscreen clone) do the same when
+   its sticky bar is pinned: allow the title/subtitle to wrap to avoid
+   overlapping the close/theme controls. The 'stuck' class is applied by
+   JS when the meta sentinel scrolls out of view. */
+.project-clone .project-meta.stuck .project-title,
+.project-clone .project-meta.stuck .project-subtitle{
+    white-space: normal;
+    max-width: calc(100% - 112px);
+}
+
 /* By default keep title on one line; the .break-after span will be turned
    into a block on phones to create the requested line-break after "Scientific". */
 .intro-heading .break-after{ display: inline; }
@@ -183,8 +207,40 @@ h2.intro-heading{
        wrapped span as block-level on phones. */
     .intro-heading .break-after{ display: block !important; }
 
+     /* Ensure the main heading area (heading, meme, and intro/subtitle)
+         are visually centered on narrow screens. We force a column layout
+         and center children so the heading, the meme image and the
+         introductory subtitle remain centered in the viewport even when
+         a right-side control gutter is reserved. */
+     .timeline-main-heading-wrapper{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          /* keep the small right gutter so top-right controls don't overlap
+              the text; child elements are centered within the wrapper */
+          padding-right: 96px;
+     }
+
     /* Increase spacing between the fixed header and the heading on phones */
     .padding-vertical-xlarge{ padding-top: 100px; padding-bottom: 40px; }
+
+    /* Prevent heading/subtitle from running under the top-right controls
+       (close / theme buttons). On phones we allow the heading to wrap and
+       reserve a right gutter so lines stop before the control area. */
+    .timeline-main-heading-wrapper{ padding-right: 96px; }
+    h2.intro-heading{
+        white-space: normal; /* allow wrapping on phones */
+        max-width: calc(100% - 96px);
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    /* slightly smaller gutter on very narrow phones */
+    @media (max-width: 420px){
+        .timeline-main-heading-wrapper{ padding-right: 56px; }
+        h2.intro-heading{ max-width: calc(100% - 56px); }
+    }
 }
 
 /* Projects grid and card styles */
@@ -335,8 +391,10 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
 }
 
 .project-close{
+    /* Default close button styling. When placed inside the clone meta
+       this will be positioned absolutely using container positioning. */
     position: absolute;
-    top: 12px;
+    top: 8px;
     right: 12px;
     background: rgba(255,255,255,0.06);
     border: 0;
@@ -346,10 +404,32 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
     height: 40px;
     border-radius: 8px;
     cursor: pointer;
-    z-index: 10001;
+    z-index: 10002;
     opacity: 0; /* start hidden; JS will fade in */
     transition: opacity 200ms ease, background 160ms ease;
 }
+
+/* Theme toggle button shown on the cloned project (matches .project-close styling) */
+.project-theme-toggle{
+    position: fixed; /* will be repositioned by JS; default visual style */
+    top: 12px;
+    right: 64px; /* default offset; updated by JS */
+    background: rgba(255,255,255,0.06);
+    border: 0;
+    color: #fff;
+    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 10002;
+    opacity: 0;
+    transition: opacity 200ms ease, background 160ms ease;
+}
+.project-theme-toggle{ display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+.project-theme-toggle svg{ display: block; width: 18px; height: 18px; }
+.project-theme-toggle:hover{ background: rgba(255,255,255,0.12); }
+body.light-mode .project-theme-toggle{ color: #111 !important; background: rgba(0,0,0,0.06) !important; }
 
 /* Overlay behind fullscreen clone */
 .project-overlay{
@@ -366,6 +446,10 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
 .project-close:hover{
     background: rgba(255,255,255,0.12);
 }
+
+/* If the close button is appended to body as a fallback, ensure fixed
+   placement looks reasonable by targeting the body-level placement. */
+body > .project-close{ position: fixed !important; top: 42px !important; right: 12px !important; }
 
 /* Make the whole card keyboard-focusable */
 .project-card{ cursor: pointer; }
@@ -398,6 +482,76 @@ body.project-modal-open .project-toggle:focus{
 /* Hide the in-card "Learn more" control when the card is cloned/open, and
    hide toggles on the page while a modal is active so the UI doesn't duplicate. */
 .project-clone .project-toggle{ display: none !important; }
+
+/* Sticky header inside cloned project
+   Keep the project title/subtitle visible at the top of the cloned viewport
+   while allowing the image and body content to scroll underneath. The
+   .project-meta is made sticky inside the .project-clone scroll container.
+*/
+.project-clone .project-meta{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0; /* stick flush to the top of the viewport */
+    z-index: 10001;
+    /* ensure the sticky bar covers underlying content for readability */
+    background: rgba(11,11,11,0.9);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 112px; /* leave space for the close + theme buttons */
+}
+
+/* When in light-mode we want the sticky meta to be light as well */
+body.light-mode .project-clone .project-meta{
+    background: rgba(255,255,255,0.96) !important;
+    color: #111 !important;
+}
+
+/* The close button is fixed via JS when a clone is created; ensure it
+   looks appropriate in both themes. */
+.project-close{
+    /* keep existing visuals but make sure fixed placement transitions smoothly */
+    transition: background 160ms ease, opacity 160ms ease, filter 160ms ease;
+}
+body.light-mode .project-close{
+    background: rgba(0,0,0,0.06) !important;
+    color: #111 !important;
+}
+
+
+/* MathJax / LaTeX color tuning for Research page
+   Use slightly muted greys per theme so equations read well on both
+   light and dark backgrounds. This page-scoped rule overrides any site-
+   wide inversion or MathJax inline attributes. */
+/* Light mode: medium-dark grey (good contrast on white) */
+body.light-mode .MathJax_SVG,
+body.light-mode .mjx-svg,
+body.light-mode .mjx-chtml,
+body.light-mode .MathJax{
+    color: #ffffff !important;
+    filter: none !important; /* ensure we don't double-invert */
+}
+body.light-mode .MathJax_SVG svg,
+body.light-mode .mjx-svg svg,
+body.light-mode .MathJax_SVG svg *{
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* Dark mode: light-medium grey (good contrast on black) */
+body:not(.light-mode) .MathJax_SVG,
+body:not(.light-mode) .mjx-svg,
+body:not(.light-mode) .mjx-chtml,
+body:not(.light-mode) .MathJax{
+    color: #ffffff !important;
+    filter: none !important;
+}
+body:not(.light-mode) .MathJax_SVG svg,
+body:not(.light-mode) .mjx-svg svg,
+body:not(.light-mode) .MathJax_SVG svg *{
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
 body.project-modal-open .project-toggle{ visibility: hidden !important; pointer-events: none !important; }
 
 /* Research-specific light-mode tweaks (kept minimal here). Global light-mode
