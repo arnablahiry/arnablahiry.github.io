@@ -171,6 +171,29 @@ h2.intro-heading{
     /* Move meme to the top of the column */
     .research-meme{ order: -1; flex: 0 0 auto; width: 100%; max-width: 420px; }
     .research-meme .meme-wrapper{ width: 100%; height: auto; display: flex; justify-content: center; }
+
+/* Tablet / small-desktop: slightly reduce font sizes and image height so
+   content fits comfortably on viewports up to 780px wide. This keeps the
+   layout readable on small laptops and large tablets. */
+@media (max-width: 780px){
+    /* Slightly smaller heading */
+    h2.intro-heading{ font-size: 6.6vh !important; }
+
+    /* Project card typography tweaks */
+    .project-title{ font-size: 2.0vh !important; }
+    .project-subtitle{ font-size: 1.6vh !important; }
+    .project-details{ font-size: 1.75vh !important; }
+    .project-full{ font-size: 1.55vh !important; }
+
+    /* Reduce intro paragraph a touch */
+    .research-intro-text .research-intro{ font-size: 1.9vh !important; }
+
+    /* Slightly reduce card image height so cards don't dominate the viewport */
+    .project-image{ height: 160px !important; }
+
+    /* Ensure cloned project sticky meta spacing still fits on narrower viewports */
+    .project-clone .project-meta{ padding-right: 80px !important; }
+}
     .research-meme .timeline-hero-image{
         /* reduce the meme size on phones to avoid visual dominance */
         max-height: 140px;
@@ -688,6 +711,27 @@ body.light-mode #projects-grid .project-toggle{
          centering is symmetric like the Timeline page. Keep the padding on
          mobile so controls don't overlap the heading there. */
      .timeline-main-heading-wrapper{ padding-right: 0; }
+
+     /* Desktop: force exactly 3 project cards per row for consistent layout */
+     .projects-grid{
+          grid-template-columns: repeat(3, 1fr);
+          gap: 28px;
+     }
+}
+
+/* Phone: ensure figures and any images inside the expanded/clone view
+   occupy the full width of the viewport so illustrations and plots
+   render edge-to-edge on small screens. Keep natural aspect ratio. */
+@media (max-width: 780px){
+    .project-clone .project-full figure,
+    .project-clone .project-full figure img,
+    .project-clone .project-full img{
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .project-clone .project-full figure{ margin: 0 0 1rem 0 !important; }
+    .project-clone .project-full figure img{ height: auto !important; display: block !important; object-fit: contain !important; }
 }
 
 

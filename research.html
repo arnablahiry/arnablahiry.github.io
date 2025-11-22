@@ -79,26 +79,108 @@
                 <!-- Projects grid: each card has an image + subtitle; clicking expands details -->
                 <div class="projects-grid" id="projects-grid">
                     <article class="project-card">
-                        <img class="project-image" src="images/research/galprop.svg" alt="Project image">
+                        <img class="project-image" src="images/research/galprop.png" alt="Project image">
                         <div class="project-meta">
                             <h3 class="project-title">Beyond Moment0: Galaxy Property Inference</h3>
                             <p class="project-subtitle">Using simulated mock IFUs to use the full emission spectrum per-pixel to infer physical galaxy properties.</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
                         <div class="project-full" hidden>
-                            <h4>Overview</h4>
-                            <p>This project builds end-to-end AI workflows for scientific datasets. It includes data preprocessing and augmentation, denoising stages, model architecture search, uncertainty quantification, and a deployment-ready pipeline that includes validation, monitoring and reproducibility tooling.</p>
-                            <h4>Highlights</h4>
+                            <p><strong>Overview:</strong></p>
+                            <p>
+                                This project explores whether the <strong>full spectral dimension</strong> of far-infrared and sub-millimeter emission lines—particularly
+                                multi-line, per-pixel spectra—can be used to infer spatially resolved galaxy properties at high redshift. Instead of relying on
+                                classical <em>moment-0</em> (integrated flux) maps, the study leverages the complete velocity-channel structure of integral-field
+                                spectroscopic (IFU) data to predict key physical quantities: star-formation rate (SFR), molecular gas mass, stellar mass, gas
+                                temperature, and gas-phase metallicity. Synthetic IFU cubes generated from cosmological simulations and radiative-transfer
+                                modelling serve as the foundation for calibrating traditional flux–property relations and training machine-learning predictors
+                                that digest full spectral information.
+                            </p>
+
+                            <h3>Methodology</h3>
+                            <p>
+                                The project contrasts two complementary approaches:
+                            </p>
                             <ul>
-                                <li>Interpretable model outputs and diagnostic visualisations</li>
-                                <li>Automated training pipelines with reproducible experiments</li>
-                                <li>Integration with evaluation suites and uncertainty estimators</li>
+                                <li><strong>Classical Moment-0 Scaling:</strong> For each emission line, the velocity-integrated flux in each pixel is used to calibrate
+                                empirical relations mapping surface brightness to physical property surface densities. These relations approximate traditional
+                                extragalactic scaling laws.</li>
+
+                                <li><strong>Full-Spectrum Machine Learning:</strong> A supervised neural network ingests the per-pixel spectra of one or multiple
+                                emission lines. Convolutional layers act along the spectral axis to extract line-shape, width, asymmetry, and multi-line
+                                correlations, followed by dense layers that combine the learned features to predict the target physical property per pixel.</li>
+
+                                <li><strong>Synthetic IFU Dataset:</strong> The input cubes are produced by applying radiative transfer and non-equilibrium
+                                chemistry to cosmological galaxy simulations. They span a broad range of redshifts, morphologies, inclinations, spatial
+                                resolutions, and dynamical states, ensuring a diverse and physically motivated training set.</li>
+
+                                <li><strong>Performance Evaluation:</strong> Predictions are compared against simulation ground truth through pixel-level residuals,
+                                scatter, bias, and morphology preservation across full 2D property maps.</li>
                             </ul>
+
+                            <h3>Key Mathematical Framework</h3>
+                            <p>
+                                The classical method assumes that the relation between emission-line luminosity surface density and a given physical
+                                property follows a logarithmic form:
+                            </p>
+
+                            \[
+                            \log \Sigma_{\mathrm{prop}} = a\,\log \Sigma_{\mathrm{line}} + b .
+                            \]
+
+                            <p>
+                                Here, \(\Sigma_{\mathrm{line}}\) is obtained by integrating the spectral flux density over all velocity channels:
+                            </p>
+
+                            \[
+                            \Sigma_{\mathrm{line}} = \int I(v)\,dv .
+                            \]
+
+                            <p>
+                                To ensure physical consistency between simulated intensities and observational luminosity–property laws, solid-angle
+                                corrections, rest-frame frequencies, and pixel-area conversions are applied. This yields surface densities in
+                                \(\mathrm{kpc}^{-2}\) suitable for comparison to established observational relations.
+                            </p>
+
+                            <p>
+                                The machine-learning model, in contrast, directly operates on the tensor of per-pixel spectra:
+                            </p>
+
+                            \[
+                            X \in \mathbb{R}^{n_{\mathrm{lines}} \times N_{\mathrm{chan}}} ,
+                            \]
+
+                            <p>
+                                applying convolutional kernels of shape \((1 \times 5)\) (for the multi-line case) to extract local spectral features across
+                                channels, followed by:
+                            </p>
+
+                            \[
+                            \hat{y} = f_{\theta}(X)
+                            \]
+
+                            <p>
+                                where \(f_{\theta}\) is a nonlinear mapping encoded by the neural network parameters \(\theta\), producing the predicted physical
+                                property for that pixel.
+                            </p>
+
+                            <h3>Pipeline Summary</h3>
+                            <ul>
+                                <li>Generate synthetic IFU cubes via radiative transfer applied to hydrodynamic simulations.</li>
+                                <li>Compute moment-0 maps and fit classical log–log relations to physical properties.</li>
+                                <li>Train and validate a spectral CNN on the full per-pixel line profiles.</li>
+                                <li>Compare predicted 2D property maps, residual distributions, and biases between methods.</li>
+                            </ul>
+
+                            <h3>Key Results & Insights</h3>
+                            <p>
+                                [ In Progress]
+                            </p>
                         </div>
                     </article>
 
                     <article class="project-card">
-                        <img class="project-image" src="images/research/3d_denoising.svg" alt="Project image">
+                        <img class="project-image" src="images/research/3d_denoising.png" alt="Project image">
                         <div class="project-meta">
                             <h3 class="project-title">Deep and Sparse Denoising of high-z Galaxy Spectral Cubes</h3>
                             <p class="project-subtitle">Tiered three-dimensional de-noising comparitive study - toy data, simulations and ALMA observations.</p>
@@ -106,12 +188,122 @@
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-2-desc">Learn more</button>
         
                         <div class="project-full" hidden>
-                            <p>We embed physically motivated constraints and preprocessing into model training to ensure learned representations respect domain structure. The work focuses on diagnostic tools that reveal why models behave a certain way and how predictions relate to known physics.</p>
+                            <p><strong>Overview:</strong></p>
+                            <p>
+                            This project benchmarks denoising strategies for three-dimensional spectral data cubes of high-redshift galaxies, spanning
+                            synthetic toy rotating-disk cubes, realistic mock IFU cubes from FIRE cosmological simulations, and ALMA observations
+                            (CRISTAL sample and W2246–0526). Methods compared include classical linear decompositions (PCA, ICA), sparse
+                            multiscale denoising (iterative 2D–1D wavelet soft-thresholding — IST), and a supervised 3D U-Net. Performance is
+                            assessed by RMSE, flux conservation within fixed emission apertures, preservation of spectral/spatial morphology, and SNR
+                            improvement.
+                            </p>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                            <!-- using the uploaded file path as the figure source (paper PDF) -->
+                            <img src="images/research/grid.png" style="max-width: 100%; height: auto;">
+                            <figcaption>Fig 1. Different levels of noise in toy cubes and wavelet decomposition of one noisy example.</figcaption>
+                            </figure>
+
+                            <h3>Methodology</h3>
+                            <p>
+                            The experimental pipeline uses three classes of data (toy rotating-disk cubes, FIRE mock IFU cubes, ALMA CRISTAL &amp; W2246)
+                            and four primary denoising strategies. The toy dataset is physically motivated (Sérsic radial profiles + vertical exponential,
+                            controlled inclination / rotation / beam convolution) and is used to train and evaluate supervised models. 
+                            </p>
+
+                            <ul>
+                            <li><strong>Data generation &amp; pre-processing:</strong> Toy cubes are produced from a 3D flux density model combining a Sérsic radial profile and an exponential vertical profile; cubes are beam-convolved and injected with spatially correlated Gaussian noise at peak SNRs sampled between ~2.5–8.</li>
+
+                            <li><strong>Unsupervised baselines:</strong> PCA and ICA on reshaped spectra (spaxel×channels) with component-selection guided by flux-plateau or explained-variance criteria; 2D–1D wavelet decomposition (Starlet 2D + 1D biorthogonal spectral wavelet) with iterative reweighted soft-thresholding (IST) for sparsity-driven denoising and a residual de-biasing step. </li>
+
+                            <li><strong>Supervised method:</strong> A 3D U-Net (encoder–decoder with skip connections, average pooling to preserve flux, LeakyReLU activations) trained on 20,000 synthetic cubes (80/10/10 split) using an MSE loss and Adam optimizer. The architecture preserves spectral–spatial features and learns non-linear mappings to suppress noise.</li>
+
+                            <li><strong>Evaluation &amp; apertures:</strong> Fixed circular emission aperture defined observationally (aperture diameter $D_{ap} = 2\times\max(De, \mathrm{FWHM_{beam}})$ ) is used to compute total flux conservation and local RMSE within the aperture. Residual noise is estimated with MAD-based estimators to account for correlated noise. </li>
+                            </ul>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                            <!-- using the uploaded file path as the figure source (paper PDF) -->
+                            <img src="images/research/methods.png"  style="max-width: 100%; height: auto;">
+                            <figcaption>Fig 2. Two major methodologies - U-Net and 2D1D-IST</figcaption>
+                            </figure>
+
+                            <h3>Key Mathematical Framework</h3>
+
+                            <p>
+                            The toy spatial flux model uses a 3D Sérsic × exponential law:
+                            </p>
+
+                            <div class="math">
+                            \[
+                            S(x,y,z) = S_e \cdot \exp\!\left[-b_n\left(\left(\frac{\sqrt{x^2+y^2}}{R_e}\right)^{1/n}-1\right)\right]\cdot \exp\!\left(-\frac{|z|}{h_z}\right)
+                            \]
+                            </div>
+                            <p>
+                            where $R_e$ is the effective radius, $n$ the Sérsic index and $b_n$ the standard Sérsic constant (polynomial approx. for $n>0.36$):
+                            </p>
+
+                            <div class="math">
+                            \[
+                            b_n = 2n - \tfrac{1}{3} + \frac{4}{405n} + \frac{46}{25515 n^2} + \frac{131}{1148175 n^3} - \frac{2194697}{30690717750 n^4}.
+                            \]
+                            </div>
+                            <p>References and derivation in the paper.</p>
+
+                            <p>
+                            Denoising evaluation uses aperture total flux and RMSE within aperture:
+                            </p>
+
+                            <div class="math">
+                            \[
+                            S_{\rm den} = \sum_{(i,j,k)\in A} X^{\rm den}_{i,j,k}, \quad
+                            S_{\rm true} = \sum_{(i,j,k)\in A} X^{\rm true}_{i,j,k}
+                            \]
+                            \[
+                            \mathrm{RMSE}_{\rm ap} = \sqrt{\frac{1}{N_p}\sum_{(i,j,k)\in A} \left(X^{\rm den}_{i,j,k} - X^{\rm true}_{i,j,k}\right)^2 }.
+                            \]
+                            </div>
+                            <p>Residual noise and SNR improvement are estimated using MAD-based noise estimates to handle beam-correlated noise. </p>
+
+                            <h3>Pipeline Steps (concise)</h3>
+                            <ul>
+                            <li><strong>Build / simulate</strong> toy cubes (Sérsic + kinematics + beam) and preprocess mock IFU/ALMA cubes.</li>
+                            <li><strong>Train</strong> U-Net on synthetic cubes (20k examples).</li>
+                            <li><strong>Apply</strong> PCA, ICA, IST, and U-Net to test / mock / real cubes (CRISTAL, W2246). </li>
+                            <li><strong>Evaluate</strong> flux conservation, RMSE, spectral-shape preservation, and SNR improvement within fixed apertures.</li>
+                            </ul>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                            <!-- using the uploaded file path as the figure source (paper PDF) -->
+                            <img src="images/research/obvs.png"  style="max-width: 120%; height: auto;">
+                            <figcaption>Fig 3. Application to observational data</figcaption>
+                            </figure>
+
+                            <h3>Key Results &amp; Insights</h3>
+                            <ul>
+                            <li><strong>Classical methods:</strong> PCA/ICA provide limited denoising in presence of spatially correlated (beam) noise; they struggle especially at low SNRs.</li>
+
+                            <li><strong>Wavelet IST:</strong> Iterative 2D–1D soft-thresholding is physically interpretable and conserves flux well in medium-to-high peak SNR regimes (conserves &gt;95% of aperture flux for CRISTAL; strong noise suppression), but tends to lose faint diffuse emission at very low SNR due to conservative thresholding. </li>
+
+                            <li><strong>3D U-Net:</strong> Trained on synthetic toy cubes, it generalizes strongly: lowest RMSE across tests, preserves spectral morphology (e.g., double-horned rotation signatures), and achieves the largest SNR improvements (factors ≈6–7 in CRISTAL examples). Caveats: slight flux overestimation / hallucinations at very low SNR and reduced recovery for morphologically very different diffuse systems (e.g., W2246 recovery ≈60%). </li>
+
+                            <li><strong>Practical takeaway:</strong> A hybrid workflow — IST as an interpretable unsupervised baseline and a U-Net trained on broad synthetic priors (with transfer/fine-tuning on small real samples) — offers a robust route for denoising ALMA / IFU surveys. </li>
+                            </ul>
+
+                            <h3>Representative Numerical Highlights</h3>
+                            <ul>
+                            <li>U-Net and IST both typically improve SNR by factors &gt;6 for CRISTAL cubes; U-Net conserves &gt;90% of aperture flux in CRISTAL, IST conserves &gt;95% in high-SNR regimes. </li>
+                            <li>On W2246 (diffuse, turbulent system), IST conserves flux robustly and improves SNR by ≳2.5, while U-Net recovers ≈60% of aperture flux — illustrating limits of purely synthetic training for exotic real morphologies. </li>
+                            </ul>
+
+                            <h3>Conclusions &amp; Future Directions</h3>
+                            <p>
+                            Deep supervised denoisers trained on well-designed, physically-motivated synthetic datasets generalize remarkably well to realistic IFU and ALMA data, offering substantial RMSE reduction and SNR gains. However, flux bias / hallucination risks at low SNR underline the need for uncertainty-aware models, hybrid architectures blending interpretable sparse priors with learned filters, and transfer learning to incorporate real-data priors (fine-tuning). The full paper outlines recommended next steps: uncertainty quantification, hybrid learnlet-like architectures, and incorporation of cosmological-simulation priors. 
+                            </p>
                         </div>
                     </article>
 
                     <article class="project-card">
-                        <img class="project-image" src="images/research/cnn_cosmo.svg" alt="Project image">
+                        <img class="project-image" src="images/research/cnn_cosmo.png" alt="Project image">
                         <div class="project-meta">
                             <h3 class="project-title">CNN and Simulation-based Cosmological Interpretability</h3>
                             <p class="project-subtitle">Exploring the scales and morphology of the cosmic web to interpret the origin of cosmological information.</p>
@@ -125,7 +317,7 @@
                             </p>
 
                             <figure style="text-align: center; margin: 20px 0;">
-                                <img src="images/research/cnn_interpret.svg" alt="Visualization of Cosmic Web Attribution" style="max-width: 80%; height: auto;">
+                                <img src="images/research/cnn_interpret.png" alt="Visualization of Cosmic Web Attribution" style="max-width: 80%; height: auto;">
                                 <figcaption>Fig 1. Visualization of cosmic web attribution for neural network interpretability.</figcaption>
                             </figure>
 
@@ -173,6 +365,202 @@
                             </ul>
                         </div>
                     </article>
+
+                    <article class="project-card">
+                        <img class="project-image" src="images/research/gdf.png" alt="Project image">
+                        <div class="project-meta">
+                            <h3 class="project-title">CNN as optimal estimator of information with Gaussian Density Fields</h3>
+                            <p class="project-subtitle">Exploring the potential of convolutional neural networks as optimal estimators of cosmological information from 2D Gaussian Density Fields.</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-3-desc">Learn more</button>
+                        <div class="project-full" hidden>
+
+                            <p><strong>Overview:</strong></p>
+                            <p>
+                            This project involves training convolutional neural networks to infer a single cosmological parameter <em>A</em> from
+                            analytically generated 2D Gaussian density field (GDF) maps. Maps are realizations of a known power spectrum
+                            \(\,P(k)=A/k\,\). The aim is to test whether CNNs can extract essentially all information available in Gaussian fields,
+                            i.e., whether their predictive uncertainty approaches the theoretical Cramér–Rao / Fisher information bound.
+                            </p>
+
+                            <h3>Data Generation &amp; Pre-processing</h3>
+                            <ul>
+                            <li><strong>Power spectrum:</strong> \(P(k)=\dfrac{A}{k}\), with \(A\) the only free parameter.</li>
+                            <li><strong>Parameter sampling:</strong> \(A\sim\mathcal{N}(1.0,\,\sigma=0.2)\), clipped to the interval \([0.8,\,1.2]\).</li>
+                            <li><strong>Map generation:</strong> 100,000 independent Gaussian density-field realizations of size \(64\times64\) pixels
+                                generated with the Pylians library (Fourier-space sampling consistent with \(P(k)\)).</li>
+                            <li><strong>Normalization:</strong> Maps are z-score normalized (dataset mean and standard deviation). Parameter \(A\)
+                                is min-max scaled to \([0,1]\).</li>
+                            <li><strong>Dataset split:</strong> 70% training, 15% validation, 15% test.</li>
+                            </ul>
+
+                            <h3>CNN Architecture &amp; Training</h3>
+                            <ul>
+                            <li><strong>Framework:</strong> PyTorch.</li>
+                            <li><strong>Architecture:</strong> 5 convolutional layers (kernel size 4, stride 2, padding 1) with LeakyReLU (α=0.2),
+                                followed by flatten → fully connected head → single regression output predicting \(A\).</li>
+                            <li><strong>Loss:</strong> Mean Squared Error (MSE):
+                                \[
+                                L = \frac{1}{N}\sum_{i=1}^{N}(A_{\text{true},i}-A_{\text{NN},i})^2 .
+                                \]
+                            </li>
+                            <li><strong>Optimizer &amp; regularization:</strong> Adam optimizer with weight decay; no dropout used.</li>
+                            <li><strong>Hyperparameter search:</strong> Optuna (TPE sampler), tuning learning rate, weight decay, and number of filters.
+                                50 trials; each trial trained up to 200 epochs.</li>
+                            </ul>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/gdf_arch.png" alt="CNN architecture used for training" style="max-width: 60%; height: auto;">
+                                <figcaption>Fig 1. CNN architecture used for training.</figcaption>
+                            </figure>
+
+
+                            <h3>Theoretical Validation — Fisher Matrix</h3>
+                            <p>
+                            For the single-parameter model \(P(k)=A/k\), the Fisher information for Gaussian fields (counting independent Fourier modes)
+                            simplifies to:
+                            </p>
+
+                            \[
+                            F = \frac{N_{\mathrm{modes}}}{2A^2}, \qquad
+                            \sigma(A)_{\mathrm{Fisher}} = A\sqrt{\frac{2}{N_{\mathrm{modes}}}} .
+                            \]
+
+                            <p>
+                            Averaging over the allowed parameter interval \([A_{\min},A_{\max}]=[0.8,1.2]\) yields the mean expected error:
+                            </p>
+
+                            \[
+                            \langle \sigma(A)\rangle =
+                            \sqrt{ \frac{A_{\min}^2 + A_{\min}A_{\max} + A_{\max}^2}{1.5\,N_{\mathrm{modes}}} }.
+                            \]
+
+                            <p>
+                            The empirical CNN error is then compared to this theoretical bound: if close, the network is effectively extracting nearly all
+                            available information from the Gaussian maps.
+                            </p>
+
+                            <h3>Experiments</h3>
+
+                            <p><strong>1. Baseline — Original Gaussian Maps</strong></p>
+                            <ul>
+                            <li>Train CNN on raw \(64\times64\) maps and evaluate predictive scatter on held-out tests.</li>
+                            <li>Create extra evaluation sets (20,000 samples each) at fixed \(A = 0.82,\ 1.00,\ 1.18\) to study conditional prediction spread
+                                and calibration.</li>
+                            <li>Compare empirical \(\sigma_A\) to Fisher-predicted \(\sigma(A)\) for the full \(k\)-range of the maps.</li>
+                            </ul>
+
+                            <p><strong>2. Fourier-Filtered Maps (Top-Hat Filters)</strong></p>
+                            <ul>
+                            <li>Apply sharp Fourier-space cutoffs with \(k_{\max}=0.2,\ 0.15,\ 0.1\) (and \(k_{\min}=0\)).</li>
+                            <li>Retrain the CNN per filter scale and recompute empirical \(\sigma_A\).</li>
+                            <li>Compute \(N_{\mathrm{modes}}\) for each \(k_{\max}\) and compare Fisher bound to network error.</li>
+                            </ul>
+
+                            <p><strong>3. Gaussian-Smoothed Maps</strong></p>
+                            <ul>
+                            <li>Apply Gaussian smoothing kernels (width = 1 px and 2 px) in image space; retrain for each smoothing level.</li>
+                            <li>Because analytic Fisher bounds are not directly available for smoothed maps, infer an effective \(N_{\mathrm{modes}}\)
+                                from the measured \(\sigma_A\) using:
+                            </li>
+                            </ul>
+
+                            \[
+                            N_{\mathrm{modes}} = \frac{A_{\min}^2 + A_{\min}A_{\max} + A_{\max}^2}{\sigma_A^2}.
+                            \]
+
+                            <h3>Implementation Details</h3>
+                            <ul>
+                            <li><strong>Language:</strong> Python 3</li>
+                            <li><strong>Key libraries:</strong> PyTorch · NumPy · Matplotlib · Pylians · Optuna</li>
+                            <li><strong>Hardware:</strong> GPU recommended (CUDA) for training efficiency</li>
+                            <li><strong>Metrics:</strong> MSE; scatter plots of predicted vs true A; conditional prediction distributions at fixed A</li>
+                            </ul>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/gdf_results.png" alt="Results of the CNN in comparison to the theoretical bounds estimated from the Fisher matrix formalism" style="max-width: 40%; height: auto;">
+                                <figcaption>Fig 2. Results of the CNN in comparison to the theoretical bounds estimated from the Fisher matrix formalism.</figcaption>
+                            </figure>
+
+                            <h3>Outcomes &amp; Insights</h3>
+                            <ul>
+                            <li>The CNN achieves parameter-estimation precision close to the Fisher-limit for the original (full-k) Gaussian maps,
+                                indicating that the network extracts nearly all available information from the fields.</li>
+
+                            <li>Reducing \(k_{\max}\) (via top-hat filtering) or increasing smoothing reduces the number of accessible Fourier modes,
+                                increasing the Fisher bound and the observed CNN error; the network errors track the theoretical expectations.</li>
+
+                            <li>By interpreting empirical errors in terms of an effective \(N_{\mathrm{modes}}\), smoothed maps can be assigned an
+                                equivalent information content consistent with the degradation due to smoothing.</li>
+
+                            <li>Overall conclusion: deep CNNs can act as near-optimal information extractors for Gaussian random fields when
+                                trained on sufficiently large datasets with architectures that capture relevant Fourier-domain structure.</li>
+                            </ul>
+
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <img class="project-image" src="images/research/yso.png" alt="Project image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Classification of Young Stellar Ojects in the Local Universe</h3>
+                            <p class="project-subtitle">Colour and magnitude-based methodologies of identifying contaminants and separating Class-I and Class-II YSOs.</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-3-desc">Learn more</button>
+                        <div class="project-full" hidden>
+
+                            <p><strong>Overview:</strong></p>
+                            <p>
+                                This project implements a multi-phase photometric pipeline to identify and classify Young Stellar Objects (YSOs) within a star-forming region. Utilizing multi-wavelength data from <strong>Spitzer/IRAC</strong> (mid-infrared), <strong>2MASS</strong> (near-infrared), and <strong>Herschel</strong> (column density maps), the study aims to distinguish true protostars from extragalactic contaminants. The analysis is split into two phases: an initial classification based on infrared colors, followed by a rigorous extinction correction process to account for interstellar reddening caused by dust, thereby refining the separation between Class I (protostars) and Class II (pre-main sequence stars with disks) objects.
+                            </p>
+
+                            <h3>Methodology</h3>
+                            <p>
+                                The classification pipeline consists of four primary stages:
+                            </p>
+                            <ul>
+                                <li><strong>Data Filtering & Quality Control:</strong> The raw Spitzer catalog is filtered to retain only sources with photometric uncertainties $\sigma < 0.2$ mag in all four IRAC bands ($3.6, 4.5, 5.8, 8.0 \mu m$).</li>
+                                <li><strong>Contaminant Removal:</strong> Specific color-color and color-magnitude cuts are applied to remove extragalactic contaminants, including star-forming PAH galaxies, Active Galactic Nuclei (AGN), and shock emissions.</li>
+                                <li><strong>Phase 1 Classification:</strong> Remaining sources are classified into Class I and Class II YSOs based on their mid-infrared spectral indices derived from IRAC color spaces.</li>
+                                <li><strong>Phase 2 Extinction Correction:</strong> Sources are cross-matched with 2MASS and Herschel data. Visual extinction ($A_V$) is derived from column density maps to calculate intrinsic colors, allowing for a reddening-independent classification.</li>
+                            </ul>
+
+                            <h3>Key Mathematical Framework</h3>
+                            <p>
+                                In Phase 2, to correct for the reddening effects of dust, the visual extinction ($A_V$) is calculated from the column density ($N_{H_2}$) map. The extinction in a specific band $\lambda$ is derived as:
+                            </p>
+
+                            $$ A_{\lambda} = C_{\lambda} \times A_V $$
+
+                            <p>
+                                Where $C_{\lambda}$ represents the extinction coefficient for that band (e.g., $C_J=0.29$, $C_K=0.12$). The pipeline then calculates the <strong>intrinsic colors</strong> (denoted by subscript 0) by subtracting the color excess from the measured colors:
+                            </p>
+
+                            $$ ([3.6]-[4.5])_0 = ([3.6]-[4.5])_{meas} - (A_{3.6} - A_{4.5}) $$
+                            $$ (K-[3.6])_0 = (K-[3.6])_{meas} - (A_{K} - A_{3.6}) $$
+
+                            <p>
+                                Errors in color space are propagated using the root mean square of individual magnitude errors:
+                            </p>
+
+                            $$ \sigma_{1} = \sqrt{\sigma_{[3.6]}^2 + \sigma_{[4.5]}^2}, \quad \sigma_{2} = \sqrt{\sigma_{K}^2 + \sigma_{[3.6]}^2} $$
+
+                            <p>
+                                Final classification relies on linear cuts in the dereddened color space. For example, Class I YSOs are identified using the condition:
+                            </p>
+
+                            $$ (K-[3.6])_0 - \sigma_2 > -2.857 (([3.6]-[4.5])_0 - \sigma_1 - 0.401) + 1.7 $$
+
+                            <h3>Key Results & Insights</h3>
+                            <ul>
+                                <li><strong>Contaminant Identification:</strong> The pipeline successfully identified and removed 89 PAH galaxies, 121 AGNs, and 30 shock emission sources, preventing them from mimicking YSO signatures.</li>
+                                <li><strong>Impact of Extinction Correction:</strong> Phase 1 identified 80 Class I YSOs. However, after applying extinction corrections in Phase 2—which accounts for dust obscuration that makes stars appear redder—the count was refined to 107 Class I YSOs. This highlights the necessity of correcting for column density in dense molecular clouds.</li>
+                                <li><strong>Population Distribution:</strong> The analysis revealed a total of 1643 non-contaminated sources. In the final extinction-corrected phase, distinct populations of Class I (enveloped protostars) and Class II (disk-bearing stars) objects were spatially isolated, allowing for the generation of region files for further astronomical analysis.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    
                 </div>
             </div>
         </div>

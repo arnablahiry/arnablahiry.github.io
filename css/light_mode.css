@@ -347,8 +347,12 @@ body.light-mode header.nav-open ~ .page-wrapper::before{
 /* Invert SVG icons that live inside project cards when in light mode so
    vector icons retain visible contrast on white card backgrounds. This
    targets both inline <svg> and <img src="*.svg"> to cover common cases. */
+/* Invert project card images/icons in light mode so they retain contrast on white cards.
+   Originally we targeted image files ending with .svg; broaden to all images inside
+   .project-card (SVG inline and raster IMG) so PNG replacements still receive the
+   same inversion treatment. */
 body.light-mode .project-card svg,
-body.light-mode .project-card img[src$=".svg"]{
+body.light-mode .project-card img{
     filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
 }
 
