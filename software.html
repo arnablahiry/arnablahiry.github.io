@@ -53,6 +53,10 @@
         </nav>
     </header>
 
+             <!-- Snitch slot (same as on index) so the launcher can mount the
+                 exact same snitch runner into the page. Hidden until launched. -->
+             <div id="snitch-slot" aria-hidden="true"></div>
+
     <div class="page-wrapper">
         <div class="section-timeline-heading">
             <div class="container">
@@ -219,15 +223,141 @@ gui.main_gui().start_gui()</code></pre>
                     </article>
 
 
-                    <article class="project-card">
-                        <img class="project-image" src="images/softwares/snitch.png" alt="Project image">
+                    <article class="project-card" id="proj-snitch">
+                        <div class="image-wrapper">
+                            <img class="project-image" src="images/softwares/snitch.png" alt="Project image">
+                            <!-- Small launcher: clicking this runs the exact same snitch game as on the home page -->
+                            <button class="snitch-launch" aria-label="Play snitch game" title="Play">
+                                <img src="images/icons/game.png" alt="" class="snitch-launch-icon" aria-hidden="true">
+                            </button>
+                        </div>
                         <div class="project-meta">
                             <h3 class="project-title">Totally not named to avoid copyright issues</h3>
                             <p class="project-subtitle">Simple JavaScript-based web-game to catch something that may bear resemblance to a famous winged ball from a famous fantasy series.</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
                         <div class="project-full" hidden>
-                            
+                            <p>
+                                This is a small, self-contained JavaScript game also availabled as an easter egg depending on the decisions made in the home page....re-used here so visitors can play it directly. It demonstrates compact animation, adaptive input handling, and a tiny game loop that balances predictable motion with occasional randomized darts to keep the target lively.
+                            </p>
+
+                            <h3>Key capabilities</h3>
+                            <ul>
+                                <li>The game is initialized via <code>window.launchSnitch()</code> </li>
+                                <li>Clean teardown API (<code>window.teardownSnitch()</code>) to stop timers/RAF and remove injected DOM safely when the modal closes.</li>
+                                <li>Responsive: runs inside a page-scoped slot or a modal viewport without requiring a framework.</li>
+                                <li>Small footprint: vanilla JS (no external dependencies) and simple CSS for the runner, progress UI, and victory box.</li>
+                            </ul>
+
+                            <h3>How it works</h3>
+                            <p>The implementation follows a straightforward architecture:</p>
+                            <ol>
+                                <li><strong>Initialization:</strong> the page creates or re-uses a <code>#snitch-slot</code> container and calls <code>launchSnitch()</code>. That entry-point renders the runner image, progress UI and wires event handlers.</li>
+                                <li><strong>Motion loop:</strong> the runner normally performs smooth, low-amplitude drifting using CSS transforms and <code>requestAnimationFrame</code>. In addition, the implementation schedules intermittent "darts" — short, faster movements that make the runner jump to a new location. Darts are randomized in timing but parameterized by tunable values such as <code>dartDistance</code> and <code>dartSpeed</code>, so you can control how far and how quickly the runner darts across the viewport. Darts are scheduled with randomized timeouts (e.g. <code>rand(dartIntervalMin, dartIntervalMax)</code>) and executed with eased transforms so motion remains visually smooth.</li>
+                                <li><strong>Interaction modes</strong>: the game continuously listens for pointer position (mouse or touch). If the pointer comes within a proximity radius the runner will attempt an evasive manoeuvre: it computes a flee vector away from the pointer and executes a directional dart in that vector (often with a small angular jitter). This makes the runner sensitive to the player's attempts to trap it — it doesn't simply move randomly, it actively avoids the pointer.</li>
+                                <li><strong>Player capture flow</strong>: the user must repeatedly chase the runner and keep it in a slow/near state to fill the on-screen progress bar. Progress accumulates while the pointer is close (or while the runner is cornered) and decays when the pointer moves away; when the progress reaches 100% the game enters a capture window that allows a click/tap to succeed. If the capture attempt fails or the runner escapes, progress begins to decay and the chase resumes.</li>
+                                <li><strong>Teardown:</strong> <code>teardownSnitch()</code> cancels outstanding RAFs/timeouts and removes all DOM elements inserted by the game, preventing leaks when the slot is moved or the modal closes.</li>
+                            </ol>
+
+                            <h4>Configurable motion parameters (example)</h4>
+                            <div class="code-snippet">
+                                <div class="lang-label">JAVASCRIPT</div>
+                                <pre><code class="language-javascript">// Example tuning constants exposed inside the snitch module
+const SNITCH_CONFIG = {
+  dartDistance: 120,      // pixels the runner moves during a dart (tunable)
+  dartSpeed: 360,         // ms duration for a dart movement (tunable)
+  dartIntervalMin: 360,   // minimum ms between scheduled darts
+  dartIntervalMax: 1600,  // maximum ms between scheduled darts
+  fleeMultiplier: 1.4,    // multiplier when fleeing from pointer (increases dartDistance)
+  proximityRadius: 140    // px radius in which the runner treats the pointer as 'near'
+};
+                                </code></pre>
+                            </div>
+
+                            <h4>Fleeing behaviour (concept)</h4>
+                            <p>The runner computes a unit vector away from the pointer and applies a dart in that direction. The flee distance uses <code>dartDistance * fleeMultiplier</code> and the dart uses <code>dartSpeed</code> for a quick escape. This produces intuitive avoidance: approaching the runner from different angles makes it dart in the opposite direction instead of just randomly teleporting.</p>
+                            <div class="code-snippet">
+                                <div class="lang-label">JAVASCRIPT (concept)</div>
+                                <pre><code class="language-javascript">function fleeFromPointer(runnerX, runnerY, pointerX, pointerY){
+  const dx = runnerX - pointerX;
+  const dy = runnerY - pointerY;
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = dx / len, ny = dy / len; // normalized flee direction
+  const distance = SNITCH_CONFIG.dartDistance * SNITCH_CONFIG.fleeMultiplier;
+  const targetX = runnerX + nx * distance;
+  const targetY = runnerY + ny * distance;
+  smoothMoveTo(runnerElement, targetX, targetY, { duration: SNITCH_CONFIG.dartSpeed });
+}
+                                </code></pre>
+                            </div>
+
+                            <h4>Progress & capture loop</h4>
+                            <p>Progress increases while the pointer remains within the proximity radius and the runner's velocity is low (i.e., it's not in an active dart). The progress visually fills the <code>.snitch-progress-bar</code>. When it reaches 100% the UI allows a capture by clicking/tapping the runner; otherwise, progress decays slowly if the player stops trying. This encourages repeated, skillful attempts rather than a single lucky click.</p>
+
+                            <h3>Representative code snippets</h3>
+                            <p>Start the game (programmatic):</p>
+                            <div class="code-snippet">
+                                <div class="lang-label">JAVASCRIPT</div>
+                                <pre><code class="language-javascript">// Start the snitch game (exposed from scripts/home/home-snitch.js)
+if (typeof window.launchSnitch === 'function') {
+  window.launchSnitch();
+} else {
+  // loader fallback: dynamically load the script then start
+  var s = document.createElement('script');
+  s.src = 'scripts/home/home-snitch.js';
+  s.onload = function(){ window.launchSnitch && window.launchSnitch(); };
+  document.body.appendChild(s);
+}
+                                </code></pre>
+                            </div>
+
+                            <p>Stop / cleanup the game (used by the modal on close):</p>
+                            <div class="code-snippet">
+                                <div class="lang-label">JAVASCRIPT</div>
+                                <pre><code class="language-javascript">// Stop the game and remove injected UI
+if (typeof window.teardownSnitch === 'function') {
+  window.teardownSnitch();
+}
+                                </code></pre>
+                            </div>
+
+                            <h3>Core algorithm (motion & scheduling)</h3>
+                            <p>At a high level the runner's behaviour is implemented as follows (simplified):</p>
+                            <div class="code-snippet">
+                                <div class="lang-label">JAVASCRIPT (concept)</div>
+                                <pre><code class="language-javascript">function scheduleRandomDart() {
+  // choose a new target position within bounds
+  var target = pickRandomOnViewport();
+  // smoothly move toward the target using easing
+  smoothMoveTo(runnerElement, target.x, target.y, { duration: 280 });
+  // occasionally perform a quick dart (flee) when the pointer is nearby
+  setTimeout(scheduleRandomDart, rand(360, 1600));
+}
+
+function smoothMoveTo(node, x, y, opts){
+  // apply CSS transform transitions to animate position changes
+  node.style.transition = 'transform ' + (opts.duration||240) + 'ms cubic-bezier(.2,.9,.2,1)';
+  node.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+}
+                                </code></pre>
+                            </div>
+
+                            <h3>Files and integration points</h3>
+                            <ul>
+                                <li><code>snitch.js</code> — full game logic, exposes <code>launchSnitch</code> and <code>teardownSnitch</code>.</li>
+                                <li><code>css/style.css</code> and <code>css/software_style.css</code> — snitch visuals, runner sizing, progress bar, and the victory box styles (copied locally for page-scoped usage).</li>
+                                <li><code>software.html</code> — includes a <code>#snitch-slot</code> container and a play button wired to open the modal and call the snitch initializer.</li>
+                            </ul>
+
+                            <h3>Play & Controls</h3>
+                            <ul>
+                                <li>Pointer: move the mouse to chase the runner; clicking (or tapping) performs capture attempts when the progress bar is full.</li>
+                            </ul>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong></li>
+                            </ul>
                         </div>
                     </article>
 
@@ -269,6 +399,81 @@ gui.main_gui().start_gui()</code></pre>
             hint.addEventListener('click', function(e){ e.stopPropagation(); try{ toggle.click(); }catch(_){ } });
             hint.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); hint.click(); } });
             window.addEventListener('load', function(){ try{ if(window.matchMedia && !window.matchMedia('(min-width: 769px)').matches) return; if(document.body.classList.contains('light-mode')) return; setTimeout(function(){ document.body.classList.add('show-theme-hint'); }, 260); }catch(_){}});
+        })();
+    </script>
+    <!-- Home snitch script: expose launchSnitch(); loaded here so the button below can call it.
+         We still add a safe loader in the event the script is not yet available when the button is clicked. -->
+    <script src="scripts/home/home-snitch.js"></script>
+    <script>
+        (function(){
+            var slot = document.getElementById('snitch-slot');
+            function loadAndCallback(cb){
+                if (window.launchSnitch) { try{ cb(); }catch(e){} return; }
+                var s = document.createElement('script');
+                s.src = 'scripts/home/home-snitch.js';
+                s.onload = function(){ try{ cb(); }catch(e){} };
+                document.body.appendChild(s);
+            }
+
+            function openSnitchModal(){
+                if (!slot) slot = document.getElementById('snitch-slot');
+                if (!slot) return;
+
+                // create overlay
+                var overlay = document.createElement('div');
+                overlay.className = 'snitch-modal';
+                overlay.id = 'snitch-modal';
+
+                // close button
+                var closeBtn = document.createElement('button');
+                closeBtn.className = 'snitch-modal-close';
+                closeBtn.setAttribute('aria-label','Close');
+                closeBtn.innerHTML = '✕';
+                overlay.appendChild(closeBtn);
+
+                // remember original slot position so we can restore it
+                var origParent = slot.parentNode;
+                var origNext = slot.nextSibling;
+
+                // preserve scroll position to avoid jump
+                var savedScrollY = window.scrollY || window.pageYOffset || 0;
+                // use fixed-body approach to lock viewport in place
+                document.body.style.position = 'fixed';
+                document.body.style.top = '-' + savedScrollY + 'px';
+                document.body.style.left = '0';
+                document.body.style.right = '0';
+
+                // append overlay and show it (visual only) without moving focus
+                document.body.appendChild(overlay);
+                requestAnimationFrame(function(){ overlay.classList.add('show'); });
+
+                // move slot into overlay but keep it visually stable because body is fixed
+                overlay.appendChild(slot);
+
+                // start snitch immediately (or load script then start)
+                loadAndCallback(function(){ try{ window.launchSnitch(); }catch(e){} });
+
+                function close(){
+                    try{ if (window.teardownSnitch) window.teardownSnitch(); }catch(e){}
+                    // visually shrink/fade the slot then move it back for a smooth return
+                    try{ slot.classList.add('snitch-closing'); }catch(e){}
+                    // hide modal (fade out)
+                    overlay.classList.remove('show');
+                    // after transition, restore slot and cleanup
+                    setTimeout(function(){
+                        try{ if (origParent) origParent.insertBefore(slot, origNext); }catch(e){}
+                        try{ slot.classList.remove('snitch-closing'); }catch(e){}
+                        try{ overlay.remove(); }catch(e){}
+                        // undo fixed-body scroll lock and restore scroll position
+                        try{ document.body.style.position = ''; document.body.style.top = ''; document.body.style.left = ''; document.body.style.right = ''; window.scrollTo(0, savedScrollY); }catch(e){}
+                    }, 260);
+                }
+
+                closeBtn.addEventListener('click', function(e){ e.stopPropagation(); close(); });
+            }
+
+            var btn = document.querySelector('#proj-snitch .snitch-launch');
+            if (btn) btn.addEventListener('click', function(e){ e.stopPropagation(); openSnitchModal(); });
         })();
     </script>
 </body>

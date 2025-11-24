@@ -22,6 +22,9 @@
       block.style.padding = '12px 16px 20px 16px';
     });
 
+    // Leave interactive launchers in the clone so the expanded view can show
+    // the play button anchored to the image (the original card is hidden).
+
   // preserve original border-radius and hide the original card to avoid duplication
   try{ var cs = window.getComputedStyle(card); clone.dataset.origBorderRadius = cs.borderRadius || ''; }catch(e){ clone.dataset.origBorderRadius = ''; }
   try{ card.dataset._origVisibility = card.style.visibility || ''; card.style.visibility = 'hidden'; }catch(e){}
@@ -134,6 +137,24 @@
   }
 
   document.body.appendChild(clone);
+  // If the clone contains a play launcher, forward its clicks to the original
+  // card's launcher (which has the real click handler that opens the modal).
+  try{
+    var clonedLaunchers = clone.querySelectorAll('.snitch-launch');
+    if(clonedLaunchers && clonedLaunchers.length){
+      clonedLaunchers.forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          try{ e.stopPropagation(); }catch(_){ }
+          try{
+            var orig = document.querySelector('#proj-snitch .snitch-launch');
+            if(orig && orig !== btn){ orig.click(); return; }
+          }catch(_){ }
+          // Fallback: try to call the global launcher directly if available
+          try{ if(window.launchSnitch) window.launchSnitch(); }catch(_){ }
+        });
+      });
+    }
+  }catch(e){}
   // keep background scroll enabled so the main scrollbar remains available
   // (do not set document.body.style.overflow = 'hidden')
   // mark modal open so we can suppress focus outlines

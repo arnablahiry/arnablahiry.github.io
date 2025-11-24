@@ -6,7 +6,14 @@
     const slot = document.getElementById('snitch-slot');
     const photoContainer = document.getElementById('photo-container');
     const header = document.querySelector('header');
-    if (!slot || !photoContainer || !header) return;
+    // Allow this module to run on pages without the home-only `photoContainer`.
+    // The auto-init logic will only run where `photoContainer` exists; however
+    // we still need `slot` and `header` to be present to initialize the snitch.
+    if (!slot || !header) return;
+
+    // shared state for the currently active snitch instance. Stored here so
+    // other pages can call teardown and so we can cancel timers/raf handlers.
+    let SNITCH_STATE = null;
 
     // keep the slot hidden by default until all visibility conditions are met
     // (photo visible + pause button grayed). This prevents any early flashes.
@@ -45,6 +52,13 @@
                 if (op <= 0.55) return true; // treat low opacity as 'grayed'
             } catch(e){}
             return false;
+        }
+
+        // If we don't have a photoContainer (i.e., not the index page), skip
+        // the auto-init observation logic and leave initialization to callers
+        // (for example, the explicit launcher button on other pages).
+        if (!photoContainer){
+            return;
         }
 
         // If the intro has already been marked visible AND the pause button is grayed,
@@ -105,7 +119,9 @@
 
     // --- create snitch behavior (lightweight copy of test harness, scoped) ---
     function initSnitch(){
-        if (slot.querySelector('#snitch-runner')) return; // already created
+        if (SNITCH_STATE) return; // already created
+        // ensure slot exists
+        if (!slot) return;
         // reveal the slot for accessibility, but animate in via CSS so it
         // appears smoothly (fade, deblur, scale). Remove direct opacity
         // writes so CSS animation controls the appearance.
@@ -125,6 +141,28 @@
         img.style.top = '8px';
         slot.appendChild(img);
 
+        // initialize state
+        SNITCH_STATE = {
+            slot: slot,
+            img: img,
+            driftRaf: null,
+            smoothRaf: null,
+            dartTimeout: null,
+            movementChecker: null,
+            slowTimeout: null,
+            movementTracking: false,
+            movementStart: 0,
+            lastMove: 0,
+            slowTriggered: false,
+            animating: false,
+            slowMode: false,
+            mouseEnabled: true,
+            onClickHandler: null,
+            progressWrap: null,
+            progressBar: null,
+            handlers: {}
+        };
+
         // bounds relative to slot
         function getBounds(){
             const r = slot.getBoundingClientRect();
@@ -132,15 +170,10 @@
         }
 
         let bounds = getBounds();
-    const EDGE_PADDING = 64; // large padding so the snitch does not reach page edges
-    // start well inside the padded area
-    let x = EDGE_PADDING + 12, y = EDGE_PADDING + 12;
+        const EDGE_PADDING = 64; // large padding so the snitch does not reach page edges
+        // start well inside the padded area
+        let x = EDGE_PADDING + 12, y = EDGE_PADDING + 12;
         let prevX = x, prevY = y;
-        let animating = false, smoothRaf = null;
-    let slowMode = false, mouseEnabled = true;
-    // handler and timeout references so we can cancel/cleanup slow-mode early
-    let onClickHandler = null;
-    let slowTimeout = null;
         const speed = 0.9, fleeDistance = 100, dartDistance = 120;
 
         function clampToBounds(nx, ny){
@@ -160,8 +193,8 @@
         }
 
         function smoothMoveTo(tx, ty, duration = 220){
-            if (smoothRaf) cancelAnimationFrame(smoothRaf);
-            animating = true;
+            if (SNITCH_STATE.smoothRaf) cancelAnimationFrame(SNITCH_STATE.smoothRaf);
+            SNITCH_STATE.animating = true;
             const start = performance.now();
             const sx = x, sy = y;
             function step(now){
@@ -171,15 +204,15 @@
                 x = sx + (tx - sx) * eased;
                 y = sy + (ty - sy) * eased;
                 updateImgPos();
-                if (t < 1) smoothRaf = requestAnimationFrame(step);
-                else { animating = false; smoothRaf = null; }
+                if (t < 1) SNITCH_STATE.smoothRaf = requestAnimationFrame(step);
+                else { SNITCH_STATE.animating = false; SNITCH_STATE.smoothRaf = null; }
             }
-            smoothRaf = requestAnimationFrame(step);
+            SNITCH_STATE.smoothRaf = requestAnimationFrame(step);
         }
 
         // drift
         function randomDrift(){
-            if (!animating){
+            if (!SNITCH_STATE.animating){
                 prevX = x; prevY = y;
                 x += (Math.random() - 0.5) * speed;
                 y += (Math.random() - 0.5) * speed;
@@ -187,19 +220,19 @@
                 updateImgPos();
                 checkCornerAndFlee();
             }
-            requestAnimationFrame(randomDrift);
+            SNITCH_STATE.driftRaf = requestAnimationFrame(randomDrift);
         }
-        randomDrift();
+        SNITCH_STATE.driftRaf = requestAnimationFrame(randomDrift);
 
         function scheduleRandomDart(){
-            const delay = slowMode ? (20000 + (Math.random() * 10000 - 5000)) : (500 + Math.random() * 1200);
-            setTimeout(()=>{
+            const delay = SNITCH_STATE.slowMode ? (20000 + (Math.random() * 10000 - 5000)) : (500 + Math.random() * 1200);
+            SNITCH_STATE.dartTimeout = setTimeout(()=>{
                 const angle = Math.random() * Math.PI * 2;
-                const effective = slowMode ? (dartDistance * 0.25) : dartDistance;
+                const effective = SNITCH_STATE.slowMode ? (dartDistance * 0.25) : dartDistance;
                 const dx = Math.cos(angle) * effective;
                 const dy = Math.sin(angle) * effective;
                 const [tx, ty] = clampToBounds(x + dx, y + dy);
-                const dur = slowMode ? 800 : 220;
+                const dur = SNITCH_STATE.slowMode ? 800 : 220;
                 smoothMoveTo(tx, ty, dur);
                 setTimeout(checkCornerAndFlee, dur + 40);
                 scheduleRandomDart();
@@ -210,25 +243,26 @@
         // proximity flee: listen globally so other UI (audio buttons, overlays)
         // can sit above the slot and still receive clicks. Compute mouse
         // position relative to the slot rect on every move.
-        document.addEventListener('mousemove', (ev) => {
-            if (!mouseEnabled) return;
+        // proximity flee handler
+        function handleProximity(ev){
+            if (!SNITCH_STATE || !SNITCH_STATE.mouseEnabled) return;
             const rect = slot.getBoundingClientRect();
             const mx = ev.clientX - rect.left;
             const my = ev.clientY - rect.top;
-            // if mouse is outside slot bounds, still compute distance (we allow
-            // the snitch to flee even when cursor is outside the slot area)
             const dx = x - mx; const dy = y - my; const dist = Math.sqrt(dx*dx + dy*dy);
             if (dist < fleeDistance){
                 const ux = dx / (dist || 1), uy = dy / (dist || 1);
                 const [tx, ty] = clampToBounds(x + ux * dartDistance, y + uy * dartDistance);
-                const dur = slowMode ? 500 : 260;
+                const dur = SNITCH_STATE.slowMode ? 500 : 260;
                 smoothMoveTo(tx, ty, dur);
                 setTimeout(checkCornerAndFlee, dur + 40);
             }
-        });
+        }
+        SNITCH_STATE.handlers.proximity = handleProximity;
+        document.addEventListener('mousemove', handleProximity);
 
         // movement-tracking to enable slow mode after 20s continuous mouse movement
-        let movementTracking=false, movementStart=0, lastMove=0, movementChecker=null, slowTriggered=false;
+        SNITCH_STATE.movementTracking = false; SNITCH_STATE.movementStart = 0; SNITCH_STATE.lastMove = 0; SNITCH_STATE.slowTriggered = false;
         // create progress UI
         const progressWrap = document.createElement('div');
         progressWrap.className = 'snitch-progress';
@@ -236,73 +270,76 @@
         progressBar.className = 'snitch-progress-bar';
         progressWrap.appendChild(progressBar);
         slot.appendChild(progressWrap);
+        SNITCH_STATE.progressWrap = progressWrap; SNITCH_STATE.progressBar = progressBar;
 
-        document.addEventListener('mousemove', (e)=>{
-            const now = Date.now(); lastMove = now;
-            if (slowTriggered) return;
-            if (!movementTracking){
-                movementTracking=true; movementStart=now;
+        function handleMovement(e){
+            const now = Date.now(); SNITCH_STATE.lastMove = now;
+            if (SNITCH_STATE.slowTriggered) return;
+            if (!SNITCH_STATE.movementTracking){
+                SNITCH_STATE.movementTracking = true; SNITCH_STATE.movementStart = now;
                 // show progress bar
-                progressWrap.classList.add('show');
-                movementChecker = setInterval(()=>{
+                SNITCH_STATE.progressWrap.classList.add('show');
+                SNITCH_STATE.movementChecker = setInterval(()=>{
                     const now2 = Date.now();
                     // if pause >1s, reset
-                    if (now2 - lastMove > 1000){
-                        movementTracking=false; movementStart=0;
-                        progressBar.style.width = '0%';
-                        progressWrap.classList.remove('show');
-                        clearInterval(movementChecker); movementChecker=null; return;
+                    if (now2 - SNITCH_STATE.lastMove > 1000){
+                        SNITCH_STATE.movementTracking = false; SNITCH_STATE.movementStart = 0;
+                        SNITCH_STATE.progressBar.style.width = '0%';
+                        SNITCH_STATE.progressWrap.classList.remove('show');
+                        clearInterval(SNITCH_STATE.movementChecker); SNITCH_STATE.movementChecker = null; return;
                     }
                     // compute fraction toward 20s
-                    const fraction = Math.max(0, Math.min(1, (now2 - movementStart) / 20000));
-                    progressBar.style.width = Math.round(fraction * 100) + '%';
+                    const fraction = Math.max(0, Math.min(1, (now2 - SNITCH_STATE.movementStart) / 20000));
+                    SNITCH_STATE.progressBar.style.width = Math.round(fraction * 100) + '%';
                     if (fraction >= 1){
-                        slowTriggered=true; movementTracking=false;
-                        clearInterval(movementChecker); movementChecker=null;
-                        progressBar.style.width = '100%';
+                        SNITCH_STATE.slowTriggered = true; SNITCH_STATE.movementTracking = false;
+                        clearInterval(SNITCH_STATE.movementChecker); SNITCH_STATE.movementChecker = null;
+                        SNITCH_STATE.progressBar.style.width = '100%';
                         startSlowMode(30000);
                         // hide progress after a short delay
-                        setTimeout(()=> progressWrap.classList.remove('show'), 500);
+                        setTimeout(()=> SNITCH_STATE.progressWrap.classList.remove('show'), 500);
                     }
                 }, 120);
             }
-        });
+        }
+        SNITCH_STATE.handlers.movement = handleMovement;
+        document.addEventListener('mousemove', handleMovement);
 
-        function startSlowMode(durationMs){
+    function startSlowMode(durationMs){
             // Enter slow (clickable) mode: keep proximity fleeing enabled, but
             // make the image clickable so users can interact. Do not disable
             // mouseEnabled here so the snitch still responds to proximity.
-            slowMode = true;
+            SNITCH_STATE.slowMode = true;
             img.style.pointerEvents = 'auto';
             img.style.cursor = 'pointer';
             // bring the image above other UI so it can be clicked
             img.style.zIndex = 1000025;
             // use a shared handler so we can remove it early if "play again" is clicked
-            onClickHandler = () => { img.style.transform = 'scale(1.08)'; setTimeout(()=>img.style.transform='', 160); showWinBox(); };
-            img.addEventListener('click', onClickHandler);
+            SNITCH_STATE.onClickHandler = () => { img.style.transform = 'scale(1.08)'; setTimeout(()=>img.style.transform='', 160); showWinBox(); };
+            img.addEventListener('click', SNITCH_STATE.onClickHandler);
 
             // track timeout so we can cancel it if needed
-            slowTimeout = setTimeout(()=>{
-                slowMode = false;
+            SNITCH_STATE.slowTimeout = setTimeout(()=>{
+                SNITCH_STATE.slowMode = false;
                 img.style.pointerEvents = 'none';
                 img.style.cursor = '';
                 img.style.zIndex = '';
-                if (onClickHandler) img.removeEventListener('click', onClickHandler);
-                onClickHandler = null;
-                slowTimeout = null;
+                if (SNITCH_STATE.onClickHandler) img.removeEventListener('click', SNITCH_STATE.onClickHandler);
+                SNITCH_STATE.onClickHandler = null;
+                SNITCH_STATE.slowTimeout = null;
             }, durationMs);
         }
 
         // Disable slow mode immediately (used by the "Play again" button)
         function disableSlowModeNow(){
-            if (!slowMode) return;
-            slowMode = false;
+            if (!SNITCH_STATE || !SNITCH_STATE.slowMode) return;
+            SNITCH_STATE.slowMode = false;
             img.style.pointerEvents = 'none';
             img.style.cursor = '';
             img.style.zIndex = '';
-            if (onClickHandler) img.removeEventListener('click', onClickHandler);
-            onClickHandler = null;
-            if (slowTimeout){ clearTimeout(slowTimeout); slowTimeout = null; }
+            if (SNITCH_STATE.onClickHandler) img.removeEventListener('click', SNITCH_STATE.onClickHandler);
+            SNITCH_STATE.onClickHandler = null;
+            if (SNITCH_STATE.slowTimeout){ clearTimeout(SNITCH_STATE.slowTimeout); SNITCH_STATE.slowTimeout = null; }
         }
 
         // Show an animated win box near the snitch
@@ -351,13 +388,13 @@
                 // tracking so the user can trigger slow-mode again.
                 disableSlowModeNow();
                 // reset movement/progress state so the loading bar can re-appear
-                slowTriggered = false;
-                movementTracking = false;
-                movementStart = 0;
-                lastMove = 0;
-                if (movementChecker){ clearInterval(movementChecker); movementChecker = null; }
-                try { progressBar.style.width = '0%'; } catch(e){}
-                try { progressWrap.classList.remove('show'); } catch(e){}
+                SNITCH_STATE.slowTriggered = false;
+                SNITCH_STATE.movementTracking = false;
+                SNITCH_STATE.movementStart = 0;
+                SNITCH_STATE.lastMove = 0;
+                if (SNITCH_STATE.movementChecker){ clearInterval(SNITCH_STATE.movementChecker); SNITCH_STATE.movementChecker = null; }
+                try { SNITCH_STATE.progressBar.style.width = '0%'; } catch(e){}
+                try { SNITCH_STATE.progressWrap.classList.remove('show'); } catch(e){}
                 // remove the win box after the hide animation
                 box.classList.remove('show');
                 setTimeout(()=> box.remove(), 160);
@@ -385,11 +422,51 @@
             const ux = -inDx / inDist; const uy = -inDy / inDist;
             const fleeAmount = Math.max(dartDistance, fleeDistance) * 1.2;
             const [tx, ty] = clampToBounds(x + ux * fleeAmount, y + uy * fleeAmount);
-            if (smoothRaf) cancelAnimationFrame(smoothRaf); animating=false; x = tx; y = ty; updateImgPos(); img.style.transform='scale(1.06)'; setTimeout(()=>img.style.transform='',140);
+            if (SNITCH_STATE && SNITCH_STATE.smoothRaf) cancelAnimationFrame(SNITCH_STATE.smoothRaf);
+            SNITCH_STATE.animating = false;
+            x = tx; y = ty; updateImgPos();
+            img.style.transform = 'scale(1.06)';
+            setTimeout(()=> img.style.transform = '', 140);
         }
 
         // keep bounds up to date on resize/scroll
-        window.addEventListener('resize', ()=>{ bounds = getBounds(); });
+        function handleResize(){ bounds = getBounds(); }
+        SNITCH_STATE.handlers.resize = handleResize;
+        window.addEventListener('resize', handleResize);
+
+        // expose a cleanup function that cancels timers and removes UI so other
+        // pages (or the overlay close button) can teardown the snitch.
+        function cleanup(){
+            try{
+                // stop RAFs and timers
+                if (SNITCH_STATE.driftRaf) cancelAnimationFrame(SNITCH_STATE.driftRaf);
+                if (SNITCH_STATE.smoothRaf) cancelAnimationFrame(SNITCH_STATE.smoothRaf);
+                if (SNITCH_STATE.dartTimeout) clearTimeout(SNITCH_STATE.dartTimeout);
+                if (SNITCH_STATE.movementChecker) clearInterval(SNITCH_STATE.movementChecker);
+                if (SNITCH_STATE.slowTimeout) clearTimeout(SNITCH_STATE.slowTimeout);
+                // remove event listeners
+                if (SNITCH_STATE.handlers.proximity) document.removeEventListener('mousemove', SNITCH_STATE.handlers.proximity);
+                if (SNITCH_STATE.handlers.movement) document.removeEventListener('mousemove', SNITCH_STATE.handlers.movement);
+                if (SNITCH_STATE.handlers.resize) window.removeEventListener('resize', SNITCH_STATE.handlers.resize);
+                // remove progress UI
+                try{ if (SNITCH_STATE.progressWrap && SNITCH_STATE.progressWrap.parentNode) SNITCH_STATE.progressWrap.parentNode.removeChild(SNITCH_STATE.progressWrap); }catch(e){}
+                // remove runner
+                try{ const r = slot.querySelector('#snitch-runner'); if (r) r.remove(); }catch(e){}
+                // remove any win boxes appended to body
+                try{ Array.from(document.querySelectorAll('.snitch-win')).forEach(n=>n.remove()); }catch(e){}
+                // hide slot
+                try{ slot.classList.remove('snitch-appear'); slot.style.display = 'none'; slot.setAttribute('aria-hidden','true'); }catch(e){}
+            }catch(e){}
+            SNITCH_STATE = null;
+            try{ window.teardownSnitch = null; }catch(e){}
+        }
+
+        try{ window.teardownSnitch = cleanup; }catch(e){}
     }
+
+    // Expose a callable launcher so other pages can trigger the exact same
+    // snitch initialization programmatically (used by the Softwares page).
+    try { window.launchSnitch = initSnitch; } catch (e) { /* noop */ }
+    try { if (!window.teardownSnitch) window.teardownSnitch = null; } catch(e){}
 
 })();

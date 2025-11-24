@@ -254,6 +254,86 @@ body.page-software .project-subtitle {
   max-height: 480px;
 }
 
+/* Snitch launcher button positioned at the bottom-right of the image wrapper */
+.image-wrapper { position: relative; display: block; }
+.image-wrapper .snitch-launch {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255,255,255,0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10002;
+  padding: 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+  filter: invert(1) brightness(1.2) saturate(1); /* dark icon */
+
+}
+
+/* Icon inside the button */
+.snitch-launch-icon{
+  width: 60%;
+  height: 60%;
+  display: block;
+  object-fit: contain;
+  transition: filter 160ms ease, transform 160ms ease;
+  /* default (dark theme): make the PNG pop (brighter) */
+}
+
+.image-wrapper .snitch-launch:hover{
+  background: rgba(255, 255, 255, 0.268);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.337)337);
+}
+
+
+
+/* ==========================================================================
+   SNITCH GAME – LIGHT MODE BUTTON FIX
+   ========================================================================== */
+
+/* Light-mode: snitch-launch button appearance */
+body.light-mode .image-wrapper .snitch-launch {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.52);       /* darker overlay */
+  border: 2px solid rgba(0, 0, 0, 0.6); /* slightly darker border */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+}
+
+/* Light-mode: hover state for snitch-launch button */
+body.light-mode .image-wrapper .snitch-launch:hover {
+  background: rgba(0, 0, 0, 0.772);       /* darker overlay on hover */
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
+  transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+}
+
+/* Light-mode: icon inside snitch-launch button */
+body.light-mode .snitch-launch-icon {
+  filter: invert(1) brightness(0.6) saturate(1); /* dark icon */
+  width: 60%;
+  height: 60%;
+  display: block;
+  object-fit: contain;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+
+
+
+
 /* --- MOBILE FIX: STACKED IMAGES WITHOUT THIN STRIPS --- */
 @media (max-width: 768px) {
   .page-software .image-pair {
@@ -281,5 +361,210 @@ body.page-software .project-subtitle {
     display: block;
   }
 }
+
+
+
+/* --- SNITCH REQUIRED STYLES (copied locally so software page does not depend on css/style.css) --- */
+/* Slot that the snitch script mounts into. Mirrors the inline rules used on index.html. */
+#snitch-slot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: none;
+  pointer-events: none;
+  z-index: 99999;
+  display: block;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+#snitch-runner {
+  position: absolute;
+  width: 96px;
+  height: auto;
+  max-height: 80px;
+  user-select: none;
+  transition: transform 0.08s linear;
+  transform-origin: center center;
+  animation: snitch-twitch 50ms linear infinite;
+  pointer-events: none;
+  will-change: left, top, transform;
+}
+
+@keyframes snitch-twitch{
+  0% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+  100% { transform: rotate(-10deg); }
+}
+
+.snitch-progress {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 180ms ease;
+  pointer-events: none;
+}
+.snitch-progress.show { opacity: 1; }
+.snitch-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, gold, #fc5b5b);
+  transition: width 120ms linear;
+  opacity: 0.6;
+}
+
+.snitch-win {
+  position: absolute;
+  pointer-events: auto;
+  z-index: 1000000;
+  transform: translateY(6px) scale(0.96);
+  opacity: 0;
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+}
+.snitch-win.show { transform: translateY(0) scale(1); opacity: 1; }
+
+@keyframes snitch-appear {
+  0% { opacity: 0; transform: translateY(14px) scale(0.96); filter: blur(6px); }
+  60% { opacity: 0.92; transform: translateY(-6px) scale(1.02); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+#snitch-slot.snitch-appear { animation: snitch-appear 520ms cubic-bezier(.2,.9,.2,1) both; pointer-events: none; }
+
+@keyframes snitch-image-settle { 0% { transform: scale(1.06); } 60% { transform: scale(0.98); } 100% { transform: scale(1); } }
+#snitch-slot.snitch-appear img#snitch-runner { animation: snitch-image-settle 120ms ease 160ms both, snitch-twitch 5ms linear infinite; }
+
+/* Play again button visuals matching the style in the main stylesheet */
+.snitch-play-again {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 0;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  cursor: pointer;
+}
+.snitch-play-again:hover{ box-shadow: 0 0 0.18rem rgba(254, 218, 74, 0.9); filter: brightness(.98); }
+
+body.light-mode .snitch-win { background: rgba(255,255,255,0.92); color: #111; border-color: rgba(140,102,12,0.95); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+body.light-mode .snitch-play-again { background: rgba(255,255,255,0.92); color: #111; border-color: rgba(140,102,12,0.95); box-shadow: 0 6px 18px rgba(0,0,0,0.06); filter: none; }
+
+/* --- end snitch styles --- */
+
+/* Modal/overlay used when launching snitch from Softwares page */
+.snitch-modal{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 68px; /* leave room for header */
+  z-index: 100500;
+  background: rgba(0, 0, 0, 0.602); /* stronger dim */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 260ms cubic-bezier(.2,.9,.2,1);
+}
+.snitch-modal .snitch-modal-close{
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 0;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  z-index: 100510;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+.snitch-modal .snitch-modal-close:hover{ background: rgba(255,255,255,0.12); }
+body.light-mode .snitch-modal{ background: rgba(255, 255, 255, 0.584); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+body.light-mode .snitch-modal .snitch-modal-close{ color: #111; background: rgba(0,0,0,0.06); }
+
+/* When modal is open, lock page scroll */
+.snitch-modal-open{ overflow: hidden !important; height: 100% !important; }
+
+/* Make the snitch slot fill the modal viewport for gameplay */
+.snitch-modal #snitch-slot{ position: relative !important; top: 0 !important; left: 0 !important; height: calc(100vh - 88px) !important; width: 100% !important; }
+
+/* Smooth close animation for the snitch slot: shrink + fade before moving back */
+.snitch-closing{
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+  transform: scale(0.96) translateY(8px) !important;
+  opacity: 0 !important;
+}
+
+/* show state for modal */
+.snitch-modal.show{ opacity: 1; }
+
+/* Victory/win box: copy exact styles from main stylesheet so it's identical */
+.snitch-win {
+  position: absolute;
+  z-index: 1000000;
+  pointer-events: auto;
+  padding: 14px 16px;
+  background: rgba(52, 49, 40, 0.45);
+  color: white;
+  border: 0.05rem solid gold;
+  border-radius: 6px;
+  box-shadow: 0 0 0.08rem rgba(254, 218, 74, 0.5);
+  font-family: "Poppins", "Montserrat", sans-serif;
+  font-weight: 200;
+  font-size: 15px;
+  line-height: 1.25;
+  max-width: calc(100% - 32px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 180ms ease, transform 200ms ease, box-shadow 180ms ease;
+}
+.snitch-win.show { opacity: 1; transform: translateY(0); box-shadow: 0 0 0.18rem rgba(254,218,74,0.9); }
+.snitch-win .hint-line { margin-bottom: 8px; text-align: center; }
+.snitch-win .hint-line .snitch-points { font-weight: 700; color: gold; display: inline-block; }
+
+.snitch-play-again {
+  display: inline-block;
+  margin: 12px auto 0;
+  padding: 8px 12px;
+  background: rgba(52, 49, 40, 0.6);
+  border: 0.05rem solid gold;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  display: block;
+  max-width: 160px;
+}
+.snitch-play-again:hover { box-shadow: 0 0 0.18rem rgba(254, 218, 74, 0.9); filter: brightness(.98); }
+
+body.light-mode .snitch-win {
+  background: rgba(255,255,255,0.92);
+  color: #111;
+  border-color: rgba(140,102,12,0.95);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+body.light-mode .snitch-win .hint-line { color: #111; }
+body.light-mode .snitch-win .hint-line .snitch-points { color: rgba(140,102,12,0.95); }
+body.light-mode .snitch-play-again {
+  background: rgba(255,255,255,0.92);
+  color: #111;
+  border-color: rgba(140,102,12,0.95);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  filter: none;
+}
+
 
 
