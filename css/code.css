@@ -1,0 +1,165 @@
+/* code.css - Code block wrapper using exact project colors
+   Colors (exact):
+     background:   #1e1e1e
+     border:       #333333
+     label text:   #888888
+     code text:    #d4d4d4
+     keyword:      #c586c0
+     comment:      #6a9955
+     name/func:    #dcdcaa
+*/
+
+.code-snippet{
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    overflow: auto;
+}
+.code-snippet .lang-label{
+    color: #888888;
+    font-family: sans-serif;
+    font-size: 12px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #333333;
+    padding-bottom: 5px;
+}
+.code-snippet pre{
+    margin: 0;
+    /* Use the default Jupyter Notebook monospace stack (Menlo on macOS,
+       Monaco, Consolas, Courier New as fallbacks) for authenticity. */
+    font-family: Menlo, Monaco, "Consolas", "Courier New", monospace;
+    color: #d4d4d4;
+    font-size: 14px;
+    background: transparent;
+    line-height: 1.45;
+    white-space: pre;
+}
+.code-snippet code{ color: #d4d4d4; }
+
+/* Highlight.js token colors (map to the project's exact palette). */
+.hljs{ background: transparent; color: #d4d4d4; }
+/* Keywords, literals and common built-in/command tokens appear in the
+   project's keyword color so short commands like `pip` are highlighted. */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-symbol,
+.hljs-selector-id,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-command{
+    color: #c586c0;
+}
+.hljs-comment, .hljs-quote, .hljs-deletion{ color: #6a9955; font-style: italic; }
+.hljs-title, .hljs-section, .hljs-name, .hljs-function{ color: #dcdcaa; }
+.hljs-attribute, .hljs-bullet, .hljs-type{ color: #c586c0; }
+
+/* Ensure inline code inside paragraphs still reads well
+   and give it the same bordered 'chip' effect in dark mode so inline
+   snippets match the block styling visually. Light-mode overrides exist
+   further below. */
+code{
+    font-family: Menlo, Monaco, "Consolas", "Courier New", monospace;
+    color: #d4d4d4;
+    background: #1e1e1e;
+    border: 0px solid #333333;
+    padding: 0.12rem 0.36rem;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+/* Light-mode styling for inline code-like elements so they remain readable
+   and visually distinct on a light background. These apply when the site
+   toggles a `light-mode` class on the document root or body. */
+.light-mode code,
+body.light-mode code,
+.light-mode kbd,
+body.light-mode kbd,
+.light-mode samp,
+body.light-mode samp{
+    background: #f5f5f5; /* subtle paper */
+    color: #111111;      /* dark text for readability */
+    border: 0px solid #e6e6e6;
+    padding: 0.12rem 0.36rem;
+    border-radius: 4px;
+    font-family: Menlo, Monaco, "Consolas", "Courier New", monospace;
+    font-size: 0.95em;
+}
+
+/* Make sure the label and snippet are visually grouped on small screens */
+@media (max-width: 520px){
+    .code-snippet{ padding: 12px; }
+    .code-snippet .lang-label{ font-size: 11px; }
+    .code-snippet pre{ font-size: 13px; }
+}
+
+/* Light-mode variants: provide high-contrast, light-friendly colors
+   for sites that apply a `light-mode` class to the root or body. */
+.light-mode .code-snippet,
+body.light-mode .code-snippet{
+    background: #fbfbfb; /* soft paper */
+    border: 1px solid #e6e6e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+.light-mode .code-snippet .lang-label,
+body.light-mode .code-snippet .lang-label{
+    color: #666666;
+    border-bottom-color: #e6e6e6;
+}
+.light-mode .code-snippet pre,
+body.light-mode .code-snippet pre{
+    color: #111111;
+}
+.light-mode .hljs,
+body.light-mode .hljs{ background: transparent; color: #111111; }
+
+/* Token color adjustments for light background - darker/muted variants */
+.light-mode .hljs-keyword,
+.light-mode .hljs-selector-tag,
+.light-mode .hljs-literal,
+.light-mode .hljs-symbol,
+.light-mode .hljs-selector-id,
+.light-mode .hljs-built_in,
+.light-mode .hljs-builtin-name,
+.light-mode .hljs-command,
+body.light-mode .hljs-keyword,
+body.light-mode .hljs-selector-tag,
+body.light-mode .hljs-literal,
+body.light-mode .hljs-symbol,
+body.light-mode .hljs-selector-id,
+body.light-mode .hljs-built_in,
+body.light-mode .hljs-builtin-name,
+body.light-mode .hljs-command{
+    color: #7b3fb0; /* muted purple for keywords/commands */
+}
+.light-mode .hljs-comment,
+.light-mode .hljs-quote,
+.light-mode .hljs-deletion,
+body.light-mode .hljs-comment,
+body.light-mode .hljs-quote,
+body.light-mode .hljs-deletion{
+    color: #2f6f2f; /* darker green for comments */
+    font-style: italic;
+}
+.light-mode .hljs-title,
+.light-mode .hljs-section,
+.light-mode .hljs-name,
+.light-mode .hljs-function,
+body.light-mode .hljs-title,
+body.light-mode .hljs-section,
+body.light-mode .hljs-name,
+body.light-mode .hljs-function{
+    color: #7a5a00; /* darker name/function color */
+}
+.light-mode .hljs-attribute,
+.light-mode .hljs-bullet,
+.light-mode .hljs-type,
+body.light-mode .hljs-attribute,
+body.light-mode .hljs-bullet,
+body.light-mode .hljs-type{
+    color: #7b3fb0;
+}
+

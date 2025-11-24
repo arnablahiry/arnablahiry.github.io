@@ -26,6 +26,7 @@
 
     if(theme === 'light'){
       document.body.classList.add('light-mode');
+      try{ document.documentElement.classList.add('light-mode'); }catch(_){ }
       if(btn){
         btn.setAttribute('aria-pressed','true');
         // Show a moon icon (indicates switching to dark) with an sr-only label
@@ -33,6 +34,7 @@
       }
     } else {
       document.body.classList.remove('light-mode');
+      try{ document.documentElement.classList.remove('light-mode'); }catch(_){ }
       if(btn){
         btn.setAttribute('aria-pressed','false');
         // Show a sun icon (indicates switching to light) with an sr-only label

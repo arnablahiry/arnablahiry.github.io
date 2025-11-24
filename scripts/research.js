@@ -356,4 +356,15 @@
       });
     });
   });
+  // Fade out hover visuals while the user is actively scrolling.
+  // Add 'scrolling' class to body on scroll and remove it shortly after scrolling stops.
+  (function(){
+    var scrollTimer = null;
+    function onScroll(){
+      try{ document.body.classList.add('scrolling'); }catch(e){}
+      if(scrollTimer) { clearTimeout(scrollTimer); }
+      scrollTimer = setTimeout(function(){ try{ document.body.classList.remove('scrolling'); }catch(e){} }, 220);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
 })();

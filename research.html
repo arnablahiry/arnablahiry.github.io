@@ -727,8 +727,27 @@
                     // only in dark mode
                     if(document.body.classList.contains('light-mode')) return;
                     // small timeout to ensure layout/paints are complete
-                    setTimeout(function(){ document.body.classList.add('show-theme-hint'); }, 260);
+                    setTimeout(function(){ 
+                        // Add the flag that triggers the CSS animations. The CSS
+                        // itself handles the delayed fade-out after ~5s using
+                        // animation delay (no JS timers required to hide it).
+                        document.body.classList.add('show-theme-hint');
+                    }, 260);
                 }catch(_){/* ignore */}
+            });
+            // When the CSS 'theme-hint-out' animation finishes, make the
+            // hint non-interactive so it cannot be clicked or focused again.
+            hint.addEventListener('animationend', function(e){
+                try{
+                    if(e && e.animationName === 'theme-hint-out'){
+                        // mark visually hidden and inert
+                        hint.classList.add('theme-hint-hidden');
+                        hint.style.pointerEvents = 'none';
+                        hint.setAttribute('aria-hidden','true');
+                        // remove from tab order
+                        try{ hint.tabIndex = -1; }catch(_){ }
+                    }
+                }catch(_){ }
             });
         })();
     </script>

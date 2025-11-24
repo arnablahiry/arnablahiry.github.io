@@ -109,10 +109,27 @@ body.light-mode header nav .nav-hint-wrapper{ display: none !important; }
         from { opacity: 0; transform: translateY(-12px); }
         to   { opacity: 0.5; transform: translateY(0); }
     }
-
-    body.show-theme-hint:not(.light-mode) header nav .nav-hint-wrapper #theme-hint{
-        animation: theme-hint-in 680ms cubic-bezier(0.22,0.1,0.22,1) 240ms both;
+    @keyframes theme-hint-out {
+        from { opacity: 0.5; transform: translateY(0); }
+        to   { opacity: 0;   transform: translateY(-12px); }
     }
+
+    /* Play the intro animation, then after 5s play the outro animation
+       so the hint fades out using pure CSS. Two animations are declared
+       so the out animation starts after a 5000ms delay. */
+    body.show-theme-hint:not(.light-mode) header nav .nav-hint-wrapper #theme-hint{
+        animation: theme-hint-in 680ms cubic-bezier(0.22,0.1,0.22,1) 240ms both,
+                   theme-hint-out 680ms cubic-bezier(0.22,0.1,0.22,1) 5000ms both;
+    }
+
+/* After the out-animation completes we mark the element hidden/inert via JS.
+   Provide a defensive CSS rule so any element with the helper class is
+   visually removed and non-interactive. */
+header nav .nav-hint-wrapper #theme-hint.theme-hint-hidden{
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
 
 }
 /* Research page: place a small meme to the right of the intro paragraph.
@@ -479,7 +496,7 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
     inset: 0;
     background: rgba(254,218,74,0.10);
     pointer-events: none;
-    opacity: 0; /* default hidden; shown only on hover */
+    opacity: 0.5; /* default semi-visible; increases on hover */
     /* make overlay fade a touch smoother */
     transition: opacity 980ms cubic-bezier(0.22, 0.1, 0.22, 1);
     border-radius: 0;
@@ -634,6 +651,32 @@ body.project-modal-open .project-toggle:focus{
     outline: none !important;
     box-shadow: none !important;
 }
+
+/* When the user starts scrolling, visually fade out hover effects so
+   hover-state highlights don't clash with scrolling. This keeps hover
+   affordances available but quickly transitions them back to the
+   non-hover appearance while scrolling. Class is toggled by JS. */
+body.scrolling .project-card:not(.project-clone) .project-image{
+    transform: none !important;
+    transition: transform 260ms ease !important;
+}
+body.scrolling .project-card:not(.project-clone) .project-toggle::before{
+    opacity: 0 !important; /* hide learn-more yellow overlay while scrolling */
+    transition: opacity 220ms ease !important;
+}
+body.scrolling .project-card{
+    outline: none !important;
+}
+body.scrolling .project-card:hover{ /* ensure hover outline fades */
+    outline: none !important;
+}
+/* suppress small hover transforms on meme reveal and other buttons while scrolling */
+body.scrolling .research-meme #meme-wrapper .reveal-btn,
+body.scrolling .research-meme #meme-wrapper .reveal-btn:hover{
+    transform: none !important;
+    transition: transform 200ms ease !important;
+}
+
 
 /* Hide the in-card "Learn more" control when the card is cloned/open, and
    hide toggles on the page while a modal is active so the UI doesn't duplicate. */
@@ -845,6 +888,16 @@ body:not(.light-mode) #meme-image{
 
 body.light-mode .research-meme .timeline-hero-image,
 body.light-mode #meme-image{
+    filter: none !important;
+}
+
+/* ------------------------------------------------------------------
+   Do NOT invert Astrolore images in dark mode
+   Some site rules convert light PNGs to dark-friendly variants using
+   `filter: invert()`; explicitly exclude Astrolore screenshots so their
+   colors remain as authored. We match filenames containing "astrolore".
+ ------------------------------------------------------------------ */
+body:not(.light-mode) img[src*="astrolore"]{
     filter: none !important;
 }
 

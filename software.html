@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/light_mode.css">
     <link rel="stylesheet" href="css/research_light_mode.css">
     <link rel="stylesheet" href="css/software_style.css">
+    <link rel="stylesheet" href="css/code.css">
     <!-- Math rendering: MathJax for this page -->
     <script>
         window.MathJax = window.MathJax || {
@@ -135,7 +136,115 @@
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-2-desc">Learn more</button>
         
                         <div class="project-full" hidden>
-                            <p></p>
+
+                            <p>
+                                <strong>AstroLore</strong> is an open-source Python package designed to bridge the gap between rigorous astronomical data and the imaginative worlds of science fiction. Hosted on <strong>GitHub</strong> and available for distribution via <strong>PyPI</strong>, this tool allows astronomers, hobbyists, and sci-fi enthusiasts to contextualize real-world celestial objects within the "lore" of popular culture.
+                            </p>
+
+                            <p>
+                                By leveraging <strong>Astropy</strong> for coordinate transformation and the <strong>SIMBAD</strong> astronomical database for object resolution, Astrolore calculates angular separations to identify connections between actual astrophysical targets and a custom-curated dataset of locations referenced in science fiction literature, television, and film.
+                            </p>
+
+                            <h3>Key Capabilities</h3>
+
+                            <p>
+                                The package offers a graphical user interface (GUI) that streamlines the user experience through the following core functionalities:
+                            </p>
+
+                            <ul>
+                                <li>
+                                    <strong>Flexible Input Methods:</strong> Users can define a target using two distinct methods:
+                                    <ul>
+                                        <li><strong>Object Name:</strong> Query by common astronomical names (e.g., "Betelgeuse", "M31"). The tool automatically resolves these names to coordinates using SIMBAD.</li>
+                                        <li><strong>Celestial Coordinates:</strong> Input specific Right Ascension (RA) and Declination (Dec) values for precise targeting of arbitrary points in the sky.</li>
+                                    </ul>
+                                </li>
+
+                                <!-- Image pair: two images side-by-side on desktop, stacked on phones -->
+                                <div class="image-pair">
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_name.png" alt="Astrolore GUI screenshot 1">
+                                    </div>
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_radec.png" alt="Astrolore GUI screenshot 2">
+                                    </div>
+                                </div>
+                                
+                                <br>
+                                <br>
+                                <li>
+                                    <strong>Nearest Source Identification:</strong> The algorithm computes the great-circle distance between the user's input and every entry in the custom "Lore" dataset to identify the closest sci-fi reference. It returns the name of the fictional location and the work of fiction it originates from.
+                                </li>
+
+                                <div class="image-pair">
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_m31.png" alt="Astrolore GUI screenshot 1">
+                                    </div>
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_coords.png" alt="Astrolore GUI screenshot 2">
+                                    </div>
+                                </div>
+
+                                <br>
+                                <li>
+                                    <strong>Aladin Sky Atlas Integration:</strong> Users can launch an interactive view of the identified nearest sci-fi source directly within the application. This utilizes the Aladin Lite API to render a high-quality optical view of the region surrounding the target.
+                                </li>
+                                <div class="image-pair">
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_m31_aladin.png" alt="Astrolore GUI screenshot 1">
+                                    </div>
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_coords_aladin.png" alt="Astrolore GUI screenshot 2">
+                                    </div>
+                                </div>
+
+                                <br>
+                                <li>
+                                    <strong>Sky Separation Plotting:</strong> The tool generates a static Matplotlib sky plot that visually represents the angular separation and relative positions of the user's input object versus the matched sci-fi source, providing spatial context to the result.
+                                </li>
+                                <div class="image-pair">
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_m31_map.png" alt="Astrolore GUI screenshot 1">
+                                    </div>
+                                    <div class="image-wrapper no-invert">
+                                        <img src="images/softwares/astrolore_coords_map.png" alt="Astrolore GUI screenshot 2">
+                                    </div>
+                                </div>
+                                <br>
+                            </ul>
+
+                            <h3>Installation & Usage</h3>
+
+                            <p>
+                                Astrolore manages dependencies such as <code>pandas</code>, <code>numpy</code>, and <code>pywebview</code> to ensure a seamless installation process.
+                            </p>
+
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">pip install astrolore</code></pre>
+                            </div>
+
+                            <p>
+                                Once installed, the GUI can be initialized with just two lines of Python code:
+                            </p>
+
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">
+from astrolore import gui
+# Initialize and launch the main interface
+gui.main_gui().start_gui()</code></pre>
+                            </div>
+
+                            
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
+                                <li><strong>Isabele Souza Vitorio</strong> (ivitorio@umich.edu)</li>
+                                <li><strong>Joe Adamo</strong> (jadamo@arizona.edu)</li>
+                                <li><strong>Kayvon Sharifi</strong> (ksharifi1@gsu.edu)</li>
+                            </ul>
                         </div>
                     </article>
 
@@ -155,6 +264,9 @@
     <script src="scripts/research.js"></script>
     <script src="scripts/reveal-meme.js"></script>
     <script src="scripts/theme-toggle.js"></script>
+    <!-- Highlight.js for client-side syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>try{hljs.highlightAll();}catch(e){}</script>
     <script>
         // Wire the page theme hint to the main theme toggle (same logic as research page)
         (function(){
