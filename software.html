@@ -93,37 +93,7 @@
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
                         <div class="project-full" hidden>
-                            <p><strong>Overview:</strong></p>
-                            <p>
-                                This project explores whether the <strong>full spectral dimension</strong> of far-infrared and sub-millimeter emission lines—particularly
-                                multi-line, per-pixel spectra—can be used to infer spatially resolved galaxy properties at high redshift. Instead of relying on
-                                classical <em>moment-0</em> (integrated flux) maps, the study leverages the complete velocity-channel structure of integral-field
-                                spectroscopic (IFU) data to predict key physical quantities: star-formation rate (SFR), molecular gas mass, stellar mass, gas
-                                temperature, and gas-phase metallicity. Synthetic IFU cubes generated from cosmological simulations and radiative-transfer
-                                modelling serve as the foundation for calibrating traditional flux–property relations and training machine-learning predictors
-                                that digest full spectral information.
-                            </p>
-
-                            <h3>Methodology</h3>
-                            <p>
-                                The project contrasts two complementary approaches:
-                            </p>
-                            <ul>
-                                <li><strong>Classical Moment-0 Scaling:</strong> For each emission line, the velocity-integrated flux in each pixel is used to calibrate
-                                empirical relations mapping surface brightness to physical property surface densities. These relations approximate traditional
-                                extragalactic scaling laws.</li>
-
-                                <li><strong>Full-Spectrum Machine Learning:</strong> A supervised neural network ingests the per-pixel spectra of one or multiple
-                                emission lines. Convolutional layers act along the spectral axis to extract line-shape, width, asymmetry, and multi-line
-                                correlations, followed by dense layers that combine the learned features to predict the target physical property per pixel.</li>
-
-                                <li><strong>Synthetic IFU Dataset:</strong> The input cubes are produced by applying radiative transfer and non-equilibrium
-                                chemistry to cosmological galaxy simulations. They span a broad range of redshifts, morphologies, inclinations, spatial
-                                resolutions, and dynamical states, ensuring a diverse and physically motivated training set.</li>
-
-                                <li><strong>Performance Evaluation:</strong> Predictions are compared against simulation ground truth through pixel-level residuals,
-                                scatter, bias, and morphology preservation across full 2D property maps.</li>
-                            </ul>
+                            
                         </div>
                     </article>
 
@@ -245,6 +215,19 @@ gui.main_gui().start_gui()</code></pre>
                                 <li><strong>Joe Adamo</strong> (jadamo@arizona.edu)</li>
                                 <li><strong>Kayvon Sharifi</strong> (ksharifi1@gsu.edu)</li>
                             </ul>
+                        </div>
+                    </article>
+
+
+                    <article class="project-card">
+                        <img class="project-image" src="images/softwares/snitch.png" alt="Project image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Totally not named to avoid copyright issues</h3>
+                            <p class="project-subtitle">Simple JavaScript-based web-game to catch something that may bear resemblance to a famous winged ball from a famous fantasy series.</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
+                        <div class="project-full" hidden>
+                            
                         </div>
                     </article>
 
