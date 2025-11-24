@@ -41,6 +41,12 @@
             <a href="repositories.html">Repositories</a>
             <a href="contact.html">Contact</a>
             <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+            <!-- Research page: desktop-only dark-mode hint under the theme button -->
+            <div class="hint-wrapper nav-hint-wrapper" aria-hidden="true">
+                <div id="theme-hint" role="button" tabindex="0" aria-label="Enable light mode">
+                    <span class="hint-line">I know we all enjoy dark mode, but for <strong>'paper-accurate' figures</strong> and <strong>easy-to-read equations</strong>, consider clicking here to enable <strong>light mode</strong></span>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -519,7 +525,7 @@
                     <article class="project-card">
                         <img class="project-image" src="images/research/agn.png" alt="Project image">
                         <div class="project-meta">
-                            <h3 class="project-title">Revisiting the Dichotomy of Active Galactic Nuclei powered Radio galaxies</h3>
+                            <h3 class="project-title">Revisiting the Dichotomy of Active Galactic Nuclei powered Radio Galaxies</h3>
                             <p class="project-subtitle">Exploring the HERG-LERG and RL-RQ dichotomy of AGNs with accreting central SMBHs</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-3-desc">Learn more</button>
@@ -677,5 +683,53 @@
     <script src="scripts/research.js"></script>
     <script src="scripts/reveal-meme.js"></script>
     <script src="scripts/theme-toggle.js"></script>
+    <script>
+        // Wire the research page theme hint to the main theme toggle.
+        (function(){
+            var hint = document.getElementById('theme-hint');
+            var toggle = document.getElementById('theme-toggle');
+            if(!hint || !toggle) return;
+            // Ensure the hint is hidden from assistive tech when light-mode is active
+            function syncVisibility(){
+                if(document.body.classList && document.body.classList.contains('light-mode')){
+                    hint.setAttribute('aria-hidden','true');
+                } else {
+                    hint.setAttribute('aria-hidden','false');
+                }
+            }
+            syncVisibility();
+            // Keep visibility in sync when theme changes
+            document.addEventListener('theme:lock-changed', syncVisibility);
+            document.addEventListener('DOMContentLoaded', syncVisibility);
+
+            hint.addEventListener('click', function(e){
+                e.stopPropagation();
+                // Delegate to the existing theme-toggle button so behavior and
+                // persistence remain consistent across the site.
+                try{ toggle.click(); }catch(_){ }
+            });
+            hint.addEventListener('keydown', function(e){
+                if(e.key === 'Enter' || e.key === ' '){
+                    e.preventDefault();
+                    hint.click();
+                }
+            });
+
+            // After the page has fully loaded (images/fonts/etc), add a body
+            // class that triggers the CSS animation so the hint fades/slides in
+            // from the top. This uses `window.load` to ensure all resources
+            // have rendered before the subtle entrance occurs.
+            window.addEventListener('load', function(){
+                try{
+                    // desktop-only
+                    if(window.matchMedia && !window.matchMedia('(min-width: 769px)').matches) return;
+                    // only in dark mode
+                    if(document.body.classList.contains('light-mode')) return;
+                    // small timeout to ensure layout/paints are complete
+                    setTimeout(function(){ document.body.classList.add('show-theme-hint'); }, 260);
+                }catch(_){/* ignore */}
+            });
+        })();
+    </script>
 </body>
 </html>

@@ -44,6 +44,77 @@ body:not(.light-mode) .container{
    top-right controls when the page scrolls or when a clone is open. */
 .timeline-main-heading-wrapper{ box-sizing: border-box; padding-right: 112px; }
 
+/* Desktop-only: theme hint under the theme-toggle for Research page
+   Matches the home page immersive hint styling but positioned under the
+   theme button. Visible only in dark mode (body:not(.light-mode)) and
+   only on desktop (min-width: 769px). Clicking or keyboard-activating
+   the hint activates the main theme toggle. */
+/* Ensure the hint is completely disabled in light mode (no layout or a11y impact) */
+body.light-mode header nav .nav-hint-wrapper{ display: none !important; }
+
+@media (min-width: 769px) {
+    /* Anchor the hint absolutely to the nav so it doesn't affect inline layout
+       and push navigation items left. This keeps nav alignment identical to
+       other pages that don't include the hint element. */
+    body:not(.light-mode) header nav{ position: relative; }
+    body:not(.light-mode) header nav .nav-hint-wrapper{ position: absolute; display: block; }
+    body:not(.light-mode) header nav .nav-hint-wrapper #theme-hint{
+        position: absolute;
+        top: calc(100% + 40px);
+        /* anchor the hint to the right side of the header/nav area */
+        right: -53vw;
+        padding: 0.6rem 0.7rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        line-height: 1.25;
+        width: 260px;
+        z-index: 2000;
+    /* smoother transitions for opacity/transform so hover/focus feels pleasing */
+    transition: opacity 360ms cubic-bezier(0.2,0.9,0.2,1), transform 300ms cubic-bezier(0.22,0.1,0.22,1), max-height 320ms ease;
+    will-change: opacity, transform;
+    /* start fully transparent; animated in to 0.5 via `body.show-theme-hint` */
+    opacity: 0;
+    transform: translateY(-12px);
+        pointer-events: auto;
+        display: inline-block;
+        border: 1px solid rgba(254,218,74,0.9);
+        white-space: normal;
+        word-break: break-word;
+        overflow: hidden;
+        max-height: 6.2rem;  
+
+        /* visual match to homepage hint (dark-mode) */
+        background: rgba(0,0,0,0.55);
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    }
+
+    body:not(.light-mode) header nav .nav-hint-wrapper #theme-hint:hover,
+    body:not(.light-mode) header nav .nav-hint-wrapper #theme-hint:focus{
+        /* Use !important so hover/focus overrides the animation layer and
+           always brings the hint to full opacity and the hover transform. */
+    opacity: 1 !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35) !important;
+        cursor: pointer;
+        outline: none !important;
+    }
+
+    /* ensure keyboard focus shows same visual state */
+    body:not(.light-mode) header nav .nav-hint-wrapper #theme-hint:focus{ box-shadow: 0 8px 28px rgba(0,0,0,0.35) !important; }
+
+    /* Animation: fade down from above when the page has fully loaded.
+       The page script will add `body.show-theme-hint` on window.load to
+       trigger this. Keep the animation desktop-only and dark-mode-only. */
+    @keyframes theme-hint-in {
+        from { opacity: 0; transform: translateY(-12px); }
+        to   { opacity: 0.5; transform: translateY(0); }
+    }
+
+    body.show-theme-hint:not(.light-mode) header nav .nav-hint-wrapper #theme-hint{
+        animation: theme-hint-in 680ms cubic-bezier(0.22,0.1,0.22,1) 240ms both;
+    }
+
+}
 /* Research page: place a small meme to the right of the intro paragraph.
    The meme wrapper stretches to match the height of the intro text column.
    Keep the meme visually small via a constrained width so it doesn't dominate. */

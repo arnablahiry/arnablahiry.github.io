@@ -281,24 +281,29 @@ body.light-mode nav#site-nav{
 }
 
 
-body.light-mode header{
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    z-index: 1000 !important; /* lift above most site content */
-}
-body.light-mode header::before{
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgb(255, 255, 255); /* white overlay strength; tune as needed */
+/* On desktop only, lift the light-mode header and add the subtle white
+   overlay behind its children. Mobile keeps the site-wide mobile header
+   flow defined in utils.css so the header does not cover the viewport. */
+@media (min-width: 769px) {
+    body.light-mode header{
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        z-index: 1000 !important; /* lift above most site content */
+    }
+    body.light-mode header::before{
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.274); /* white overlay strength; tune as needed */
 
-    pointer-events: none;
-    z-index: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+    /* Ensure header children are above the pseudo-element */
+    body.light-mode header > *{ position: relative; z-index: 1; }
 }
-/* Ensure header children are above the pseudo-element */
-body.light-mode header > *{ position: relative; z-index: 1; }
 
 /* Desktop: prefer transparent header/nav background so nav text sits
    directly on the page content (removes opaque white strip on large screens) */
