@@ -101,10 +101,23 @@ body.page-software .research-meme .timeline-hero-image{
 body.page-software #meme-wrapper .meme-overlay,
 body.page-software .meme-wrapper .meme-overlay{
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  /* cover most of the meme but leave the bottom visible */
+  height:101%;
+  bottom: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Mobile: slightly smaller overlay so a larger strip of the meme remains visible */
+@media (max-width: 768px) {
+  body.page-software #meme-wrapper .meme-overlay,
+  body.page-software .meme-wrapper .meme-overlay{
+    height: 60%;
+  }
 }
 
 /* Reveal button parity */

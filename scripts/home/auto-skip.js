@@ -48,6 +48,68 @@ document.addEventListener('DOMContentLoaded', () => {
   // initialize memes to match current enabled state
   updateMemesFromAutoSkip(enabled);
 
+  // Make audio controls non-interactive to mouse when auto-skip is enabled.
+  // This is intentionally minimal: we only toggle pointer-events on the
+  // control elements and any wrapping anchor so mouse clicks don't work.
+  function updateAudioPointerEvents(enabledFlag){
+    try{
+      const ids = ['restart-button','skip-button','pause-scroll','play-pause'];
+      ids.forEach((id)=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        if(enabledFlag){
+          try{ el.style.pointerEvents = 'none'; }catch(e){}
+        } else {
+          try{ el.style.pointerEvents = ''; }catch(e){}
+        }
+        try{ const a = el.closest('a'); if(a) { a.style.pointerEvents = enabledFlag ? 'none' : ''; } }catch(e){}
+      });
+    }catch(e){}
+  }
+
+  // apply initial pointer-events state
+  updateAudioPointerEvents(enabled);
+
+  // Create an invisible overlay that sits on top of #audio-controls and
+  // intercepts mouse interactions. This is used when auto-skip is enabled
+  // so the four controls underneath cannot be clicked by mouse.
+  function ensureAudioControlsOverlay(){
+    try{
+      const container = document.getElementById('audio-controls');
+      if(!container) return null;
+      let overlay = document.getElementById('audio-controls-overlay');
+      if(!overlay){
+        overlay = document.createElement('div');
+        overlay.id = 'audio-controls-overlay';
+        // position to cover the whole audio-controls container
+        overlay.style.position = 'absolute';
+        overlay.style.left = '0';
+        overlay.style.top = '7vh';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'transparent';
+        overlay.style.zIndex = '9999999';
+        overlay.style.display = 'none';
+        // ensure overlay captures pointer events
+        overlay.style.pointerEvents = 'auto';
+        // append as the first child so it sits above the buttons
+        container.appendChild(overlay);
+      }
+      return overlay;
+    }catch(e){ return null; }
+  }
+
+  function toggleAudioControlsOverlay(enabledFlag){
+    try{
+      const overlay = ensureAudioControlsOverlay();
+      if(!overlay) return;
+      overlay.style.display = enabledFlag ? 'block' : 'none';
+    }catch(e){}
+  }
+
+  // apply initial overlay state
+  toggleAudioControlsOverlay(enabled);
+
   // If enabled, try to click the skip button shortly after load so skip runs
   if (enabled && skipBtn){
     setTimeout(() => {
@@ -79,6 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // update memes immediately to reflect the new preference, then reload
     // so the change is persistent across navigation.
     updateMemesFromAutoSkip(enabled);
+    // reflect pointer-events change immediately
+    updateAudioPointerEvents(enabled);
+    // show/hide the overlay immediately
+    toggleAudioControlsOverlay(enabled);
     try { window.location.reload(); } catch (e){}
   });
 
