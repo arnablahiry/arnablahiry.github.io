@@ -62,7 +62,7 @@ body.light-mode header nav .nav-hint-wrapper{ display: none !important; }
         position: absolute;
         top: calc(100% + 40px);
         /* anchor the hint to the right side of the header/nav area */
-        right: -53vw;
+        right: -60vw;
         padding: 0.6rem 0.7rem;
         border-radius: 6px;
         font-size: 0.8rem;

@@ -1,0 +1,186 @@
+/* Page-scoped styles for software.html */
+/* Force 2 columns per row on desktop, keep responsive behavior on mobile */
+@media (min-width: 769px) {
+  /* Only affect the Softwares page grid; do not change global .projects-grid */
+  body.page-software .projects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Ensure the theme hint matches research page placement but doesn't overlap nav */
+@media (min-width: 769px) {
+  body:not(.light-mode) header nav .nav-hint-wrapper {
+    right: -48vw;
+  }
+}
+
+/* Stretch the main container full-bleed for the softwares page so cards cover the whole page horizontally */
+body.page-software .container,
+body.page-software .section-timeline .container,
+body.page-software .section-timeline-heading .container {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Let the projects grid span full width and remove outer gutters */
+body.page-software .projects-grid {
+  width: 100vw;
+  margin-left: calc(50% - 50vw); /* center full-bleed content while removing container offset */
+  grid-gap: 28px;
+  /* Add side padding so cards don't touch the viewport edges — match .container side gutters (90vw -> 5vw each side) */
+  padding-left: 5vw;
+  padding-right: 5vw;
+  box-sizing: border-box; /* include padding inside the 100vw width to avoid horizontal overflow */
+}
+
+/* On very wide viewports, the site's container uses max-width: 1360px; match that gutter
+   by increasing the grid padding so spacing remains visually identical to the Research page. */
+@media (min-width: 1360px) {
+  body.page-software .projects-grid {
+    padding-left: calc((100vw - 1360px)/2 + 24px);
+    padding-right: calc((100vw - 1360px)/2 + 24px);
+  }
+}
+
+/* Make card inner content match research spacing when full-bleed */
+/* Do NOT override .project-card styles here — keep cards identical to Research page by
+   inheriting all card-related rules from css/research_style.css. */
+
+/* NOTE: Intro & meme styles are intentionally omitted here so that
+   the canonical Research styles in css/research_style.css control the
+   intro and meme appearance on the Softwares page. This preserves
+   exact parity between the two pages. */
+
+/* ------------------------------------------------------------------
+   Duplicate of Research intro & meme rules but scoped to Softwares page
+   (prefixed with body.page-software) so appearance is identical.
+   Kept verbatim from css/research_style.css where practical.
+ ------------------------------------------------------------------ */
+body.page-software .research-heading-row{
+  display: flex;
+  gap: 1.6rem;
+  align-items: stretch; /* ensure children match height */
+  justify-content: center;
+}
+body.page-software .research-intro-text{
+  flex: 1 1 60%;
+}
+/* Intro paragraph styling (dark-mode defaults). Light mode overrides live in css/light_mode.css */
+body.page-software .research-intro-text .research-intro{
+  color: #ffffff;
+  font-size: 2.2vh;
+  line-height: 1.45;
+}
+body.page-software .research-meme{
+  /* Make meme column smaller than Research so the image is less dominant */
+  flex: 0 0 700px;
+  display: flex;
+  align-items: center;
+}
+body.page-software .research-meme .meme-wrapper{
+  /* Keep the wrapper compact (don't stretch to the full heading height) */
+  width: 100%;
+  height: auto;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* ensure overlay and rounded corners clip the image */
+  border-radius: 8px;
+}
+body.page-software .research-meme .timeline-hero-image{
+  width: 100%;
+  height: auto;
+  max-height: 300px; /* slightly smaller than Research */
+  object-fit: contain;
+  transform: none;
+}
+
+/* Ensure the overlay fully covers the meme wrapper on the Softwares page */
+body.page-software #meme-wrapper .meme-overlay,
+body.page-software .meme-wrapper .meme-overlay{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Reveal button parity */
+body.page-software .research-meme #meme-wrapper .reveal-btn{ padding: 0.6rem 0.95rem; border-radius: 8px; }
+body.page-software .research-meme #meme-wrapper .reveal-btn:focus,
+body.page-software .research-meme #meme-wrapper .reveal-btn:hover{ transform: translateY(-1px); }
+
+body.page-software body:not(.light-mode) .research-meme #meme-wrapper .reveal-btn,
+body.page-software body:not(.light-mode) #meme-wrapper .reveal-btn{
+  background: rgba(255,255,255,0.06) !important;
+  color: #ffffff !important;
+  border: 2px solid transparent !important;
+  padding: 0.6rem 1rem !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+body.page-software body:not(.light-mode) .research-meme #meme-wrapper .reveal-btn:focus,
+body.page-software body:not(.light-mode) .research-meme #meme-wrapper .reveal-btn:hover,
+body.page-software body:not(.light-mode) #meme-wrapper .reveal-btn:focus,
+body.page-software body:not(.light-mode) #meme-wrapper .reveal-btn:hover{
+  box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8) !important;
+  background: rgba(160, 138, 65, 0.179) !important;
+  transition: transform 0.15s ease, background 0.3s ease, box-shadow 0.3s ease, border 0.15s ease !important;
+}
+
+/* Mobile reflow: place the meme above the intro text, then the project cards (meme -> text -> cards) on narrow screens. */
+@media (max-width: 768px){
+  body.page-software .research-heading-row{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.9rem; /* increase space between heading and meme */
+  }
+
+  /* Move meme to the top of the column */
+  /* Make meme full-width on phones with side padding and extra spacing */
+  body.page-software .research-meme{ order: -1; flex: 0 0 auto; width: 100%; max-width: none; }
+  body.page-software .research-meme .meme-wrapper{ width: 100%; height: auto; display: flex; justify-content: center; padding-left: 5vw; padding-right: 5vw; box-sizing: border-box; margin-bottom: 1.25rem; }
+
+  body.page-software .research-meme .timeline-hero-image{
+    /* allow a larger mobile presentation while remaining constrained by padding */
+    max-height: 220px;
+    width: 100%;
+    transform: none;
+    margin: 0 auto;
+  }
+
+  /* Intro text flows under the meme and uses full width */
+  body.page-software .research-intro-text{ width: 100%; }
+  body.page-software .research-intro-text .research-intro{ text-align: center; }
+
+  /* Reduce intro paragraph size slightly on phones */
+  body.page-software .research-intro-text .research-intro{ font-size: 1.6vh !important; text-align: center;}
+}
+
+/* Move the heading a bit up on phones so it appears closer to the top */
+@media (max-width: 768px){
+  body.page-software .padding-vertical-xlarge{ padding-top: 60px !important; padding-bottom: 40px !important; }
+}
+
+/* ------------------------------------------------------------------
+   Softwares page: project card font overrides
+   Use Courier for titles/subtitles on the Softwares page only so the
+   cards visually differ per your request without changing Research.
+ ------------------------------------------------------------------ */
+body.page-software .project-title{
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+}
+
+body.page-software .project-subtitle{
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 400;
+}
+
+
