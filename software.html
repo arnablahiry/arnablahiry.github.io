@@ -88,12 +88,19 @@
         <div class="section-timeline">
             <div class="container">
                 <!-- Projects grid: each card has an image + subtitle; clicking expands details -->
+                <div class="project-filters" id="project-filters" aria-label="Filter projects">
+                    <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+                    <button class="filter-btn" data-filter="science" aria-pressed="false">Science</button>
+                    <button class="filter-btn" data-filter="fun" aria-pressed="false">Fun</button>
+                </div>
+
                 <div class="projects-grid" id="projects-grid">
-                    <article class="project-card">
+                    <article class="project-card" data-tags="science">
                         <img class="project-image" src="images/softwares/cubecraft.png" alt="Project image">
                         <div class="project-meta">
                             <h3 class="project-title">GalCubeCraft - Sythetic Galaxy Spectral Cubes</h3>
                             <p class="project-subtitle">Theoretically and physically motivated generator of unique synthetic galaxy spectral cubes for astrophysical research.</p>
+                            <div class="project-tags"><span class="tag-chip">Science</span></div>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
                         <div class="project-full" hidden>
@@ -101,11 +108,12 @@
                         </div>
                     </article>
 
-                    <article class="project-card">
+                    <article class="project-card" data-tags="science, fun">
                         <img class="project-image" src="images/softwares/astrolore.png" alt="Project image">
                         <div class="project-meta">
                             <h3 class="project-title">AstroLore</h3>
                             <p class="project-subtitle">Fun Python software to find the nearest astronomical object referenced in science-fiction from a given location.</p>
+                            <div class="project-tags"><span class="tag-chip">Science</span><span class="tag-chip">Fun</span></div>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-2-desc">Learn more</button>
         
@@ -223,7 +231,7 @@ gui.main_gui().start_gui()</code></pre>
                     </article>
 
 
-                    <article class="project-card" id="proj-snitch">
+                    <article class="project-card" id="proj-snitch" data-tags="fun">
                         <div class="image-wrapper">
                             <img class="project-image" src="images/softwares/snitch.png" alt="Project image">
                             <!-- Small launcher: clicking this runs the exact same snitch game as on the home page -->
@@ -234,6 +242,7 @@ gui.main_gui().start_gui()</code></pre>
                         <div class="project-meta">
                             <h3 class="project-title">Totally not named to avoid copyright issues</h3>
                             <p class="project-subtitle">Simple JavaScript-based web-game to catch something that may bear resemblance to a famous winged ball from a famous fantasy series.</p>
+                            <div class="project-tags"><span class="tag-chip">Fun</span></div>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
                         <div class="project-full" hidden>
@@ -474,6 +483,44 @@ function smoothMoveTo(node, x, y, opts){
 
             var btn = document.querySelector('#proj-snitch .snitch-launch');
             if (btn) btn.addEventListener('click', function(e){ e.stopPropagation(); openSnitchModal(); });
+        })();
+    </script>
+    <script>
+        (function(){
+            // Project tag filtering
+            var filterBar = document.getElementById('project-filters');
+            if (!filterBar) return;
+            var buttons = Array.prototype.slice.call(filterBar.querySelectorAll('.filter-btn'));
+            var cards = Array.prototype.slice.call(document.querySelectorAll('.project-card'));
+
+            function setFilter(filter){
+                buttons.forEach(function(b){
+                    var active = (b.dataset.filter === filter);
+                    b.classList.toggle('active', active);
+                    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+                });
+
+                if (filter === 'all'){
+                    cards.forEach(function(c){ c.classList.remove('card-hidden'); });
+                } else {
+                    cards.forEach(function(c){
+                        var tags = (c.dataset.tags || '').toLowerCase().split(',').map(function(s){return s.trim();});
+                        if (tags.indexOf(filter) !== -1) c.classList.remove('card-hidden');
+                        else c.classList.add('card-hidden');
+                    });
+                }
+            }
+
+            filterBar.addEventListener('click', function(e){
+                var btn = e.target.closest('.filter-btn');
+                if (!btn) return;
+                setFilter(btn.dataset.filter);
+            });
+
+            // keyboard activation for buttons
+            buttons.forEach(function(b){
+                b.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); } });
+            });
         })();
     </script>
 </body>

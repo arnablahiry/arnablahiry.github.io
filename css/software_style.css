@@ -44,6 +44,65 @@ body.page-software .projects-grid {
   box-sizing: border-box;
 }
 
+/* Filter bar above the projects grid */
+.project-filters {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center; /* center the bar */
+  padding: 20px 5vw; /* larger vertical padding */
+  box-sizing: border-box;
+  margin-bottom: 22px; /* add more space between filters and cards */
+  flex-wrap: wrap; /* allow wrap on small screens */
+}
+.project-filters .filter-btn {
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  border: 0;
+  padding: 10px 16px; /* larger touch target */
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px; /* larger label */
+  min-width: 88px; /* consistent button width */
+  text-align: center;
+  transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
+}
+.project-filters .filter-btn[aria-pressed="true"], .project-filters .filter-btn.active{
+  background: linear-gradient(90deg, rgba(254,218,74,0.14), rgba(160,138,65,0.12));
+  box-shadow: 0 8px 26px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 520px) {
+  .project-filters { gap: 10px; padding-left: 4vw; padding-right: 4vw; }
+  .project-filters .filter-btn { min-width: 72px; padding: 8px 12px; font-size: 14px; }
+}
+
+/* Tag chips shown on each project card */
+.project-tags { margin-top: 8px; }
+.tag-chip {
+  display: inline-block;
+  padding: 4px 8px;
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Layout for tag chips inside the compact/closed card view */
+.project-meta .project-tags {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.project-meta .tag-chip { margin: 0; }
+
+/* Hidden cards when filtered out */
+.project-card.card-hidden { display: none !important; opacity: 0; transform: translateY(6px); }
+
 /* Match Research page gutter on ultra-wide screens */
 @media (min-width: 1360px) {
   body.page-software .projects-grid {
@@ -289,7 +348,7 @@ body.page-software .project-subtitle {
 
 .image-wrapper .snitch-launch:hover{
   background: rgba(255, 255, 255, 0.268);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.337)337);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.337);
 }
 
 
