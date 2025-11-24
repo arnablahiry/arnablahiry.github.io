@@ -182,7 +182,7 @@
                     <article class="project-card">
                         <img class="project-image" src="images/research/3d_denoising.png" alt="Project image">
                         <div class="project-meta">
-                            <h3 class="project-title">Deep and Sparse Denoising of high-z Galaxy Spectral Cubes</h3>
+                            <h3 class="project-title">Deep and Sparse Denoising of high-z Galaxy Spectral Data Cubes</h3>
                             <p class="project-subtitle">Tiered three-dimensional de-noising comparitive study - toy data, simulations and ALMA observations.</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-2-desc">Learn more</button>
@@ -316,31 +316,31 @@
                                 This project investigates the interpretability of Convolutional Neural Networks (CNNs) applied to field-level cosmological inference. Utilizing the <strong>CAMELS</strong> (Cosmology and Astrophysics with MachinE Learning Simulations) dataset, specifically the IllustrisTNG suite, this work explores how neural networks extract cosmological parameters ($\Omega_m$ and $\sigma_8$) from total matter density fields in the presence of complex baryonic physics. The study focuses on identifying which morphological features of the cosmic web—such as voids, filaments, or halos—drive the network's predictions.
                             </p>
 
-                            <figure style="text-align: center; margin: 20px 0;">
-                                <img src="images/research/cnn_interpret.png" alt="Visualization of Cosmic Web Attribution" style="max-width: 80%; height: auto;">
-                                <figcaption>Fig 1. Visualization of cosmic web attribution for neural network interpretability.</figcaption>
-                            </figure>
-
                             <h3>Methodology</h3>
                             <p>
                                 The analysis pipeline consists of three primary stages:
                             </p>
                             <ul>
-                                <li><strong>Simulation-Based Inference:</strong> A CNN is trained to map 2D total matter density fields ($X$) to the posterior distributions of cosmological parameters ($\theta$), predicting both the mean and variance.</li>
-                                <li><strong>Attribution Mapping:</strong> Post-training, interpretability algorithms (Saliency Maps, Integrated Gradients, and GradientSHAP) are applied to quantify the contribution of individual pixels to the model's inference.</li>
-                                <li><strong>Information Cutting:</strong> The robustness of the model is tested by systematically removing information via Fourier scale cuts ($k_{max}$) and density threshold cuts ($\rho_{min}, \rho_{max}$).</li>
+                                <li><strong>Simulation-Based Inference:</strong> A CNN is trained to map 2D total matter density fields ($X$) to the posterior distributions of cosmological parameters ($\theta$), predicting both the mean and variance. The networks are trained on fields from the CAMELS-TNG suite and evaluated on CAMELS-SIMBA to test robustness against baryonic feedback models.</li>
+                                <li><strong>Attribution Mapping:</strong> Post-training, interpretability algorithms, including Saliency Maps, Integrated Gradients, and GradientSHAP, are applied to quantify the contribution of individual pixels to the model's inference. Integrated Gradients was selected as the primary method due to its adherence to axioms like sensitivity and implementation invariance.</li>
+                                <li><strong>Information Cutting:</strong> The robustness of the model is tested by systematically removing information via Fourier scale cuts ($k_{max}$) and density threshold cuts ($\rho_{min}, \rho_{max}$). This involves retraining the networks on modified fields where certain scales or density regimes are filtered out to assess information content.</li>
                             </ul>
 
                             <h3>Key Mathematical Framework</h3>
                             <p>
                                 The neural network predicts the mean ($\mu_i$) and variance ($\sigma_i^2$) of the marginal posterior for the $i$-th parameter:
                             </p>
-                            
+
                             $$ \mu_{i}(X)=\int_{\theta_{i}}p(\theta_{i}|X)\theta_{i}d\theta_{i} $$
                             $$ \sigma_{i}^{2}(X)=\int_{\theta_{i}}p(\theta_{i}|X)(\theta_{i}-\mu_{i})^{2}d\theta_{i} $$
 
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/cosmo-cnn-arch.png" alt="Visualization of CNN architecture" style="max-width: 80%; height: auto;">
+                                <figcaption>Fig 1. Visualization of CNN architecture.</figcaption>
+                            </figure>
+
                             <p>
-                                To optimize these predictions, the model minimizes a custom loss function designed for moment matching:
+                                To optimize these predictions, the model minimizes a custom loss function designed for moment matching, assuming the posterior can be approximated by a Gaussian:
                             </p>
 
                             $$
@@ -356,12 +356,28 @@
 
                             $$ IG_{i}(x)=(x_{i}-x_{i}^{\prime})\int_{0}^{1}\frac{\partial f(x^{\prime}+\alpha(x-x^{\prime}))}{\partial x_{i}}d\alpha $$
 
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/cnn_interpret.png" alt="Visualization of Cosmic Web Attribution" style="max-width: 80%; height: auto;">
+                                <figcaption>Fig 2. Visualization of cosmic web attribution for neural network interpretability.</figcaption>
+                            </figure>
+
                             <h3>Key Results & Insights</h3>
                             <ul>
                                 <li><strong>Morphological Focus:</strong> Attribution maps reveal that CNNs extract cosmological information from both high-density regions (halos) and low-density regions (voids). While overdense regions provide the most "information per pixel," underdense regions contribute significantly due to their large spatial extent and coherent features.</li>
                                 <li><strong>Robustness to Scale Cuts:</strong> The model demonstrates remarkable robustness to Fourier scale cuts. There is negligible degradation in cosmological constraining power even after removing small scales (cutting at $k_{max} \sim 20~h/Mpc$), suggesting the network can marginalize over uncertain baryonic effects that dominate small scales.</li>
-                                <li><strong>Baryonic Independence:</strong> Experiments comparing full hydrodynamic simulations to gravity-only (N-body) simulations yielded similar results for $\Omega_m$, implying the neural network effectively learns the underlying dark matter morphology regardless of baryonic feedback mechanisms.</li>
+                                
+                                <figure style="text-align: center; margin: 20px 0;">
+                                    <img src="images/research/kmax_vis.png" alt="Visualization of kmax cuts" style="max-width: 80%; height: auto;">
+                                    <figcaption>Fig 3. Visualization of $\rm top-hat-k_{max}$ cuts</figcaption>
+                                </figure>
+                            
+                            <li><strong>Baryonic Independence:</strong> Experiments comparing full hydrodynamic simulations to gravity-only (N-body) simulations yielded similar results for $\Omega_m$, implying the neural network effectively learns the underlying dark matter morphology regardless of baryonic feedback mechanisms.</li>
                                 <li><strong>The Power of Voids:</strong> Density cut analysis showed that even when high-density halos are removed, the network retains significant accuracy by relying on the structures within voids and filaments.</li>
+                                <figure style="text-align: center; margin: 20px 0;">
+                                    <img src="images/research/rho_max_vis.png" alt="Visualization of rhomax cuts" style="max-width: 80%; height: auto;">
+                                    <figcaption>Fig 4. Visualization of $\rm \rho_{max}$ cuts</figcaption>
+                                </figure>
+                                <li><strong>Scale Cut Impact:</strong> Training models with a smoothing scale of $k_{max} = 1~h/Mpc$ resulted in a significant loss of constraining power for $\Omega_m$ and $\sigma_8$, indicating that information on scales smaller than $1~h/Mpc$ is critical for optimal parameter inference.</li>
                             </ul>
                         </div>
                     </article>
@@ -369,7 +385,7 @@
                     <article class="project-card">
                         <img class="project-image" src="images/research/gdf.png" alt="Project image">
                         <div class="project-meta">
-                            <h3 class="project-title">CNN as optimal estimator of information with Gaussian Density Fields</h3>
+                            <h3 class="project-title">CNN as an Optimal Estimator of Information with Gaussian Density Fields</h3>
                             <p class="project-subtitle">Exploring the potential of CNNs as optimal estimators of cosmological information from 2D field maps.</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-3-desc">Learn more</button>
@@ -499,6 +515,93 @@
 
                         </div>
                     </article>
+
+                    <article class="project-card">
+                        <img class="project-image" src="images/research/agn.png" alt="Project image">
+                        <div class="project-meta">
+                            <h3 class="project-title">Revisiting the Dichotomy of Active Galactic Nuclei powered Radio galaxies</h3>
+                            <p class="project-subtitle">Exploring the HERG-LERG and RL-RQ dichotomy of AGNs with accreting central SMBHs</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-3-desc">Learn more</button>
+                        <div class="project-full" hidden>
+
+                            <p><strong>Overview:</strong></p>
+                            <p>
+                                This project presents a comprehensive analysis of Active Galactic Nuclei (AGN) properties, focusing on the interplay between optical spectral classification, accretion efficiency, and radio jet production. By integrating data from radio (1.4 GHz) and optical (R-band, emission lines) surveys, the study characterizes the fundamental dichotomy between High-Excitation (HERG) and Low-Excitation (LERG) radio galaxies and explores how these classes map onto the fundamental plane of black hole activity. The analysis culminates in a rigorous classification of Radio Loud (RL) and Radio Quiet (RQ) sources using both core and total flux measurements.
+                            </p>
+
+
+                            <h3>Methodology & Mathematical Framework</h3>
+                            <p>
+                                The analysis pipeline is structured into three sequential modules, each building upon the physical properties derived in the previous steps:
+                            </p>
+
+                            <h4>1. HERG and LERG Dichotomy</h4>
+                            <p>
+                                The first stage classifies AGN based on the ionization state of their narrow-line regions. Sources are divided into High-Excitation Radio Galaxies (HERGs) and Low-Excitation Radio Galaxies (LERGs) using an <strong>Excitation Index (EI)</strong> derived from key optical emission line ratios (e.g., [OIII]/H&beta;, [NII]/H&alpha;).
+                            </p>
+                            <ul>
+                                <li><strong>Classification Criterion:</strong> Sources with \( EI > 0.95 \) are classified as HERGs (indicating radiatively efficient accretion), while those below are LERGs (indicating radiatively inefficient, advection-dominated flows).</li>
+                                <li><strong>Property Analysis:</strong> The study correlates this classification with physical host galaxy properties, including the \( D_n(4000) \) break (stellar age proxy), concentration index \( R_{90}/R_{50} \), and black hole mass \( M_{BH} \).</li>
+                            </ul>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/herg-lerg.png" alt="classification of HERGs and LERGs" style="width: 100%; height: auto;">
+                                <figcaption>Fig 1. Binned scatter plot classification of HERGs and LERGs based on central $D_n(4000)$, SMBH mass as a function of the total flux.</figcaption>
+                            </figure>
+
+                            <h4>2. Eddington Scaled Accretion Rate</h4>
+                            <p>
+                                To understand the physical driver behind the HERG/LERG dichotomy, the project calculates the <strong>Eddington-scaled accretion rate</strong> (\( \lambda \)). This metric quantifies the accretion efficiency by comparing the total bolometric luminosity to the theoretical Eddington limit.
+                            </p>
+                            <p>
+                                The total energy output is modeled as the sum of radiative (\( L_{rad} \)) and mechanical (\( L_{mech} \)) components:
+                            </p>
+
+                            $$ L_{rad} = 3500 \times L_{[\text{OIII}]} $$
+                            $$ L_{mech} = 7.3 \times 10^{36} \times \left( \frac{L_{1.4\text{GHz}}}{10^{24} \text{ W Hz}^{-1}} \right)^{0.7} \text{ [erg s}^{-1}\text{]} $$
+
+                            <p>
+                                The dimensionless accretion rate is then defined as:
+                            </p>
+
+                            $$ \lambda = \frac{L_{bol}}{L_{Edd}} = \frac{L_{rad} + L_{mech}}{1.26 \times 10^{38} (M_{BH}/M_{\odot})} $$
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/agn_accretion.png" alt="classification of HERGs and LERGs - lambda" style="max-width: 100%; height: auto;">
+                                <figcaption>Fig 2. Classification of HERGs and LERGs based on Eddington-scaled accretion rate.</figcaption>
+                            </figure>
+
+
+                            <h4>3. Radio Loud (RL) and Radio Quiet (RQ) Classification</h4>
+                            <p>
+                                The final phase categorizes sources based on their radio-to-optical flux ratio. This analysis was performed twice to assess the impact of resolution effects: once using <strong>Total Radio Flux</strong> and again using <strong>Core Radio Flux</strong>.
+                            </p>
+                            <p>
+                                The radio loudness parameter \( R \) is calculated in logarithmic space:
+                            </p>
+
+                            $$ R = \log\left( \frac{F_{1.4\text{GHz}}}{F_{R\text{-band}}} \right) $$
+
+                            <p>
+                                A threshold of \( \log(R) > 1 \) is utilized to define Radio Loud galaxies, distinguishing jet-dominated systems from those where radio emission may be dominated by star formation.
+                            </p>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/radio-loud-quiet.png" alt="classification of RL and RQ" style="width: 100%; height: auto;">
+                                <figcaption>Fig 3. Classification of Radio Loud and Radio Quiet galaxies based on radio loudness parameter \( R \).</figcaption>
+                            </figure>
+
+
+                            <h3>Key Results & Insights</h3>
+                            <ul>
+                                <li><strong>Accretion Modes:</strong> The accretion rate analysis confirms a physical distinction between the classes. HERGs typically exhibit high excitation rates (\( \log \lambda \gtrsim -2 \)) consistent with standard thin accretion disks, while LERGs populate the low-accretion regime (\( \log \lambda \lesssim -2 \)), powered by advection-dominated accretion flows (ADAFs).</li>
+                                <li><strong>Energetic Output:</strong> The inclusion of \( L_{mech} \) in the bolometric luminosity calculation highlights that for many LERGs, the primary energy output is kinetic (jets) rather than radiative, a crucial correction often missed in optical-only studies.</li>
+                                <li><strong>Morphological Connections:</strong> The RL/RQ classification reveals that radio loudness is not strictly binary but forms a continuous distribution. However, using core flux provides a sharper distinction for jet-dominated AGN compared to total flux, which can be contaminated by extended lobe emissions.</li>
+                            </ul>
+                        </div>
+                    </article>
+
 
                     <article class="project-card">
                         <img class="project-image" src="images/research/yso.png" alt="Project image">

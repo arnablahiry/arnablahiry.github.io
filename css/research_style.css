@@ -734,4 +734,47 @@ body.light-mode #projects-grid .project-toggle{
     .project-clone .project-full figure img{ height: auto !important; display: block !important; object-fit: contain !important; }
 }
 
+/* Research: expanded/clone view image theme handling
+   - Use PNGs (light-mode assets) as-is when `body.light-mode` is present.
+   - When the site is in dark mode (no `light-mode` class), apply a filter to
+     convert the light PNG into a dark-friendly variant. This keeps the image
+     sources as single PNG files while presenting them appropriately in both
+     themes. Use a selector specific to the cloned/expanded card so regular
+     thumbnail/inline images are unaffected. */
+.project-clone .project-full img{
+    filter: none !important;
+    transition: filter 220ms ease, opacity 160ms ease;
+}
+
+/* Dark mode: convert light PNGs to dark-ish appearance */
+body:not(.light-mode) .project-clone .project-full img{
+    /* Tuned to approximate a dark-mode look; adjust per-image if needed */
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+/* Light mode: ensure images render without the darkening filter */
+body.light-mode .project-clone .project-full img{
+    filter: none !important;
+}
+
+/* Meme image theme handling: allow you to provide a single light-mode PNG and
+   automatically convert it for dark-mode using a CSS filter. Scoped to the
+   research page meme image (`#meme-image` / `.timeline-hero-image`). */
+.research-meme .timeline-hero-image,
+#meme-image{
+    filter: none !important;
+    transition: filter 220ms ease, opacity 160ms ease;
+}
+
+body:not(.light-mode) .research-meme .timeline-hero-image,
+body:not(.light-mode) #meme-image{
+    /* Tuned to produce a dark-friendly visual; adjust if needed per image */
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+body.light-mode .research-meme .timeline-hero-image,
+body.light-mode #meme-image{
+    filter: none !important;
+}
+
 

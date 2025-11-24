@@ -104,6 +104,16 @@ body.light-mode .site-link,
   }
 }
 
+body.light-mode header::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.274); /* white overlay strength; tune as needed */
+
+    pointer-events: none;
+    z-index: 0;
+}
+
 /* Homepage-only: ensure audio controls are centered on phone in both themes.
    This is scoped to the homepage (this file) and applied only on small
    viewports so the vertical offset already set elsewhere remains unchanged. */
