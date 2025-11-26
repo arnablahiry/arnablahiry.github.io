@@ -280,6 +280,24 @@ body.light-mode nav#site-nav{
     color: #111111 !important;
 }
 
+/* Make header opaque in light mode on all pages except the homepage.
+   The homepage includes `body.no-theme-transition` so we use :not(.no-theme-transition)
+   to target non-home pages. This forces a solid white header with no blur so
+   the navigation reads as an opaque bar on content pages. */
+body.light-mode:not(.no-theme-transition) header,
+body.light-mode:not(.no-theme-transition) nav#site-nav{
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: #111111 !important;
+}
+
+/* Ensure any header pseudo-element used for subtle overlays is disabled on
+   non-home pages so the header remains fully opaque. */
+body.light-mode:not(.no-theme-transition) header::before{
+    background: transparent !important;
+}
+
 
 /* On desktop only, lift the light-mode header and add the subtle white
    overlay behind its children. Mobile keeps the site-wide mobile header
@@ -485,11 +503,27 @@ body.light-mode .contact-card .details-text .correct{
 
 /* Theme toggle in the nav should invert in light mode: slight dark overlay
    with black text, and a subtle dark-yellow hover to match the site accent. */
+/* Exact Research-style theme-toggle appearance in light mode
+   Copy the Research page's project-theme-toggle look and apply it to the
+   nav .theme-toggle so the header toggle matches across pages. This uses
+   high-specificity + !important to override per-page styles. */
 body.light-mode nav .theme-toggle{
     background: rgba(0,0,0,0.06) !important;
     color: #111111 !important;
-    border-color: rgba(0,0,0,0.08) !important;
+    border-color: rgba(0,0,0,0.06) !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    /* Make the toggle circular in light mode across all pages */
+    padding: 0 !important; /* use fixed width/height for a consistent circle */
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
 }
+/* Hover / focus state matches Research: subtle dark-yellow background and glow */
 body.light-mode nav .theme-toggle:hover,
 body.light-mode nav .theme-toggle:focus{
     background: rgba(160,138,65,0.12) !important; /* slight dark-yellow */

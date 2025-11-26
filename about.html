@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>About</title>
+  <link rel="stylesheet" href="css/utils.css">
+  <link rel="stylesheet" href="css/research_style.css">
+  <link rel="stylesheet" href="css/about_style.css">
+  <link rel="stylesheet" href="css/light_mode.css">
+  <link rel="stylesheet" href="css/research_light_mode.css">
+</head>
+<body class="page-about">
+
+<header>
+  <div class="logo-container">
+    <a href="index.html" aria-label="Home">
+      <img src="images/logo.png" alt="Logo" class="logo light-img">
+    </a>
+  </div>
+  <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
+    <span class="bar bar1"></span>
+    <span class="bar bar2"></span>
+    <span class="bar bar3"></span>
+  </button>
+  <nav id="site-nav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="timeline.html">Timeline</a>
+    <a href="research.html">Research</a>
+    <a href="software.html">Software</a>
+    <a href="cv.html">CV</a>
+    <a href="publications.html">Publications</a>
+    <a href="contact.html">Contact</a>
+    <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+  </nav>
+</header>
+
+<main class="page-wrapper">
+  <section class="about-hero">
+    <div class="about-collage" role="img" aria-label="Collage of photos">
+      <img src="images/about/photo1.png" alt="Photo 1" loading="lazy" data-year="">
+      <img src="images/about/photo2.png" alt="Photo 2" loading="lazy" data-year="">
+      <img src="images/about/photo3.png" alt="Photo 3" loading="lazy" data-year="">
+      <img src="images/about/photo4.png" alt="Photo 4" loading="lazy" data-year="">
+      <img src="images/about/photo5.png" alt="Photo 5" loading="lazy" data-year="">
+      <img src="images/about/photo6.png" alt="Photo 6" loading="lazy" data-year="">
+      <img src="images/about/photo7.png" alt="Photo 7" loading="lazy" data-year="">
+      <img src="images/about/photo8.png" alt="Photo 8" loading="lazy" data-year="">
+    </div>
+    <!-- Static timeline bar aligned to the collage above. The JS below will
+         populate year labels from the `data-year` attribute on each image if set. -->
+    <div class="about-timeline" aria-hidden="false">
+      <div class="timeline-line" aria-hidden="true"></div>
+      <!-- markers: left positions set to the center of each of 8 grid columns -->
+      <div class="timeline-marker" style="left:6.25%">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-year" aria-hidden="false">2005</div>
+        <div class="timeline-tooltip" role="note" aria-hidden="true">Since everyone asks - this T-shirt is where my love for Spider-Man comes from, I blame my Mom.</div>
+      </div>
+      <div class="timeline-marker" style="left:18.75%">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-year" aria-hidden="false">2012</div>
+        <div class="timeline-tooltip" role="note" aria-hidden="true">This picture exists purely so that my sister can call me a hypocrite for eating mutton.</div>
+      </div>
+      <div class="timeline-marker" style="left:31.25%">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-year" aria-hidden="false">2018</div>
+        <div class="timeline-tooltip" role="note" aria-hidden="true">First time living away form my hometown, and getting bit by the travel bug for the first time as well ;)</div>
+      </div>
+      <div class="timeline-marker" style="left:43.75%">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-year" aria-hidden="false">2021</div>
+        <div class="timeline-tooltip" role="note" aria-hidden="true">Exploring other options in case this science thing doesn't pan out.</div>
+      </div>
+      <div class="timeline-marker" style="left:56.25%">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-year" aria-hidden="false">2023</div>
+        <div class="timeline-tooltip" role="note" aria-hidden="true">First time living and travelling abroad: Still hovering between continuing to look prepubescent or to grow a beard.</div>
+      </div>
+      <!-- Combined marker for photo6 & photo7: positioned midway between the two images -->
+      <div class="timeline-marker" style="left:75%">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-year" aria-hidden="false">2024</div>
+        <!-- Combined marker: two separate tooltips, one for each photo (6 and 7). -->
+        <div class="timeline-tooltip" role="note" aria-hidden="true">Two photos for 2024 as it had been the most transformative year - Decided NOT to look prepubescent anymore, and travelled a lot, case in point: one of my deam destinations - Meteora, Greece</div>
+        <div class="timeline-tooltip" role="note" aria-hidden="true">First experience of Cretan summer - so many things to do on this island, and the colour of the sea drives me insane even after 2 years.</div>
+      </div>
+      <!-- final marker (photo 8) -->
+      <div class="timeline-marker" style="left:93.75%">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-year" aria-hidden="false">2025</div>
+        <div class="timeline-tooltip" role="note" aria-hidden="true">Checking things off my bucket list - the top of the Eiffel Tower ;)</div>
+      </div>
+    </div>
+    <div class="container">
+      <h3 class="about-heading">About Me</h3>
+      <div class="about-text">
+  <p> I am a doctoral researcher working at the intersection of astrophysics and machine learning. I am currently based at <strong><a class="forth-link" href="https://www.forth.gr/" target="_blank" rel="noopener">Foundation for Research and Technology - Hellas (FORTH)</a></strong> : Institutes of <strong><a class="forth-link" href="https://www.ics.forth.gr/" target="_blank" rel="noopener">Computer Science</a></strong> and <strong><a class="forth-link" href="https://www.ia.forth.gr/" target="_blank" rel="noopener">Astrophysics</a></strong> in Crete, Greece, with a strong collaboration with the <strong><a class="forth-link" href="https://www.cosmostat.org/" target="_blank" rel="noopener">CosmoStat Laboratory</a></strong> in the Department of Astrophysics at <strong><a class="forth-link" href="https://www.cea.fr/english" target="_blank" rel="noopener">CEA Paris-Saclay</a></strong>. My work and topics of interest are preimarily:
+            <ul>
+                <li>High-redshift galaxy formation and evolution</li>
+                <li>Large-scale structures of the Universe and cosmology</li>
+                <li>Machine learning applications in astrophysics and cosmology</li>
+                <li>Signal processing in multi-modal data</li>
+                <li>Reproducible research and scientific software development</li>
+            </ul>
+
+            Apart from Astrophysics, I am curious about data science and AI/ML approaches to different fields of science and real-world problem solving. 
+            <br>
+            <br>
+            When I am not immersed in research or coding, I enjoy traveling, photography, and exploring new cultures. I believe that a well-rounded life outside of academia enriches my perspective and creativity in my scientific endeavours. Some more 'lore' about me:
+
+            <br>
+            <br>
+
+            <!-- mini banner for Kolkata: three equal-width photos, spans container width -->
+            <div class="about-mini-banner" aria-hidden="true">
+              <img src="images/about/kolkata1.png" alt="Kolkata 1" loading="lazy">
+              <img src="images/about/kolkata2.png" alt="Kolkata 2" loading="lazy">
+              <img src="images/about/kolkata3.png" alt="Kolkata 3" loading="lazy">
+            </div>
+
+            I come from the eastern part of India - <strong><a class="forth-link" href="https://en.wikipedia.org/wiki/Kolkata" target="_blank" rel="noopener">Kolkata, West Bengal</a></strong> - a city and a state famous for mouth watering sweets, street food, arts, literature and culture. Needless to say, I have had my fair share of indulgence in the first of these so much so that my local sweet vendor knows that he is about ot make a great profit every time I return home.
+            
+            <br>
+            <br>
+
+            <!-- mini banner for Tirupati: reuse photos for now -->
+            <div class="about-mini-banner" aria-hidden="true">
+              <img src="images/about/tpt.png" alt="Tirupati 1" loading="lazy">
+              <img src="images/about/tpt2.png" alt="Tirupati 2" loading="lazy">
+              <img src="images/about/tpt3.png" alt="Tirupati 3" loading="lazy">
+            </div>
+
+            I moved to <strong><a class="forth-link" href="https://en.wikipedia.org/wiki/Tirupati" target="_blank" rel="noopener">Tirupati, Andhra Pradesh, India</a></strong> - a state famous for extemely spicy food - for an integrated Bachelor of Science - Master of Science (BS-MS) dual degree programme at the <strong><a class="forth-link" href="https://www.iisertirupati.ac.in/" target="_blank" rel="noopener">Indian Institute of Science Education and Research (IISER) Tirupati</a></strong>. I spent 5 amazing years there learning physics, doing research, and making lifelong friends - or that is what you would think...I mean the physics research and friends part is definitely true, but 5 was more like 3 because COVID struck the world right in the middle of the peak years of my undergraduate life haha. Nevertheless, I completed my degree within the stipulated timeframe and graduated with both BS and MS degrees in the summer of 2023.
+
+            <br>
+            <br>
+
+            <!-- mini banner for Greece: three equal-width photos, reuse photos for now -->
+            <div class="about-mini-banner" aria-hidden="true">
+              <img src="images/about/heraklion1.webp" alt="Greece 1" loading="lazy">
+              <img src="images/about/heraklion2.jpg" alt="Greece 2" loading="lazy">
+              <img src="images/about/heraklion3.webp" alt="Greece 3" loading="lazy">
+            </div>
+
+
+            I was fortunate to be selected for a fully funded PhD position and moved to <strong><a class="forth-link" href="https://en.wikipedia.org/wiki/Heraklion" target="_blank" rel="noopener">Heraklion, Crete, Greece</a></strong> - also well known in Europe for fantastic (and healthy) food, for the <strong><a class="forth-link" href="https://spl.ics.forth.gr/titan/" target="_blank" rel="noopener">TITAN Project</a></strong> at FORTH in late 2023. Moving to a new country and adapting to a different culture has been an enriching experience, and I have been fortunate enough to travel to several beautiful places in Europe since then, both pofessionally for conferences, as well as in a personal capacity. I also collaborate with researchers at CEA Paris-Saclay, France, allowing me to explore and live in beautiful Paris.
+
+            <br>
+            <br>
+            In the banner at the top of the page, you can see my evolution from a shy, pasty kid obsessed with Spider-Man, to a reasonably well-adjusted adult, with a reasonable good tan, still reasonably into Spider-Man. The timeline markers correspond to some such significant years and events in my life, each with its own story and memory attached. Hover over the dots/images to get a glimpse into those moments!
+
+            <br>
+            <br>
+            And lastly, since it is evident that I am a huge gastronome as I have been introducing places on the basis of food, it also stands to reason that I love cooking as well. So if you ever visit me, be prepared to be treated to some delicious home-cooked meals (with a fusion twist of course) ! <strong>Below are few of the dishes I have cooked (and remembered to take pictures of)</strong> before inevitably crying at the thought of washing so many utensils. Thank you for reading this far, enjoy the website, you may find more than what you expect here ;)
+      </div>
+      <!-- Photo grid: 5 columns x 2 rows, square photos, same container width as mini-banners -->
+      <div class="about-photo-grid" aria-hidden="true">
+        <img src="images/about/food/food1.jpeg" alt="Food 1" loading="lazy">
+        <img src="images/about/food/food2.jpeg" alt="Food 2" loading="lazy">
+        <img src="images/about/food/food3.jpeg" alt="Food 3" loading="lazy">
+        <img src="images/about/food/food4.jpeg" alt="Food 4" loading="lazy">
+        <img src="images/about/food/food5.jpeg" alt="Food 5" loading="lazy">
+        <img src="images/about/food/food6.jpeg" alt="Food 6" loading="lazy">
+        <img src="images/about/food/food7.jpeg" alt="Food 7" loading="lazy">
+        <img src="images/about/food/food8.jpeg" alt="Food 8" loading="lazy">
+        <img src="images/about/food/food9.jpeg" alt="Food 9" loading="lazy">
+        <img src="images/about/food/food10.jpeg" alt="Food 10" loading="lazy">
+      </div>
+        ~ Arnab
+      </p>
+
+    </div>
+  </section>
+</main>
+    <footer>
+        <p>&copy; 2025 Arnab Lahiry</p>
+    </footer>
+
+    <script src="scripts/nav-toggle.js"></script>
+    <script src="scripts/theme-toggle.js"></script>
+    <script>
+    // Photo hover/focus -> highlight marker + dim rest of page
+    (function(){
+      try{
+        const imgs = Array.from(document.querySelectorAll('.about-collage img'));
+        const markers = Array.from(document.querySelectorAll('.about-timeline .timeline-marker'));
+
+        // Compute gradient-matched colors for each marker and set CSS vars.
+        try{
+          const start = { r: 238, g: 9, b: 121 }; // #ee0979
+          const end = { r: 255, g: 215, b: 0 };   // gold (#ffd700)
+          const lineLeft = 6.25;  // percent where line starts
+          const lineRight = 93.75; // percent where line ends
+          const span = lineRight - lineLeft;
+          markers.forEach(marker => {
+            const leftStr = (marker.style.left || '').trim();
+            const leftPct = leftStr.endsWith('%') ? parseFloat(leftStr) : NaN;
+            const pos = Number.isFinite(leftPct) ? leftPct : 0;
+            let t = (pos - lineLeft) / span;
+            if(t < 0) t = 0; if(t > 1) t = 1;
+            const r = Math.round(start.r + (end.r - start.r) * t);
+            const g = Math.round(start.g + (end.g - start.g) * t);
+            const b = Math.round(start.b + (end.b - start.b) * t);
+            const rgb = `rgb(${r}, ${g}, ${b})`;
+            const glow = `rgba(${r}, ${g}, ${b}, 0.9)`;
+            marker.style.setProperty('--marker-color', rgb);
+            marker.style.setProperty('--marker-glow', glow);
+          });
+        }catch(err){ console.warn('marker color compute error', err); }
+
+        // Position markers so they sit centered under their corresponding
+        // image(s). This ensures pixel-perfect alignment even when the
+        // collage has horizontal padding or the viewport resizes.
+        (function positionMarkersSetup(){
+          const timeline = document.querySelector('.about-timeline');
+          if(!timeline) return;
+
+          function markerMap(mIdx){
+            if(mIdx <= 4) return [mIdx];
+            if(mIdx === 5) return [5,6];
+            return [7];
+          }
+
+          function computeAndPlace(){
+            const tRect = timeline.getBoundingClientRect();
+            const timelineLine = timeline.querySelector('.timeline-line');
+            let minPct = 100, maxPct = 0;
+            markers.forEach((marker, mIdx) => {
+              const mapped = markerMap(mIdx);
+              // average center x of mapped images
+              const centers = mapped.map(i => {
+                const el = imgs[i];
+                if(!el) return null;
+                const r = el.getBoundingClientRect();
+                return r.left + r.width / 2;
+              }).filter(Boolean);
+              if(centers.length === 0) return;
+              const avg = centers.reduce((a,b) => a + b, 0) / centers.length;
+              const leftPx = avg - tRect.left;
+              const pct = (leftPx / tRect.width) * 100;
+              marker.style.left = pct + '%';
+              // Set tooltip width/position. Support multiple tooltips inside a
+              // single (combined) marker: we position each tooltip so it is
+              // centered under its corresponding image even though the dot
+              // (marker) itself remains a single element.
+              const markerRect = marker.getBoundingClientRect();
+              const tooltips = Array.from(marker.querySelectorAll('.timeline-tooltip'));
+              if(tooltips.length){
+                // compute widths per mapped image (use individual widths when
+                // multiple, otherwise fall back to avg)
+                const widths = mapped.map(i => {
+                  const el = imgs[i]; if(!el) return null; return el.getBoundingClientRect().width;
+                }).filter(Boolean);
+
+                // If there's only one tooltip (most markers), center it on the
+                // marker as before and size it to the avg mapped width.
+                if(tooltips.length === 1){
+                  if(widths.length){
+                    const avgW = widths.reduce((a,b) => a + b, 0) / widths.length;
+                    const w = Math.max(80, Math.round(avgW * 0.92));
+                    tooltips[0].style.width = w + 'px';
+                  }
+                  // keep centered on the marker
+                  tooltips[0].style.left = '50%';
+                  tooltips[0].style.transform = 'translateX(-50%) scale(0.98)';
+                } else {
+                  // Multiple tooltips: align each tooltip under its mapped image
+                  tooltips.forEach((tt, j) => {
+                    const imgIdx = mapped[j];
+                    const el = imgs[imgIdx];
+                    if(!el) return;
+                    const r = el.getBoundingClientRect();
+                    const centerAbs = r.left + r.width / 2; // page coords
+                    // left relative to the marker's left edge (page coords)
+                    const leftRel = centerAbs - markerRect.left;
+                    // apply width tuned to the specific image
+                    const w = Math.max(72, Math.round(r.width * 0.92));
+                    tt.style.width = w + 'px';
+                    // position tooltip so its center sits at leftRel within the
+                    // marker's coordinate space. Keep translateX(-50%) to center.
+                    tt.style.left = leftRel + 'px';
+                    tt.style.transform = 'translateX(-50%) scale(0.98)';
+                  });
+                }
+              }
+              if(pct < minPct) minPct = pct;
+              if(pct > maxPct) maxPct = pct;
+            });
+            // If we found valid mins/maxes, set the timeline line to span them.
+            if(timelineLine && minPct <= maxPct){
+              // left is minPct% from left of timeline, right should be (100 - maxPct)%
+              timelineLine.style.left = minPct + '%';
+              timelineLine.style.right = (100 - maxPct) + '%';
+            }
+          }
+
+          // debounce helper
+          let resizeHandle = null;
+          function delayedCompute(){
+            if(resizeHandle) clearTimeout(resizeHandle);
+            resizeHandle = setTimeout(() => { computeAndPlace(); resizeHandle = null; }, 80);
+          }
+
+          // run now and on next tick (images may still load)
+          computeAndPlace();
+          setTimeout(computeAndPlace, 250);
+
+          window.addEventListener('resize', delayedCompute);
+          window.addEventListener('orientationchange', delayedCompute);
+        })();
+
+        function imgToMarkerIndex(idx){
+          if(idx <= 4) return idx;
+          if(idx === 7) return 6;
+          return 5; // idx 5 or 6 -> combined marker
+        }
+
+        imgs.forEach((img, idx) => {
+          const mIdx = imgToMarkerIndex(idx);
+          const marker = markers[mIdx];
+          if(!marker) return;
+
+          // For UX: photos 6 and 7 (indexes 5 and 6) are treated as a group.
+          // Hovering/focusing one should also highlight the other.
+          const isGrouped = (idx === 5 || idx === 6);
+          const groupIndices = isGrouped ? [5,6] : [idx];
+
+          function addFocusToGroup(){
+            document.body.classList.add('photo-focused');
+            groupIndices.forEach(i => {
+              const el = imgs[i];
+              if(el) el.classList.add('focused');
+            });
+            if(marker) marker.classList.add('active');
+          }
+
+          function removeFocusFromGroup(){
+            // Only remove focus if none of the grouped images are hovered or focused
+            const anyHoveredOrFocused = groupIndices.some(i => {
+              const el = imgs[i];
+              if(!el) return false;
+              // :hover reflects pointer hover; document.activeElement handles keyboard focus
+              return el.matches(':hover') || document.activeElement === el;
+            });
+            if(anyHoveredOrFocused) return; // keep focus if one of group is still active
+
+            document.body.classList.remove('photo-focused');
+            groupIndices.forEach(i => {
+              const el = imgs[i];
+              if(el) el.classList.remove('focused');
+            });
+            if(marker) marker.classList.remove('active');
+          }
+
+          img.addEventListener('mouseenter', addFocusToGroup);
+          img.addEventListener('mouseleave', removeFocusFromGroup);
+          img.addEventListener('focus', addFocusToGroup);
+          img.addEventListener('blur', removeFocusFromGroup);
+
+          // marker hover handling is attached once per marker below to keep
+          // a single source of truth for marker -> image mapping.
+        });
+        
+        // Attach hover/focus handlers to markers so hovering a marker also
+        // highlights the corresponding image(s). This is added once per
+        // marker to avoid duplicate listeners when multiple images map to
+        // the same combined marker.
+        markers.forEach((marker, mIdx) => {
+          // map marker index back to image indices: 0-4 -> [i], 5 -> [5,6], 6 -> [7]
+          const mapped = (function(){
+            if(mIdx <= 4) return [mIdx];
+            if(mIdx === 5) return [5,6];
+            return [7];
+          })();
+
+          function addFocusToMapped(){
+            document.body.classList.add('photo-focused');
+            mapped.forEach(i => { const el = imgs[i]; if(el) el.classList.add('focused'); });
+            marker.classList.add('active');
+          }
+
+          function removeFocusFromMapped(){
+            const anyHoveredOrFocused = mapped.some(i => {
+              const el = imgs[i]; if(!el) return false;
+              return el.matches(':hover') || document.activeElement === el;
+            });
+            if(anyHoveredOrFocused) return;
+            document.body.classList.remove('photo-focused');
+            mapped.forEach(i => { const el = imgs[i]; if(el) el.classList.remove('focused'); });
+            marker.classList.remove('active');
+          }
+
+          marker.addEventListener('mouseenter', addFocusToMapped);
+          marker.addEventListener('mouseleave', removeFocusFromMapped);
+          // Also allow keyboard focus: if marker receives focus (rare), treat it similarly.
+          marker.addEventListener('focus', addFocusToMapped);
+          marker.addEventListener('blur', removeFocusFromMapped);
+        });
+      }catch(e){ console.warn('timeline hover wiring error', e); }
+    })();
+    </script>
+</body>
+</html>

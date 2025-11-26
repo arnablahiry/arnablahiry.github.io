@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CV / Resumé</title>
+  <link rel="stylesheet" href="css/utils.css">
+  <link rel="stylesheet" href="css/cv_style.css">
+</head>
+<body class="page-cv">
+
+<header>
+    <div class="logo-container">
+    <a href="index.html" aria-label="Home">
+      <img src="images/logo.png" alt="Logo" class="logo light-img">
+    </a>
+  </div>
+    <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
+        <span class="bar bar1"></span>
+        <span class="bar bar2"></span>
+        <span class="bar bar3"></span>
+    </button>
+    <nav id="site-nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="research.html">Research</a>
+        <a href="software.html">Software</a>
+        <a href="cv.html">CV</a>
+        <a href="publications.html">Publications</a>
+        <a href="repositories.html">Repositories</a>
+        <a href="contact.html">Contact</a>
+        <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+    </nav>
+</header>
+
+<main class="page-wrapper">
+  <div class="section-timeline-heading">
+    <div class="container">
+      <div class="padding-vertical-xlarge">
+        <div class="timeline-main-heading-wrapper">
+          <div class="margin-bottom-medium">
+            <h2 class="intro-heading">CV / Resumé
+              <a class="cv-download-link" href="docs/cv_Arnab.pdf" target="_blank" rel="noopener noreferrer" title="Open CV (PDF) in a new tab" aria-label="Open CV as PDF in a new tab">
+                <img class="cv-download light-img" src="images/icons/pdf_download.png" alt="Open CV PDF in new tab">
+              </a>
+            </h2>
+          </div>
+          <!-- no subtitle as requested -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="cv-layout">
+      <aside class="cv-contents" aria-label="Contents">
+        <ul>
+          <li><a href="#education" data-target="education">Education</a></li>
+          <li><a href="#experience" data-target="experience">Work / Research Experience</a></li>
+          <li><a href="#skills" data-target="skills">Skills</a></li>
+          <li><a href="#conferences" data-target="conferences">Conferences / Workshops / Talks</a></li>
+          <li><a href="#publications" data-target="publications">Publications</a></li>
+          <li><a href="#languages" data-target="languages">Languages</a></li>
+        </ul>
+      </aside>
+
+      <div class="cv-main">
+
+        <section id="education" class="cv-section">
+          <div class="cv-subheading-wrap"><h3 class="cv-subheading">Education</h3></div>
+          <div class="projects-grid cols-2">
+        <article class="project-card">
+          <img class="project-image light-img" src="images/cv/uoc.png" alt="Institution 1">
+          <div class="project-meta">
+            <h4 class="project-title">Doctorate of Philosophy - Physics</h4>
+            <p class="project-subtitle">2023 - 2026 [Expected]</p>
+            <p>Joined the Department of Physics at UoC, in association with the Institutes of Astrophysics and Computer Science, FORTH in collaboration with CosmoStat Laboratory, CEA Paris-Saclay (see next section) on a collaborative research project on <strong>signal processing and analysis og high-z galaxy spectral datacubes using theory, simulations and observations</strong>.</p>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <img class="project-image light-img" src="images/cv/iiser.png" alt="Institution 2">
+          <div class="project-meta">
+            <h4 class="project-title">Integrated : Bachelor of Science (BS), Master of Science (MS) - Physics</h4>
+            <p class="project-subtitle">2018 - 2023</p>
+            <p>Studied BS courses in all scientific disciplines - Physics, Chemistry, Biology, Mathematics, Earth Sciences; <strong>Advanced MS courses in theoretical and experimental Physics, specialising in Astrophysics, Data Science and Machine Learning</strong></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+        <!-- Links to other pages for full experience lists (moved inside Experience so they inherit section text sizing) -->
+
+        <section id="experience" class="cv-section">
+          <div class="cv-subheading-wrap"><h3 class="cv-subheading">Work / Research Experience</h3></div>
+          <div class="projects-grid cols-4">
+        <article class="project-card">
+          <img class="project-image light-img" src="images/cv/forth.png" alt="Work 1">
+          <div class="project-meta"><h4 class="project-title">Doctoral Researcher</h4><p class="project-subtitle">2023 - Present</p><p>Collaborative work for my PhD dissertation as part of the European Union's HORIZON 2020 ERA Chair project - <strong>TITAN</strong>. <br><br>Supervised by <strong> Dr. Jean-Luc Starck</strong> (CEA | IA/ICS-FORTH), <strong>Dr. Tanio Diaz-Santos</strong> (IA-FORTH); Project Coordinator: <strong>Dr. Panagiotis Tsakalides</strong> (ICS-FORTH); Collaborator: <strong>Dr. Grigorios Tsagkatakis</strong> </p></div>
+        </article>
+        <article class="project-card">
+          <img class="project-image light-img" src="images/cv/cosmostat.png" alt="Work 2">
+          <div class="project-meta"><h4 class="project-title">Visiting Doctoral Student</h4><p class="project-subtitle">2024, 2025</p><p>Scientific collaborator of the CosmoStat Laboratory (LCS) Located in Irfu's Department of Astrophysics (DaP) at CEA Paris-Saclay, France.<br><br>Annual secondmends conducted at LCS under the direct supervision of <strong>Dr. Jean-Luc Starck</strong>, Laboratory Head.</p></div>
+        </article>
+        <article class="project-card">
+          <img class="project-image light-img" src="images/cv/flatiron.png" alt="Work 3">
+          <div class="project-meta"><h4 class="project-title">Master Research Intern</h4><p class="project-subtitle">2022 - 2023</p><p>Worked on my Master's Thesis on machine learning-based cosmological interpretability of the large-scale structures of the Universe, supervised by <strong>Dr. Francisco Villaescusa-Navarro</strong>, CCA, FI | Princeton University, and collaborated with <strong>Dr. Adrian Bayer </strong>, CCA, FI | Princeton University. More details about complete research in the 'Scientific Research' and 'Publications' pages.</p></div>
+        </article>
+        <article class="project-card">
+          <img class="project-image light-img" src="images/cv/jagellonian.png" alt="Work 4">
+          <div class="project-meta"><h4 class="project-title">Summer Research Intern</h4><p class="project-subtitle">2021</p><p>Conducted a three-month summer research project under the supervision of <strong>Dr. Arti Goyal</strong>, Jagellonian University, on a project investigating the high-excitation and low-excitation, and the radio-loud and radio-quiet AGN dichotomy present in the largest manually compiled sample set of radio galaxies: ROGUE-I</p></div>
+        </article>
+        <article class="project-card">
+          <img class="project-image light-img" src="images/cv/IISER_2.png" alt="Work 5">
+          <div class="project-meta"><h4 class="project-title">Semester and Summer Research Intern</h4><p class="project-subtitle">2020, 2021</p><p>Worked on multiple semester-long and summer research projects on computational astrophysics: Worked on a reading project on galactic dynamics under the supervision of <strong>Dr. Arunima Banerjee</strong>, IISER Tirupati; and worked on the classification of Class-I and Class-II young stellar objects, under the supervision of <strong>Dr. Jessy Jose</strong>.</p></div>
+        </article>
+      </div>
+      
+      <!-- reinsert cross-links here so they inherit the same sizing as other in-section links -->
+      <div class="project-meta" style="padding-top:8px; padding-bottom:0;">
+        <p style="margin:6px 0 0 0;"><a class="cv-link" href="timeline.html">View on 'Career Timeline' Page</a></p>
+        <p style="margin:6px 0 0 0;"><a class="cv-link" href="research.html">View on 'Scientific Research' Page</a></p>
+      </div>
+    </section>
+
+        <section id="skills" class="cv-section">
+          <div class="cv-subheading-wrap"><h3 class="cv-subheading">Skills</h3></div>
+          <div class="projects-grid cols-4">
+            <!-- Card 1: Programming & Systems -->
+            <article class="project-card">
+              <div class="project-meta">
+                <h4 class="project-title">Programming & Systems</h4>
+                <p class="project-subtitle">Languages & operating systems</p>
+                <div class="skill-badges">
+                  <span class="skill-chip">Python (Primary)</span>
+                  <span class="skill-chip">C / C++</span>
+                  <span class="skill-chip">FORTRAN</span>
+                  <span class="skill-chip">MATLAB</span>
+                  <span class="skill-chip">Linux (Ubuntu, Debian)</span>
+                  <span class="skill-chip">macOS</span>
+                  <span class="skill-chip">iOS / iPadOS</span>
+                  <span class="skill-chip">Android</span>
+                  <span class="skill-chip">Windows</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 2: Machine Learning / AI -->
+            <article class="project-card">
+              <div class="project-meta">
+                <h4 class="project-title">Machine Learning / AI</h4>
+                <p class="project-subtitle">Frameworks, libraries & tooling</p>
+                <div class="skill-badges">
+                  <span class="skill-chip">PyTorch</span>
+                  <span class="skill-chip">PyG</span>
+                  <span class="skill-chip">Lightning</span>
+                  <span class="skill-chip">TensorFlow</span>
+                  <span class="skill-chip">Keras</span>
+                  <span class="skill-chip">Scikit-Learn</span>
+                  <span class="skill-chip">vLLM</span>
+                  <span class="skill-chip">Transformers</span>
+                  <span class="skill-chip">Jax</span>
+                  <span class="skill-chip">Optuna</span>
+                  <span class="skill-chip">Captum</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 3: Numerical & Statistical Techniques -->
+            <article class="project-card">
+              <div class="project-meta">
+                <h4 class="project-title">Numerical Computing & Visualisation</h4>
+                <p class="project-subtitle">Libraries and formatting tools</p>
+                <div class="skill-badges">
+                  <span class="skill-chip">NumPy</span>
+                  <span class="skill-chip">Astropy</span>
+                  <span class="skill-chip">SpectralCube</span>
+                  <span class="skill-chip">SciPy</span>
+                  <span class="skill-chip">h5py</span>
+                  <span class="skill-chip">Pandas</span>
+                  <span class="skill-chip">SymPy</span>
+                  <span class="skill-chip">Cython</span>
+                  <span class="skill-chip">PyWavelets</span>
+                  <span class="skill-chip">Matplotlib</span>
+                  <span class="skill-chip">Seaborn</span>
+                  <span class="skill-chip">Corner</span>
+                  <span class="skill-chip">Plotly</span>
+                  <span class="skill-chip">PyVista</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 4: Visualisation & Analysis -->
+            <article class="project-card">
+              <div class="project-meta">
+                <h4 class="project-title">Sccientific Techniques</h4>
+                <p class="project-subtitle">Statistical Methodologies</p>
+                <div class="skill-badges">
+                  <span class="skill-chip">Bayesian Inference</span>
+                  <span class="skill-chip">Bayesian Optimisation</span>
+                  <span class="skill-chip">Gaussian Processes</span>
+                  <span class="skill-chip">Time Series Analysis</span>
+                  <span class="skill-chip">Simulation-based Inference</span>
+                  
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 5: Data Engineering & Cloud -->
+            <article class="project-card">
+              <div class="project-meta">
+                <h4 class="project-title">Data Engineering & Cloud</h4>
+                <p class="project-subtitle">Storage, databases & deployment</p>
+                <div class="skill-badges">
+                  <span class="skill-chip">SQL</span>
+                  <span class="skill-chip">SQLite</span>
+                  <span class="skill-chip">MySQL</span>
+                  <span class="skill-chip">Docker</span>
+                  <span class="skill-chip">Kubernetes</span>
+                  <span class="skill-chip">AWS - EC2 / S3 / SageMaker</span>
+                  <span class="skill-chip">CUDA</span>
+
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 6: Collaboration, Tools & Web -->
+            <article class="project-card">
+              <div class="project-meta">
+                <h4 class="project-title">Collaboration, Tools & Web</h4>
+                <p class="project-subtitle">Version control, editors & utilities</p>
+                <div class="skill-badges">
+                  <span class="skill-chip">Git / GitHub / GitLab</span>
+                  <span class="skill-chip">Jupyter</span>
+                  <span class="skill-chip">VSCode</span>
+                  <span class="skill-chip">LaTeX</span>
+                  <span class="skill-chip">MS Office</span>
+                  <span class="skill-chip">HPC (SLURM)</span>
+                  <span class="skill-chip">HTML5</span>
+                  <span class="skill-chip">CSS3</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+                
+
+        <section id="conferences" class="cv-section">
+          <div class="cv-subheading-wrap"><h3 class="cv-subheading">Conferences / Workshops / Meetings / Talks</h3></div>
+          <div class="projects-grid cols-1">
+        <article class="project-card">
+          <div class="project-meta">
+            <ul class="cv-list">
+              <li><strong>MINOAS</strong> - <strong>M</strong>achine <strong>I</strong>ntelligence for i<strong>N</strong>verse imaging, <strong>O</strong>bservation <strong>A</strong>nalysis and <strong>S</strong>ensing Workshop, <span class="conf-location">Heraklion, Crete, Greece</span></li>
+                <ul>
+                  <li><italic>Contributed Poster Presentation</italic></li>
+                </ul>
+
+              <li><strong>Code/Astro</strong> Workshop, <span class="conf-location">Evanston, IL, USA</span></li>
+                <ul>
+                  <li><italic>Group Project - Contributed Demonstration</italic></li>
+                </ul>
+
+              <li><strong>Astrostatistics Summer School, Crete</strong> <span class="conf-location">Heraklion, Crete, Greece</span></li>
+                <ul>
+                  <li><italic>Volunteered as teaching assistant</italic></li>
+                </ul>
+
+              <li><strong>UniversAI Symposium</strong> - Exploring the Universe using Artificial Intelligence, <span class="conf-location">Athens, Greece</span></li>
+                <ul>
+                  <li><italic>Contributed Poster Presentation</italic></li>
+                </ul>
+
+              <li><strong>Deep CosmoStat Days</strong>, <span class="conf-location">Paris, France</span></li>
+                <ul>
+                  <li><italic>Contributed Talk</italic></li>
+                </ul>
+            
+              <li><strong>ML4ASTRO2</strong> - Machine Learning for Astrophysics: Second Edition, <span class="conf-location">Catania, Italy</span></li>
+                <ul>
+                  <li><italic>Contributed Flash Talk</italic></li>
+                </ul>
+
+              <li><strong>COSMO21</strong> - Statistical Challenges in 21st Century Cosmology, <span class="conf-location">Chania, Crete, Greece</span></li>
+                <ul>
+                  <li><italic>Contributed Poster Presentation</italic></li>
+                </ul>
+            </ul>
+            <p style="margin-top:10px;"><a class="cv-link" href="timeline.html">View on 'Career Timeline' Page</a></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+        <section id="publications" class="cv-section">
+          <div class="cv-subheading-wrap"><h3 class="cv-subheading">Publications</h3></div>
+          <div class="projects-grid cols-1">
+        <article class="project-card">
+          <div class="project-meta">
+            <h4 class="project-title">Peer-reviewed articles & preprints</h4>
+            <ul class="cv-list">
+              <li>
+                <em>Lahiry, A.; Díaz‑Santos, T.; Starck, J.‑L.; Roy, N. C.; Anglés‑Alcázar, D.; Tsagkatakis, G.; Tsakalides, P.</em> — <strong>"Deep and Sparse Denoising Benchmarks for Spectral Data Cubes of High‑z Galaxies: From Simulations to ALMA observations"</strong> &middot; Submitted to Astronomy & Astrophysics (2025)
+              </li>
+              <li>
+                <em>Lahiry, A.; Villaescusa‑Navarro, F.; Bayer, A. E.</em> — <strong>"Interpreting Cosmological Information from Neural Networks in the Hydrodynamic Universe"</strong> &middot; Published at the Astrophysical Journal (2025). <a class="cv-link" href="https://arxiv.org/abs/2504.17839" target="_blank" rel="noopener">arXiv:2504.17839</a> &middot; DOI: <a class="cv-link" href="https://iopscience.iop.org/article/10.3847/1538-4357/ae0b5a" target="_blank" rel="noopener">10.3847/1538-4357/ae0b5a</a>
+              </li>
+            </ul>
+            <p style="margin-top:10px;"><a class="cv-link" href="publications.html">View on "Publications" Page</a></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+        <section id="languages" class="cv-section">
+          <div class="cv-subheading-wrap"><h3 class="cv-subheading">Languages</h3></div>
+          <div class="lang-cards-grid">
+        <article class="project-card"><div class="project-meta"><h4 class="project-title">English</h4><div class="lang-proficiency"><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span></div></div></article>
+        <article class="project-card"><div class="project-meta"><h4 class="project-title">Bengali</h4><div class="lang-proficiency"><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span></div></div></article>
+        <article class="project-card"><div class="project-meta"><h4 class="project-title">Hindi</h4><div class="lang-proficiency"><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot full"></span></div></article>
+        <article class="project-card"><div class="project-meta"><h4 class="project-title">Greek</h4><div class="lang-proficiency"><span class="lang-dot full"></span><span class="lang-dot full"></span><span class="lang-dot"></span><span class="lang-dot"></span><span class="lang-dot"></span></div></div></article>
+      </div>
+          </div>
+        </section>
+
+      </div> <!-- .cv-main -->
+
+    </div> <!-- .cv-layout -->
+
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 Arnab Lahiry</p>
+</footer>
+
+<script src="scripts/nav-toggle.js"></script>
+<script src="scripts/theme-toggle.js"></script>
+<script>
+  (function(){
+    // Smooth scroll + scrollspy for CV contents
+    var links = Array.prototype.slice.call(document.querySelectorAll('.cv-contents a'));
+    var sections = links.map(function(l){ return document.getElementById(l.dataset.target); });
+    if (!links.length || !sections.length) return;
+
+    // click -> smooth scroll
+    links.forEach(function(a){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        var id = a.dataset.target;
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // update active state immediately
+        links.forEach(function(x){ x.classList.toggle('active', x === a); });
+      });
+    });
+
+    // Scrollspy: highlight the section currently near top of viewport
+    var ticking = false;
+    function onScroll(){
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        var topOffset = 140; // account for header
+        var current = null;
+        sections.forEach(function(s){
+          if (!s) return;
+          var r = s.getBoundingClientRect();
+          if (r.top - topOffset <= 20) { current = s; }
+        });
+        if (!current) current = sections[0];
+        links.forEach(function(a){
+          var id = a.dataset.target;
+          a.classList.toggle('active', current && current.id === id);
+        });
+        ticking = false;
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    // initialize
+    setTimeout(onScroll, 200);
+  })();
+</script>
+</body>
+</html>

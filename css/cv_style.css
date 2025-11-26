@@ -1,0 +1,901 @@
+/* CV page styles - based on research_style.css, narrowed and tuned for CV
+   This file intentionally duplicates the relevant parts of research_style.css
+   so the CV page has an isolated stylesheet that can be customized safely.
+*/
+
+/* Page container & spacing */
+.container{
+  width: 90vw;
+  max-width: 1360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CV layout: left contents column + main content area */
+.cv-layout{ display: flex; gap: 32px; align-items: flex-start; }
+.cv-contents{ width: 220px; position: sticky; top: 140px; align-self: flex-start; padding-right: 18px; }
+.cv-contents ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.cv-contents a{ color: rgba(255,255,255,0.86); text-decoration: none; font-weight: 700; padding: 6px 8px; border-radius: 6px; display: inline-block; }
+.cv-contents a:hover{ background: rgba(255,255,255,0.03); }
+.cv-contents a.active{ color: #feda4a; background: rgba(254,218,74,0.08); }
+body.light-mode .cv-contents a{ color: #222; }
+body.light-mode .cv-contents a.active{ color: #a67b00; background: rgba(166,123,0,0.08); }
+
+.cv-main{ flex: 1 1 0; max-width: 900px; }
+
+/* Increase left padding for narrower feel */
+body.page-cv .container{ padding-left: 96px; padding-right: 6vw; box-sizing: border-box; }
+
+/* Ensure anchored sections clear the fixed header when scrolled-to */
+.cv-section{ scroll-margin-top: 120px; }
+
+@media (max-width: 980px){
+  .cv-section{ scroll-margin-top: 88px; }
+}
+
+@media (max-width: 980px){
+  .cv-layout{ display: block; }
+  .cv-contents{ display: none; }
+  body.page-cv .container{ padding-left: 5vw; padding-right: 5vw; }
+  .cv-main{ max-width: none; }
+}
+
+/* Reduce gap between main heading and first subheading specifically for CV page */
+body.page-cv .section-timeline-heading .padding-vertical-xlarge{
+  padding-bottom: 8px; /* reduce large bottom padding used on Research page */
+  padding-top: 56px;   /* keep some top spacing for header */
+}
+
+/* Reduce margin around the intro heading on CV page */
+body.page-cv .timeline-main-heading-wrapper{ padding-right: 80px; }
+body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom: 6px; margin-top: 0; }
+
+/* Make subheading sit slightly higher so it lines up with contents top */
+.cv-subheading{ margin-top: 2px; margin-bottom: 8px; }
+
+/* Nudge the very first subheading slightly upward to better align with the contents' top */
+.cv-main section:first-of-type .cv-subheading {
+  margin-top: -1px;
+}
+
+/* Slightly reduce gap between contents top and first heading when not scrolled */
+.cv-contents{ top: 140px; }
+
+.padding-vertical-xlarge{
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+/* Heading wrapper and heading */
+.timeline-main-heading-wrapper{
+  color: white;
+  text-align: center;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  box-sizing: border-box;
+  padding-right: 112px;
+}
+
+.section-timeline-heading{ background-color: black; }
+
+h2.intro-heading{
+  font-size: 8vh;
+  background: -webkit-linear-gradient(to right, gold, #ee0979);
+  background: linear-gradient(to right, gold, #ee0979);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  white-space: nowrap;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Nudge the whole heading (text + download icon) slightly to the right */
+.timeline-main-heading-wrapper h2.intro-heading{
+  position: relative;
+  left: 40px; /* move right by 18px; reduce via media query on small screens */
+}
+
+@media (max-width: 768px){
+  .timeline-main-heading-wrapper h2.intro-heading{ left: 6px; }
+}
+
+/* CV download icon placed next to the main heading */
+.cv-download-link{ display: inline-block; margin-left: 10px; vertical-align: middle; position: relative; top: -10px; }
+.cv-download{ width: 60px; height: auto; display: inline-block; vertical-align: middle; opacity : 0.6; transition: opacity 680ms ease-in-out; }
+.cv-download:hover{ opacity: 0.8; }
+
+/* Ensure the download icon follows the same light-img inversion rules: show original in light mode */
+body.light-mode img.light-img.cv-download{ filter: none !important; }
+
+/* Subheading styling for CV page: slightly smaller than main heading and gold/dark-yellow per theme */
+.cv-subheading{
+  font-size: 3.2vh;
+  font-weight: 700;
+  margin-top: 28px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+body:not(.light-mode) .cv-subheading{ color: #feda4a; }
+body.light-mode .cv-subheading{ color: #a67b00; }
+
+/* Projects / cards grid */
+.projects-grid{ display: grid; gap: 20px; margin-top: 6px; }
+
+/* Default two-columns where requested will be overridden per section via container classes */
+.projects-grid.cols-2{ grid-template-columns: repeat(2, 1fr); }
+.projects-grid.cols-4{ grid-template-columns: repeat(2, 1fr); }
+.projects-grid.cols-1{ grid-template-columns: 1fr; }
+.projects-grid.cols-4-wide{ grid-template-columns: repeat(2, 1fr); }
+
+/* Desktop: make Skills section use 3 columns for a balanced layout */
+@media (min-width: 981px){
+  #skills .projects-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+
+.project-card{
+  background: #0f0f10;
+  border: 1px solid #232325;
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+}
+body:not(.light-mode) .project-card{ background: #0f0f10 !important; color: #e6e6e6 !important; }
+body.light-mode .project-card{ background: rgba(255,255,255,0.96); color: #111; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+
+/* Narrower photo banner for CV page */
+.project-image{ width: 100%; height: 110px; object-fit: cover; display: block; transition: transform 360ms ease; }
+
+/* Banner for skill cards to preserve original card banner height */
+
+.project-meta{ padding: 12px; }
+/* Increase padding for title+subtitle inside the Skills cards as a group */
+#skills .project-meta{ padding: 20px !important; }
+
+/* Language cards: increase internal padding for better spacing of the
+   language title and proficiency dots. Scoped to #languages only. */
+#languages .project-card .project-meta{
+  padding: 20px !important;
+}
+.project-title{ margin: 0 0 6px 0; color: white; font-size: 2.1vh; }
+.project-subtitle{ margin: 0; color: #cfcfcf; font-size: 1.6vh; }
+
+/* Small adjustments for light mode */
+body.light-mode .project-title{ color: #111 !important; }
+body.light-mode .project-subtitle{ color: #444 !important; }
+
+/* Languages proficiency: small circular indicators */
+.lang-proficiency{ display: flex; gap: 6px; align-items: center; margin-top: 8px; }
+.lang-dot{ width: 10px; height: 10px; border-radius: 50%; background: #a0a0a0; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.05); }
+.lang-dot.full{ background: gold; }
+
+/* Make cards non-expandable visually (no hover zoom) */
+.project-card:hover .project-image{ transform: none !important; }
+.project-card .project-toggle{ display: none; }
+
+/* Responsive: stack columns on small screens */
+@media (max-width: 768px){
+  .projects-grid.cols-2, .projects-grid.cols-4, .projects-grid.cols-4-wide{ grid-template-columns: 1fr; }
+  h2.intro-heading{ white-space: normal; font-size: 6.6vh; }
+  /* Make subheadings a bit smaller on tablet-sized screens */
+  .cv-subheading{ font-size: 3.0vh; }
+
+  .cv-download{ width: 40px; height: auto; opacity: 0.85; }
+  .cv-download-link{
+    position: absolute;
+    right: -6vw; /* align near the right edge of the container */
+    transform: translateY(-8%);
+    margin-left: 0;
+    display: inline-block;
+    padding: 14px; /* increases tap area without changing visible icon size (16px + 2*14px = 44px) */
+    border-radius: 8px;
+  }
+
+}
+
+/* Phone-specific adjustments: smaller subheadings, smaller PDF icon, and tighter spacing */
+@media (max-width: 480px){
+  /* Ensure the main heading and download icon sit on the same line and scale down */
+  h2.intro-heading{
+    font-size: 6.0vh;
+    white-space: normal;
+    display: block; /* keep heading centered while icon is positioned at the right */
+    text-align: center;
+  }
+
+  /* Make the download icon smaller on phones and pin it to the right edge.
+     Use a larger invisible padding box on the link to preserve a comfortable
+     tap target while keeping the visible icon small. Visible icon width is
+     slightly reduced; padding ensures the clickable area remains >=44x44px. */
+  .cv-download{ width: 16px; height: auto; opacity: 0.85; }
+  .cv-download-link{
+    position: absolute;
+    right: 5vw; /* align near the right edge of the container */
+    top: 50%;
+    transform: translateY(-10%);
+    margin-left: 0;
+    display: inline-block;
+    padding: 14px; /* increases tap area without changing visible icon size (16px + 2*14px = 44px) */
+    border-radius: 8px;
+  }
+
+  /* Reduce the large vertical padding in the heading wrapper so the first
+     subheading moves closer to the main heading on phones. */
+  body.page-cv .section-timeline-heading .padding-vertical-xlarge{
+    padding-bottom: 6px;
+    padding-top: 40px;
+  }
+
+  /* Make subheadings smaller and tighten their top margin */
+  .cv-subheading{ font-size: 2.6vh; margin-top: 6px; margin-bottom: 8px; }
+
+  /* Specifically reduce the first subheading offset so it sits closer to the heading */
+  .cv-main section:first-of-type .cv-subheading { margin-top: 2px; }
+
+  /* Slightly reduce spacing inside project-meta for very small screens */
+  .project-meta{ padding: 10px; }
+}
+
+/* Minor spacing utilities */
+.cv-section{ margin-bottom: 28px; }
+.cv-card-photo-narrow{ height: 90px; }
+
+/* Links styled similar to research's Learn more */
+.cv-link{ color: #feda4a; font-weight: 700; text-decoration: none; font-size:1.5vh; }
+.cv-link:hover{ text-decoration: underline; }
+
+/* Ensure the CV page mirrors Research page dark background */
+body.page-cv:not(.light-mode) .page-wrapper, body.page-cv:not(.light-mode) .section-timeline-heading{ background: #000; color: #e6e6e6; }
+
+/* subtle card inner text sizing */
+.project-card .project-meta p{ font-size: 1.6vh; margin: 6px 0 0 0; }
+
+/* small card for languages */
+.lang-cards-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 768px){ .lang-cards-grid{ grid-template-columns: repeat(2, 1fr); } }
+
+/* small badge for section titles alignment on phones */
+.cv-subheading-wrap{ display:flex; justify-content: space-between; align-items:center; }
+
+/* CV lists for conferences/publications */
+.cv-list{ margin: 8px 0 0 0; padding-left: 1.1rem; }
+.cv-list li{ margin-bottom: 6px; font-size: 1.55vh; line-height: 1.35; }
+
+/* Conference location styling: italic and muted (dark-grey on light mode,
+   slightly lighter on dark mode for readability). Scoped to the CV page. */
+.conf-location{ font-style: italic; color: #7a7a7a; }
+body:not(.light-mode) .conf-location{ color: rgba(230,230,230,0.75); }
+
+/* Skill badge: replace previous image-based skill tiles with rounded boxes */
+.skill-badge{
+  height: 110px; /* match previous image height for visual consistency */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  padding: 12px;
+  margin: 10px;
+  background: rgba(255,255,255,0.03);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 2.0vh;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+}
+
+/* Light mode variant: slightly darker badge background with dark text */
+body.light-mode .skill-badge{
+  background: rgba(0,0,0,0.06) !important;
+  color: #111 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+@media (max-width: 768px){
+  .skill-badge{ height: 92px; font-size: 2.4vh; margin: 6px; }
+}
+
+/* New chip-style skill badges (compact, many per row) */
+.skill-badges{ display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+.skill-chip{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.6vh;
+  /* flat chips: use a subtle border instead of shadow */
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+  will-change: border-color, box-shadow;
+}
+.skill-chip:hover,
+.skill-chip:focus{
+  /* remove translate lift; instead darken the chip border on hover/focus */
+  border-color: rgba(255,255,255,0.18);
+}
+/* Visible focus ring for keyboard users (adds subtle theme-accent glow) */
+.skill-chip:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(254,218,74,0.08);
+  border-color: rgba(254,218,74,0.18);
+}
+body.light-mode .skill-chip{ background: rgba(0,0,0,0.06) !important; color: #111 !important; border: 1px solid rgba(0,0,0,0.12) !important; }
+/* In light mode ensure hover/focus darken the border (use !important to override per-page rules) */
+body.light-mode .skill-chip:hover,
+body.light-mode .skill-chip:focus{
+  border-color: rgba(0, 0, 0, 0.407) !important;
+  /* use inset box-shadow to simulate a thicker border without layout shift */
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,0.12) !important;
+}
+
+/* Dark-mode: make base chip border a bit lighter and on hover/focus make it
+   visually thicker and lighter without changing layout (use inset box-shadow). */
+body:not(.light-mode) .skill-chip{ border-color: rgba(255,255,255,0.12); }
+body:not(.light-mode) .skill-chip:hover,
+body:not(.light-mode) .skill-chip:focus{
+  border-color: rgba(255,255,255,0.28);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.16);
+}
+
+@media (max-width: 480px){
+  .skill-chip{ font-size: 2.6vh; padding: 8px 10px; }
+}
+
+/* Slightly increase font-size for the Conferences list to improve readability */
+body.page-cv #conferences .cv-list li{ font-size: 1.7vh; }
+
+/* Match publications list size with conferences for consistent readability */
+body.page-cv #publications .cv-list li{ font-size: 1.7vh; }
+
+/* ------------------------------------------------------------------
+   Spacing adjustments for Conferences & Publications sections
+   - increase padding inside the section cards
+   - add extra gap after nested lists so the next main list item is distinct
+   - increase gap between the end of the lists and the 'View on ...' link
+------------------------------------------------------------------------ */
+
+/* Increase internal padding for the specific section cards */
+#conferences .project-card .project-meta,
+#publications .project-card .project-meta {
+  padding: 20px !important;
+}
+
+/* Make lists breathe more at the end so the following action link doesn't feel cramped */
+#conferences .cv-list,
+#publications .cv-list {
+  margin-bottom: 18px; /* space between list and following content */
+}
+
+/* Add extra spacing for nested lists so the nested block and the next sibling
+   list item/section are visually separated */
+#conferences .cv-list li > ul {
+  /* Reduce top gap specifically for nested lists in Conferences so
+     'Contributed Poster Presentation' appears closer to its parent item */
+  margin-top: 4px;
+  margin-bottom: 20px;
+  padding-left: 1.15rem; /* slightly more inset for nested lists */
+}
+
+#publications .cv-list li > ul {
+  /* Keep the slightly larger top gap for publications (separate treatment) */
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-left: 1.15rem;
+}
+
+/* Slightly increase bottom spacing for each main list item in conferences
+   so items following nested blocks have clearer separation. */
+#conferences .cv-list li { margin-bottom: 10px; }
+
+/* Ensure the small paragraph that contains the 'View on ...' link sits further
+   away from the lists above it */
+#conferences .project-meta > p,
+#publications .project-meta > p {
+  margin-top: 16px;
+}
+
+/* meta links under sections */
+.cv-meta-links{ margin-top: 12px; }
+.cv-meta-links a{ margin-right: 14px; }
+
+/* -------------------------------------------------------------------------
+   Merged from css/light_mode.css
+   The project's shared light-mode rules were copied here so the CV page no
+   longer needs to load a separate stylesheet. Keep this section near the
+   end of the CV stylesheet so page-scoped rules above can override as needed.
+------------------------------------------------------------------------- */
+
+/* Shared light-mode rules (page-agnostic). Include this stylesheet on pages
+   that want a per-page or site-wide light mode. Styles are applied when the
+   document root has the `light-mode` class on <body>. */
+/* Smooth theme transitions
+   Apply gentle transitions to common visual properties when toggling
+   `body.light-mode` so switching between dark and light appears smooth.
+   Respects the user's `prefers-reduced-motion` setting by disabling
+   transitions when the user requests reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Smooth transitions for theme toggles on all pages EXCEPT the homepage.
+     Pages that should opt-out (homepage) add `body.no-theme-transition`. */
+  body:not(.no-theme-transition),
+  body:not(.no-theme-transition) header,
+  body:not(.no-theme-transition) nav,
+  body:not(.no-theme-transition) main,
+  body:not(.no-theme-transition) footer,
+  body:not(.no-theme-transition) .page-wrapper,
+  body:not(.no-theme-transition) .project-card,
+  body:not(.no-theme-transition) .contact-card,
+  body:not(.no-theme-transition) .contact-details,
+  body:not(.no-theme-transition) .meme-overlay,
+  body:not(.no-theme-transition) #image-overlay,
+  body:not(.no-theme-transition) #bg-image,
+  body:not(.no-theme-transition) .social-card img,
+  body:not(.no-theme-transition) .project-card img,
+  body:not(.no-theme-transition) button,
+  body:not(.no-theme-transition) a,
+  body:not(.no-theme-transition) input,
+  body:not(.no-theme-transition) textarea,
+  body:not(.no-theme-transition) select {
+    /* Slightly longer durations for a smooth, pleasant cross-fade */
+    transition: background-color 420ms ease, color 420ms ease,
+          border-color 420ms ease, box-shadow 420ms ease,
+          opacity 320ms ease, filter 420ms ease, backdrop-filter 420ms ease;
+  }
+
+  /* Images and svg filter transitions (slower for smoother feel) */
+  body:not(.no-theme-transition) #bg-image,
+  body:not(.no-theme-transition) .meme-wrapper img,
+  body:not(.no-theme-transition) .project-card img,
+  body:not(.no-theme-transition) .social-card img {
+    transition: filter 520ms ease, opacity 420ms ease;
+    will-change: filter, opacity;
+  }
+  /* User-triggered theme animations: only enable smooth transitions for
+     theme-related properties while the temporary `.theme-animate` class is
+     present on the root. This keeps all other animations (transforms,
+     element-specific hover transitions, keyframes) unaffected. */
+    html.theme-animate *, body.theme-animate * {
+      transition: background-color 420ms ease, color 420ms ease,
+            border-color 420ms ease, box-shadow 420ms ease,
+            opacity 380ms ease, filter 420ms ease, backdrop-filter 420ms ease;
+    /* When a theme toggle attempt adds `html.theme-animate` or
+       `body.theme-animate`, force transitions to none so the change is
+       immediate. We use !important to override earlier transition rules. */
+    html.theme-animate *, body.theme-animate * {
+      transition: none !important;
+    }
+    }
+
+    /* Image/filter transitions slightly slower for a pleasant cross-fade */
+    html.theme-animate #bg-image, body.theme-animate #bg-image,
+    html.theme-animate .meme-wrapper img, body.theme-animate .meme-wrapper img,
+    html.theme-animate .project-card img, body.theme-animate .project-card img,
+    html.theme-animate .social-card img, body.theme-animate .social-card img {
+      transition: filter 600ms ease, opacity 420ms ease;
+      will-change: filter, opacity;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root, body, header, nav, main, footer, .page-wrapper,
+  .project-card, .contact-card, .contact-details, .meme-overlay,
+  #image-overlay, #bg-image, .social-card img, .project-card img,
+  button, a, input, textarea, select {
+    transition: none !important;
+  }
+}
+
+/* Base light/dark inversion */
+body.light-mode{
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+body.light-mode a{ color: #0b57a4; }
+
+/* Make the theme toggle in the header match the Research page appearance
+  when in light mode: dark, semi-transparent pill with a dark-yellow focus
+  highlight on hover handled by utils.css. */
+body.light-mode nav .theme-toggle{
+  color: #111 !important;
+  background: rgba(0,0,0,0.06) !important;
+  border-color: rgba(0,0,0,0.06) !important;
+}
+
+/* Links in content should be dark-yellow in light mode (but keep nav links
+  and logo link overrides intact). Use a warm dark-yellow consistent with
+  other accents on the site. */
+body.light-mode a{ color: #aa7e00 !important; }
+/* Keep navigation links readable (override the global link color) */
+body.light-mode nav#site-nav a{ color: #111111 !important; }
+/* Keep logo link white on the dark header per existing rules */
+body.light-mode .logo-container a{ color: #ffffff !important; }
+
+/* Header / nav become black bars with light text in light-mode (per request) */
+body.light-mode header,
+body.light-mode nav#site-nav{
+  background: #000000 !important;
+}
+body.light-mode .logo-container a,
+body.light-mode nav#site-nav a{
+  color: #ffffff !important;
+}
+/* Hamburger bars (three lines) usually use .bar; ensure they're visible */
+body.light-mode .hamburger .bar{
+  background-color: #ffffff !important;
+}
+
+/* Footer styling for light mode */
+body.light-mode footer{
+  background: #ffffff !important;
+  color: #111111 !important;
+}
+
+/* Generic card / panel adjustments */
+body.light-mode .project-card{
+  background: #ffffff !important;
+  border-color: #e6e6e6 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+}
+body.light-mode .project-title{ color: #111 !important; }
+body.light-mode .project-subtitle{ color: #444 !important; }
+
+/* Meme reveal overlay: dark overlay in normal (dark) mode; in light mode use
+   a pale overlay so the button remains readable against a white page. */
+.meme-overlay{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  transition: background 220ms ease, opacity 220ms ease;
+}
+body.light-mode .meme-overlay{
+  background: rgba(255,255,255,0.85) !important;
+}
+
+.meme-overlay .reveal-btn{
+  background: rgba(254,218,74,0.96);
+  color: #000;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+body.light-mode .meme-overlay .reveal-btn{
+  background: #f5d85a !important;
+  color: #111 !important;
+}
+
+/* For Research page specifically, invert the reveal button colors in light mode
+   so it is the inverse of the dark-mode button above. */
+body.light-mode #meme-wrapper .reveal-btn,
+body.light-mode .research-meme #meme-wrapper .reveal-btn{
+  /* Slight dark translucent overlay so the button sits on white but remains visible */
+  background: rgba(0,0,0,0.06) !important;
+  color: #111 !important; /* black text */
+  border-color: rgba(0,0,0,0.06) !important;
+  transition: background 180ms ease, box-shadow 180ms ease, color 120ms ease !important;
+}
+
+body.light-mode #meme-wrapper .reveal-btn:hover,
+body.light-mode .research-meme #meme-wrapper .reveal-btn:hover,
+body.light-mode #meme-wrapper .reveal-btn:focus,
+body.light-mode .research-meme #meme-wrapper .reveal-btn:focus{
+  /* Slight dark yellow overlay on hover to match the requested accent */
+  background: rgba(160,138,65,0.12) !important; /* subtle dark yellow */
+  box-shadow: 0 0 0.2rem rgba(160,138,65,0.28) !important;
+  color: #111 !important;
+}
+
+
+/* Ensure text inputs / forms are legible */
+body.light-mode input,
+body.light-mode textarea,
+body.light-mode select{
+  background: #fff;
+  color: #111;
+  border: 1px solid #ddd;
+}
+
+/* Slight tweak for site logo when placed on the dark header in light-mode */
+body.light-mode .logo{ filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12)); }
+
+/* Utility: prefer-contrast adjustments for badges or small UI elements */
+body.light-mode .project-toggle{ color: #f5d85a !important; }
+
+/* Timeline & section overrides so dark sections don't stay black in light mode */
+body.light-mode .section-timeline,
+body.light-mode .section-timeline-heading{
+  background: #ffffff !important;
+}
+body.light-mode .timeline-text,
+body.light-mode .timeline-date-text,
+body.light-mode .timeline_link,
+body.light-mode .timeline_link a,
+body.light-mode .text-color-lightgrey{
+  color: #111111 !important;
+}
+body.light-mode .text-color-lightgrey{ color: #666666 !important; }
+body.light-mode .timeline-progress{ background-color: #e6e6e6 !important; }
+/* Ensure timeline progress bar keeps the same colored gradient in light mode
+   (match dark-mode appearance). We explicitly set the same inverted gradient
+   used on the timeline page so the colored bar remains visible in light mode. */
+body.light-mode .timeline-progress-bar{
+  background: linear-gradient(to bottom, #ee0979, gold) !important;
+}
+
+/* Visibility fixes: in light mode the page background can sit above
+   negative-z-index elements. Ensure the timeline progress track and bar
+   use non-negative stacking so they remain visible but still sit under
+   timeline items (which use z-index: 2). */
+body.light-mode .timeline-progress{
+  z-index: 0 !important;
+}
+body.light-mode .timeline-progress-bar{
+  z-index: 0 !important;
+}
+
+/* Timeline overlay fades: when in light mode, use white->transparent so the
+   top/bottom fades read correctly on a white background instead of black. */
+body.light-mode .overlay-fade-top{
+  background-image: linear-gradient(white, rgba(255,255,255,0)) !important;
+}
+body.light-mode .overlay-fade-bottom{
+  background-image: linear-gradient(white, rgba(255,255,255,0)) !important;
+}
+
+/* Ensure the main page wrapper and sections also flip to light background
+   — this prevents specific section backgrounds from staying black. */
+body.light-mode .page-wrapper,
+body.light-mode main,
+body.light-mode .container,
+body.light-mode .section-timeline,
+body.light-mode .section-timeline-heading{
+  background: #ffffff !important;
+}
+
+/* Homepage-specific background-image / overlay styles were moved to
+  `css/home_light_mode.css` to avoid forcing a dark->light visual transition
+  on non-home pages when the stored theme is applied via JavaScript. */
+
+/* Research intro and other subtitle text should be dark in light mode */
+body.light-mode .research-intro-text .research-intro{ color: #111111 !important; }
+body.light-mode .project-subtitle{ color: #222222 !important; }
+
+/* Invert the meme image colors for light mode so it reads on white */
+body.light-mode .meme-wrapper img,
+body.light-mode img.timeline-hero-image{
+  filter: invert(1) hue-rotate(180deg) contrast(0.95);
+}
+
+/* h2 headings intentionally inherit their page styles; do not override here. */
+
+h2.light-mode{
+  font-size: 8vh;
+  background: linear-gradient(to right, rgb(169, 143, 0), #80003e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Make the introductory "Hello there" and the tagline strong text black in
+   light mode so they remain readable against the white overlay. */
+body.light-mode .intro-text p strong,
+body.light-mode #tagline strong{
+  color: #111111 !important;
+}
+
+/* Make the entire tagline line black (including its children) in light mode */
+body.light-mode #tagline,
+body.light-mode #tagline *{
+  color: #111111 !important;
+}
+
+/* Also ensure the small "I'm" span next to "Hello there" is black in light mode */
+body.light-mode .intro-text p:first-of-type,
+body.light-mode .intro-text p:first-of-type *{
+  color: #111111 !important;
+}
+
+
+
+/* Header in light mode: white, blurred, no page-dimming; nav links are dark
+   with a bark-yellow highlight on hover/focus. This keeps the header light
+   while preserving readability and the blur effect. */
+body.light-mode header,
+body.light-mode nav#site-nav{
+  /* Make the header completely white in light mode */
+  background: #ffffffe6 !important;
+  backdrop-filter: blur(8px) !important;
+  color: #111111 !important;
+}
+
+
+/* On desktop only, lift the light-mode header and add the subtle white
+   overlay behind its children. Mobile keeps the site-wide mobile header
+   flow defined in utils.css so the header does not cover the viewport. */
+@media (min-width: 769px) {
+  body.light-mode header{
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important; /* lift above most site content */
+  }
+  body.light-mode header::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.274); /* white overlay strength; tune as needed */
+
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* Ensure header children are above the pseudo-element */
+  body.light-mode header > *{ position: relative; z-index: 1; }
+}
+
+/* Desktop: prefer transparent header/nav background so nav text sits
+   directly on the page content (removes opaque white strip on large screens) */
+@media (min-width: 769px){
+  /* Keep the semi-opaque white header with blur on desktop, but make
+     individual nav items transparent so link backgrounds don't create
+     a white strip over the page. Use the nav background variable so
+     the image overlay is decoupled from the header appearance. */
+  body.light-mode header,
+  body.light-mode nav#site-nav{
+    background: rgba(255,255,255,var(--nav-bg-opacity)) !important; /* keep the blurred white bar */
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* Make nav items themselves transparent and remove underline/box-shadow
+     decorations on hover/focus so they don't draw a background or line. */
+  body.light-mode nav#site-nav a,
+  body.light-mode nav#site-nav a:link,
+  body.light-mode nav#site-nav a:visited{
+    background: transparent !important;
+  }
+  body.light-mode nav#site-nav a:hover,
+  body.light-mode nav#site-nav a:focus,
+  body.light-mode nav#site-nav a:active{
+    text-decoration: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  /* Ensure the theme toggle in the nav also stays visually transparent */
+  body.light-mode nav .theme-toggle{
+    background: transparent !important;
+  }
+}
+
+/* Nav link colors and highlight */
+/* Nav links in light mode: use dark-yellow highlight and no underline */
+body.light-mode nav#site-nav a{ color: #111111 !important; text-decoration: none !important; }
+body.light-mode nav#site-nav a:hover,
+body.light-mode nav#site-nav a:focus,
+body.light-mode nav#site-nav a:active{
+  color: #aa7e00 !important; /* dark yellow accent in light mode */
+  text-decoration: none !important;
+  /* Remove bottom border/underline effect in light mode */
+  box-shadow: none !important;
+}
+
+/* CV page: Contents sidebar link colors in light mode
+   Make non-active contents links black, active link dark-yellow. Use
+   high-specificity selectors to override the global body.light-mode a rule. */
+body.page-cv.light-mode .cv-contents a { color: #111111 !important; }
+body.page-cv.light-mode .cv-contents a.active { color: #aa7e00 !important; background: rgba(166,123,0,0.08) !important; }
+
+/* Hamburger bars should be dark on the light header */
+body.light-mode .hamburger .bar{ background-color: #111 !important; }
+
+/* When nav is open, show a frosted overlay over the page content so the
+   navigation reads as an elevated layer. Uses the nav-open opacity and
+   applies a blur to the backdrop. This applies on mobile and desktop. */
+/* Disable the dark page-dim overlay when the nav is open in light mode */
+body.light-mode header.nav-open ~ .page-wrapper::before{
+  background: rgba(255,255,255,0) !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* Invert SVG icons that live inside project cards when in light mode so
+   vector icons retain visible contrast on white card backgrounds. This
+   targets both inline <svg> and <img src="*.svg"> to cover common cases. */
+/* Invert project card images/icons in light mode so they retain contrast on white cards.
+   Originally we targeted image files ending with .svg; broaden to all images inside
+   .project-card (SVG inline and raster IMG) so PNG replacements still receive the
+   same inversion treatment. */
+body.light-mode .project-card svg,
+body.light-mode .project-card img{
+  filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+
+/* Invert full-bleed contact/location and social images in light mode so
+   thumbnails and icons read on white backgrounds. Scoped to common contact
+   selectors used on the contact page. */
+body.light-mode .contact-photos img,
+body.light-mode .contact-card img,
+body.light-mode .contact-photos .contact-btn img,
+body.light-mode .social-card img{
+  filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+/* Force social icons to render black in light mode (overrides the above
+   inversion for social icons so they appear as solid black glyphs). */
+body.light-mode .social-card img{
+  filter: brightness(0) saturate(100%) !important;
+}
+
+/* Slightly reduce hover opacity for social icons in light mode to give a
+   subtle feedback without making them too faint on white backgrounds. */
+body.light-mode .social-card:hover{
+  opacity: 0.9 !important;
+}
+
+
+/* Images that were authored for light backgrounds: keep them original in
+  light mode, invert them when dark mode is active. Use the `light-img`
+  class on images you want this behavior for (we add it on CV images).
+*/
+img.light-img{ transition: filter 220ms ease; filter: none; }
+
+/* Dark mode: invert the image colors so light-mode images match the dark
+  theme without needing separate assets. Targets CV images and the header
+  logo when it has the same class. */
+/* Dark mode: invert the image colors so light-mode images match the dark
+   theme without needing separate assets. Targets CV images and the header
+   logo when it has the same class. */
+body:not(.light-mode) img.light-img,
+body:not(.light-mode) header .logo.light-img{
+  filter: invert(1) hue-rotate(180deg) brightness(0.98) contrast(1.03);
+}
+
+/* Explicit override for light mode to avoid accidental inversion during
+   transitions or other rules; !important ensures this wins if other
+   selectors apply filters. */
+body.light-mode img.light-img,
+body.light-mode header .logo.light-img{
+  filter: none !important;
+}
+
+/* CV page only: make the header theme toggle background light grey when
+   light mode is active. This overrides global light-mode toggle styles so
+   only the CV page shows the light-grey pill. */
+body.page-cv.light-mode nav .theme-toggle{
+  background: rgba(245,245,245,0.95) !important; /* very light grey */
+  color: #111111 !important;
+  border-color: rgba(0,0,0,0.06) !important;
+}
+
+/* Make header opaque in CV light-mode on non-home pages
+   Mirror the site-wide `light_mode.css` behavior but scoped to the CV
+   stylesheet. The homepage is identified by `body.no-theme-transition`, so
+   we exclude it using :not(.no-theme-transition). This forces a solid white
+   header with no blur for the CV page when light mode is active. */
+body.page-cv.light-mode:not(.no-theme-transition) header,
+body.page-cv.light-mode:not(.no-theme-transition) nav#site-nav{
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: #111111 !important;
+}
+
+body.page-cv.light-mode:not(.no-theme-transition) header::before{
+  background: transparent !important;
+}

@@ -1,0 +1,405 @@
+/* About page styles - mirror Research page theming for light/dark consistency */
+
+.container{ width: 90vw; max-width: 1200px; margin-left: auto; margin-right: auto; }
+
+.about-hero{ padding: 28px 0 48px 0; }
+
+/* Add breathing room between the collage/timeline and the intro text */
+.about-hero .container{
+  margin-top: 18px;
+}
+@media (min-width: 769px){
+  .about-hero .container{
+    margin-top: 34px; /* a bit more space on larger viewports */
+  }
+}
+
+/* Ensure these containers have transitions defined in their base state so
+   returning from a focused/dimmed state animates smoothly (not only when
+   the .photo-focused selector is present). */
+.container,
+.about-text,
+footer,
+header{
+  transition: filter 420ms ease-in-out, opacity 420ms ease-in-out;
+}
+
+/* Layout: make body a column flex so footer stays at the bottom when
+	content is short. Keep the main .page-wrapper flexible to grow. */
+html, body { height: 100%; }
+body.page-about { display: flex; flex-direction: column; min-height: 100vh; }
+main.page-wrapper { flex: 1 1 auto; }
+
+.about-collage{
+  /* Collage: 8 images span the viewport width on wide screens with a 4:5 aspect ratio
+     (width:height = 4:5). On small screens the layout collapses to fewer columns
+     for readability. */
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  align-items: start;
+  margin-bottom: 18px;
+  width: 100vw; /* span full viewport */
+  margin-left: calc(50% - 50vw); /* center full-bleed element */
+  /* Add horizontal padding so images aren't flush to the viewport edges. Use
+     box-sizing so padding reduces available inner width rather than increasing
+     the overall element width. Reduce this padding on narrow viewports below. */
+  padding-inline: 24px;
+  box-sizing: border-box;
+}
+.about-collage img{
+  width: 100%;
+  aspect-ratio: 4 / 5; /* enforces 4:5 layout */
+  object-fit: cover;
+  display: block;
+  border-radius: 12px; /* slightly rounder corners */
+}
+
+/* Mini banners used inside the about text (three equal photos spanning the
+   container width). They are thinner than the main collage and sit inside
+   the `.container` so they don't full-bleed across the viewport. */
+.about-mini-banner{
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  margin: 12px 0;
+  height: 150px; /* increased for more visual presence */
+}
+.about-mini-banner img{
+  flex: 1 1 0;
+  width: 33.333%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px; /* keep small radius inside the banner */
+}
+
+/* Any inline/about page images should have rounded corners for visual
+   consistency. Avoid affecting global site images by scoping to the
+   about page selectors used above. */
+.about-text img,
+.about-hero img{
+  border-radius: 12px;
+}
+
+@media (max-width: 480px){
+  .about-mini-banner{ height: 120px; }
+}
+
+/* Photo grid: 5 columns x 2 rows of square images within the container */
+.about-photo-grid{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin: 18px 0 28px 0;
+}
+.about-photo-grid img{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+/* Responsive: step down number of columns on narrower viewports */
+@media (max-width: 1000px){ .about-photo-grid{ grid-template-columns: repeat(4,1fr); } }
+@media (max-width: 700px){ .about-photo-grid{ grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 480px){ .about-photo-grid{ grid-template-columns: repeat(2,1fr); } }
+
+/* Default thumbnail appearance: slightly translucent */
+.about-collage img{
+  opacity: 0.5;
+  transition: transform 320ms ease-in-out, opacity 320ms ease-in-out, filter 320ms ease-in-out;
+}
+/* Focused/hovered image */
+.about-collage img.focused,
+.about-collage img:focus,
+.about-collage img:hover{
+  opacity: 1 !important;
+  transform: scale(1.035);
+  z-index: 6;
+}
+
+/* When a photo is focused, dim the rest of the page except the timeline bar.
+   Do NOT dim the header; on light mode make the header slightly lighter. */
+body.photo-focused .container,
+body.photo-focused .about-text,
+body.photo-focused footer,
+body.photo-focused .about-collage img:not(.focused){
+  filter: brightness(0.72);
+  opacity: 0.72;
+  transition: filter 420ms ease-in-out, opacity 420ms ease-in-out;
+}
+
+/* In light mode, invert the dim: slightly lighten the page elements instead
+   of dimming them so the focused photo reads as emphasized. Keep transitions
+   and a subtle opacity change. */
+body.light-mode.photo-focused .container,
+body.light-mode.photo-focused .about-text,
+body.light-mode.photo-focused footer,
+body.light-mode.photo-focused .about-collage img:not(.focused){
+  filter: brightness(1.12) !important;
+  opacity: 0.45 !important;
+  transition: filter 420ms ease-in-out, opacity 420ms ease-in-out;
+}
+
+/* Keep header unaffected by photo-focused dimming. In light mode make it
+   slightly lighter so it reads as lifted/bright rather than dimmed. */
+body.photo-focused header{
+  filter: none !important;
+  transition: filter 420ms ease-in-out;
+}
+body.light-mode.photo-focused header{
+  /* subtle brighten in light mode */
+  filter: brightness(1.06) !important;
+}
+
+/* Ensure the timeline bar remains bright and visible during photo focus */
+body.photo-focused .about-timeline{
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.about-timeline .timeline-dot{
+  transition: transform 200ms ease, box-shadow 220ms ease, background 200ms ease;
+  /* Default dot color: white in dark mode. We'll override for light mode below.
+     The gradient color is applied only on hover/active via the .timeline-marker
+     active/hover rules (uses --marker-color). */
+  background-color: white;
+}
+.about-timeline .timeline-marker:hover .timeline-dot,
+.about-timeline .timeline-marker.active .timeline-dot{
+  transform: scale(1.25);
+  /* Force the gradient-matched highlight even if a light-mode default
+     background-color uses !important. Using !important here ensures the
+     hover/active state shows the computed --marker-color in both themes. */
+  background: var(--marker-color, #fedb4a) !important; /* gradient-matched highlight */
+  box-shadow: 0 0 12px var(--marker-glow, rgba(254,218,74,0.95)), 0 0 0 6px rgba(254,218,74,0.12) !important;
+}
+
+/* Responsive adjustments (collapse columns progressively as viewport shrinks).
+  Phones: show 4 images per row (user request) at small widths (<=480px). */
+@media (max-width: 1400px){ .about-collage{ grid-template-columns: repeat(6, 1fr); } }
+@media (max-width: 1200px){ .about-collage{ grid-template-columns: repeat(5, 1fr); } }
+@media (max-width: 1000px){ .about-collage{ grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 800px){ .about-collage{ grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 600px){ .about-collage{ grid-template-columns: repeat(4, 1fr); } }
+
+/* Reduce side padding on narrower screens so the grid remains usable. */
+@media (max-width: 980px){
+  .about-collage{ padding-inline: 16px; }
+}
+@media (max-width: 480px){
+  .about-collage{ padding-inline: 12px; }
+}
+
+/* Heading + text */
+.about-heading{ font-size: 2.8vh; margin: 6px 0 10px 0; color: #feda4a; }
+.about-text p{ margin: 0 0 12px 0; line-height: 1.5; color: rgba(230,230,230,0.9); }
+
+/* Light mode adjustments to match Research page visuals */
+body.light-mode .about-heading{ color: #a67b00 !important; }
+body.light-mode .about-text p{ color: #222 !important; }
+
+/* Make collage responsive: collapse to fewer columns on small screens */
+@media (max-width: 980px){ .about-collage{ grid-template-columns: repeat(4, 1fr); } .about-collage img{ height: 140px; } }
+@media (max-width: 480px){ .about-collage{ grid-template-columns: repeat(4, 1fr); gap: 8px; } .about-collage img{ height: 110px; } .about-heading{ font-size: 2.2vh; } }
+
+/* Keep timeline padding in sync with collage padding at smaller sizes */
+@media (max-width: 980px){
+  .about-timeline{ padding-inline: 16px; }
+}
+@media (max-width: 480px){
+  .about-timeline{ padding-inline: 12px; }
+}
+
+/* Do not override header/light-mode styling here; the site-wide
+	`css/light_mode.css` and `css/research_light_mode.css` provide the
+	exact Research-page light/dark behavior. Keep this file scoped to
+	About-specific visuals only. */
+
+/* Ensure the collage sits below the header even when the header is
+	fixed in desktop light-mode. Add a small top offset on large viewports.
+	Also provide a slightly larger offset when the header becomes fixed
+	in light mode to avoid overlap. */
+.about-hero { padding-top: 24px; }
+@media (min-width: 769px) {
+  /* default desktop offset: large enough to clear the fixed header */
+  /* moved up slightly from 120px to reduce vertical whitespace */
+  .about-hero { padding-top: 100px; }
+  /* Keep light-mode layout identical to dark-mode: use the same top
+     padding so content doesn't shift downward when switching themes. */
+  body.light-mode .about-hero { padding-top: 100px; }
+}
+
+/* About-page-only: make header opaque in dark mode as well so the header
+   reads as a solid top bar on this page in both themes. Keep the rule
+   specific to `body.page-about` to avoid affecting other pages. */
+body.page-about:not(.light-mode) header{
+  background: #000 !important;
+  color: #e6e6e6 !important;
+  /* remove blur/backdrop if present and ensure a subtle shadow for depth */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.45) !important;
+}
+
+/* Footer styling (ensure it's visually separated and sits at bottom) */
+footer{ padding: 22px 0; text-align: center; }
+
+/* Keep site-wide utilities available */
+
+/* Ensure full-page dark background when not in light mode (matches Research page)
+	 Some pages set the background on .page-wrapper but leaving the body white
+	 can leave portions of the viewport bright. Force the body background so
+	 the entire page appears dark in dark mode. */
+body:not(.light-mode){
+	background: #000 !important;
+	color: #e6e6e6 !important;
+}
+
+/* Footer styling (consistent with other pages) */
+footer{ padding: 22px 0; text-align: center; color: rgba(230,230,230,0.85); }
+body.light-mode footer{ color: #222 !important; }
+
+/* --- About page static timeline bar (matches timeline page theme) --- */
+.about-timeline{
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  height: 56px; /* compact space for dot and year */
+  margin-top: 12px;
+  margin-bottom: 18px;
+  /* Match the collage horizontal padding so the timeline content aligns
+     with the images' inner edges. Use box-sizing so padding doesn't expand
+     the outer width. Adjusted responsively further below. */
+  padding-inline: 24px;
+  box-sizing: border-box;
+  /* Sit above the collage and any dimming applied to other page areas so
+     tooltips remain fully visible. */
+  z-index: 60;
+}
+.about-timeline .timeline-line{
+  position: absolute;
+  /* span the padded inner area so the line begins/ends at the same
+     horizontal padding used by the collage above. Marker positions are
+     computed dynamically in JS to match image centers. */
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px; /* narrower line */
+  border-radius: 2px;
+  /* reuse the same gradient as timeline page */
+  background: -webkit-linear-gradient(left, #ee0979, gold);
+  background: linear-gradient(to right, #ee0979, gold);
+}
+.about-timeline .timeline-marker{
+  position: absolute;
+  top: 75%; /* center markers vertically so dot sits on the line */
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.about-timeline .timeline-tooltip{
+  position: absolute;
+  top: calc(100% + 20px);
+  left: 50%;
+  /* start slightly above final position and a touch smaller so it drops
+     into place while fading in */
+  transform: translateX(-50%) translateY(-8px) scale(0.98);
+  background: rgba(22, 22, 22, 0.78);
+  color: #fff;
+  border: 0.05rem solid gold;
+  padding: 8px 10px;
+  border-radius: 6px;
+  /* subtle top/backdrop shadow to lift the tooltip off bright/dark images,
+    plus a faint gold glow to match site accents */
+  box-shadow: 0 -6px 18px rgba(0,0,0,0.35), 0 0 0.08rem rgba(254,218,74,0.45);
+  font-family: "Poppins", "Montserrat", sans-serif;
+  font-weight: 200;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  /* slower, smoother fade+drop animation */
+  transition: opacity 360ms ease-out, transform 360ms cubic-bezier(.22,.8,.22,1);
+  z-index: 1000000;
+  max-width: calc(100vw - 48px);
+}
+.about-timeline .timeline-marker.active .timeline-tooltip,
+.about-timeline .timeline-marker:hover .timeline-tooltip{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+  pointer-events: auto;
+}
+/* Light-mode variant: make tooltip light with dark text */
+body.light-mode .about-timeline .timeline-tooltip{
+  background: rgba(255,255,255,0.94);
+  color: #111;
+  border-color: rgba(140,102,12,0.95);
+  /* keep a soft drop shadow in light mode too */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12), 0 0 0.06rem rgba(140,102,12,0.12);
+}
+
+/* FORTH link styling: gold / dark-yellow color and slight emphasis */
+.about-text a.forth-link{
+  color: #feda4a; /* gold used across the site */
+  font-weight: 600;
+  text-decoration: none;
+}
+.about-text a.forth-link:hover,
+.about-text a.forth-link:focus{
+  text-decoration: underline;
+}
+/* In light mode use a slightly darker gold for better contrast on white backgrounds */
+body.light-mode .about-text a.forth-link{
+  color: #997800 !important;
+}
+.about-timeline .timeline-dot{
+  width: 1.5vh;
+  height: 1.5vh;
+  min-width: 1.5vh;
+  min-height: 1.5vh;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px black;
+  margin: 0 auto;
+}
+.about-timeline .timeline-year{
+  margin-top: 10px;
+  font-size: 1.5vh; /* slightly increased for better readability */
+  color: #fff;
+  opacity: 0.95;
+}
+
+/* Light mode adjustments: make years dark and dot border subtle if needed */
+body.light-mode .about-timeline .timeline-year{ color: #222 !important; }
+body.light-mode .about-timeline .timeline-dot{
+  /* In light mode the default dot should be dark so it reads against a light background */
+  background-color: #000 !important;
+  box-shadow: 0 0 0 4px white;
+}
+
+/* Responsive: reduce spacing and dot size on narrow screens */
+@media (max-width: 780px){
+  /* Disable timeline bar on phones and ensure all its children (line,
+     markers, dots and tooltips) are also hidden so nothing overlaps the
+     collage on narrow viewports. Keep this rule !important to override
+     any inline styles set by JS. */
+  .about-timeline{ display: none !important; }
+  .about-timeline .timeline-line,
+  .about-timeline .timeline-marker,
+  .about-timeline .timeline-dot,
+  .about-timeline .timeline-year,
+  .about-timeline .timeline-tooltip{
+    display: none !important;
+    visibility: hidden !important;
+  }
+  .about-hero {
+    padding-top: 80px !important;
+  }
+}
