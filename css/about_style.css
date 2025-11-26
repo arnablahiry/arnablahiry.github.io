@@ -424,6 +424,17 @@ body.photo-focused .about-timeline{
   box-shadow: 0 0 12px var(--marker-glow, rgba(254,218,74,0.95)), 0 0 0 6px rgba(254,218,74,0.12) !important;
 }
 
+/* When an image (thumbnail) is hovered we want to indicate the timeline
+   dot without revealing all tooltips that a marker.active would show.
+   Use `.dot-highlight` for this purpose so JS can toggle a lighter
+   highlight state that mirrors the dot visual but does not trigger
+   tooltip visibility. */
+.about-timeline .timeline-marker.dot-highlight .timeline-dot{
+  transform: scale(1.18);
+  background: var(--marker-color, #fedb4a) !important;
+  box-shadow: 0 0 10px var(--marker-glow, rgba(254,218,74,0.9)), 0 0 0 5px rgba(254,218,74,0.09) !important;
+}
+
 /* Responsive adjustments (collapse columns progressively as viewport shrinks).
   Phones: show 4 images per row (user request) at small widths (<=480px). */
 @media (max-width: 1400px){ .about-collage{ grid-template-columns: repeat(6, 1fr); } }

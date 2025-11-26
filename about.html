@@ -777,10 +777,13 @@
               const el = imgs[i];
               if(el) el.classList.add('focused');
             });
-            // Show only the tooltip belonging to this image (if any). Do NOT
-            // add marker.active here because that would display all tooltips
-            // for a combined marker.
+            // Show only the tooltip belonging to this image (if any).
             if(tooltipEl) tooltipEl.classList.add('is-visible');
+            // Also highlight the corresponding timeline dot so hovering the
+            // image has the same marker effect as hovering the dot itself.
+            // We use a separate class (`dot-highlight`) so we can style the
+            // dot without revealing multiple tooltips for combined markers.
+            try{ if(marker && marker.classList) marker.classList.add('dot-highlight'); }catch(e){}
           }
 
           function removeFocusFromGroup(){
@@ -798,6 +801,9 @@
               if(el) el.classList.remove('focused');
             });
             if(tooltipEl) tooltipEl.classList.remove('is-visible');
+            // Remove the transient dot highlight unless the marker is truly
+            // active (e.g. because the user is hovering the marker itself).
+            try{ if(marker && marker.classList && !marker.classList.contains('active')) marker.classList.remove('dot-highlight'); }catch(e){}
           }
 
           img.addEventListener('mouseenter', addFocusToGroup);
