@@ -11,6 +11,17 @@
   margin-right: auto;
 }
 
+/*
+  Disable transitions for the CV page so theme toggles are instant.
+  The Research page already disables theme cross-fades; mirror that
+  behavior here so toggling `body.light-mode` applies immediately
+  with no animated cross-fade.
+*/
+body.page-cv, body.page-cv * , body.page-cv *::before, body.page-cv *::after{
+  transition: none !important;
+  -webkit-transition: none !important;
+}
+
 /* CV layout: left contents column + main content area */
 .cv-layout{ display: flex; gap: 32px; align-items: flex-start; }
 .cv-contents{ width: 220px; position: sticky; top: 140px; align-self: flex-start; padding-right: 18px; }
