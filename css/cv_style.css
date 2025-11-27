@@ -195,7 +195,7 @@ body.light-mode .project-subtitle{ color: #444 !important; }
 /* Responsive: stack columns on small screens */
 @media (max-width: 768px){
   .projects-grid.cols-2, .projects-grid.cols-4, .projects-grid.cols-4-wide{ grid-template-columns: 1fr; }
-  h2.intro-heading{ white-space: normal; font-size: 6.6vh; }
+  h2.intro-heading{ white-space: normal; font-size: 2.6vh; }
   /* Make subheadings a bit smaller on tablet-sized screens */
   .cv-subheading{ font-size: 3.0vh; }
 
@@ -213,10 +213,12 @@ body.light-mode .project-subtitle{ color: #444 !important; }
 }
 
 /* Phone-specific adjustments: smaller subheadings, smaller PDF icon, and tighter spacing */
-@media (max-width: 480px){
+@media (max-width: 780px){
   /* Ensure the main heading and download icon sit on the same line and scale down */
-  h2.intro-heading{
-    font-size: 6.0vh;
+  /* More specific selector with !important to override global utils.css rule */
+  body.page-cv h2.intro-heading{
+    font-size: 4.5vh !important;
+    margin-top: 5vh;
     white-space: normal;
     display: block; /* keep heading centered while icon is positioned at the right */
     text-align: center;
@@ -226,12 +228,13 @@ body.light-mode .project-subtitle{ color: #444 !important; }
      Use a larger invisible padding box on the link to preserve a comfortable
      tap target while keeping the visible icon small. Visible icon width is
      slightly reduced; padding ensures the clickable area remains >=44x44px. */
-  .cv-download{ width: 16px; height: auto; opacity: 0.85; }
+  .cv-download{ width: 45px; height: auto; opacity: 0.85; }
   .cv-download-link{
     position: absolute;
-    right: 5vw; /* align near the right edge of the container */
+    right: 0vw; /* align near the right edge of the container */
     top: 50%;
-    transform: translateY(-10%);
+    /* vertically center the icon reliably */
+    transform: translateY(-57%) translateX(90%);
     margin-left: 0;
     display: inline-block;
     padding: 14px; /* increases tap area without changing visible icon size (16px + 2*14px = 44px) */
@@ -324,7 +327,7 @@ body.light-mode .skill-badge{
   background: rgba(255,255,255,0.04);
   color: #fff;
   font-weight: 700;
-  font-size: 1.6vh;
+  font-size: 1.0vh;
   /* flat chips: use a subtle border instead of shadow */
   border: 1px solid rgba(255,255,255,0.12);
   transition: border-color 200ms ease, box-shadow 200ms ease;
@@ -360,7 +363,8 @@ body:not(.light-mode) .skill-chip:focus{
 }
 
 @media (max-width: 480px){
-  .skill-chip{ font-size: 2.6vh; padding: 8px 10px; }
+  /* Reduce skill chip size and padding on very small screens so chips fit comfortably */
+  .skill-chip{ font-size: 1.5vh; padding: 8px 10px; }
 }
 
 /* Slightly increase font-size for the Conferences list to improve readability */

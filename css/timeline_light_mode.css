@@ -43,6 +43,50 @@ body.light-mode .timeline-circle {
   box-shadow: 0 0 0 4px #ffffff !important; /* white border ring */
 }
 
+/* Make the header white with black text in light mode on the timeline page.
+   Ensure links, nav items, and controls inside the header use dark text so
+   the header reads correctly on a white background. Use !important to
+   override any site-wide header theming that may apply. */
+body.light-mode header{
+  background: #ffffff !important;
+  color: #000000 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06) !important;
+}
+body.light-mode header a,
+body.light-mode header a:link,
+body.light-mode header a:visited,
+body.light-mode header a:hover,
+body.light-mode header a:focus{
+  color: #000000 !important;
+}
+/* Theme toggle and hamburger should be visible on white background */
+body.light-mode header .theme-toggle,
+body.light-mode header .hamburger{
+  color: #000000 !important;
+}
+/* nav container may be separately styled by shared light_mode.css; ensure
+   the site nav uses a transparent background here so the header's white
+   background shows through, and make nav links dark. */
+body.light-mode nav#site-nav{
+  background: transparent !important;
+}
+body.light-mode nav#site-nav a,
+body.light-mode nav#site-nav a:link,
+body.light-mode nav#site-nav a:visited,
+body.light-mode nav#site-nav a:hover,
+body.light-mode nav#site-nav a:focus{
+  color: #000000 !important;
+}
+/* Hamburger bars use .bar and are set white in shared light_mode.css; force
+   them dark here so they are visible on the white header. */
+body.light-mode .hamburger .bar{
+  background-color: #000000 !important;
+}
+/* Ensure the logo image isn't forced to a light-mode filter; show it normally */
+body.light-mode .logo{ filter: none !important; }
+
 /* Make theme property changes instantaneous on the timeline page, even when
    the user-initiated `.theme-animate` class is present. This targets only
    theme-related properties so other animations (transforms, keyframes,

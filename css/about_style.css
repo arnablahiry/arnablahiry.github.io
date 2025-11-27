@@ -14,6 +14,16 @@
   }
 }
 
+/* Desktop (PC) tweak: hide horizontal scrollbar on the About page when using
+   the full-bleed collage layout. Some browsers include the vertical scrollbar
+   in 100vw which can produce a 1px horizontal overflow; hiding horizontal
+   overflow on the page prevents the unwanted scrollbar while preserving the
+   intended full-bleed visuals. Change/remove this if you prefer fixing the
+   root layout instead. */
+@media (min-width: 769px){
+  body.page-about { overflow-x: hidden; }
+}
+
 /* Ensure these containers have transitions defined in their base state so
    returning from a focused/dimmed state animates smoothly (not only when
    the .photo-focused selector is present). */
@@ -159,14 +169,31 @@ main.page-wrapper { flex: 1 1 auto; }
 
 /* Reduced padding on small screens so overlay text doesn't overflow */
 @media (max-width: 480px){
-  .about-mini-banner a.about-thumb .thumb-text,
-  .about-photo-grid a.about-thumb .thumb-text{
-    padding: 0 12px;
-    font-size: 0.92rem;
+  .about-mini-banner a.about-thumb .thumb-text{
+    padding: 0 8px;
+    /* keep the default font-size on titles for legibility on phones */
+    line-height: 1.05;
+    text-align: center;
+    white-space: normal;
+    overflow: hidden;
   }
-  .about-mini-banner a.about-thumb .thumb-desc,
+  .about-mini-banner a.about-thumb .thumb-desc{
+    font-size: 0.76rem;
+    line-height: 1.05;
+  }
+
+  /* Food/gallery thumbnails: keep title sizes as defined globally but
+     make only the description text smaller on phones so it fits neatly. */
+  .about-photo-grid a.about-thumb .thumb-text{
+    padding: 0 6px;
+    line-height: 1.02;
+    text-align: center;
+    white-space: normal;
+    overflow: hidden;
+  }
   .about-photo-grid a.about-thumb .thumb-desc{
-    font-size: 0.82rem;
+    font-size: 0.72rem;
+    line-height: 1.02;
   }
 }
 
