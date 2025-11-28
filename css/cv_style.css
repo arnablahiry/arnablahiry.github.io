@@ -163,7 +163,52 @@ body:not(.light-mode) .project-card{ background: #0f0f10 !important; color: #e6e
 body.light-mode .project-card{ background: rgba(255,255,255,0.96); color: #111; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
 
 /* Narrower photo banner for CV page */
-.project-image{ width: 100%; height: 110px; object-fit: cover; display: block; transition: transform 360ms ease; }
+.project-image{ width: 100%; height: 110px; object-fit: cover; display: block;
+  /* match Research page card zoom timing and easing for identical feel */
+  transition: transform 480ms cubic-bezier(0.22,0.1,0.22,1) !important;
+  transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Split-banner helper: allows placing two transparent half-links over a banner image */
+.split-banner{ position: relative; display: block; overflow: hidden; }
+.split-banner .project-image{ display: block; width: 100%; height: 110px; object-fit: cover; display: block;
+/* match Research page card zoom timing and easing for identical feel */
+  transition: transform 480ms cubic-bezier(0.22,0.1,0.22,1) !important;
+  transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);}
+.split-banner .split-link{ position: absolute; top: 0; bottom: 0; width: 50%; z-index: 2; background: transparent; border: 0; }
+.split-banner .split-left{ left: 0; }
+.split-banner .split-right{ right: 0; }
+.split-banner .split-link:focus{ outline: 0px; }
+
+/* Banner links: clickable banners (non-split) should zoom slightly on hover/focus
+  and not show a focus outline per user preference. Use focus-within so keyboard
+  focus on the link also triggers the image zoom. */
+.banner-link{ display: block; position: relative; overflow: hidden; }
+.banner-link .project-image{
+  /* match Research page transition exactly so the zoom feels identical */
+  transition: transform 480ms cubic-bezier(0.22,0.1,0.22,1) !important;
+  will-change: transform; transform-origin: center center;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0);
+}
+.banner-link:hover .project-image,
+.banner-link:focus .project-image,
+.split-banner:hover .project-image,
+.split-banner:focus-within .project-image{ transform: scale(1.06);
+transition: transform 480ms cubic-bezier(0.22,0.1,0.22,1) !important;
+  transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);}
+.banner-link:focus{ outline: 0; }
 
 /* Banner for skill cards to preserve original card banner height */
 
@@ -191,6 +236,28 @@ body.light-mode .project-subtitle{ color: #444 !important; }
 /* Make cards non-expandable visually (no hover zoom) */
 .project-card:hover .project-image{ transform: none !important; }
 .project-card .project-toggle{ display: none; }
+
+/* Re-enable subtle zoom for banners when hovered/focused (only when the
+   user hovers the banner itself, not the whole card). This selector is
+   intentionally placed after the global disable rule and uses !important
+   so it overrides the .project-card disable while still ensuring the zoom
+   only occurs when hovering the banner/link or the split-banner area. */
+.banner-link:hover .project-image,
+.banner-link:focus .project-image,
+.split-banner:hover .project-image,
+.split-banner:focus-within .project-image {
+  transform: scale(1.05) !important;
+  transition: transform 480ms cubic-bezier(0.22,0.1,0.22,1) !important;
+  transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+
+/* Match Research page: hovering the entire (non-clone) project card should
+   zoom the card image (applies to all project images, including split banners). */
 
 /* Responsive: stack columns on small screens */
 @media (max-width: 768px){
@@ -266,6 +333,16 @@ body.light-mode .project-subtitle{ color: #444 !important; }
 .cv-link{ color: #feda4a; font-weight: 700; text-decoration: none; font-size:1.5vh; }
 .cv-link:hover{ text-decoration: underline; }
 
+/* Author/person link used for 'Dr. ...' names in the CV. Use the site's
+  warm-accent in dark mode and a darker warm accent in light mode. These are
+  intentionally simple placeholders (href="#") so they can be wired to
+  real profiles later. */
+.person-link{ color: #feda4a; font-weight: 700; text-decoration: none; }
+.person-link:hover,
+.person-link:focus{ text-decoration: underline; }
+.person-link:focus-visible{ outline: none; box-shadow: 0 0 0 4px rgba(254,218,74,0.08); }
+body.light-mode .person-link{ color: #aa7e00 !important; }
+
 /* Ensure the CV page mirrors Research page dark background */
 body.page-cv:not(.light-mode) .page-wrapper, body.page-cv:not(.light-mode) .section-timeline-heading{ background: #000; color: #e6e6e6; }
 
@@ -327,9 +404,11 @@ body.light-mode .skill-badge{
   background: rgba(255,255,255,0.04);
   color: #fff;
   font-weight: 700;
-  font-size: 1.0vh;
+  font-size: 1.5vh;
   /* flat chips: use a subtle border instead of shadow */
   border: 1px solid rgba(255,255,255,0.12);
+  text-decoration: none;
+  cursor: pointer;
   transition: border-color 200ms ease, box-shadow 200ms ease;
   will-change: border-color, box-shadow;
 }

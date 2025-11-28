@@ -323,8 +323,10 @@ body.light-mode .intro-section .intro-text h2{
         flex-direction: column;
         align-items: center; /* center items horizontally */
         justify-content: flex-start;
-        padding: 8vh 4vw;
-        gap: 0.6rem;
+          padding: 8vh 4vw;
+          /* Reduce vertical spacing between nav items on phones so the opened
+              navigation menu shows more items without excessive scrolling. */
+          gap: 0.3rem;
         z-index: 40;
         text-align: center;
     }
@@ -342,8 +344,9 @@ body.light-mode .intro-section .intro-text h2{
        decoration (no border-bottom) and center the link text. */
     nav a{
         display: block;
-        padding: 0.9rem 0;
-        font-size: 1.05rem;
+        /* slightly reduced vertical padding to tighten item spacing on phones */
+        padding: 0.6rem 0;
+        font-size: 1.02rem;
         color: white;
         text-decoration: none;
         border-bottom: none;
