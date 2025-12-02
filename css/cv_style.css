@@ -1,3 +1,24 @@
+/* Masonry gallery layout for References */
+.masonry {
+  display: block !important; /* ensure masonry uses column layout, not grid/flex */
+  column-count: 3;
+  column-gap: 16px;
+}
+.masonry .masonry-item {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 16px;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+
+/* Responsive breakpoints: stack to 2 columns on tablets, 1 on phones */
+@media (max-width: 1024px) {
+  .masonry { column-count: 2; }
+}
+@media (max-width: 640px) {
+  .masonry { column-count: 1; }
+}
 /* CV page styles - based on research_style.css, narrowed and tuned for CV
    This file intentionally duplicates the relevant parts of research_style.css
    so the CV page has an isolated stylesheet that can be customized safely.
@@ -58,7 +79,7 @@ body.page-cv .section-timeline-heading .padding-vertical-xlarge{
 }
 
 /* Reduce margin around the intro heading on CV page */
-body.page-cv .timeline-main-heading-wrapper{ padding-right: 80px; }
+body.page-cv .timeline-main-heading-wrapper{ padding-right: 10px; }
 body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom: 6px; margin-top: 0; }
 
 /* Make subheading sit slightly higher so it lines up with contents top */
@@ -78,7 +99,7 @@ body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom
 }
 
 /* Heading wrapper and heading */
-.timeline-main-heading-wrapper{
+timeline-main-heading-wrapper{
   color: white;
   text-align: center;
   max-width: 1100px;
@@ -86,7 +107,7 @@ body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom
   margin-right: auto;
   position: relative;
   box-sizing: border-box;
-  padding-right: 112px;
+  padding-right: 40px;
 }
 
 .section-timeline-heading{ background-color: black; }
@@ -114,6 +135,20 @@ h2.intro-heading{
 
 @media (max-width: 768px){
   .timeline-main-heading-wrapper h2.intro-heading{ left: 6px; }
+}
+
+/* Desktop-only: remove the small right-offset and ensure the main heading is
+   horizontally centered in the viewport. This only applies on larger screens
+   (PC) so mobile offsets remain unchanged. */
+@media (min-width: 981px) {
+  body.page-cv .timeline-main-heading-wrapper h2.intro-heading{
+    left: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+  }
+  /* remove the extra right padding on the heading wrapper so centering is exact */
+  body.page-cv .timeline-main-heading-wrapper{ padding-right: 0 !important; }
 }
 
 /* CV download icon placed next to the main heading */
@@ -992,4 +1027,138 @@ body.page-cv.light-mode:not(.no-theme-transition) nav#site-nav{
 
 body.page-cv.light-mode:not(.no-theme-transition) header::before{
   background: transparent !important;
+}
+
+/* Subtitle tweaks: reduce gap between main heading and subtitle, and
+   increase gap after the subtitle for better separation from following
+   content. Scoped to the CV page so other pages are unaffected. */
+body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom: 2px; }
+.intro-subtitle{
+  margin-top: 1px;    /* bring the subtitle closer to the heading */
+  margin-bottom: 35px; /* increase spacing after the subtitle */
+  font-size: 2.0vh;    /* readable but smaller than h2 */
+  line-height: 1.45;
+  max-width: 86%;
+  margin-left: auto;
+  margin-right: auto;
+  color: rgba(230,230,230,0.92); /* default (dark mode) slightly muted */
+  text-align: center;
+}
+
+/* In light-mode make the subtitle text black for maximum contrast */
+body.light-mode .intro-subtitle{
+  color: #000000 !important;
+}
+
+/* Phone-specific: reduce subtitle size and show whole card images on small screens */
+@media (max-width: 780px) {
+  .intro-subtitle{
+    font-size: 1.5vh !important; /* smaller on very small screens */
+    max-width: 100% !important;
+    text-align: center; /* justified on phone-only */
+    text-justify: inter-word;
+    margin-top: 6px !important;
+    margin-bottom: 28px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Make project images show the full image (no cropping) on phones. Use
+     object-fit: contain and height:auto so the entire image is visible. A
+     max-height prevents images from becoming excessively tall. */
+  .project-image,
+  .split-banner .project-image,
+  .banner-link .project-image{
+    width: 100% !important;
+    height: auto !important;
+    max-height: 180px !important; /* keep images reasonably sized */
+    object-fit: contain !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   CV page: center the Download CV button and make it theme-aware
+   Scoped to the CV heading wrapper so other pages are unaffected.
+------------------------------------------------------------------ */
+.timeline-main-heading-wrapper .site-links{
+  width: 100%;
+  display: flex;
+  justify-content: center; /* center the button horizontally */
+  align-items: center;
+  margin-top: 12px; /* ensure comfortable gap from subtitle */
+  margin-bottom: 45px; /* larger space below button before subheadings */
+}
+
+.timeline-main-heading-wrapper .site-links .site-link{
+  /* keep the global `.site-link` sizing but ensure it doesn't collapse
+     when the wrapper has tight paddings on this page */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6.5rem;
+  border-radius: 12px; /* rounded edges */
+  border: 1px solid; /* border will be themed below */
+  text-decoration: none !important; /* no underline */
+  color: inherit;
+  padding: 0.6rem 1rem; /* ensure comfortable tap/click area */
+  /* Override the global "no transitions" rule on this page by using a
+     more specific selector with !important. This makes hover/focus feel
+     smooth while leaving the rest of the CV page transition-free. */
+  transition: background-color 260ms cubic-bezier(.2,.9,.2,1),
+              box-shadow 260ms cubic-bezier(.2,.9,.2,1),
+              transform 180ms cubic-bezier(.2,.9,.2,1),
+              color 200ms ease,
+              border-color 200ms ease !important;
+  will-change: background-color, box-shadow, transform;
+}
+
+/* Light / dark theme overrides scoped to CV page */
+body.page-cv.light-mode .timeline-main-heading-wrapper .site-links .site-link{
+  /* light-mode: use a pale dark-yellow overlay with a stronger warm border */
+  background: rgba(160,138,65,0.06) !important; /* very light dark-yellow overlay */
+  color: #111 !important;
+  border-color: rgba(160, 116, 14, 0.95) !important; /* warm dark-yellow */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+}
+
+/* Hover / focus states for light mode: overlay gets darker on hover */
+body.page-cv.light-mode .timeline-main-heading-wrapper .site-links .site-link:hover,
+body.page-cv.light-mode .timeline-main-heading-wrapper .site-links .site-link:focus{
+  background: rgba(160, 138, 65, 0.106) !important; /* darker overlay on hover */
+  box-shadow: 0 8px 22px rgba(160,138,65,0.12) !important; /* subtle warm glow */
+}
+
+body.page-cv:not(.light-mode) .timeline-main-heading-wrapper .site-links .site-link{
+  /* dark-mode: emphasize gold border and a very light gold overlay */
+  background: rgba(254,218,74,0.06) !important; /* very light gold overlay */
+  color: #fff !important; /* white text in dark mode */
+  border-color: #feda4a !important; /* gold */
+  box-shadow: 0 0 0.08rem rgba(254,218,74,0.16) !important;
+}
+
+/* Hover / focus states for dark mode: overlay gets lighter (brighter) on hover */
+body.page-cv:not(.light-mode) .timeline-main-heading-wrapper .site-links .site-link:hover,
+body.page-cv:not(.light-mode) .timeline-main-heading-wrapper .site-links .site-link:focus{
+  background: rgba(254, 218, 74, 0.186) !important; /* brighter gold overlay */
+  box-shadow: 0 8px 22px rgba(254,218,74,0.18) !important; /* subtle gold glow */
+  color: #fff !important;
+}
+
+@media (max-width: 780px){  
+  /* make sure the button stays centered and doesn't overflow on small screens */
+  .timeline-main-heading-wrapper .site-links{ width: 100%; padding: 0 6vw; box-sizing: border-box; margin-bottom: 36px; }
+  .timeline-main-heading-wrapper .site-links .site-link{ width: 100%; max-width: 420px; }
+}
+
+/* Phone-only: ensure any whitespace before the footer inherits the dark
+   background when the site is in dark mode. This fixes a small gap that
+   occasionally shows a light background on very small screens. */
+@media (max-width: 780px) {
+  body.page-cv:not(.light-mode),
+  body.page-cv:not(.light-mode) main,
+  body.page-cv:not(.light-mode) .page-wrapper,
+  body.page-cv:not(.light-mode) .container,
+  body.page-cv:not(.light-mode) footer {
+    background: #000 !important;
+    color: #e6e6e6 !important;
+  }
 }
