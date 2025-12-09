@@ -286,9 +286,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -304,18 +302,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.moment0"><code class="docutils literal notranslate"><span class="pre">moment0()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.moment1"><code class="docutils literal notranslate"><span class="pre">moment1()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.slice_view"><code class="docutils literal notranslate"><span class="pre">slice_view()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -325,137 +311,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-GalCubeCraft.visualise">
-<span id="visualisation"></span><h1>Visualisation<a class="headerlink" href="#module-GalCubeCraft.visualise" title="Link to this heading">#</a></h1>
-<p>Plotting helpers for GalCubeCraft results.</p>
-<p>This module provides small, focused plotting utilities that operate on the
-<code class="docutils literal notranslate"><span class="pre">results</span></code> list produced by <a class="reference internal" href="core_functionality.html#GalCubeCraft.core.GalCubeCraft.generate_cubes" title="GalCubeCraft.core.GalCubeCraft.generate_cubes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">generate_cubes()</span></code></a>.
-Each public helper accepts the <code class="docutils literal notranslate"><span class="pre">results</span></code> container and an index selecting
-which generated cube to visualise. The functions are intentionally lightweight
-and return a Matplotlib <code class="docutils literal notranslate"><span class="pre">(fig,</span> <span class="pre">ax)</span></code> pair so callers (GUIs, scripts, tests)
-can further customise or save figures.</p>
-<section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>matplotlib (this module sets the <code class="docutils literal notranslate"><span class="pre">TkAgg</span></code> backend by default)</p></li>
-<li><p>astrodendro (used to compute a crude mask for visual guides)</p></li>
-</ul>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>These helpers call <code class="xref py py-func docutils literal notranslate"><span class="pre">_prepare_cube()</span></code> to extract cube / metadata and to</dt><dd><p>compute a simple dendrogram-based mask used for moment maps. The dendrogram
-parameters are deliberately conservative and may be tuned for different
-signal-to-noise regimes.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>The plotting functions attempt to save to <code class="docutils literal notranslate"><span class="pre">figures/&lt;shape&gt;/</span></code> when</dt><dd><p><code class="docutils literal notranslate"><span class="pre">save=True</span></code> is passed; save failures are intentionally ignored to keep
-UI flows robust.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</section>
-<dl class="py function">
-<dt class="sig sig-object py" id="GalCubeCraft.visualise.moment0">
-<span class="sig-prename descclassname"><span class="pre">GalCubeCraft.visualise.</span></span><span class="sig-name descname"><span class="pre">moment0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GalCubeCraft/visualise.html#moment0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GalCubeCraft.visualise.moment0" title="Link to this definition">#</a></dt>
-<dd><p>Plot the zeroth moment (integrated intensity) of a spectral cube.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>sequence</em>) – The <code class="docutils literal notranslate"><span class="pre">results</span></code> container produced by <code class="docutils literal notranslate"><span class="pre">GalCubeCraft.generate_cubes</span></code>.</p></li>
-<li><p><strong>idx</strong> (<em>int</em>) – Index selecting which cube to plot.
-fig, ax = plt.subplots(figsize=(6, 6))
-If True, attempt to save the figure to <code class="docutils literal notranslate"><span class="pre">figures/&lt;shape&gt;/moment0.pdf</span></code>.</p></li>
-<li><p><strong>fname_save</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Optional directory to save the figure. If None a path under the
-current working directory is chosen automatically.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fig, ax</strong> – Matplotlib figure and axes objects containing the rendered moment map.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Figure, Axes)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="GalCubeCraft.visualise.moment1">
-<span class="sig-prename descclassname"><span class="pre">GalCubeCraft.visualise.</span></span><span class="sig-name descname"><span class="pre">moment1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GalCubeCraft/visualise.html#moment1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GalCubeCraft.visualise.moment1" title="Link to this definition">#</a></dt>
-<dd><p>Plot the first moment (intensity-weighted velocity) of a spectral cube.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>sequence</em>) – The <code class="docutils literal notranslate"><span class="pre">results</span></code> container produced by <code class="docutils literal notranslate"><span class="pre">GalCubeCraft.generate_cubes</span></code>.</p></li>
-<li><p><strong>idx</strong> (<em>int</em>) – Index selecting which cube to plot.</p></li>
-<li><p><strong>save</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, attempt to save the figure to <code class="docutils literal notranslate"><span class="pre">figures/&lt;shape&gt;/moment1.pdf</span></code>.</p></li>
-<li><p><strong>fname_save</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Optional directory to save the figure. If None a path under the
-current working directory is chosen automatically.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fig, ax</strong> – Matplotlib figure and axes objects containing the rendered moment map.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Figure, Axes)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="GalCubeCraft.visualise.slice_view">
-<span class="sig-prename descclassname"><span class="pre">GalCubeCraft.visualise.</span></span><span class="sig-name descname"><span class="pre">slice_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GalCubeCraft/visualise.html#slice_view"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GalCubeCraft.visualise.slice_view" title="Link to this definition">#</a></dt>
-<dd><p>Show a slice viewer embedded in a Tk window.</p>
-<p>This viewer embeds the Matplotlib figure into a Tk Toplevel and uses a
-ttk-styled slider to step through spectral channels. The viewer always
-keeps the lower colour limit fixed at 0 and computes an upper limit per
-slice so contrast adapts to the currently displayed channel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>sequence</em>) – The <code class="docutils literal notranslate"><span class="pre">results</span></code> container produced by <code class="docutils literal notranslate"><span class="pre">GalCubeCraft.generate_cubes</span></code>.</p></li>
-<li><p><strong>idx</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of the cube within <code class="docutils literal notranslate"><span class="pre">data</span></code> to display (default 0).</p></li>
-<li><p><strong>channel</strong> (<em>int</em><em>, </em><em>optional</em>) – Initial spectral channel index to show. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default)
-the viewer will open on the central spectral channel (<code class="docutils literal notranslate"><span class="pre">int(n/2)</span></code>).</p></li>
-<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Matplotlib colormap to use for imshow.</p></li>
-<li><p><strong>parent</strong> (<em>tkinter widget</em><em>, </em><em>optional</em>) – If provided, the slice viewer will be a child Toplevel of this
-widget. Otherwise a new Toplevel (or root) is used.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fig, ax</strong> – The Matplotlib figure and axes used by the embedded viewer.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Figure, Axes)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="GalCubeCraft.visualise.spectrum">
-<span class="sig-prename descclassname"><span class="pre">GalCubeCraft.visualise.</span></span><span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GalCubeCraft/visualise.html#spectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GalCubeCraft.visualise.spectrum" title="Link to this definition">#</a></dt>
-<dd><p>Plot the integrated spectrum (total flux vs velocity) for a cube.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>sequence</em>) – The <code class="docutils literal notranslate"><span class="pre">results</span></code> container produced by <code class="docutils literal notranslate"><span class="pre">GalCubeCraft.generate_cubes</span></code>.</p></li>
-<li><p><strong>idx</strong> (<em>int</em>) – Index selecting which cube to plot.</p></li>
-<li><p><strong>save</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, save the figure as <code class="docutils literal notranslate"><span class="pre">spectrum.pdf</span></code> under
-<code class="docutils literal notranslate"><span class="pre">figures/&lt;shape&gt;/</span></code> unless <code class="docutils literal notranslate"><span class="pre">fname_save</span></code> overrides the path.</p></li>
-<li><p><strong>fname_save</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Optional directory to save the figure.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fig, ax</strong> – The Matplotlib figure and axes containing the spectrum.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(Figure, Axes)</p>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="visualisation">
+<h1>Visualisation<a class="headerlink" href="#visualisation" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -493,25 +350,6 @@ widget. Otherwise a new Toplevel (or root) is used.</p></li>
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.moment0"><code class="docutils literal notranslate"><span class="pre">moment0()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.moment1"><code class="docutils literal notranslate"><span class="pre">moment1()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.slice_view"><code class="docutils literal notranslate"><span class="pre">slice_view()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#GalCubeCraft.visualise.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
