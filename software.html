@@ -103,7 +103,19 @@
                         <div class="project-meta">
                             <h3 class="project-title">GalCubeCraft - Sythetic Galaxy Spectral Cubes</h3>
                             <p class="project-subtitle">Theoretically and physically motivated generator of unique synthetic galaxy spectral cubes for astrophysical research.</p>
-                            <div class="project-tags"><span class="tag-chip">Science</span></div>
+                            <div class="project-tags">
+                                <span class="tag-chip">Science</span>
+                                <div class="project-badges" aria-hidden="true">
+                                    <a href="https://github.com/arnablahiry/GalCubeCraft/actions/workflows/ci.yml" target="_blank" rel="noopener noreferrer"><img src="https://github.com/arnablahiry/GalCubeCraft/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+                                    <a href="https://pypi.org/project/GalCubeCraft" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/pypi/v/GalCubeCraft.svg?cacheSeconds=3600" alt="PyPI version"></a>
+                                    <a href="https://doi.org/10.5281/zenodo.17840423" target="_blank" rel="noopener noreferrer"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17840423.svg" alt="DOI"></a>
+                                </div>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="https://github.com/arnablahiry/GalCubeCraft" target="_blank" rel="noopener noreferrer"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub"></a>
+                                <a class="project-icon-link" href="#" target="_blank" rel="noopener noreferrer"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx"></a>
+                                <a class="project-icon-link" href="https://pypi.org/project/GalCubeCraft/" target="_blank" rel="noopener noreferrer"><img class="project-icon" src="images/icons/pypi_software.png" alt="PyPI"></a>
+                            </div>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>                                
                         <div class="project-full" hidden>
@@ -237,7 +249,15 @@ python gui.py</code></pre>
                         <div class="project-meta">
                             <h3 class="project-title">AstroLore</h3>
                             <p class="project-subtitle">Fun Python software to find the nearest astronomical object referenced in science-fiction from a given location.</p>
-                            <div class="project-tags"><span class="tag-chip">Science</span><span class="tag-chip">Fun</span></div>
+                            <div class="project-tags">
+                                <span class="tag-chip">Science</span>
+                                <span class="tag-chip">Fun</span>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="#" target="_blank" rel="noopener noreferrer"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub"></a>
+                                <a class="project-icon-link" href="#" target="_blank" rel="noopener noreferrer"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx"></a>
+                                <a class="project-icon-link" href="#" target="_blank" rel="noopener noreferrer"><img class="project-icon" src="images/icons/pypi_software.png" alt="PyPI"></a>
+                            </div>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-2-desc">Learn more</button>
         
@@ -534,6 +554,35 @@ function smoothMoveTo(node, x, y, opts){
             window.addEventListener('load', function(){ try{ if(window.matchMedia && !window.matchMedia('(min-width: 769px)').matches) return; if(document.body.classList.contains('light-mode')) return; setTimeout(function(){ document.body.classList.add('show-theme-hint'); }, 260); }catch(_){}});
         })();
     </script>
+        <script>
+            // Ensure project badges match the width/height of the first tag chip
+            (function(){
+                function syncBadges(){
+                    var cards = document.querySelectorAll('.project-card');
+                    cards.forEach(function(card){
+                        var tag = card.querySelector('.project-tags .tag-chip');
+                        var badges = card.querySelector('.project-badges');
+                        if(!tag || !badges) return;
+                        var tagRect = tag.getBoundingClientRect();
+                        var tagWidth = Math.round(tagRect.width);
+                        var tagHeight = Math.round(tagRect.height);
+                        // Make each individual badge match the tag width/height so
+                        // badges are the same size as the tag (not the whole block).
+                        var imgs = badges.querySelectorAll('img');
+                        imgs.forEach(function(img){
+                            img.style.height = tagHeight - 6 + 'px';
+                            img.style.objectFit = 'contain';
+                            img.style.display = 'inline-block';
+                        });
+                        // keep a consistent small gap between tag and badges
+                        badges.style.marginLeft = '6px';
+                    });
+                }
+                document.addEventListener('DOMContentLoaded', syncBadges);
+                window.addEventListener('load', syncBadges);
+                window.addEventListener('resize', function(){ setTimeout(syncBadges, 80); });
+            })();
+        </script>
     <!-- Home snitch script: expose launchSnitch(); loaded here so the button below can call it.
          We still add a safe loader in the event the script is not yet available when the button is clicked. -->
     <script src="scripts/home/home-snitch.js"></script>

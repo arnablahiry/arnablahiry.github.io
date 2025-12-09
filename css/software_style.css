@@ -73,6 +73,30 @@ body.page-software .projects-grid {
   box-shadow: 0 8px 26px rgba(0,0,0,0.12);
 }
 
+/* Light-mode: make the filter buttons visible on white backgrounds while
+   keeping the dark-mode visual style (rounded pills + gold accent). */
+body.light-mode .project-filters .filter-btn{
+  background: rgba(0, 0, 0, 0.02) !important;
+  color: #111 !important;
+  box-shadow: none !important;
+}
+body.light-mode .project-filters .filter-btn:hover{
+  background: rgba(0,0,0,0.08) !important;
+}
+body.light-mode .project-filters .filter-btn[aria-pressed="true"],
+body.light-mode .project-filters .filter-btn.active{
+  background: linear-gradient(90deg, rgba(250,228,150,0.22), rgba(200,170,80,0.14)) !important;
+  color: #111 !important;
+  box-shadow: 0 8px 22px rgba(140,102,12,0.09) !important;
+}
+
+/* Light-mode: ensure tag chips remain readable on white backgrounds */
+body.light-mode .tag-chip{
+  background: rgba(170,126,0,0.08) !important; /* subtle warm tint */
+  color: #111 !important;
+  box-shadow: none !important;
+}
+
 @media (max-width: 520px) {
   .project-filters { gap: 10px; padding-left: 4vw; padding-right: 4vw; }
   .project-filters .filter-btn { min-width: 72px; padding: 8px 12px; font-size: 14px; }
@@ -99,6 +123,68 @@ body.page-software .projects-grid {
   flex-wrap: wrap;
 }
 .project-meta .tag-chip { margin: 0; }
+
+/* Keep a consistent 1px border space on project cards to avoid layout
+  shifts when light-mode applies a visible border. Using a transparent
+  border in the default state ensures inner content stays aligned. */
+body.page-software .project-card{ border: 1px solid transparent; box-sizing: border-box; }
+
+/* Project icons (GitHub / Sphinx / PyPI) shown under tags in condensed view */
+.project-icons{ display: flex; gap: 18px; align-items: center; margin-top: 18px; margin-bottom: 12px; }
+.project-icon-link{ display: inline-block; border-radius: 8px; overflow: hidden; padding: 2px; }
+.project-icons .project-icon{ width: 44px; height: 44px; object-fit: cover; border-radius: 8px; display: inline-block; transition: opacity 300ms cubic-bezier(.2,.9,.2,1), transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms cubic-bezier(.2,.9,.2,1); opacity: 0.7; }
+
+/* Explicitly prevent theme-based inversion on these small icons */
+body.light-mode .project-icons .project-icon,
+body:not(.light-mode) .project-icons .project-icon,
+.project-icons .project-icon{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+.project-icon-link:hover .project-icon,
+.project-icon-link:focus .project-icon{
+  transform: scale(1.06);
+  opacity: 1 !important;
+}
+
+/* Remove any visible border/outline on hover while keeping an accessible
+   focus indicator for keyboard users via box-shadow (no browser outline). */
+.project-icon-link:focus{ outline: none; }
+
+@media (max-width: 520px){
+  .project-icons .project-icon{ width: 36px; height: 36px; }
+}
+
+/* Badges (CI / PyPI / License / DOI) shown inline next to tag chips */
+.project-badges{ display: inline-flex; gap: 8px; align-items: center; margin-left: 10px; }
+.project-badges img{ height: 44px; width: auto; display: block; filter: none !important; -webkit-filter: none !important; object-fit: contain; }
+
+/* Ensure badges are never color-inverted by site theme rules in either
+   light or dark mode. This explicit override prevents unexpected
+   `filter: invert()` from affecting badges. */
+body.page-software .project-badges img,
+body.page-software body.light-mode .project-badges img,
+body.page-software body:not(.light-mode) .project-badges img{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+@media (max-width: 520px){
+  .project-badges img{ height: 32px; }
+}
+
+
+/* Invert badge colours in light mode so SVG badges designed for dark backgrounds
+   render properly on white backgrounds. This targets badges only; project
+   icons kept un-inverted elsewhere. */
+
+/* Hide project icons when a card is expanded.
+   - The clone/expanded view uses `.project-clone` so hide icons there.
+   - Use `:has()` to hide icons when the containing card has an expanded `.project-full`.
+   This keeps icons visible on condensed cards but removes them in the expanded view. */
+.project-clone .project-icons{ display: none !important; }
+.project-card:has(.project-full[aria-expanded="true"]) .project-icons{ display: none !important; }
 
 /* Hidden cards when filtered out */
 .project-card.card-hidden { display: none !important; opacity: 0; transform: translateY(6px); }
