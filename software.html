@@ -105,10 +105,131 @@
                             <p class="project-subtitle">Theoretically and physically motivated generator of unique synthetic galaxy spectral cubes for astrophysical research.</p>
                             <div class="project-tags"><span class="tag-chip">Science</span></div>
                         </div>
-                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>                                
                         <div class="project-full" hidden>
-                            
-                        </div>
+                                <p>
+                                    <strong>GalCubeCraft</strong> is a high-fidelity, easy-to-read pipeline for synthesising IFU-style spectral cubes (velocity × y × x). It is designed for method development: fast generation of controllable, reproducible cubes for denoising, deconvolution, kinematic tests, and ML pretraining. The code emphasises clarity (well-named small functions), sensible defaults, and modularity so you can replace morphology, kinematics or instrument modules with minimal changes.
+                                </p>
+
+                                <h3>What it does</h3>
+                                <ul>
+                                    <li>Constructs a 3D flux field per galaxy component using a radial Sérsic-like surface profile (disk plane) combined with an exponential vertical profile.</li>
+                                    <li>Builds a compact analytic rotation-curve model to assign tangential velocities to voxels; supports multiple components (primary + satellites) and simple velocity dispersion models.</li>
+                                    <li>Rotates the 3D flux & velocity fields to an arbitrary viewing geometry (inclination + position angle) and projects emission into line-of-sight velocity bins to form a spectral cube.</li>
+                                    <li>Applies optional instrument effects: per-channel 2D beam convolution (elliptical Gaussian), channel binning / spectral smoothing, and additive noise models. Cubes are saved with accompanying metadata for reproducibility.</li>
+                                </ul>
+
+                                <h3>Design & architecture</h3>
+                                <ul>
+                                    <li><strong>Core pipeline</strong>: small, single-responsibility functions in <code>src/GalCubeCraft/core.py</code> orchestrate grid creation, component stacking, kinematics and I/O.</li>
+                                    <li><strong>Helpers</strong>: <code>utils.py</code> contains beam kernels, convolution helpers and spatial transforms; <code>io.py</code> wraps saving/loading with consistent folder layouts.</li>
+                                    <li><strong>Visualisation</strong>: <code>visualise.py</code> exposes moment map and spectrum helpers used by both scripts and the GUI.</li>
+                                    <li><strong>GUI</strong>: a compact Tkinter-based GUI (see below) designed for interactive exploration without blocking the UI thread.</li>
+                                </ul>
+
+
+
+                                <h3>Quick install & API example</h3>
+                                <div class="code-snippet">
+                                    <div class="lang-label">TERMINAL</div>
+                                    <pre><code class="language-bash">pip install GalCubeCraft</code></pre>
+                                </div>
+
+                                <div class="code-snippet">
+                                    <div class="lang-label">PYTHON</div>
+                                    <pre><code class="language-python">import GalCubeCraft
+# create and run quickly from script
+g = GalCubeCraft(n_cubes=1, grid_size=125, n_spectral_slices=40, seed=42)
+results = g.generate_cubes()
+cube, params = results[0]
+print('cube shape =', cube.shape)
+g.visualise(results, idx=0, save=False)</code></pre>
+                                </div>
+
+                                <h3>Files & integration (expanded)</h3>
+                                <ul>
+                                    <li><code>src/GalCubeCraft/core.py</code> — orchestrates grid creation, stacking components and kinematics.</li>
+                                    <li><code>src/GalCubeCraft/utils.py</code> — beam kernels, convolution helpers and small numeric utilities.</li>
+                                    <li><code>src/GalCubeCraft/visualise.py</code> — moment maps and spectrum plotting helpers used by the GUI and scripts.</li>
+                                    <li><code>src/GalCubeCraft/gui.py</code> — the compact Tkinter GUI; see the pseudocode excerpt above for its threading pattern.</li>
+                                </ul>
+
+
+                                <h3>GUI - Interactive Usage</h3>
+                                <ul>
+                                    <li>Generates one spectral cube at a time from the parameters you set. This is sufficient for interactive experimentation and previewing the effects of different choices.</li>
+                                    <li>Runs the heavy generation step in a background thread and displays logs in a small Log window so you can follow progress and any printed diagnostics.</li>
+                                    <li>Provides convenience buttons to visualise results using the plotting helpers: Moment-0 (integrated intensity), Moment-1 (intensity-weighted velocity), and the integrated line-of-sight spectrum. These open interactive Matplotlib figures so you can pan/zoom as needed.</li>
+                                    <li>Allows saving the generated spectral cube along with a parameters/metadata dictionary to disk. Both NumPy <code>.npz</code> archives and Python <code>.pkl</code> pickles are supported by the GUI save dialog.</li>
+                                </ul>
+
+                                <h3>Controls and parameters</h3>
+                                <p>The GUI exposes the following user-adjustable parameters (each control is directly reflected in the generator instance shown in <code>gui.py</code>):</p>
+                                <ul>
+                                    <li>Number of galaxies (primary + satellites)</li>
+                                    <li>Satellite offset (distance from primary centre, pixels)</li>
+                                    <li>Beam information: minor axis (bmin, px), major axis (bmaj, px), position angle (BPA, degrees)</li>
+                                    <li>Resolution parameter r (controls Re relative to beam size)</li>
+                                    <li>Sérsic index n (profile concentration)</li>
+                                    <li>Scale height h_z (vertical exponential scale, px)</li>
+                                    <li>Central effective flux density S_e (intrinsic scaling)</li>
+                                    <li>Line-of-sight velocity dispersion <code>σ_v,z</code> (km/s)</li>
+                                    <li>Grid size (nx = ny, pixels)</li>
+                                    <li>Number of spectral channels (n_s)</li>
+                                    <li>Inclination angle (rotation about X, degrees)</li>
+                                    <li>Azimuthal / position angle (rotation about Y, degrees)</li>
+                                </ul>
+                                <h4>Launch</h4>
+                                <div class="code-snippet">
+                                    <div class="lang-label">TERMINAL</div>
+                                    <pre><code class="language-bash"># from package (recommended)
+python -m GalCubeCraft.gui
+
+# or from the source tree
+cd src/GalCubeCraft
+python gui.py</code></pre>
+                                </div>
+                                <h3>Behaviour and UX notes</h3>
+                                <ul>
+                                    <li>Generation is started with the "Generate" button. While a cube is being produced the GUI disables the interactive sliders (to indicate a running state) and the Log window is shown so you can follow output.</li>
+                                    <li>When generation finishes the visualisation buttons (Moment0, Moment1, Spectra) and the Save button become enabled. The "New" button clears the current generator state and re-enables controls so you can start a fresh instance.</li>
+                                    <li>The GUI attempts to render LaTeX-style labels for parameter names (using Matplotlib mathtext). If rendering fails for a label it falls back to a readable plain-text label so controls remain understandable.</li>
+                                </ul>
+
+                                <h3>Visualisation</h3>
+                                <ul>
+                                    <li><strong>Moment-0</strong>: integrated intensity map produced by summing the cube along the spectral axis and optionally saving the figure.</li>
+                                    <li><strong>Moment-1</strong>: intensity-weighted velocity map computed from the spectral channels and visualised with an overlaid beam marker.</li>
+                                    <li><strong>Spectrum</strong>: integrated flux vs velocity (line-of-sight spectrum).</li>
+                                </ul>
+                                <p>All visualisation helpers are implemented as small functions in <code>src/GalCubeCraft/visualise.py</code> and are called by the GUI to produce Matplotlib figures. These figures are interactive; you can pan/zoom and save them using Matplotlib's GUI controls.</p>
+
+                                <h3>Saving</h3>
+                                <p>The GUI Save flow prefers to save already-generated results (so it does not re-run the expensive generation step). You can save as a compressed NumPy archive (<code>.npz</code>) or as a pickled Python object (<code>.pkl</code>). Saved contents include the spectral cube array and a parameter dictionary with metadata (beam info, pixel scale, average velocities, etc.).</p>
+
+                                <h3>Future features</h3>
+                                <p>Planned enhancements for future releases include:</p>
+                                <ul>
+                                    <li>Artificial noise injection and configurable S/N controls</li>
+                                    <li>Batch generation of multiple cubes and export of training-ready datasets</li>
+                                    <li>More advanced kinematic models and multi-component morphologies</li>
+                                    <li>Small GUI refinements (progress bar for generation, better layout on HiDPI displays)</li>
+                                </ul>
+
+                                
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/cubecraft_gui1.png" alt="Astrolore GUI screenshot 1" style="width:50%;">
+                                </div>
+                                <br>
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/cubecraft_gui2.png" alt="Astrolore GUI screenshot 2" style="width:80%;"  >
+                                </div>
+            
+                                <h3>Authors</h3>
+                                <ul>
+                                    <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
+                                </ul>
+                            </div>
                     </article>
 
                     <article class="project-card" data-tags="science, fun">

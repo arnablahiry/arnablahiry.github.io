@@ -897,8 +897,17 @@ body.light-mode #meme-image{
    `filter: invert()`; explicitly exclude Astrolore screenshots so their
    colors remain as authored. We match filenames containing "astrolore".
  ------------------------------------------------------------------ */
-body:not(.light-mode) img[src*="astrolore"]{
+body:not(.light-mode) img{
     filter: none !important;
+}
+
+/* Center Cubecraft GUI screenshots inside the expanded project card
+   without modifying HTML. Select by filename segment so this only
+   affects the intended images. */
+.project-full img[src*="cubecraft_gui"]{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 

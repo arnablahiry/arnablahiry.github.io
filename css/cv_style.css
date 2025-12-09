@@ -977,6 +977,32 @@ body.light-mode .social-card:hover{
   opacity: 0.9 !important;
 }
 
+/* Respect explicit opt-out for images that should not be inverted.
+   Use the `no-invert` class on the wrapper or the image to prevent
+   theme-aware CSS filters from being applied. This avoids accidental
+   inversion of authored screenshots or GUI captures. */
+body.light-mode .project-card .no-invert img,
+body.light-mode .project-card .no-invert svg,
+body.light-mode .image-wrapper.no-invert img,
+body.light-mode .image-wrapper.no-invert svg,
+body.light-mode img.no-invert,
+body.light-mode svg.no-invert{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* Also ensure the opt-out works in dark mode where other inversion rules
+   might apply (mirror the selectors). */
+body:not(.light-mode) .project-card .no-invert img,
+body:not(.light-mode) .project-card .no-invert svg,
+body:not(.light-mode) .image-wrapper.no-invert img,
+body:not(.light-mode) .image-wrapper.no-invert svg,
+body:not(.light-mode) img.no-invert,
+body:not(.light-mode) svg.no-invert{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
 
 /* Images that were authored for light backgrounds: keep them original in
   light mode, invert them when dark mode is active. Use the `light-img`

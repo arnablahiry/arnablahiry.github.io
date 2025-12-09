@@ -16,9 +16,9 @@ body.page-software .section-timeline-heading .container {
    This file is loaded after the site-wide theme CSS, so a page-scoped,
    high-specificity selector here will override broader inversion rules.
  ------------------------------------------------------------------ */
-body.page-software:not(.light-mode) .image-pair img[src*="astrolore"],
-body.page-software:not(.light-mode) .project-card img[src*="astrolore"],
-body.page-software:not(.light-mode) img[src*="astrolore"]{
+body.page-software:not(.light-mode) .image-pair img,
+body.page-software:not(.light-mode) .project-card img,
+body.page-software:not(.light-mode) img{
   filter: none !important;
   -webkit-filter: none !important;
 }
