@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GalCubeCraft.utils &#8212;  0.1.2 documentation</title>
+    <title>GalCubeCraft.utils &#8212;  1.0.1 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=0deb7d70"></script>
+    <script src="../../_static/documentation_options.js?v=423d4ce3"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../_static/logo.png" class="logo__image only-light" alt=" 0.1.2 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt=" 0.1.2 documentation - Home"/>`);</script>
+    <img src="../../_static/logo.png" class="logo__image only-light" alt=" 1.0.1 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt=" 1.0.1 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -264,8 +264,12 @@ document.write(`
                   
   <h1>Source code for GalCubeCraft.utils</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This module provides essential functions for processing and analyzing Integral Field Unit (IFU) spectral cubes, particularly for astronomical observations and synthetic data generation. The functions support common operations needed in radio and optical astronomy workflows.</span>
+<span class="sd">&quot;&quot;&quot;Utility functions for IFU spectral cube processing.</span>
+
+<span class="sd">This module provides essential helpers for working with synthetic and observed</span>
+<span class="sd">IFU data: beam annotation for figures, circular aperture masks for simple</span>
+<span class="sd">photometry, beam convolution, and noise application (with or without beam</span>
+<span class="sd">correlation). Functions are kept small and focused to aid reuse.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">astropy.convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gaussian2DKernel</span><span class="p">,</span> <span class="n">convolve_fft</span>
@@ -709,7 +713,6 @@ document.write(`
 <span class="sd">    convolve_beam : Beam convolution without noise addition</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Step 1: Estimate peak flux for noise scaling</span>
-    <span class="c1"># TODO: peak_snr is undefined - should be a function parameter</span>
     <span class="n">peak_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">spectral_cube</span><span class="p">)</span>
     <span class="n">target_noise_rms</span> <span class="o">=</span> <span class="n">peak_flux</span> <span class="o">/</span> <span class="n">peak_snr</span>  <span class="c1"># Calculate target noise level</span>
 
@@ -719,7 +722,6 @@ document.write(`
 
 
     <span class="c1"># Step 3: Convolve noise with beam to create realistic spatial correlation</span>
-    <span class="c1"># TODO: beam_width_px is undefined - should be derived from beam_list</span>
     <span class="n">convolved_noise</span> <span class="o">=</span> <span class="n">convolve_beam</span><span class="p">(</span><span class="n">white_noise</span><span class="p">,</span> <span class="n">beam_list</span><span class="p">)</span>
     
     <span class="c1"># Step 4: Measure actual RMS in the convolved noise</span>
