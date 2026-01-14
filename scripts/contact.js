@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Configuration: set the current winning location here (easy to change)
   // Valid ids: 'kolkata', 'heraklion', 'paris', 'world'
-  const WINNER = 'heraklion';
+  const WINNER = 'paris';
 
   // If you have a server endpoint to receive contact form submissions, set it here.
   // Example (Formspree): 'https://formspree.io/f/yourFormId'
