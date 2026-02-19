@@ -1,0 +1,338 @@
+/* ============================================================
+   TRAVELS PAGE — globe version
+   ============================================================ */
+
+body { background-color: black; }
+.section-travels-heading { background-color: black; }
+
+.container {
+    width: 90vw;
+    max-width: 1360px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.padding-vertical-xlarge {
+    padding-top: 90px;
+    padding-bottom: 0;
+}
+
+.timeline-main-heading-wrapper {
+    color: white;
+    text-align: center;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.margin-bottom-medium {
+    margin-top: -4vh;
+    margin-bottom: 1vh;
+}
+
+h2.intro-heading {
+    font-size: 8vh;
+    background: -webkit-linear-gradient(to right, gold, #ee0979);
+    background: linear-gradient(to right, gold, #ee0979);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    display: inline-block;
+}
+
+.travels-subtitle {
+    color: #666;
+    font-size: 13px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    margin: 0 0 28px 0;
+}
+
+/* ── Stats ──────────────────────────────────────────────────── */
+.travels-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0 24px 0;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.stat-number {
+    font-size: 2.6rem;
+    font-weight: 800;
+    background: linear-gradient(to right, gold, #ee0979);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    margin-top: 5px;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 36px;
+    background: #222;
+}
+
+/* ── Globe wrap ─────────────────────────────────────────────── */
+.travels-section { padding-bottom: 60px; }
+
+#globe-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;   /* top-aligned so expanding downward doesn't shift stats */
+    padding: 8px 0 40px;
+    /* allow the canvas to overflow if zoomed larger than viewport width */
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+#globe-container {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+#globe-canvas {
+    display: block;
+    border-radius: 50%;
+}
+
+/* Hint label sits below the canvas, offset from its bottom */
+.globe-hint {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #444;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────── */
+.map-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(8, 10, 14, 0.93);
+    border: 1px solid rgba(254, 218, 74, 0.18);
+    border-radius: 10px;
+    padding: 11px 15px;
+    min-width: 130px;
+    max-width: 210px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.14s ease, transform 0.14s ease;
+    z-index: 200;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+}
+
+.map-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tooltip-country {
+    font-size: 12px;
+    font-weight: 700;
+    color: #feda4a;
+    margin-bottom: 7px;
+    letter-spacing: 0.05em;
+}
+
+.tooltip-places {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 7px 0;
+}
+
+.tooltip-places li {
+    font-size: 11.5px;
+    color: #c8c8c8;
+    padding: 1.5px 0 1.5px 12px;
+    position: relative;
+}
+
+.tooltip-places li::before {
+    content: '·';
+    position: absolute;
+    left: 2px;
+    color: rgba(254, 218, 74, 0.5);
+}
+
+.tooltip-hint {
+    font-size: 10px;
+    color: #484848;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    border-top: 1px solid #1c1c1c;
+    padding-top: 6px;
+    margin-top: 3px;
+}
+
+/* ── Detail panel ───────────────────────────────────────────── */
+.travel-detail {
+    width: 88vw;
+    max-width: 900px;
+    margin: 0 auto;
+    background: #0f0f10;
+    border: 1px solid #232325;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 420ms cubic-bezier(.2,.9,.2,1),
+                opacity 300ms ease;
+    pointer-events: none;
+}
+
+.travel-detail.open {
+    max-height: 900px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #1c1c1e;
+}
+
+.detail-country-name {
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0 0 5px 0;
+    background: linear-gradient(to right, gold, #ee0979);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.detail-places-list {
+    font-size: 13px;
+    color: #777;
+    letter-spacing: 0.03em;
+}
+
+.detail-close {
+    background: transparent;
+    border: none;
+    color: #444;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+    flex-shrink: 0;
+}
+
+.detail-close:hover { color: #e6e6e6; background: #1e1e1e; }
+
+/* ── Photo grid ─────────────────────────────────────────────── */
+.detail-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 2fr));
+    gap: 12px;
+    padding: 2px 24px 24px;
+}
+
+.photo-card {
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+    background: #191919;
+    animation: photo-in 0.35s cubic-bezier(.2,.9,.2,1) both;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.photo-card:hover {
+    transform: scale(1.025);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: linear-gradient(135deg, #101012, #181820);
+    border: 1px dashed #282830;
+    cursor: default;
+}
+
+.placeholder-icon  { font-size: 1.7rem; opacity: 0.28; }
+.placeholder-text  { font-size: 10.5px; color: #3a3a3a; letter-spacing: 0.07em; text-transform: uppercase; }
+
+@keyframes photo-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* ── Light mode ─────────────────────────────────────────────── */
+body.light-mode { background: #fff; }
+body.light-mode .section-travels-heading { background: #fff; }
+body.light-mode .travels-subtitle  { color: #aaa; }
+body.light-mode .stat-label        { color: #aaa; }
+body.light-mode .stat-divider      { background: #ddd; }
+body.light-mode .globe-hint        { color: #bbb; }
+
+body.light-mode .map-tooltip {
+    background: rgba(255,255,255,0.96);
+    border-color: rgba(160,120,0,0.22);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+body.light-mode .tooltip-country              { color: #8a6600; }
+body.light-mode .tooltip-places li            { color: #444; }
+body.light-mode .tooltip-places li::before    { color: rgba(138,104,0,0.45); }
+body.light-mode .tooltip-hint                 { color: #bbb; border-top-color: #eee; }
+
+body.light-mode .travel-detail     { background: #fff; border-color: #e8e8e8; box-shadow: 0 8px 40px rgba(0,0,0,0.07); }
+body.light-mode .detail-header     { border-bottom-color: #eee; }
+body.light-mode .detail-places-list{ color: #aaa; }
+body.light-mode .detail-close      { color: #ccc; }
+body.light-mode .detail-close:hover{ color: #333; background: #f4f4f4; }
+body.light-mode .photo-card        { background: #f2f2f4; }
+body.light-mode .photo-placeholder { background: linear-gradient(135deg,#eeeef0,#e6e6ea); border-color: #d8d8dc; }
+body.light-mode .placeholder-icon  { opacity: 0.18; }
+body.light-mode .placeholder-text  { color: #bbb; }
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .padding-vertical-xlarge { padding-top: 62px; }
+    h2.intro-heading { font-size: 5.5vh; }
+    .stat-item  { padding: 0 16px; }
+    .stat-number{ font-size: 2rem; }
+    .travel-detail { width: 94vw; border-radius: 10px; }
+    .detail-photos { grid-template-columns: repeat(2,1fr); padding: 14px 14px 18px; gap: 10px; }
+    .detail-header { padding: 14px 16px 12px; }
+    .detail-country-name { font-size: 17px; }
+}

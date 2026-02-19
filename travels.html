@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travels</title>
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <link rel="shortcut icon" href="images/logo.png">
+    <link href="css/utils.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/travels_style.css">
+    <link rel="stylesheet" href="css/light_mode.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html" aria-label="Home">
+                <img src="images/logo.png" alt="Logo" class="logo">
+        <script>/* early theme apply */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();</script>
+            </a>
+        </div>
+        <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
+            <span class="bar bar1"></span>
+            <span class="bar bar2"></span>
+            <span class="bar bar3"></span>
+        </button>
+        <nav id="site-nav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="timeline.html">Timeline</a>
+            <a href="research.html">Research</a>
+            <a href="software.html">Software</a>
+            <a href="cv.html">CV / Résumé</a>
+            <a href="publications.html">Publications</a>
+            <a href="repositories.html">Repositories</a>
+            <a href="contact.html">Contact</a>
+            <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+        </nav>
+    </header>
+
+    <div class="page-wrapper">
+        <div class="section-travels-heading">
+            <div class="container">
+                <div class="padding-vertical-xlarge">
+                    <div class="timeline-main-heading-wrapper">
+                        <div class="margin-bottom-medium">
+                            <h2 class="intro-heading">Travels</h2>
+                        </div>
+                        <p class="travels-subtitle">Drag to rotate · Scroll to zoom · Click a country to explore</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="travels-section">
+            <div class="travels-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-countries">0</span>
+                    <span class="stat-label">countries</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-places">0</span>
+                    <span class="stat-label">places</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" id="stat-continents">0</span>
+                    <span class="stat-label">continents</span>
+                </div>
+            </div>
+
+            <div id="globe-wrap">
+                <div id="globe-container">
+                    <canvas id="globe-canvas"></canvas>
+                    <div id="map-tooltip" class="map-tooltip" aria-hidden="true">
+                        <div class="tooltip-country"></div>
+                        <ul class="tooltip-places"></ul>
+                        <div class="tooltip-hint">click to explore →</div>
+                    </div>
+                    <div class="globe-hint" id="globe-hint">drag to rotate · scroll to zoom</div>
+                </div>
+            </div>
+
+            <div id="travel-detail" class="travel-detail" aria-hidden="true">
+                <div class="detail-header">
+                    <div class="detail-title-wrap">
+                        <h3 class="detail-country-name"></h3>
+                        <div class="detail-places-list"></div>
+                    </div>
+                    <button class="detail-close" aria-label="Close">✕</button>
+                </div>
+                <div class="detail-photos" id="detail-photos"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
+    </footer>
+
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+    <script src="scripts/nav-toggle.js"></script>
+    <script src="scripts/theme-toggle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+    <script>
+    /* ======================================================
+       TRAVEL DATA — edit this section
+       ISO numeric codes: https://en.wikipedia.org/wiki/ISO_3166-1_numeric
+    ====================================================== */
+const VISITS = {
+    356: { 
+        name: "India", 
+        continent: "Asia", 
+        places: ["Too many to list here hahaha"], 
+        photos: new Array(17).fill(null) 
+    },
+    250: { 
+        name: "France", 
+        continent: "Europe", 
+        places: ["Paris", "Strasbourg"], 
+        photos: [null, null] 
+    },
+    276: { 
+        name: "Germany", 
+        continent: "Europe", 
+        places: ["Heidelberg", "Jena", "Frankfurt"], 
+        photos: [null, null, null] 
+    },
+    616: { 
+        name: "Poland", 
+        continent: "Europe", 
+        places: ["Krakow"], 
+        photos: [null] 
+    },
+    703: { 
+        name: "Slovakia", 
+        continent: "Europe", 
+        places: ["Jasna", "Bratislava"], 
+        photos: [null, null] 
+    },
+    203: { 
+        name: "Czechia", 
+        continent: "Europe", 
+        places: ["Prague"], 
+        photos: [null] 
+    },
+    380: { 
+        name: "Italy", 
+        continent: "Europe", 
+        places: ["Venice", "Florence", "Catania", "Bologna"], 
+        photos: [null, null, null, null] 
+    },
+    300: { 
+        name: "Greece", 
+        continent: "Europe", 
+        places: ["Heraklion", "Chania", "Rethymno", "Agios Nikolaos", "Athens", "Thessaloniki", "Meteora", "Delphi", "Plastiras"], 
+        photos: new Array(9).fill(null) 
+    },
+    528: { 
+        name: "Netherlands", 
+        continent: "Europe", 
+        places: ["Amsterdam", "Middelburg"], 
+        photos: [null, null] 
+    },
+    56: { 
+        name: "Belgium", 
+        continent: "Europe", 
+        places: ["Brussels", "Ghent"], 
+        photos: [null, null] 
+    },
+    704: { 
+        name: "Vietnam", 
+        continent: "Asia", 
+        places: ["Hanoi", "Hoi An", "Da Nang", "Ba Na Hills", "Ninh Binh", "Trang An"], 
+        photos: ['images/travels/vietnam/vietnam_1.png', 'images/travels/vietnam/vietnam_2.png', 'images/travels/vietnam/vietnam_3.png', 'images/travels/vietnam/vietnam_4.png', 'images/travels/vietnam/vietnam_5.png', 'images/travels/vietnam/vietnam_6.png'] 
+    },
+    840: { 
+        name: "United States", 
+        continent: "North America", 
+        places: ["Chicago", "Indiana Dunes"], 
+        photos: [null, null] 
+    }
+};
+
+    /* ====================================================== STATS */
+    const visitedIds   = new Set(Object.keys(VISITS).map(Number));
+    const continentSet = new Set(Object.values(VISITS).map(v => v.continent));
+    const totalPlaces  = Object.values(VISITS).reduce((s, v) => s + v.places.length, 0);
+
+    function animateCount(el, target) {
+        let n = 0;
+        const step = Math.ceil(target / 30);
+        const t = setInterval(() => { n = Math.min(n + step, target); el.textContent = n; if (n >= target) clearInterval(t); }, 30);
+    }
+    new IntersectionObserver(entries => {
+        if (!entries[0].isIntersecting) return;
+        animateCount(document.getElementById('stat-countries'),  visitedIds.size);
+        animateCount(document.getElementById('stat-places'),     totalPlaces);
+        animateCount(document.getElementById('stat-continents'), continentSet.size);
+    }, { threshold: 0.3 }).observe(document.querySelector('.travels-stats'));
+
+    /* ====================================================== GLOBE */
+    const canvas  = document.getElementById('globe-canvas');
+    const ctx     = canvas.getContext('2d');
+    const tooltip = document.getElementById('map-tooltip');
+    const detail  = document.getElementById('travel-detail');
+    const hint    = document.getElementById('globe-hint');
+
+    let worldGeo = null, borders = null;
+    let hoveredId = null, isDragging = false;
+    let autoRotate = true, autoTimer = null;
+    let W, H, R;
+    let currentScale = 1;
+
+    const proj  = d3.geoOrthographic().clipAngle(90).precision(0.3);
+    const gpath = d3.geoPath(proj, ctx);
+
+    function isLight() { return document.body.classList.contains('light-mode'); }
+
+    function C() {
+        const l = isLight();
+        return {
+            ocean:         l ? '#c2d9ea' : '#0c1118',
+            land:          l ? '#dbd6ca' : '#1c1f27',
+            landStroke:    l ? '#bfbab0' : '#282c36',
+            visited:       l ? '#c89a1a' : '#feda4a',
+            visitedHover:  l ? '#a07800' : '#ffe566',
+            visitedStroke: l ? '#7a5800' : '#c4a020',
+            graticule:     l ? 'rgba(0,0,0,0.05)'        : 'rgba(255,255,255,0.035)',
+            atmo0:         l ? 'rgba(160,200,230,0.40)'  : 'rgba(20,60,140,0.30)',
+            outline:       l ? 'rgba(0,0,0,0.18)'        : 'rgba(255,255,255,0.09)',
+        };
+    }
+
+    function setSize(keepZoom) {
+        const wrap    = document.getElementById('globe-wrap');
+        const natural = Math.min(wrap.clientWidth, window.innerHeight * 0.72, 700);
+        if (!keepZoom) currentScale = 1;
+        const sz = Math.round(natural * currentScale);
+        W = H = sz;
+        canvas.width  = sz * devicePixelRatio;
+        canvas.height = sz * devicePixelRatio;
+        canvas.style.width  = sz + 'px';
+        canvas.style.height = sz + 'px';
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        R = sz / 2 - 14;
+        proj.scale(R).translate([sz / 2, sz / 2]);
+    }
+
+    function draw() {
+        const c    = C();
+        const curR = proj.scale();
+        const [cx, cy] = proj.translate();
+        ctx.clearRect(0, 0, W, H);
+
+        // atmosphere glow — always tracks globe centre & scale
+        const ag = ctx.createRadialGradient(cx, cy, curR * 0.88, cx, cy, curR * 1.10);
+        ag.addColorStop(0, c.atmo0);
+        ag.addColorStop(1, 'transparent');
+        ctx.beginPath();
+        ctx.arc(cx, cy, curR * 1.10, 0, 2 * Math.PI);
+        ctx.fillStyle = ag;
+        ctx.fill();
+
+        // ocean + shadow
+        ctx.save();
+        ctx.shadowColor   = isLight() ? 'rgba(0,0,0,0.10)' : 'rgba(0,0,0,0.60)';
+        ctx.shadowBlur    = 32;
+        ctx.shadowOffsetY = 8;
+        ctx.beginPath(); gpath({ type: 'Sphere' });
+        ctx.fillStyle = c.ocean; ctx.fill();
+        ctx.restore();
+
+        // graticule
+        ctx.beginPath(); gpath(d3.geoGraticule()());
+        ctx.strokeStyle = c.graticule; ctx.lineWidth = 0.4; ctx.stroke();
+
+        if (!worldGeo) return;
+
+        // countries
+        worldGeo.features.forEach(f => {
+            const vis = visitedIds.has(+f.id);
+            const hov = hoveredId === +f.id;
+            ctx.beginPath(); gpath(f);
+            if (vis) {
+                if (hov) {
+                    ctx.shadowColor = isLight() ? 'rgba(150,100,0,0.45)' : 'rgba(254,218,74,0.45)';
+                    ctx.shadowBlur  = 14;
+                }
+                ctx.fillStyle = hov ? c.visitedHover : c.visited;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = c.visitedStroke; ctx.lineWidth = 0.9; ctx.stroke();
+            } else {
+                ctx.fillStyle = c.land; ctx.fill();
+                ctx.strokeStyle = c.landStroke; ctx.lineWidth = 0.3; ctx.stroke();
+            }
+        });
+
+        // borders
+        if (borders) {
+            ctx.beginPath(); gpath(borders);
+            ctx.strokeStyle = isLight() ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.05)';
+            ctx.lineWidth = 0.3; ctx.stroke();
+        }
+
+        // outline ring
+        ctx.beginPath(); gpath({ type: 'Sphere' });
+        ctx.strokeStyle = c.outline; ctx.lineWidth = 1.2; ctx.stroke();
+    }
+
+    /* auto-rotation */
+    requestAnimationFrame(function frame() {
+        if (autoRotate) {
+            const r = proj.rotate();
+            proj.rotate([r[0] + 0.10, r[1], r[2]]);
+            draw();
+        }
+        requestAnimationFrame(frame);
+    });
+
+    function pauseAuto() {
+        autoRotate = false;
+        clearTimeout(autoTimer);
+        autoTimer = setTimeout(() => { autoRotate = true; }, 3500);
+    }
+
+    function ptFrom(e) {
+        const rect = canvas.getBoundingClientRect();
+        const src  = e.touches ? e.touches[0] : e;
+        return [src.clientX - rect.left, src.clientY - rect.top];
+    }
+
+    function countryAt([x, y]) {
+        if (!worldGeo) return null;
+        const inv = proj.invert([x, y]);
+        if (!inv) return null;
+        return worldGeo.features.find(f => { try { return d3.geoContains(f, inv); } catch (_) { return false; } });
+    }
+
+    /* ---- drag (mouse) ---- */
+    canvas.addEventListener('mousedown', e => {
+        isDragging = false;
+        pauseAuto();
+        const p0 = ptFrom(e);
+        const r0 = proj.rotate();
+        canvas.style.cursor = 'grabbing';
+        function mv(ev) {
+            const p1 = ptFrom(ev);
+            const dx = p1[0] - p0[0], dy = p1[1] - p0[1];
+            if (Math.abs(dx) > 2 || Math.abs(dy) > 2) isDragging = true;
+            proj.rotate([r0[0] + dx * 0.28, Math.max(-80, Math.min(80, r0[1] - dy * 0.28)), r0[2]]);
+            draw();
+        }
+        function up() {
+            canvas.style.cursor = 'grab';
+            window.removeEventListener('mousemove', mv);
+            window.removeEventListener('mouseup', up);
+            setTimeout(() => { isDragging = false; }, 10); // reset AFTER click fires
+        }
+        window.addEventListener('mousemove', mv);
+        window.addEventListener('mouseup', up);
+    });
+
+    /* ---- drag (touch) ---- */
+    canvas.addEventListener('touchstart', e => {
+        e.preventDefault(); isDragging = false; pauseAuto();
+        const p0 = ptFrom(e), r0 = proj.rotate();
+        function mv(ev) {
+            ev.preventDefault();
+            const p1 = ptFrom(ev), dx = p1[0] - p0[0], dy = p1[1] - p0[1];
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) isDragging = true;
+            proj.rotate([r0[0] + dx * 0.28, Math.max(-80, Math.min(80, r0[1] - dy * 0.28)), r0[2]]);
+            draw();
+        }
+        function up() {
+            canvas.removeEventListener('touchmove', mv);
+            setTimeout(() => { isDragging = false; }, 10); // reset AFTER touchend fires
+        }
+        canvas.addEventListener('touchmove', mv, { passive: false });
+        canvas.addEventListener('touchend', up, { once: true });
+    }, { passive: false });
+
+    /* ---- zoom ---- */
+    canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        pauseAuto();
+        const factor = e.deltaY > 0 ? 0.90 : 1.11;
+        currentScale = Math.max(0.45, Math.min(3.5, currentScale * factor));
+        setSize(true);
+        draw();
+    }, { passive: false });
+
+    /* ---- hover ---- */
+    canvas.addEventListener('mousemove', e => {
+        if (isDragging) { tooltip.classList.remove('visible'); return; }
+        const p = ptFrom(e), f = countryAt(p);
+        const id = f ? +f.id : null;
+        if (id !== hoveredId) { hoveredId = id; draw(); }
+        if (f && visitedIds.has(id)) {
+            canvas.style.cursor = 'pointer';
+            const v = VISITS[+f.id];
+            tooltip.querySelector('.tooltip-country').textContent = v.name;
+            const ul = tooltip.querySelector('.tooltip-places'); ul.innerHTML = '';
+            v.places.forEach(c => { const li = document.createElement('li'); li.textContent = c; ul.appendChild(li); });
+            const cr = document.getElementById('globe-container').getBoundingClientRect();
+            let tx = e.clientX - cr.left + 16, ty = e.clientY - cr.top - 10;
+            const tw = tooltip.offsetWidth || 160, th = tooltip.offsetHeight || 100;
+            if (tx + tw > cr.width  - 8) tx = e.clientX - cr.left - tw - 16;
+            if (ty + th > cr.height - 8) ty = e.clientY - cr.top  - th - 10;
+            tooltip.style.left = tx + 'px'; tooltip.style.top = ty + 'px';
+            tooltip.setAttribute('aria-hidden', 'false');
+            tooltip.classList.add('visible');
+        } else {
+            canvas.style.cursor = 'grab';
+            tooltip.classList.remove('visible');
+            tooltip.setAttribute('aria-hidden', 'true');
+        }
+    });
+
+    canvas.addEventListener('mouseleave', () => { hoveredId = null; tooltip.classList.remove('visible'); draw(); });
+
+    /* ---- click ---- */
+    canvas.addEventListener('click', e => {
+        if (isDragging) return;
+        const f = countryAt(ptFrom(e));
+        if (f && visitedIds.has(+f.id)) { openDetail(+f.id); hint.style.opacity = '0'; }
+    });
+
+    canvas.addEventListener('touchend', e => {
+        if (isDragging) return;
+        const t = e.changedTouches[0], r = canvas.getBoundingClientRect();
+        const f = countryAt([t.clientX - r.left, t.clientY - r.top]);
+        if (f && visitedIds.has(+f.id)) openDetail(+f.id);
+    });
+
+    /* dismiss hint */
+    ['mousedown', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { hint.style.opacity = '0'; }, { once: true }));
+
+    /* ====================================================== DETAIL PANEL */
+    function openDetail(id) {
+        const v = VISITS[id];
+        detail.querySelector('.detail-country-name').textContent = v.name;
+        detail.querySelector('.detail-places-list').textContent  = v.places.join(' · ');
+        const grid = document.getElementById('detail-photos'); grid.innerHTML = '';
+        v.photos.forEach((photo, i) => {
+            const card = document.createElement('div'); card.className = 'photo-card';
+            if (photo) {
+                const img = document.createElement('img'); img.src = photo; img.alt = v.name + ' ' + (i + 1); card.appendChild(img);
+            } else {
+                card.classList.add('photo-placeholder');
+                card.innerHTML = '<span class="placeholder-icon">📷</span><span class="placeholder-text">Photo ' + (i + 1) + '</span>';
+            }
+            card.style.animationDelay = (i * 55) + 'ms'; grid.appendChild(card);
+        });
+        detail.setAttribute('aria-hidden', 'false');
+        detail.classList.add('open');
+        setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+    }
+
+    document.querySelector('.detail-close').addEventListener('click', () => {
+        detail.classList.remove('open'); detail.setAttribute('aria-hidden', 'true');
+    });
+
+    /* ====================================================== INIT */
+    setSize(false);
+    proj.rotate([-20, -20, 0]);
+    canvas.style.cursor = 'grab';
+    draw();
+
+    window.addEventListener('resize', () => { setSize(false); draw(); });
+    new MutationObserver(() => draw()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
+        worldGeo = topojson.feature(world, world.objects.countries);
+        borders  = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+        draw();
+    }).catch(() => {
+        document.getElementById('globe-wrap').innerHTML = '<p style="color:#888;text-align:center;padding:80px">Globe failed to load — check network settings.</p>';
+    });
+    </script>
+</body>
+</html>

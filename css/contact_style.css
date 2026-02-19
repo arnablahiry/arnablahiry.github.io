@@ -384,5 +384,5 @@ body:not(.light-mode) .contact-card.revealed .details-text{
     background: transparent;
 }
 .light-mode .contact-card.revealed .contact-close:hover {
-    color: #1a7a35;
+    color: #1c853a;
 }
