@@ -713,3 +713,41 @@ body.light-mode .snitch-play-again {
 
 
 
+
+/* ── Software icon legend ───────────────────────────────────────────────── */
+.button-legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 0 24px 0;
+    margin-bottom: 30px;
+
+}
+
+.legend-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-item img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    border-radius: 6px;
+    opacity: 0.75;
+    filter: none !important;
+}
+
+.legend-item span {
+    color: #888;
+    font-size: 13px;
+}
+
+body.light-mode .legend-item img {
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
