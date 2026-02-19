@@ -130,7 +130,7 @@ body{
     right: 10px;
     background: transparent;
     border: 0;
-    color: #e6e6e6;
+    color: #ffffff;
     font-size: 2.2rem;
     line-height: 1;
     cursor: pointer;
@@ -153,6 +153,8 @@ body{
 body:not(.light-mode) .contact-card.wrong .details-text{
     color: #ff8a8a !important;
 }
+
+
 
 /* Animations for wrong and revealed states */
 @keyframes wrongPulse {
@@ -365,4 +367,22 @@ body:not(.light-mode) .contact-card.revealed .details-text{
     .social-card[aria-label="X (Twitter)"] img,
     .social-card[aria-label="LinkedIn"] img{ height: 25px; }
     .social-card[aria-label="Instagram"] img{ height: 35px; transform: translateY(1px); }
+}
+
+
+
+.contact-card.wrong .contact-close {
+    display: none;
+}
+
+.light-mode .contact-card.revealed .contact-close {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+}
+.light-mode .contact-card.revealed .contact-close:hover {
+    color: #1a7a35;
 }

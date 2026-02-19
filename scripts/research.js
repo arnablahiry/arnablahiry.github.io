@@ -389,3 +389,19 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   })();
 })();
+
+
+
+(function () {
+    if (!location.hash) return;
+    var target = document.querySelector(location.hash);
+    if (!target) return;
+    var toggle = target.querySelector('.project-toggle');
+    if (!toggle) return;
+    setTimeout(function () {
+        toggle.click();
+        setTimeout(function () {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 120);
+    }, 150);
+})();

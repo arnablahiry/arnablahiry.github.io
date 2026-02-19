@@ -167,11 +167,15 @@ body{
     height: 40px;
     padding: 0;
     background-color: #111111;
-    border: 0px solid #ffffff;
-    border-radius: 100px;
+    border: 0px solid #ffffff00;
+    border-radius: 8px;
+    -webkit-appearance: none;
+    appearance: none;
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
     flex-shrink: 0;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .paper-button:hover {
@@ -230,3 +234,51 @@ body{
 
     /* paper buttons stay the same size on mobile — no overrides needed */
 }
+
+
+.light-mode .paper-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.paper-button.paper-button--wide {
+    width: auto;
+}
+
+.paper-button.paper-button--wide img {
+    width: auto;
+    height: 40px;
+}
+
+
+/* ── Button legend ──────────────────────────────────────────────────────── */
+.button-legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 0 24px 0;
+}
+
+.legend-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-item img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    border-radius: 6px;
+    opacity: 0.75;
+}
+
+.legend-item span {
+    color: #888;
+    font-size: 13px;
+}
+/* ── End button legend ──────────────────────────────────────────────────── */
