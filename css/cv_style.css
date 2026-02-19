@@ -1064,11 +1064,12 @@ body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom
   margin-bottom: 35px; /* increase spacing after the subtitle */
   font-size: 2.0vh;    /* readable but smaller than h2 */
   line-height: 1.45;
-  max-width: 86%;
+  max-width: 93%;
   margin-left: auto;
   margin-right: auto;
   color: rgba(230,230,230,0.92); /* default (dark mode) slightly muted */
   text-align: center;
+  font-size: 16px;
 }
 
 /* In light-mode make the subtitle text black for maximum contrast */
