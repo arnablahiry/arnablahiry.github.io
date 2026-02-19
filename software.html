@@ -523,8 +523,12 @@ function smoothMoveTo(node, x, y, opts){
     </div>
 
     <footer>
-        <p>&copy; 2025 Arnab Lahiry</p>
+    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/research.js"></script>

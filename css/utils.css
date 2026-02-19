@@ -34,7 +34,7 @@ body{
 }
 
 /* Footer baseline (color may be overridden per page) */
-footer{ text-align: center; margin: 0; padding: 28px 0; }
+footer{ text-align: center; margin: 0; padding: 28px 0; font-size: 15px;}
 
 /* -----------------------------
    Header & Navigation
@@ -123,7 +123,7 @@ header.nav-open ~ .page-wrapper::before{ opacity: 1; pointer-events: auto; }
 .logo-container{ display: flex; align-items: center; gap: 0.8rem; }
 .logo{ height: 8vh; width: auto; }
 nav{ display: flex; align-items: center; gap: 2vw; margin-right: 4vw; }
-nav a{ color: white; text-decoration: none; font-weight: bold; transition: color 0.3s ease; }
+nav a{ color: white; text-decoration: none; font-size: 16px; font-weight: bold; transition: color 0.3s ease; }
 nav a:hover{ color: #feda4a; }
 
 /* Theme toggle placed in the nav. Small pill button that matches nav aesthetic. */

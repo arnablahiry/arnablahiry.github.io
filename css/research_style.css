@@ -147,7 +147,7 @@ header nav .nav-hint-wrapper #theme-hint.theme-hint-hidden{
 /* Intro paragraph styling (dark-mode defaults). Light mode overrides live in css/light_mode.css */
 .research-intro-text .research-intro{
     color: #ffffff;
-    font-size: 2.2vh;
+    font-size: 16px;
     line-height: 1.45;
 }
 .research-meme{
@@ -269,7 +269,7 @@ h2.intro-heading{
 
     /* Project card typography tweaks */
     .project-title{ font-size: 2.0vh !important; }
-    .project-subtitle{ font-size: 1.6vh !important; }
+    .project-subtitle{ font-size: 15px !important; }
     .project-details{ font-size: 1.75vh !important; }
     .project-full{ font-size: 1.55vh !important; }
 
@@ -467,12 +467,12 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
 .project-title{
     margin: 0 0 6px 0;
     color: white;
-    font-size: 2.4vh;
+    font-size: 18px;
 }
 .project-subtitle{
     margin: 0;
     color: #cfcfcf;
-    font-size: 1.9vh;
+    font-size: 15px;
 }
 
 .project-toggle{

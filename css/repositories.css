@@ -80,7 +80,7 @@ footer{ background: transparent; color: #ffffff; padding: 28px 0; text-align: ce
 }
 
 .repo-meta{ grid-column: 2; grid-row: 1; display:flex; flex-direction: column; gap: 6px; }
-.repo-title{ margin: 0; font-size: 2.8vh; }
+.repo-title{ margin: 0; font-size: 20px; }
 .repo-subtitle{ margin: 2px 0 0 0; color: rgba(255,255,255,0.85); }
 .repo-actions{ display:flex; gap:10px; align-items:center; justify-self: start; margin-top: 6px; }
 .btn{
@@ -113,11 +113,11 @@ footer{ background: transparent; color: #ffffff; padding: 28px 0; text-align: ce
 .btn:hover{ border-color: var(--accent-btn); box-shadow: 0 6px 18px rgba(0,0,0,0.6); }
 
 .repo-head{ display:flex; justify-content:space-between; align-items:center; gap:12px }
-.repo-name{ margin:0; font-size: 1.4rem }
+.repo-name{ margin:0; font-size: 20px }
 .repo-name a{ color: white; text-decoration: none }
 .repo-name a:hover{ color: var(--accent); }
 .repo-lang{ background: rgba(255,255,255,0.05); padding: 6px 8px; border-radius: 999px; font-size: 11px }
-.repo-desc{ margin: 0; color: rgba(255,255,255,0.85); }
+.repo-desc{ margin: 0; color: rgba(255,255,255,0.85); font-size: 15px;}
 .repo-meta-row{ display:flex; gap: 12px; align-items:center; color: rgba(255,255,255,0.7); font-size: 13px }
 
 /* Responsive tweaks */

@@ -59,7 +59,7 @@
 .timeline-text{
     color: white;
     /* slightly smaller for improved density on large screens */
-    font-size: 2vh;
+    font-size: 15px;
     font-weight: 500;
     line-height: 1.3;
 }

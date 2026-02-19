@@ -157,21 +157,21 @@
               <a class="about-thumb" href="images/about/kolkata5.png" target="_blank" rel="noopener" aria-label="Open Cretan Taverna photo in new tab">
                 <img src="images/about/kolkata5.png" alt="Cretan Taverna" loading="lazy">
                 <span class="thumb-overlay" aria-hidden="true">
-                  <span class="thumb-text"><span class="thumb-desc">Last time the whole family was together :)</span></span>
+                  <span class="thumb-text"><span class="thumb-desc">Celebrating Durga Puja with my whole family in....2019?</span></span>
                 </span>
               </a>
 
               <a class="about-thumb" href="images/about/kolkata6.jpeg" target="_blank" rel="noopener" aria-label="Open Island Views photo in new tab">
                 <img src="images/about/kolkata6.jpeg" alt="Island Views" loading="lazy">
                 <span class="thumb-overlay" aria-hidden="true">
-                  <span class="thumb-text"><span class="thumb-desc">Drove 3.5 hours to pick up my cutiepie,<br>didn't know it would be the last :(</span></span>
+                  <span class="thumb-text"><span class="thumb-desc">Drove 3.5 hours to pick up my cutiepie after <br> not seeing her for a year</span></span>
                 </span>
               </a>
 
               <a class="about-thumb" href="images/about/kolkata4.jpeg" target="_blank" rel="noopener" aria-label="Open Heraklion photo in new tab">
                 <img src="images/about/kolkata4.jpeg" alt="Heraklion" loading="lazy">
                 <span class="thumb-overlay" aria-hidden="true">
-                  <span class="thumb-text"><span class="thumb-desc">But, happiness can be found<br>even in the darkest of times...<br><br>if one rememebrs to turn on the light</span></span>
+                  <span class="thumb-text"><span class="thumb-desc">My family's smiles against the world!</span></span>
                 </span>
               </a>
               
@@ -215,7 +215,7 @@
               <a class="about-thumb" href="images/about/tirupati5.png" target="_blank" rel="noopener" aria-label="Open Cretan Taverna photo in new tab">
                 <img src="images/about/tirupati5.png" alt="Cretan Taverna" loading="lazy">
                 <span class="thumb-overlay" aria-hidden="true">
-                  <span class="thumb-text"><span class="thumb-desc">Showing off Bengali outfits in Tirupati</span></span>
+                  <span class="thumb-text"><span class="thumb-desc">Flaunting Bengali outfits in Tirupati</span></span>
                 </span>
               </a>
               <a class="about-thumb" href="images/about/tirupati6.jpeg" target="_blank" rel="noopener" aria-label="Open Island Views photo in new tab">
@@ -389,8 +389,12 @@
   </section>
 </main>
     <footer>
-        <p>&copy; 2025 Arnab Lahiry</p>
+    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
     <!-- Lightbox modal for in-page gallery viewing -->
     <div id="lightbox" class="lightbox-overlay" aria-hidden="true">

@@ -231,7 +231,7 @@ body.page-software .research-intro-text {
 /* Intro paragraph styling */
 body.page-software .research-intro-text .research-intro {
   color: #ffffff;
-  font-size: 2.1vh;
+  font-size: 16px;
   line-height: 1.45;
 }
 
@@ -261,7 +261,7 @@ body.page-software .research-meme .meme-wrapper {
 body.page-software .research-meme .timeline-hero-image {
   width: 100%;
   height: auto;
-  max-height: 300px;
+  max-height: 360px;
   object-fit: contain;
   transform: none;
 }

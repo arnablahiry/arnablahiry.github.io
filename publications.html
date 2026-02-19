@@ -74,9 +74,13 @@
                         <div class="project-meta">
                             <h3 class="project-title">Deep and Sparse Denoising Benchmarks for Spectral Data Cubes of High-z Galaxies: From Simulations to ALMA observations</h3>
                             <p class="project-authors">A. Lahiry, T. Díaz-Santos, J.-L. Starck, N. C. Roy, D. Anglés-Alcázar, G. Tsagkatakis, P. Tsakalides</p>
-                            <p class="project-journal">Submitted to: Astronomy & Astrophysics (2025)</p>
-                            <!-- Added arXiv button -->
-            
+                            <p class="project-journal">Submitted: Astronomy & Astrophysics (2025)</p>
+                            <div class="action-buttons">
+
+                                <button class="arxiv-button" onclick="window.open('https://www.arxiv.org/abs/2602.10893', '_blank')" aria-label="arXiv">
+                                    <img src="images/icons/arxiv-logo.svg" alt="arXiv logo">
+                                </button>
+                            </div>
                             <button class="project-toggle" aria-expanded="false" aria-controls="pub-1-desc">Show Abstract</button>
                             <div class="project-full" id="pub-2-desc" aria-expanded="false">
                                 <p>ABeyond cosmic noon, galaxies usually appear as faint whispers amid overwhelming noise, yet this epoch is key to understanding massive galaxy assembly. ALMA’s sensitivity to cold dust and [C II] emission allows us to probe their interstellar medium, but faint signals are still challenging, rendering robust denoising essential. We evaluate denoising strategies, including classical statistical methods, sparse unsupervised representations, and supervised deep learning, to identify techniques that suppress noise while preserving flux and spectral-spatial morphology. We develop a physically motivated synthetic dataset of spectral cubes simulating rotating disk galaxies for training and evaluation. We benchmark Principal Component Analysis (PCA), Independent Component Analysis (ICA), iterative soft thresholding with 2D-1D wavelets (IST), and a supervised 3D U-Net across peak SNRs of ∼2.5–8, applied to (i) toy cubes, (ii) synthetic II] IFU cubes from FIRE simulations, and (iii) ALMA observations of z ∼ 5 galaxies from the CRISTAL sample and the quasar W2246−0526. Performance is assessed via RMSE, flux conservation, morphology, and SNR improvement. PCA and ICA provide limited noise reduction and struggle with correlated noise. IST reduces noise at moderate SNRs but suppresses emission at low SNRs. The 3D U-Net outperforms all methods, generalizing well to unseen data, though it slightly overestimates flux at very low SNRs and may hallucinate signal. In ALMA-CRISTAL cubes, IST and U-Net conserve ≥ 95% of flux and increase SNR by ≥ 6. For the extreme case of W2246–0526, the U-Net recovers ∼ 60% of flux at moderate SNR, whereas IST robustly conserves flux and improves SNR by ≥ 2.5. Deep learning trained on synthetic data generalizes effectively, though flux bias and interpretability challenges remain at low SNR. The addition of physically motivated priors and uncertainty quantification will enhance robustness. This framework of synthetic, simulated, and real datasets offers a pathway for transferable denoising in surveys with ALMA, VLT/MUSE, and JWST IFUs.</p>
@@ -88,7 +92,7 @@
                         <div class="project-meta">
                             <h3 class="project-title">Interpreting Cosmological Information from Neural Networks in the Hydrodynamic Universe</h3>
                             <p class="project-authors">A. Lahiry, F. Villaescusa-Navarro, A. E. Bayer</p>
-                            <p class="project-journal">Accepted at: The Astrophysical Journal (2025)</p>
+                            <p class="project-journal">Published: The Astrophysical Journal (2025)</p>
                             <div class="action-buttons">
                                 <button class="arxiv-button" onclick="window.open('https://arxiv.org/abs/2504.17839', '_blank')" aria-label="arXiv">
                                     <img src="images/icons/arxiv-logo.svg" alt="arXiv logo">
@@ -108,8 +112,12 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 Arnab Lahiry</p>
+    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/publications.js"></script>

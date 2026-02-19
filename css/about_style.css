@@ -34,6 +34,7 @@ header{
   transition: filter 420ms ease-in-out, opacity 420ms ease-in-out;
 }
 
+.about-text{font-size: 16px;}
 /* Layout: make body a column flex so footer stays at the bottom when
 	content is short. Keep the main .page-wrapper flexible to grow. */
 html, body { height: 100%; }
@@ -480,7 +481,7 @@ body.photo-focused .about-timeline{
 
 /* Heading + text */
 .about-heading{ font-size: 2.8vh; margin: 6px 0 10px 0; color: #feda4a; }
-.about-text p{ margin: 0 0 12px 0; line-height: 1.5; color: rgba(230,230,230,0.9); }
+.about-text p{ margin: 0 0 12px 0; line-height: 1.5; color: rgba(230,230,230,0.9); font}
 
 /* Light mode adjustments to match Research page visuals */
 body.light-mode .about-heading{ color: #a67b00 !important; }

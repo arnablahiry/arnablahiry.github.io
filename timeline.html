@@ -70,6 +70,35 @@
                     <div class="timeline-progress">
                         <div class="timeline-progress-bar"></div>
                     </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-left">
+                            <div class="timeline-date-text">September 2025</div>
+                        </div>
+                        <div class="timeline-center">
+                            <div class="timeline-circle"></div>
+                        </div>
+                        <div class="timeline-right">
+                            <div class="margin-bottom-xlarge">
+                                <div class="timeline-text">
+                                    Participated in the MINOAS – Machine Intelligence for iNverse imaging, Observation Analysis and Sensing Workshop, and presented a poster on my work on spectral cube denoising using sparsity and deep learning.
+                                </div>
+                            </div>
+                            <div class="timeline-image-wrapper">
+                                <img src="images/timeline/minoas1.jpg" alt="Talk at MINOAS workshop"
+                                loading="lazy" width="480"/>
+                            </div>
+                            <div class="timeline-image-wrapper">
+                                <img src="images/timeline/minoas2.jpg" alt="Poster Presentation at MINOAS workshop"
+                                loading="lazy" width="480"/>
+                            </div>
+                            <div class="timeline-image-wrapper">
+                                <img src="images/timeline/heraklion-2.jpg" alt="Heraklion"
+                                loading="lazy" width="480"/>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="timeline-item">
                         <div class="timeline-left">
                             <div class="timeline-date-text">August 2025</div>
@@ -137,7 +166,11 @@
                             </div>
                             <!-- Second set of images -->
                             <div class="timeline-image-wrapper">
-                                <img src="images/timeline/universai.jpg" alt="UniversAI symposium"
+                                <img src="images/timeline/universai-crowd.jpeg" alt="UniversAI symposium"
+                                loading="lazy" width="480"/>
+                            </div>
+                            <div class="timeline-image-wrapper">
+                                <img src="images/timeline/universai-poster.jpeg" alt="UniversAI poster presentation"
                                 loading="lazy" width="480"/>
                             </div>
                             <div class="timeline-image-wrapper">
@@ -296,8 +329,12 @@
         </div>
     </div>
     <footer>
-        <p>&copy; 2025 Arnab Lahiry</p>
+    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
     <script src="scripts/audio-player.js"></script>
     <script src="scripts/skip-button.js"></script>
     <script src="scripts/reveal-meme.js"></script>

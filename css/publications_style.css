@@ -95,20 +95,20 @@ body{
 .project-title {
     margin: 0 0 8px 0;
     color: white;
-    font-size: 2.8vh;
+    font-size: 18px;
 }
 
 .project-authors {
     margin: 0;
     color: #cfcfcf;
-    font-size: 2vh;
+    font-size: 15.5px;
 }
 
 .project-journal {
     margin-top: 0;
     margin-bottom: 10px;
     color: #cfcfcf;
-    font-size: 1.8vh;
+    font-size: 15px;
 }
 .project-toggle{
     border: 0;
