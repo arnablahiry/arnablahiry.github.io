@@ -203,11 +203,14 @@ h2.intro-heading {
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-    max-height: 0;
     opacity: 0;
     transition: max-height 420ms cubic-bezier(.2,.9,.2,1),
                 opacity 300ms ease;
     pointer-events: none;
+    max-height: 80vh; /* Limits panel to 80% of screen height */
+    overflow-y: auto; /* Adds a scrollbar if images exceed max-height */
+    display: flex;
+    flex-direction: column;
 }
 
 .travel-detail.open {
@@ -257,11 +260,16 @@ h2.intro-heading {
 /* ── Photo grid ─────────────────────────────────────────────── */
 .detail-photos {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 2fr));
+    /* Changed to 1fr for stability */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
     gap: 12px;
-    padding: 2px 24px 24px;
+    padding: 24px;
+    /* Ensure it doesn't collapse */
+    width: 100%;
+    /* Allow the container to grow with the images */
+    height: auto; 
+    overflow: visible;
 }
-
 .photo-card {
     border-radius: 10px;
     overflow: hidden;

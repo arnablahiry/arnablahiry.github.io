@@ -115,7 +115,7 @@ const VISITS = {
         name: "India", 
         continent: "Asia", 
         places: ["Too many to list here hahaha"], 
-        photos: new Array(17).fill(null) 
+        photos: ['images/travels/india/india_1.png', 'images/travels/india/india_2.png', 'images/travels/india/india_3.png']
     },
     250: { 
         name: "France", 
@@ -157,7 +157,7 @@ const VISITS = {
         name: "Greece", 
         continent: "Europe", 
         places: ["Heraklion", "Chania", "Rethymno", "Agios Nikolaos", "Athens", "Thessaloniki", "Meteora", "Delphi", "Plastiras"], 
-        photos: new Array(9).fill(null) 
+        photos: ['images/travels/greece/greece_1.png', 'images/travels/greece/greece_2.png', 'images/travels/greece/greece_3.png', 'images/travels/greece/greece_4.png', 'images/travels/greece/greece_5.png', 'images/travels/greece/greece_6.png'] 
     },
     528: { 
         name: "Netherlands", 
@@ -175,13 +175,13 @@ const VISITS = {
         name: "Vietnam", 
         continent: "Asia", 
         places: ["Hanoi", "Hoi An", "Da Nang", "Ba Na Hills", "Ninh Binh", "Trang An"], 
-        photos: ['images/travels/vietnam/vietnam_1.png', 'images/travels/vietnam/vietnam_2.png', 'images/travels/vietnam/vietnam_3.png', 'images/travels/vietnam/vietnam_4.png', 'images/travels/vietnam/vietnam_5.png', 'images/travels/vietnam/vietnam_6.png'] 
+        photos: ['images/travels/vietnam/vietnam_1.png', 'images/travels/vietnam/vietnam_2.png', 'images/travels/vietnam/vietnam_3.png', 'images/travels/vietnam/vietnam_4.png', 'images/travels/vietnam/vietnam_5.png', 'images/travels/vietnam/vietnam_6.png', 'images/travels/vietnam/vietnam_7.png', 'images/travels/vietnam/vietnam_8.png', 'images/travels/vietnam/vietnam_9.png'] 
     },
     840: { 
         name: "United States", 
         continent: "North America", 
         places: ["Chicago", "Indiana Dunes"], 
-        photos: [null, null] 
+        photos: ['images/travels/usa/usa_1.png', 'images/travels/usa/usa_2.png', 'images/travels/usa/usa_3.png', 'images/travels/usa/usa_4.png', 'images/travels/usa/usa_5.png', 'images/travels/usa/usa_6.png'] 
     }
 };
 
@@ -198,7 +198,7 @@ const VISITS = {
     new IntersectionObserver(entries => {
         if (!entries[0].isIntersecting) return;
         animateCount(document.getElementById('stat-countries'),  visitedIds.size);
-        animateCount(document.getElementById('stat-places'),     totalPlaces);
+        animateCount(document.getElementById('stat-places'),     totalPlaces+20);
         animateCount(document.getElementById('stat-continents'), continentSet.size);
     }, { threshold: 0.3 }).observe(document.querySelector('.travels-stats'));
 
