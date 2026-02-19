@@ -281,4 +281,15 @@ body{
     color: #888;
     font-size: 13px;
 }
+
+
+body.light-mode .paper-button img,
+body.light-mode .legend-item img {
+    filter: none !important;
+}
+
+body.light-mode .legend-item img {
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
 /* ── End button legend ──────────────────────────────────────────────────── */
