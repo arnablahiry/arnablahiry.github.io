@@ -292,4 +292,17 @@ body.light-mode .legend-item img {
     filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
 }
 
+
+@media (max-width: 520px) {
+    .button-legend {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        justify-content: center;
+        gap: 16px 24px;
+        padding-left: 34px;
+        padding-right: 34px;
+        padding-bottom: 24px;
+    }
+}
+
 /* ── End button legend ──────────────────────────────────────────────────── */
