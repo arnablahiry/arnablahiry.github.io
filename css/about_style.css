@@ -481,7 +481,7 @@ body.photo-focused .about-timeline{
 
 /* Heading + text */
 .about-heading{ font-size: 2.8vh; margin: 6px 0 10px 0; color: #feda4a; }
-.about-text p{ margin: 0 0 12px 0; line-height: 1.5; color: rgba(230,230,230,0.9); font}
+.about-text p{ margin: 0 0 12px 0; line-height: 1.5; color: rgba(230,230,230,0.9);}
 
 /* Light mode adjustments to match Research page visuals */
 body.light-mode .about-heading{ color: #a67b00 !important; }
