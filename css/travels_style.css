@@ -2,6 +2,13 @@
    TRAVELS PAGE — globe version
    ============================================================ */
 
+html.theme-animate body.no-theme-transition,
+html.theme-animate body.no-theme-transition *,
+body.no-theme-transition,
+body.no-theme-transition * {
+    transition: none !important;
+}
+
 body { background-color: black; }
 .section-travels-heading { background-color: black; }
 
@@ -13,7 +20,7 @@ body { background-color: black; }
 }
 
 .padding-vertical-xlarge {
-    padding-top: 90px;
+    padding-top: 136px;
     padding-bottom: 0;
 }
 
@@ -27,7 +34,7 @@ body { background-color: black; }
 
 .margin-bottom-medium {
     margin-top: -4vh;
-    margin-bottom: 1vh;
+    margin-bottom: 0.2vh;
 }
 
 h2.intro-heading {
@@ -41,6 +48,7 @@ h2.intro-heading {
     white-space: nowrap;
     overflow-wrap: normal;
     display: inline-block;
+    margin: 0;
 }
 
 .travels-subtitle {
@@ -48,7 +56,8 @@ h2.intro-heading {
     font-size: 13px;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    margin: 0 0 28px 0;
+    margin: 8px 0 28px 0;
+    line-height: 1.5;
 }
 
 /* ── Stats ──────────────────────────────────────────────────── */
@@ -69,11 +78,7 @@ h2.intro-heading {
 .stat-number {
     font-size: 2.6rem;
     font-weight: 800;
-    background: linear-gradient(to right, gold, #ee0979);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    color: #feda4a;
     line-height: 1;
     font-variant-numeric: tabular-nums;
 }
@@ -207,19 +212,23 @@ h2.intro-heading {
     transition: max-height 420ms cubic-bezier(.2,.9,.2,1),
                 opacity 300ms ease;
     pointer-events: none;
-    max-height: 80vh; /* Limits panel to 80% of screen height */
-    overflow-y: auto; /* Adds a scrollbar if images exceed max-height */
+    max-height: 92vh; /* Gives the grid more vertical room */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
 .travel-detail.open {
-    max-height: 900px;
+    max-height: 1200px;
     opacity: 1;
     pointer-events: auto;
 }
 
 .detail-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #0f0f10;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -239,7 +248,7 @@ h2.intro-heading {
 
 .detail-places-list {
     font-size: 13px;
-    color: #777;
+    color: #d2d2d2;
     letter-spacing: 0.03em;
 }
 
@@ -259,32 +268,59 @@ h2.intro-heading {
 
 /* ── Photo grid ─────────────────────────────────────────────── */
 .detail-photos {
-    display: grid;
+    display: grid !important;
     /* Changed to 1fr for stability */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    column-gap: 18px !important;
+    row-gap: 18px !important;
     padding: 24px;
-    /* Ensure it doesn't collapse */
     width: 100%;
-    /* Allow the container to grow with the images */
-    height: auto; 
-    overflow: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1 1 auto;
+    grid-auto-flow: row;
+    grid-auto-rows: auto;
+    align-content: start;
 }
 .photo-card {
+    position: relative;
+    margin: 0 !important;
     border-radius: 10px;
     overflow: hidden;
     aspect-ratio: 1/1;
     background: #191919;
-    animation: photo-in 0.35s cubic-bezier(.2,.9,.2,1) both;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    animation: none;
+    transition: none;
+    transform: none !important;
 }
 
 .photo-card:hover {
-    transform: scale(1.025);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    transform: none;
+    box-shadow: none;
 }
 
 .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.photo-desc-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.66);
+    color: #f0f0f0;
+    font-size: 12px;
+    line-height: 1.35;
+    opacity: 0;
+    transition: opacity 180ms ease;
+}
+
+.photo-card:hover .photo-desc-overlay,
+.photo-card:focus-within .photo-desc-overlay {
+    opacity: 1;
+}
 
 .photo-placeholder {
     display: flex;
@@ -309,6 +345,7 @@ h2.intro-heading {
 body.light-mode { background: #fff; }
 body.light-mode .section-travels-heading { background: #fff; }
 body.light-mode .travels-subtitle  { color: #aaa; }
+body.light-mode .stat-number       { color: #8a6600; }
 body.light-mode .stat-label        { color: #aaa; }
 body.light-mode .stat-divider      { background: #ddd; }
 body.light-mode .globe-hint        { color: #bbb; }
@@ -324,11 +361,22 @@ body.light-mode .tooltip-places li::before    { color: rgba(138,104,0,0.45); }
 body.light-mode .tooltip-hint                 { color: #bbb; border-top-color: #eee; }
 
 body.light-mode .travel-detail     { background: #fff; border-color: #e8e8e8; box-shadow: 0 8px 40px rgba(0,0,0,0.07); }
-body.light-mode .detail-header     { border-bottom-color: #eee; }
-body.light-mode .detail-places-list{ color: #aaa; }
+body.light-mode .detail-header     { background: #fff; border-bottom-color: #eee; }
+body.light-mode .detail-country-name {
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-text-fill-color: #8a6b1f;
+    color: #8a6b1f;
+}
+body.light-mode .detail-places-list{ color: #666; }
 body.light-mode .detail-close      { color: #ccc; }
 body.light-mode .detail-close:hover{ color: #333; background: #f4f4f4; }
 body.light-mode .photo-card        { background: #f2f2f4; }
+body.light-mode .photo-desc-overlay {
+    background: rgba(255, 255, 255, 0.72);
+    color: #111111;
+}
 body.light-mode .photo-placeholder { background: linear-gradient(135deg,#eeeef0,#e6e6ea); border-color: #d8d8dc; }
 body.light-mode .placeholder-icon  { opacity: 0.18; }
 body.light-mode .placeholder-text  { color: #bbb; }

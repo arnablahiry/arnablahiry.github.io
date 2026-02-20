@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/travels_style.css">
     <link rel="stylesheet" href="css/light_mode.css">
 </head>
-<body>
+<body class="no-theme-transition">
 
     <header>
         <div class="logo-container">
@@ -31,6 +31,7 @@
             <div class="nav-dropdown-menu">
                 <a href="about.html">Me</a>
                 <a href="travels.html">My Travels</a>
+                <a href="mywildindia.html">My Wild India</a>
             </div>
         </div>
             <a href="timeline.html">Timeline</a>
@@ -50,9 +51,9 @@
                 <div class="padding-vertical-xlarge">
                     <div class="timeline-main-heading-wrapper">
                         <div class="margin-bottom-medium">
-                            <h2 class="intro-heading">Travels</h2>
+                            <h2 class="intro-heading">My Travels</h2>
                         </div>
-                        <p class="travels-subtitle">Drag to rotate · Scroll to zoom · Click a country to explore</p>
+                        <p class="travels-subtitle">Drag to rotate · Scroll to zoom<br>Click a country to explore</p>
                     </div>
                 </div>
             </div>
@@ -84,7 +85,6 @@
                         <ul class="tooltip-places"></ul>
                         <div class="tooltip-hint">click to explore →</div>
                     </div>
-                    <div class="globe-hint" id="globe-hint">drag to rotate · scroll to zoom</div>
                 </div>
             </div>
 
@@ -116,12 +116,20 @@
        TRAVEL DATA — edit this section
        ISO numeric codes: https://en.wikipedia.org/wiki/ISO_3166-1_numeric
     ====================================================== */
+const photo = (src, caption) => ({ src, desc: caption });
 const VISITS = {
     356: { 
         name: "India", 
         continent: "Asia", 
         places: ["Too many to list here hahaha"], 
-        photos: ['images/travels/india/india_1.png', 'images/travels/india/india_2.png', 'images/travels/india/india_3.png']
+        photos: [
+            photo('images/travels/india/india_1.png', 'Taj Mahal, Agra'),
+            photo('images/travels/india/india_2.png', 'Himalayan peaks, Uttarakhand'),
+            photo('images/travels/india/india_3.png', 'Cloudy valley, Shillong, Meghalaya'),
+            photo('images/travels/india/india_4.png', 'India photo 4'),
+            photo('images/travels/india/india_5.png', 'India photo 5'),
+            photo('images/travels/india/india_6.png', 'India photo 6')
+        ]
     },
     250: { 
         name: "France", 
@@ -157,13 +165,30 @@ const VISITS = {
         name: "Italy", 
         continent: "Europe", 
         places: ["Venice", "Florence", "Catania", "Bologna"], 
-        photos: [null, null, null, null] 
+        photos: [
+            photo('images/travels/italy/italy_1.jpeg', 'Italy photo 1'),
+            photo('images/travels/italy/italy_2.jpeg', 'Italy photo 2'),
+            photo('images/travels/italy/italy_3.jpeg', 'Italy photo 3'),
+            photo('images/travels/italy/italy_4.jpeg', 'Italy photo 4'),
+            photo('images/travels/italy/italy_5.jpeg', 'Italy photo 5'),
+            photo('images/travels/italy/italy_6.jpeg', 'Italy photo 6'),
+            photo('images/travels/italy/italy_7.jpeg', 'Italy photo 7'),
+            photo('images/travels/italy/italy_8.jpeg', 'Italy photo 8'),
+            photo('images/travels/italy/italy_9.jpeg', 'Italy photo 9')
+        ] 
     },
     300: { 
         name: "Greece", 
         continent: "Europe", 
         places: ["Heraklion", "Chania", "Rethymno", "Agios Nikolaos", "Athens", "Thessaloniki", "Meteora", "Delphi", "Plastiras"], 
-        photos: ['images/travels/greece/greece_1.png', 'images/travels/greece/greece_2.png', 'images/travels/greece/greece_3.png', 'images/travels/greece/greece_4.png', 'images/travels/greece/greece_5.png', 'images/travels/greece/greece_6.png'] 
+        photos: [
+            photo('images/travels/greece/greece_1.png', 'Greece photo 1'),
+            photo('images/travels/greece/greece_2.png', 'Greece photo 2'),
+            photo('images/travels/greece/greece_3.png', 'Greece photo 3'),
+            photo('images/travels/greece/greece_4.png', 'Greece photo 4'),
+            photo('images/travels/greece/greece_5.png', 'Greece photo 5'),
+            photo('images/travels/greece/greece_6.png', 'Greece photo 6')
+        ] 
     },
     528: { 
         name: "Netherlands", 
@@ -177,17 +202,40 @@ const VISITS = {
         places: ["Brussels", "Ghent"], 
         photos: [null, null] 
     },
+    40: {
+        name: "Austria",
+        continent: "Europe",
+        places: ["Vienna"],
+        photos: [null]
+    },
     704: { 
         name: "Vietnam", 
         continent: "Asia", 
         places: ["Hanoi", "Hoi An", "Da Nang", "Ba Na Hills", "Ninh Binh", "Trang An"], 
-        photos: ['images/travels/vietnam/vietnam_1.png', 'images/travels/vietnam/vietnam_2.png', 'images/travels/vietnam/vietnam_3.png', 'images/travels/vietnam/vietnam_4.png', 'images/travels/vietnam/vietnam_5.png', 'images/travels/vietnam/vietnam_6.png', 'images/travels/vietnam/vietnam_7.png', 'images/travels/vietnam/vietnam_8.png', 'images/travels/vietnam/vietnam_9.png'] 
+        photos: [
+            photo('images/travels/vietnam/vietnam_1.png', 'Vietnam photo 1'),
+            photo('images/travels/vietnam/vietnam_2.png', 'Vietnam photo 2'),
+            photo('images/travels/vietnam/vietnam_3.png', 'Vietnam photo 3'),
+            photo('images/travels/vietnam/vietnam_4.png', 'Vietnam photo 4'),
+            photo('images/travels/vietnam/vietnam_5.png', 'Vietnam photo 5'),
+            photo('images/travels/vietnam/vietnam_6.png', 'Vietnam photo 6'),
+            photo('images/travels/vietnam/vietnam_7.png', 'Vietnam photo 7'),
+            photo('images/travels/vietnam/vietnam_8.png', 'Vietnam photo 8'),
+            photo('images/travels/vietnam/vietnam_9.png', 'Vietnam photo 9')
+        ] 
     },
     840: { 
         name: "United States", 
         continent: "North America", 
         places: ["Chicago", "Indiana Dunes"], 
-        photos: ['images/travels/usa/usa_1.png', 'images/travels/usa/usa_2.png', 'images/travels/usa/usa_3.png', 'images/travels/usa/usa_4.png', 'images/travels/usa/usa_5.png', 'images/travels/usa/usa_6.png'] 
+        photos: [
+            photo('images/travels/usa/usa_1.png', 'United States photo 1'),
+            photo('images/travels/usa/usa_2.png', 'United States photo 2'),
+            photo('images/travels/usa/usa_3.png', 'United States photo 3'),
+            photo('images/travels/usa/usa_4.png', 'United States photo 4'),
+            photo('images/travels/usa/usa_5.png', 'United States photo 5'),
+            photo('images/travels/usa/usa_6.png', 'United States photo 6')
+        ] 
     }
 };
 
@@ -201,12 +249,17 @@ const VISITS = {
         const step = Math.ceil(target / 30);
         const t = setInterval(() => { n = Math.min(n + step, target); el.textContent = n; if (n >= target) clearInterval(t); }, 30);
     }
-    new IntersectionObserver(entries => {
-        if (!entries[0].isIntersecting) return;
+    const statsEl = document.querySelector('.travels-stats');
+    let statsAnimated = false;
+    const statsObserver = new IntersectionObserver(entries => {
+        if (statsAnimated || !entries[0].isIntersecting) return;
+        statsAnimated = true;
         animateCount(document.getElementById('stat-countries'),  visitedIds.size);
-        animateCount(document.getElementById('stat-places'),     totalPlaces+20);
+        animateCount(document.getElementById('stat-places'),     totalPlaces + 20);
         animateCount(document.getElementById('stat-continents'), continentSet.size);
-    }, { threshold: 0.3 }).observe(document.querySelector('.travels-stats'));
+        statsObserver.disconnect();
+    }, { threshold: 0.3 });
+    statsObserver.observe(statsEl);
 
     /* ====================================================== GLOBE */
     const canvas  = document.getElementById('globe-canvas');
@@ -220,6 +273,7 @@ const VISITS = {
     let autoRotate = true, autoTimer = null;
     let W, H, R;
     let currentScale = 1;
+    let detailReturnScrollY = null;
 
     const proj  = d3.geoOrthographic().clipAngle(90).precision(0.3);
     const gpath = d3.geoPath(proj, ctx);
@@ -229,21 +283,24 @@ const VISITS = {
     function C() {
         const l = isLight();
         return {
-            ocean:         l ? '#c2d9ea' : '#0c1118',
-            land:          l ? '#dbd6ca' : '#1c1f27',
-            landStroke:    l ? '#bfbab0' : '#282c36',
-            visited:       l ? '#c89a1a' : '#feda4a',
-            visitedHover:  l ? '#a07800' : '#ffe566',
-            visitedStroke: l ? '#7a5800' : '#c4a020',
+            ocean:         l ? '#8fc7ee' : '#0c1118',
+            land:          l ? '#d8bf78' : '#1c1f27',
+            landStroke:    l ? '#9a7a2f' : '#282c36',
+            visited:       l ? '#a97f12' : '#d8b537',
+            visitedHover:  l ? '#8d6700' : '#c79f1d',
+            visitedStroke: l ? '#7a5800' : '#5f4b18',
             graticule:     l ? 'rgba(0,0,0,0.05)'        : 'rgba(255,255,255,0.035)',
-            atmo0:         l ? 'rgba(160,200,230,0.40)'  : 'rgba(20,60,140,0.30)',
-            outline:       l ? 'rgba(0,0,0,0.18)'        : 'rgba(255,255,255,0.09)',
+            borderStroke:  l ? 'rgba(82,60,18,0.30)'     : 'rgba(255,255,255,0.12)',
+            atmoCore:      l ? 'rgba(164,208,236,0.14)'  : 'rgba(98,164,255,0.16)',
+            atmoMid:       l ? 'rgba(164,208,236,0.07)'  : 'rgba(64,128,240,0.10)',
+            atmoOuter:     l ? 'rgba(164,208,236,0.00)'  : 'rgba(64,128,240,0.00)',
+            outline:       l ? 'rgba(0,0,0,0.08)'        : 'rgba(255,255,255,0.05)',
         };
     }
 
     function setSize(keepZoom) {
         const wrap    = document.getElementById('globe-wrap');
-        const natural = Math.min(wrap.clientWidth, window.innerHeight * 0.72, 700);
+        const natural = Math.min(wrap.clientWidth, window.innerHeight * 0.92, 900);
         if (!keepZoom) currentScale = 1;
         const sz = Math.round(natural * currentScale);
         W = H = sz;
@@ -262,14 +319,18 @@ const VISITS = {
         const [cx, cy] = proj.translate();
         ctx.clearRect(0, 0, W, H);
 
-        // atmosphere glow — always tracks globe centre & scale
-        const ag = ctx.createRadialGradient(cx, cy, curR * 0.88, cx, cy, curR * 1.10);
-        ag.addColorStop(0, c.atmo0);
-        ag.addColorStop(1, 'transparent');
+        // atmosphere glow — soft bloom, not a hard ring
+        const ag = ctx.createRadialGradient(cx, cy, curR * 0.28, cx, cy, curR * 1.58);
+        ag.addColorStop(0.00, c.atmoCore);
+        ag.addColorStop(0.62, c.atmoMid);
+        ag.addColorStop(1.00, c.atmoOuter);
+        ctx.save();
+        if (!isLight()) ctx.globalCompositeOperation = 'screen';
         ctx.beginPath();
-        ctx.arc(cx, cy, curR * 1.10, 0, 2 * Math.PI);
+        ctx.arc(cx, cy, curR * 1.58, 0, 2 * Math.PI);
         ctx.fillStyle = ag;
         ctx.fill();
+        ctx.restore();
 
         // ocean + shadow
         ctx.save();
@@ -299,7 +360,9 @@ const VISITS = {
                 ctx.fillStyle = hov ? c.visitedHover : c.visited;
                 ctx.fill();
                 ctx.shadowBlur = 0;
-                ctx.strokeStyle = c.visitedStroke; ctx.lineWidth = 0.9; ctx.stroke();
+                ctx.strokeStyle = c.visitedStroke;
+                ctx.lineWidth = isLight() ? 0.9 : 1.2;
+                ctx.stroke();
             } else {
                 ctx.fillStyle = c.land; ctx.fill();
                 ctx.strokeStyle = c.landStroke; ctx.lineWidth = 0.3; ctx.stroke();
@@ -309,13 +372,14 @@ const VISITS = {
         // borders
         if (borders) {
             ctx.beginPath(); gpath(borders);
-            ctx.strokeStyle = isLight() ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.05)';
-            ctx.lineWidth = 0.3; ctx.stroke();
+            ctx.strokeStyle = c.borderStroke;
+            ctx.lineWidth = isLight() ? 0.55 : 0.45;
+            ctx.stroke();
         }
 
         // outline ring
         ctx.beginPath(); gpath({ type: 'Sphere' });
-        ctx.strokeStyle = c.outline; ctx.lineWidth = 1.2; ctx.stroke();
+        ctx.strokeStyle = c.outline; ctx.lineWidth = 0.85; ctx.stroke();
     }
 
     /* auto-rotation */
@@ -406,12 +470,21 @@ const VISITS = {
         const p = ptFrom(e), f = countryAt(p);
         const id = f ? +f.id : null;
         if (id !== hoveredId) { hoveredId = id; draw(); }
-        if (f && visitedIds.has(id)) {
-            canvas.style.cursor = 'pointer';
-            const v = VISITS[+f.id];
-            tooltip.querySelector('.tooltip-country').textContent = v.name;
-            const ul = tooltip.querySelector('.tooltip-places'); ul.innerHTML = '';
-            v.places.forEach(c => { const li = document.createElement('li'); li.textContent = c; ul.appendChild(li); });
+        if (f) {
+            const isVisited = visitedIds.has(id);
+            canvas.style.cursor = isVisited ? 'pointer' : 'grab';
+            const countryName = isVisited ? VISITS[id].name : (f.properties && (f.properties.name || f.properties.NAME)) || 'Unknown';
+            tooltip.querySelector('.tooltip-country').textContent = countryName;
+            const ul = tooltip.querySelector('.tooltip-places');
+            ul.innerHTML = '';
+            if (isVisited) {
+                VISITS[id].places.forEach(c => {
+                    const li = document.createElement('li');
+                    li.textContent = c;
+                    ul.appendChild(li);
+                });
+            }
+            tooltip.querySelector('.tooltip-hint').textContent = isVisited ? 'click to explore →' : 'Not visited yet!';
             const cr = document.getElementById('globe-container').getBoundingClientRect();
             let tx = e.clientX - cr.left + 16, ty = e.clientY - cr.top - 10;
             const tw = tooltip.offsetWidth || 160, th = tooltip.offsetHeight || 100;
@@ -433,7 +506,7 @@ const VISITS = {
     canvas.addEventListener('click', e => {
         if (isDragging) return;
         const f = countryAt(ptFrom(e));
-        if (f && visitedIds.has(+f.id)) { openDetail(+f.id); hint.style.opacity = '0'; }
+        if (f && visitedIds.has(+f.id)) { openDetail(+f.id); if (hint) hint.style.opacity = '0'; }
     });
 
     canvas.addEventListener('touchend', e => {
@@ -444,18 +517,31 @@ const VISITS = {
     });
 
     /* dismiss hint */
-    ['mousedown', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { hint.style.opacity = '0'; }, { once: true }));
+    ['mousedown', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { if (hint) hint.style.opacity = '0'; }, { once: true }));
 
     /* ====================================================== DETAIL PANEL */
     function openDetail(id) {
+        detailReturnScrollY = window.scrollY || window.pageYOffset || 0;
         const v = VISITS[id];
         detail.querySelector('.detail-country-name').textContent = v.name;
         detail.querySelector('.detail-places-list').textContent  = v.places.join(' · ');
         const grid = document.getElementById('detail-photos'); grid.innerHTML = '';
         v.photos.forEach((photo, i) => {
             const card = document.createElement('div'); card.className = 'photo-card';
-            if (photo) {
-                const img = document.createElement('img'); img.src = photo; img.alt = v.name + ' ' + (i + 1); card.appendChild(img);
+            const fallbackDesc = `${v.name} · ${(v.places && v.places[i % v.places.length]) || 'Travel memory'} (${i + 1})`;
+            const photoSrc = (photo && typeof photo === 'object') ? photo.src : photo;
+            const photoDesc = (photo && typeof photo === 'object')
+                ? (photo.desc || photo.caption || fallbackDesc)
+                : fallbackDesc;
+            if (photoSrc) {
+                const img = document.createElement('img');
+                img.src = photoSrc;
+                img.alt = v.name + ' ' + (i + 1);
+                card.appendChild(img);
+                const overlay = document.createElement('div');
+                overlay.className = 'photo-desc-overlay';
+                overlay.textContent = photoDesc;
+                card.appendChild(overlay);
             } else {
                 card.classList.add('photo-placeholder');
                 card.innerHTML = '<span class="placeholder-icon">📷</span><span class="placeholder-text">Photo ' + (i + 1) + '</span>';
@@ -464,11 +550,20 @@ const VISITS = {
         });
         detail.setAttribute('aria-hidden', 'false');
         detail.classList.add('open');
-        setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+        setTimeout(() => {
+            const headerEl = document.querySelector('header');
+            const headerOffset = headerEl ? headerEl.getBoundingClientRect().height : 0;
+            const targetTop = window.pageYOffset + detail.getBoundingClientRect().top - headerOffset - 8;
+            window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        }, 80);
     }
 
     document.querySelector('.detail-close').addEventListener('click', () => {
         detail.classList.remove('open'); detail.setAttribute('aria-hidden', 'true');
+        if (detailReturnScrollY !== null) {
+            window.scrollTo({ top: detailReturnScrollY, behavior: 'smooth' });
+            detailReturnScrollY = null;
+        }
     });
 
     /* ====================================================== INIT */

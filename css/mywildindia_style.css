@@ -1,0 +1,686 @@
+body.page-wild-india {
+  background: #060606;
+  color: #e9e9e9;
+}
+
+body.page-wild-india,
+body.page-wild-india * {
+  transition-property: color, background-color, border-color, box-shadow, fill, stroke !important;
+  transition-duration: 0ms !important;
+  transition-delay: 0ms !important;
+}
+
+.wild-india-heading {
+  padding-top: 90px;
+  padding-bottom: 44px;
+}
+
+.wild-india-heading .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.wild-india-heading h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  background: linear-gradient(to right, gold, #ee0979);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.wild-india-heading p {
+  margin: 8px auto 0;
+  text-align: center;
+  max-width: 720px;
+  color: #a9a9a9;
+}
+
+.travels-subtitle {
+  color: #7a7a7a;
+  font-size: 14px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin: 16px auto 28px auto;
+  text-align: center;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.wild-india-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 20px;
+  align-items: start;
+  padding-bottom: 40px;
+}
+
+.right-column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.wild-tribute {
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 14px 8px 5px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tribute-story {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tribute-photos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 96%;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+.tribute-photos img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+}
+
+.travels-subtitle.tribute-caption {
+  width: fit-content;
+  max-width: 100%;
+  margin: 18px auto 12px auto;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.travels-subtitle.tribute-caption strong {
+  font-weight: 700;
+}
+
+.tribute-paragraph {
+  width: 75%;
+  margin: 0 auto;
+  color: #b8b8b8;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.map-panel {
+  position: relative;
+  padding: 0;
+  background: #000000;
+}
+
+.map-filters {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 45;
+  background: rgba(8, 8, 10, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  backdrop-filter: blur(6px);
+}
+
+.map-filter-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #e6e6e6;
+  font-size: 12px;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.map-filter-option input {
+  margin-top: 1px;
+}
+
+#india-map {
+  width: 100%;
+  height: auto;
+  background: transparent;
+}
+
+.state-layer path {
+  fill: #1c1c20;
+  stroke: #5d5d63;
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  shape-rendering: geometricPrecision;
+  transition: fill 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
+  cursor: pointer;
+}
+
+.state-layer path:hover,
+.state-layer path:focus,
+.state-layer path.active {
+  fill: #27272f;
+  stroke: #5d5d63;
+  stroke-width: 1.6;
+  outline: none;
+}
+
+.highlight-layer .state-highlight {
+  fill: none;
+  stroke: #feda4a;
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.marker.marker-wild circle {
+  fill: #ff5d91;
+  stroke: white;
+  stroke-width: 1.2;
+  cursor: pointer;
+  transition: transform 160ms ease, r 160ms ease, fill 160ms ease;
+  transform-origin: center;
+}
+
+.marker.marker-wild:hover circle,
+.marker.marker-wild:focus-within circle {
+  fill: #ff79a7;
+}
+
+.marker.marker-notwild circle {
+  fill: #3ad46b;
+  stroke: #effff3;
+  stroke-width: 1.2;
+  cursor: pointer;
+}
+
+.marker.marker-notwild:hover circle,
+.marker.marker-notwild:focus-within circle {
+  fill: #57e584;
+}
+
+.capital-marker circle {
+  fill: #66d9ff;
+  stroke: #f8fcff;
+  stroke-width: 0.9;
+  cursor: pointer;
+}
+
+.map-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(4px);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(8, 10, 14, 0.93);
+  border: 1px solid rgba(254, 218, 74, 0.28);
+  color: #f4f4f4;
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  z-index: 40;
+  transition: opacity 150ms ease, transform 150ms ease;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+.map-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.map-tooltip.rich {
+  white-space: normal;
+  max-width: 420px;
+}
+
+.map-tooltip .tooltip-title {
+  color: #feda4a;
+  font-weight: 800;
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+
+.map-tooltip .tooltip-desc {
+  color: #d8d8d8;
+  font-size: 14px;
+  line-height: 1.42;
+  margin-bottom: 10px;
+}
+
+.map-tooltip .tooltip-thumbs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+}
+
+.map-tooltip .tooltip-thumbs img {
+  width: 100%;
+  aspect-ratio: 7.5 / 4.5;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.place-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  background: #101012;
+  border: 1px solid #262629;
+  border-radius: 12px;
+  padding: 14px;
+  max-height: min(72vh, 760px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: auto;
+  transform: translateY(12px) scale(0.975);
+  transform-origin: top center;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transition: opacity 520ms cubic-bezier(.16,1,.3,1), transform 520ms cubic-bezier(.16,1,.3,1), visibility 520ms ease !important;
+}
+
+body.page-wild-india .place-panel {
+  transition-property: opacity, transform, visibility !important;
+  transition-duration: 520ms !important;
+  transition-timing-function: cubic-bezier(.16,1,.3,1) !important;
+  transition-delay: 0ms !important;
+}
+
+body.page-wild-india .photo-lightbox {
+  transition-property: opacity, visibility !important;
+  transition-duration: 340ms !important;
+  transition-timing-function: cubic-bezier(.16,1,.3,1) !important;
+  transition-delay: 0ms !important;
+}
+
+body.page-wild-india .lightbox-inner {
+  transition-property: opacity, transform !important;
+  transition-duration: 360ms !important;
+  transition-timing-function: cubic-bezier(.16,1,.3,1) !important;
+  transition-delay: 0ms !important;
+}
+
+.place-panel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.place-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.place-panel-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #feda4a;
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+#close-place {
+  background: transparent;
+  border: 0;
+  color: #cfcfcf;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#place-description {
+  color: #c8c8c8;
+  margin: 10px 0 14px;
+  white-space: normal;
+}
+
+.place-photos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.photo-tile {
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.photo-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-tile-btn {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.photo-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: rgba(0, 0, 0, 0.88);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.photo-lightbox.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.lightbox-inner {
+  width: min(980px, 92vw);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-rows: 1fr auto auto 1fr;
+  column-gap: 10px;
+  row-gap: 6px;
+  align-items: start;
+  transform: translateY(10px) scale(0.985);
+  opacity: 0;
+}
+
+.photo-lightbox.open .lightbox-inner {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.lightbox-close {
+  position: relative;
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  align-self: start;
+  transform: translateY(-110%);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(0, 0, 0, 0.78);
+  color: #ffffff;
+  font-size: 1.45rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.lightbox-next {
+  position: absolute;
+  right: -120px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#lightbox-image {
+  width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: 12px;
+  grid-column: 1;
+  grid-row: 1 / 5;
+}
+
+.lightbox-caption-box {
+  width: 100%;
+  background: rgba(8, 10, 14, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+#lightbox-caption {
+  margin: 0;
+  color: #efefef;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.lightbox-credit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.lightbox-credit img {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.lightbox-credit span {
+  color: #f4f4f4;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .lightbox-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #lightbox-image,
+  .lightbox-caption-box,
+  .lightbox-credit {
+    width: 100%;
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    grid-column: auto;
+    grid-row: auto;
+    transform: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .wild-india-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .place-panel {
+    position: static;
+    width: auto;
+    z-index: auto;
+    max-height: 1000px;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    padding: 14px;
+  }
+}
+
+body.light-mode.page-wild-india {
+  background: #f8f8f8;
+  color: #111;
+}
+
+body.light-mode .wild-india-heading h1 {
+  background: linear-gradient(to right, #b0892b, #a00056);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+body.light-mode .map-panel {
+  background: #ffffff;
+}
+
+body.light-mode .place-panel {
+  background: #ffffff;
+  border: 1px solid #d9d9de;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+body.light-mode .photo-lightbox {
+  background: rgba(255, 255, 255, 0.84);
+}
+
+body.light-mode .lightbox-caption-box {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(0, 0, 0, 0.16);
+}
+
+body.light-mode #lightbox-caption,
+body.light-mode .lightbox-credit span {
+  color: #111111;
+}
+
+body.light-mode .lightbox-close {
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  color: #111111;
+}
+
+body.light-mode .lightbox-next {
+  color: #111111;
+}
+
+body.light-mode #india-map {
+  background: transparent;
+}
+
+body.light-mode .map-filters {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+body.light-mode .map-filter-option {
+  color: #111111;
+}
+
+body.light-mode .state-layer path {
+  fill: #efeff2;
+  stroke: #9a9aa2;
+}
+
+body.light-mode .state-layer path:hover,
+body.light-mode .state-layer path:focus,
+body.light-mode .state-layer path.active {
+  fill: #e7e7ed;
+  stroke: #9a9aa2;
+}
+
+body.light-mode .place-panel-header h2 {
+  color: #aa7e00 !important;
+}
+
+body.light-mode .highlight-layer .state-highlight {
+  stroke: #aa7e00;
+}
+
+body.light-mode .capital-marker circle {
+  fill: #007fa6;
+  stroke: #ffffff;
+}
+
+body.light-mode .map-tooltip {
+  background: rgba(255, 255, 255, 0.98);
+  color: #1a1a1a;
+  border-color: rgba(170, 126, 0, 0.35);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+body.light-mode .map-tooltip .tooltip-title {
+  color: #aa7e00;
+}
+
+body.light-mode .map-tooltip .tooltip-desc {
+  color: #333;
+}
+
+body.light-mode .travels-subtitle {
+  color: #666;
+}
+
+body.light-mode .travels-subtitle.tribute-caption {
+  color: #000000;
+}
+
+body.light-mode .tribute-paragraph {
+  color: #444;
+}
+
+body.light-mode .wild-tribute {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+body.light-mode #place-description {
+  color: #333;
+}
