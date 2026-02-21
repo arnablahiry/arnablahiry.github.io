@@ -274,7 +274,12 @@ const VISITS = {
     let autoRotate = true, autoTimer = null;
     let W, H, R;
     let currentScale = 1;
+    let introActive = true;
+    let introStartTs = null;
     let detailReturnScrollY = null;
+    const INTRO_MS = 1200;
+    const INTRO_FAST_SPIN = 2.8;
+    const INTRO_NORMAL_SPIN = 0.10;
 
     const proj  = d3.geoOrthographic().clipAngle(90).precision(0.3);
     const gpath = d3.geoPath(proj, ctx);
@@ -385,9 +390,23 @@ const VISITS = {
 
     /* auto-rotation */
     requestAnimationFrame(function frame() {
-        if (autoRotate) {
+        if (introActive) {
+            if (introStartTs === null) introStartTs = performance.now();
+            const t = Math.min(1, (performance.now() - introStartTs) / INTRO_MS);
+            const eased = 1 - Math.pow(1 - t, 3);
+            const spinStep = INTRO_FAST_SPIN + (INTRO_NORMAL_SPIN - INTRO_FAST_SPIN) * eased;
             const r = proj.rotate();
-            proj.rotate([r[0] + 0.10, r[1], r[2]]);
+            proj.rotate([r[0] + spinStep, r[1], r[2]]);
+            canvas.style.opacity = String(eased);
+            draw();
+            if (t >= 1) {
+                introActive = false;
+                canvas.style.opacity = '1';
+            }
+        }
+        if (!introActive && autoRotate) {
+            const r = proj.rotate();
+            proj.rotate([r[0] + INTRO_NORMAL_SPIN, r[1], r[2]]);
             draw();
         }
         requestAnimationFrame(frame);
@@ -570,6 +589,7 @@ const VISITS = {
     /* ====================================================== INIT */
     setSize(false);
     proj.rotate([-20, -20, 0]);
+    canvas.style.opacity = '0';
     canvas.style.cursor = 'grab';
     draw();
 
