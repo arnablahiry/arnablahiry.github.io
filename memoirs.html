@@ -1,0 +1,1253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Memoirs of a Vagabond</title>
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="shortcut icon" href="images/logo.png">
+  <script>/* early theme apply */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();</script>
+  <link rel="stylesheet" href="css/utils.css">
+  <link rel="stylesheet" href="css/memoirs_style.css">
+  <link rel="stylesheet" href="css/light_mode.css">
+</head>
+<body class="page-memoirs">
+  <header>
+    <div class="logo-container">
+      <a href="index.html" aria-label="Home">
+        <img src="images/logo.png" alt="Logo" class="logo" loading="lazy" decoding="async">
+      </a>
+    </div>
+    <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
+      <span class="bar bar1"></span>
+      <span class="bar bar2"></span>
+      <span class="bar bar3"></span>
+    </button>
+    <nav id="site-nav">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-toggle" type="button" aria-expanded="false">About</button>
+        <div class="nav-dropdown-menu">
+          <a href="about.html">Me</a>
+          <a href="travels.html">My Travels</a>
+          <a href="mywildindia.html">My Wild India</a>
+          <a href="memoirs.html">Memoirs of a Vagabond</a>
+        </div>
+      </div>
+      <a href="timeline.html">Timeline</a>
+      <a href="research.html">Research</a>
+      <a href="software.html">Software</a>
+      <a href="cv.html">CV / Resume</a>
+      <a href="publications.html">Publications</a>
+      <a href="repositories.html">Repositories</a>
+      <a href="contact.html">Contact</a>
+      <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="memoirs-heading">
+      <h1>Memoirs of a Vagabond</h1>
+      <p class="memoirs-subtitle">Drag to rotate · Scroll to zoom · Select Places to Explore Memoirs</p>
+    </section>
+
+    <section class="memoirs-layout" aria-label="Memoirs globe and story cards">
+      <aside class="globe-side">
+        <canvas id="memoirs-globe-canvas" aria-label="Interactive memoir globe"></canvas>
+        <div id="memoirs-tooltip" class="memoirs-tooltip" aria-hidden="true"></div>
+      </aside>
+
+      <aside class="story-side">
+        <article id="foreword-card" class="foreword-card">
+          <div class="foreword-head">
+            <img class="foreword-avatar" src="images/mywildindia/baba/pralay_1.png" alt="Pralay Lahiry" loading="lazy" decoding="async">
+            <div class="foreword-head-text">
+              <h2 id="foreword-name">Pralay Lahiry</h2>
+              <p class="foreword-dates">1968 - 2020</p>
+            </div>
+          </div>
+          <p id="foreword-text" class="foreword-text">Loading foreword...</p>
+        </article>
+        <article id="selected-card-box" class="selected-card-box" aria-hidden="true">
+          <h3 id="selected-panel-title">Selected Memoirs</h3>
+          <p id="selected-panel-hint" class="selected-panel-hint">Click a card to open it in full-screen reader mode.</p>
+          <div id="story-cards-selected" class="story-cards story-cards-selected"></div>
+        </article>
+      </aside>
+      <h3 class="all-memoirs-heading">All Memoirs</h3>
+      <p class="all-memoirs-hint">Click a card to open it in full-screen reader mode.</p>
+      <div id="story-cards-all" class="story-cards story-cards-bottom"></div>
+    </section>
+
+    <div id="book-reader" class="book-reader" aria-hidden="true">
+      <div class="book-sheet" role="dialog" aria-modal="true" aria-label="Story reader">
+        <div class="book-head">
+          <h3 id="book-title" class="book-title">Story</h3>
+          <div class="book-head-controls">
+            <div class="book-reader-tools" aria-label="Reader controls">
+              <button id="reader-font-down" class="book-page-btn" type="button" aria-label="Decrease font size">A-</button>
+              <button id="reader-font-up" class="book-page-btn" type="button" aria-label="Increase font size">A+</button>
+              <button id="reader-line-compact" class="book-page-btn reader-line-option" type="button" data-line="compact" aria-label="Compact line spacing"><span class="line-icon line-icon-compact" aria-hidden="true"></span></button>
+              <button id="reader-line-regular" class="book-page-btn reader-line-option" type="button" data-line="regular" aria-label="Regular line spacing"><span class="line-icon line-icon-regular" aria-hidden="true"></span></button>
+              <button id="reader-line-large" class="book-page-btn reader-line-option" type="button" data-line="large" aria-label="Large line spacing"><span class="line-icon line-icon-large" aria-hidden="true"></span></button>
+              <button id="reader-theme-toggle" class="theme-toggle reader-theme-toggle" type="button" aria-label="Toggle light/dark mode">☀</button>
+            </div>
+            <button id="book-close" class="book-close" type="button" aria-label="Close story">×</button>
+          </div>
+        </div>
+        <div id="book-body" class="book-body">Loading...</div>
+        <div id="book-page-nav" class="book-page-nav book-page-nav-sides" hidden>
+          <button id="book-prev" class="book-page-btn book-side-arrow book-side-arrow-left" type="button" aria-label="Previous page">‹</button>
+          <span id="book-page-label" class="book-page-label">Page 1 / 1</span>
+          <button id="book-next" class="book-page-btn book-side-arrow book-side-arrow-right" type="button" aria-label="Next page">›</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="scripts/nav-toggle.js"></script>
+  <script src="scripts/theme-toggle.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+  <script>
+    const WORLD_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+    const FOREWORD_URL = 'stories/vagabond/foreword.txt';
+    const BOOK_PAGES_PREFIX = 'images/memoirs/pages/07880038-aab2-46d1-b1f6-15f322b09de9_page-';
+    const BOOK_PAGE_COUNT = 213;
+
+    const COUNTRY_LIBRARY = {
+      356: { key: 'india', name: 'India' },
+      320: { key: 'guatemala', name: 'Guatemala' },
+      360: { key: 'indonesia', name: 'Indonesia' },
+      484: { key: 'mexico', name: 'Mexico' },
+      156: { key: 'china', name: 'China' },
+      643: { key: 'russia', name: 'Russia' },
+      364: { key: 'iran', name: 'Iran' }
+    };
+    const SEA_SPOTS = {
+      caribbean: {
+        key: 'caribbean',
+        name: 'Caribbean Sea',
+        lonLat: [-74, 16]
+      }
+    };
+
+    function pageImagePath(pageNum) {
+      return BOOK_PAGES_PREFIX + String(pageNum).padStart(4, '0') + '.jpg';
+    }
+
+    function slugifyTitle(title) {
+      return String(title)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+    }
+
+    // Set custom card images here: "Exact Chapter Title": "image/path.ext"
+    // If a title is not listed, the card uses the first page image by default.
+    const CHAPTER_CARD_IMAGES = {
+      '12 Days in a Stable with 30 Cows and 1 Bull in Dibru Saikhowa National Park': 'images/memoirs/covers/1.jpg',
+      'The Man Who Bought a Mountain': 'images/memoirs/covers/2.jpg',
+      'Kaziranga': 'images/memoirs/covers/3.jpg',
+      'Quest for the Feral Horse': 'images/memoirs/covers/4.jpg',
+      'The Last of the Dooars': 'images/memoirs/covers/5.jpg',
+      'Miracle of Migration': 'images/memoirs/covers/6.jpg',
+      'The Fight Is On': 'images/memoirs/covers/7.jpg',
+      'The Young Oak and the Old Lady': 'images/memoirs/covers/8.jpg',
+      'Shining India': 'images/memoirs/covers/9.jpg',
+      'Where Humans Dare': 'images/memoirs/covers/10.jpg',
+      'Only Footsteps in the Dark Jungle: My "Ghost" Experience': 'images/memoirs/covers/11.jpg',
+      'Paradise Regained': 'images/memoirs/covers/12.jpg',
+      'Hoolongapar Gibbon Wildlife Sanctuary': 'images/memoirs/covers/13.jpg',
+      'The Story of Dream the Leopard Cub': 'images/memoirs/covers/14.jpg',
+      'A Rogue Wild Buffalo and Me in Pobitora': 'images/memoirs/covers/15.jpg',
+      'Fambangloh (Phambangloh) Wildlife Sanctuary: Hidden Treasure in the Eastern Himalayas': 'images/memoirs/covers/16.jpg',
+      'Pench, Maharashtra: Tiger Haven in a Power Plant': 'images/memoirs/covers/17.jpg',
+      'Orang National Park': 'images/memoirs/covers/18.jpg',
+      'Manas: Alluringly Beautiful': 'images/memoirs/covers/19.jpg',
+      'Tadoba: Raining Tigers': 'images/memoirs/covers/20.jpg',
+      'The Realm of the Red Panda': 'images/memoirs/covers/21.jpg',
+      'Lepchajagat': 'images/memoirs/covers/22.jpg',
+      'Rhino and the Jumping Lady': 'images/memoirs/covers/23.jpg',
+      'A Strange Football Game in Guatemala': 'images/memoirs/covers/24.jpg',
+      'Pirates of the Caribbean and Yanni Yanankis': 'images/memoirs/covers/25.jpg',
+      'Disco Dancer in a Remote Indonesian Village': 'images/memoirs/covers/26.jpg',
+      'Love and Football in Mexico': 'images/memoirs/covers/27.jpg',
+      'How to Eat a Duck in China': 'images/memoirs/covers/28.jpg',
+      'Vodka, Apple and a Bulldozer in Siberia': 'images/memoirs/covers/29.jpg',
+      'Lost in the Sands of Persia': 'images/memoirs/covers/30.jpg'
+    };
+
+    function storyCard(title, startPage, endPage) {
+      return {
+        title,
+        image: CHAPTER_CARD_IMAGES[title] || pageImagePath(startPage),
+        pageRange: [startPage, endPage],
+        textFile: 'stories/vagabond/ocr/' + slugifyTitle(title) + '.txt'
+      };
+    }
+
+    const STORIES = {
+      india: [
+        storyCard('12 Days in a Stable with 30 Cows and 1 Bull in Dibru Saikhowa National Park', 1, 7),
+        storyCard('The Man Who Bought a Mountain', 8, 17),
+        storyCard('Kaziranga', 18, 31),
+        storyCard('Quest for the Feral Horse', 46, 54),
+        storyCard('The Last of the Dooars', 60, 62),
+        storyCard('Miracle of Migration', 76, 78),
+        storyCard('The Fight Is On', 92, 97),
+        storyCard('The Young Oak and the Old Lady', 106, 114),
+        storyCard('Shining India', 115, 118),
+        storyCard('Where Humans Dare', 127, 134),
+        storyCard('Only Footsteps in the Dark Jungle: My "Ghost" Experience', 144, 151),
+        storyCard('Paradise Regained', 152, 155),
+        storyCard('Hoolongapar Gibbon Wildlife Sanctuary', 156, 161),
+        storyCard('The Story of Dream the Leopard Cub', 162, 168),
+        storyCard('A Rogue Wild Buffalo and Me in Pobitora', 169, 175),
+        storyCard('Fambangloh (Phambangloh) Wildlife Sanctuary: Hidden Treasure in the Eastern Himalayas', 176, 180),
+        storyCard('Pench, Maharashtra: Tiger Haven in a Power Plant', 181, 184),
+        storyCard('Orang National Park', 185, 190),
+        storyCard('Manas: Alluringly Beautiful', 191, 196),
+        storyCard('Tadoba: Raining Tigers', 197, 201),
+        storyCard('The Realm of the Red Panda', 202, 204),
+        storyCard('Lepchajagat', 205, 208),
+        storyCard('Rhino and the Jumping Lady', 209, 212)
+      ],
+      guatemala: [
+        storyCard('A Strange Football Game in Guatemala', 55, 59)
+      ],
+      caribbean: [
+        storyCard('Pirates of the Caribbean and Yanni Yanankis', 32, 45)
+      ],
+      indonesia: [
+        storyCard('Disco Dancer in a Remote Indonesian Village', 135, 143)
+      ],
+      mexico: [
+        storyCard('Love and Football in Mexico', 63, 75)
+      ],
+      china: [
+        storyCard('How to Eat a Duck in China', 119, 126)
+      ],
+      russia: [
+        storyCard('Vodka, Apple and a Bulldozer in Siberia', 98, 105)
+      ],
+      iran: [
+        storyCard('Lost in the Sands of Persia', 79, 91)
+      ]
+    };
+
+    function resolveCardPages(card) {
+      if (!card.pageRange || card.pageRange.length !== 2) return [];
+      const start = Math.max(1, Math.min(BOOK_PAGE_COUNT, Number(card.pageRange[0]) || 1));
+      const end = Math.max(start, Math.min(BOOK_PAGE_COUNT, Number(card.pageRange[1]) || start));
+      const pages = [];
+      for (let p = start; p <= end; p += 1) pages.push(pageImagePath(p));
+      return pages;
+    }
+
+    const globeCanvas = document.getElementById('memoirs-globe-canvas');
+    const globeCtx = globeCanvas.getContext('2d');
+    const tooltipEl = document.getElementById('memoirs-tooltip');
+
+    const sidePanel = document.querySelector('.story-side');
+    const forewordTextEl = document.getElementById('foreword-text');
+    const selectedCardBox = document.getElementById('selected-card-box');
+    const selectedPanelTitle = document.getElementById('selected-panel-title');
+    const selectedPanelHint = document.getElementById('selected-panel-hint');
+    const storyCardsSelected = document.getElementById('story-cards-selected');
+    const storyCardsAll = document.getElementById('story-cards-all');
+
+    const readerEl = document.getElementById('book-reader');
+    const readerTitleEl = document.getElementById('book-title');
+    const readerBodyEl = document.getElementById('book-body');
+    const readerCloseEl = document.getElementById('book-close');
+    const readerPageNavEl = document.getElementById('book-page-nav');
+    const readerPrevEl = document.getElementById('book-prev');
+    const readerNextEl = document.getElementById('book-next');
+    const readerPageLabelEl = document.getElementById('book-page-label');
+    const readerFontDownEl = document.getElementById('reader-font-down');
+    const readerFontUpEl = document.getElementById('reader-font-up');
+    const readerLineCompactEl = document.getElementById('reader-line-compact');
+    const readerLineRegularEl = document.getElementById('reader-line-regular');
+    const readerLineLargeEl = document.getElementById('reader-line-large');
+    const readerLineOptionEls = [readerLineCompactEl, readerLineRegularEl, readerLineLargeEl].filter(Boolean);
+    const readerThemeToggleEl = document.getElementById('reader-theme-toggle');
+
+    const visitedCountryIds = new Set(Object.keys(COUNTRY_LIBRARY).map(Number));
+
+    let W = 0;
+    let H = 0;
+    let baseRadius = 0;
+    let worldGeo = null;
+    let countryBorders = null;
+    let hoveredCountryId = null;
+    let hoveredSpotKey = null;
+    let focusedCountryId = null;
+    let focusedSpotKey = null;
+    let isDragging = false;
+    let autoRotate = true;
+    let isAnimating = false;
+    let unfocusState = null;
+    let cardsTransitionToken = 0;
+    const FOCUS_MS = 3600;
+    const UNFOCUS_MS = 2400;
+    const TEXT_FADE_MS = 560;
+    const LINE_PRESETS = { compact: 1.5, regular: 1.72, large: 1.95 };
+    let selectedRevealTimer = null;
+    let focusedCountryBlend = 1;
+    let readerTextPages = [];
+    let readerTextPageIndex = 0;
+    let readerCurrentParagraphs = [];
+    let readerPageAnimating = false;
+    const readerPrefs = {
+      fontSize: 15,
+      lineHeight: LINE_PRESETS.regular,
+      textPad: 14
+    };
+
+    const proj = d3.geoOrthographic().clipAngle(90).precision(0.3);
+    const gpath = d3.geoPath(proj, globeCtx);
+
+    function isLight() {
+      return document.body.classList.contains('light-mode');
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function normalizeForMatch(text) {
+      return String(text || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+    }
+
+    function clamp(v, min, max) {
+      return Math.max(min, Math.min(max, v));
+    }
+
+    function applyReaderPrefs() {
+      readerBodyEl.style.setProperty('--reader-font-size', readerPrefs.fontSize + 'px');
+      readerBodyEl.style.setProperty('--reader-line-height', String(readerPrefs.lineHeight));
+      readerBodyEl.style.setProperty('--reader-text-pad', readerPrefs.textPad + 'px');
+    }
+
+    function setReaderLinePreset(presetKey) {
+      const next = LINE_PRESETS[presetKey];
+      if (!next) return;
+      readerPrefs.lineHeight = next;
+      readerLineOptionEls.forEach((el) => {
+        el.classList.toggle('active', el.dataset.line === presetKey);
+        el.setAttribute('aria-pressed', el.dataset.line === presetKey ? 'true' : 'false');
+      });
+      applyReaderPrefs();
+      repaginateReader(true);
+    }
+
+    function syncReaderThemeButton() {
+      const siteThemeBtn = document.getElementById('theme-toggle');
+      if (siteThemeBtn) {
+        readerThemeToggleEl.innerHTML = siteThemeBtn.innerHTML;
+        readerThemeToggleEl.setAttribute('aria-pressed', siteThemeBtn.getAttribute('aria-pressed') || 'false');
+        return;
+      }
+      readerThemeToggleEl.textContent = document.body.classList.contains('light-mode') ? '☾' : '☀';
+      readerThemeToggleEl.setAttribute('aria-pressed', document.body.classList.contains('light-mode') ? 'true' : 'false');
+    }
+
+    function extractStoryParagraphs(rawText, title) {
+      const noMarkers = rawText
+        .replace(/\r/g, '')
+        .replace(/^\s*\[Page\s+\d+\]\s*$/gim, '')
+        .replace(/^\s*\d{1,4}\s*$/gim, '')
+        // Join OCR line-wrap hyphenations: "moun-\ntain" -> "mountain"
+        .replace(/([A-Za-z])-\n([A-Za-z])/g, '$1$2')
+        .trim();
+
+      const titleNorm = normalizeForMatch(title);
+      const lines = noMarkers.split('\n');
+
+      // Stage 1: keep natural OCR blocks split by blank lines.
+      const blocks = [];
+      let current = [];
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+        if (!line) {
+          if (current.length) {
+            blocks.push(current.join(' ').replace(/\s{2,}/g, ' ').trim());
+            current = [];
+          }
+          continue;
+        }
+        current.push(line);
+      }
+      if (current.length) {
+        blocks.push(current.join(' ').replace(/\s{2,}/g, ' ').trim());
+      }
+
+      // Stage 2: drop exact chapter-title block if present.
+      let droppedTitle = false;
+      const cleanedBlocks = [];
+      for (const b of blocks) {
+        if (!droppedTitle && titleNorm && normalizeForMatch(b) === titleNorm) {
+          droppedTitle = true;
+          continue;
+        }
+        cleanedBlocks.push(b);
+      }
+
+      // Stage 3: merge only likely OCR-fragmented blocks, keep true paragraph gaps.
+      const out = [];
+      const likelyContinuation = (prev, next) => {
+        if (!prev || !next) return false;
+        const prevEndsHard = /[.!?:"')\]]$/.test(prev);
+        const nextStartsLower = /^[a-z]/.test(next);
+        const nextStartsComma = /^[,;:.)\]]/.test(next);
+        const nextStartsConnective = /^(and|but|or|so|because|while|though|however|therefore|thus|yet|then)\b/i.test(next);
+        const prevVeryShort = prev.length < 45;
+        // Merge when it looks like wrapped prose, not a new thought block.
+        return !prevEndsHard || nextStartsLower || nextStartsComma || (prevVeryShort && nextStartsConnective);
+      };
+
+      for (const block of cleanedBlocks) {
+        if (!block) continue;
+        if (!out.length) {
+          out.push(block);
+          continue;
+        }
+        const prev = out[out.length - 1];
+        if (likelyContinuation(prev, block)) {
+          out[out.length - 1] = (prev + ' ' + block).replace(/\s{2,}/g, ' ').trim();
+        } else {
+          out.push(block);
+        }
+      }
+
+      return out.filter(Boolean);
+    }
+
+    function countryPalette() {
+      const l = isLight();
+      return {
+        ocean: l ? '#8fc7ee' : '#0d111a',
+        land: l ? '#d9c07a' : '#1b202b',
+        landStroke: l ? '#8f702a' : '#2c3442',
+        visited: l ? '#ad8215' : '#d7b43b',
+        visitedHover: l ? '#8c6500' : '#c89f27',
+        visitedFocused: l ? '#654600' : '#ffe89a',
+        visitedStroke: l ? '#715200' : '#5a4a1f',
+        border: l ? 'rgba(65,45,8,0.28)' : 'rgba(255,255,255,0.13)',
+        glowInner: l ? 'rgba(170,210,236,0.15)' : 'rgba(88,154,250,0.14)',
+        glowOuter: l ? 'rgba(170,210,236,0.00)' : 'rgba(88,154,250,0.00)'
+      };
+    }
+
+    function setCanvasSize() {
+      const wrap = document.querySelector('.globe-side');
+      const rect = wrap.getBoundingClientRect();
+      W = Math.max(380, Math.round(rect.width));
+      H = Math.max(380, Math.round(rect.height));
+      globeCanvas.width = W * devicePixelRatio;
+      globeCanvas.height = H * devicePixelRatio;
+      globeCanvas.style.width = W + 'px';
+      globeCanvas.style.height = H + 'px';
+      globeCtx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      baseRadius = Math.min(W, H) / 2 - 14;
+      proj.translate([W / 2, H / 2]);
+      if (!proj.scale() || !isFinite(proj.scale())) proj.scale(baseRadius);
+    }
+
+    function isPointVisible(lonLat) {
+      const centerLonLat = [-proj.rotate()[0], -proj.rotate()[1]];
+      return d3.geoDistance(lonLat, centerLonLat) <= (Math.PI / 2);
+    }
+
+    function spotScreenPoint(spot) {
+      if (!isPointVisible(spot.lonLat)) return null;
+      return proj(spot.lonLat);
+    }
+
+    function spotAt(p) {
+      const hitR = 11;
+      for (const spot of Object.values(SEA_SPOTS)) {
+        const xy = spotScreenPoint(spot);
+        if (!xy) continue;
+        const dx = p[0] - xy[0];
+        const dy = p[1] - xy[1];
+        if ((dx * dx + dy * dy) <= (hitR * hitR)) return spot;
+      }
+      return null;
+    }
+
+    function drawGlobe() {
+      const c = countryPalette();
+      const curR = proj.scale();
+      const center = proj.translate();
+      globeCtx.clearRect(0, 0, W, H);
+
+      const ag = globeCtx.createRadialGradient(center[0], center[1], curR * 0.3, center[0], center[1], curR * 1.55);
+      ag.addColorStop(0, c.glowInner);
+      ag.addColorStop(1, c.glowOuter);
+      globeCtx.beginPath();
+      globeCtx.arc(center[0], center[1], curR * 1.55, 0, Math.PI * 2);
+      globeCtx.fillStyle = ag;
+      globeCtx.fill();
+
+      globeCtx.beginPath();
+      gpath({ type: 'Sphere' });
+      globeCtx.fillStyle = c.ocean;
+      globeCtx.fill();
+
+      if (worldGeo) {
+        worldGeo.features.forEach((f) => {
+          const id = +f.id;
+          const isVisited = visitedCountryIds.has(id);
+          const isHovered = hoveredCountryId === id;
+          const isFocused = focusedCountryId === id;
+          const shouldHover = isHovered && !isFocused;
+          globeCtx.beginPath();
+          gpath(f);
+          if (isVisited) {
+            if (isFocused) {
+              globeCtx.fillStyle = d3.interpolateRgb(c.visited, c.visitedFocused)(Math.max(0, Math.min(1, focusedCountryBlend)));
+            } else {
+              globeCtx.fillStyle = shouldHover ? c.visitedHover : c.visited;
+            }
+            globeCtx.fill();
+            globeCtx.strokeStyle = c.visitedStroke;
+            globeCtx.lineWidth = isFocused ? 1.28 : 1.15;
+            globeCtx.stroke();
+          } else {
+            globeCtx.fillStyle = c.land;
+            globeCtx.fill();
+            globeCtx.strokeStyle = c.landStroke;
+            globeCtx.lineWidth = 0.35;
+            globeCtx.stroke();
+          }
+        });
+      }
+
+      if (countryBorders) {
+        globeCtx.beginPath();
+        gpath(countryBorders);
+        globeCtx.strokeStyle = c.border;
+        globeCtx.lineWidth = isLight() ? 0.45 : 0.55;
+        globeCtx.stroke();
+      }
+
+      for (const spot of Object.values(SEA_SPOTS)) {
+        const xy = spotScreenPoint(spot);
+        if (!xy) continue;
+        const isHovered = hoveredSpotKey === spot.key;
+        const isFocused = focusedSpotKey === spot.key;
+        globeCtx.beginPath();
+        globeCtx.arc(xy[0], xy[1], isFocused ? 5.6 : 4.7, 0, Math.PI * 2);
+        globeCtx.fillStyle = isHovered || isFocused ? (isLight() ? '#f0c942' : '#feda4a') : (isLight() ? '#d2a71f' : '#d0ab2c');
+        globeCtx.fill();
+        globeCtx.strokeStyle = isLight() ? 'rgba(65,45,8,0.85)' : 'rgba(8,10,14,0.9)';
+        globeCtx.lineWidth = 1.1;
+        globeCtx.stroke();
+      }
+
+      globeCtx.beginPath();
+      gpath({ type: 'Sphere' });
+      globeCtx.strokeStyle = isLight() ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.07)';
+      globeCtx.lineWidth = 0.9;
+      globeCtx.stroke();
+    }
+
+    function clearTooltip() {
+      tooltipEl.classList.remove('visible');
+      tooltipEl.setAttribute('aria-hidden', 'true');
+    }
+
+    function showTooltip(html, x, y) {
+      const host = document.querySelector('.globe-side').getBoundingClientRect();
+      tooltipEl.innerHTML = html;
+      tooltipEl.classList.add('visible');
+      tooltipEl.setAttribute('aria-hidden', 'false');
+      const tw = tooltipEl.offsetWidth || 200;
+      const th = tooltipEl.offsetHeight || 80;
+      let tx = x - host.left + 14;
+      let ty = y - host.top + 14;
+      if (tx + tw > host.width - 8) tx = x - host.left - tw - 14;
+      if (ty + th > host.height - 8) ty = y - host.top - th - 14;
+      tooltipEl.style.left = tx + 'px';
+      tooltipEl.style.top = ty + 'px';
+    }
+
+    function pointFromEvent(e) {
+      const rect = globeCanvas.getBoundingClientRect();
+      const src = e.touches ? e.touches[0] : e;
+      return [src.clientX - rect.left, src.clientY - rect.top];
+    }
+
+    function countryAt(p) {
+      if (!worldGeo) return null;
+      const inv = proj.invert(p);
+      if (!inv) return null;
+      return worldGeo.features.find((f) => {
+        try { return d3.geoContains(f, inv); } catch (_) { return false; }
+      });
+    }
+
+    function eased(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function animateProjection(toRotate, toScale, duration, onProgress) {
+      const fromRotate = proj.rotate().slice();
+      const fromScale = proj.scale();
+      const rotateInterp = d3.interpolate(fromRotate, toRotate);
+      const scaleInterp = d3.interpolateNumber(fromScale, toScale);
+      isAnimating = true;
+      return new Promise((resolve) => {
+        const t0 = performance.now();
+        function tick(now) {
+          const p = Math.min(1, (now - t0) / duration);
+          const ep = eased(p);
+          if (onProgress) onProgress(ep);
+          proj.rotate(rotateInterp(ep));
+          proj.scale(scaleInterp(ep));
+          drawGlobe();
+          if (p < 1) {
+            requestAnimationFrame(tick);
+            return;
+          }
+          isAnimating = false;
+          resolve();
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+
+    function scheduleSelectedReveal() {
+      if (selectedRevealTimer) window.clearTimeout(selectedRevealTimer);
+      selectedRevealTimer = window.setTimeout(() => {
+        selectedRevealTimer = null;
+        if (focusedCountryId !== null || focusedSpotKey !== null) {
+          setSelectionPhase('selected');
+        }
+      }, TEXT_FADE_MS);
+    }
+
+    async function focusCountry(id, feature) {
+      if (!COUNTRY_LIBRARY[id] || isAnimating) return;
+      if (!feature) return;
+
+      if (!unfocusState) {
+        unfocusState = {
+          rotate: proj.rotate().slice(),
+          scale: proj.scale()
+        };
+      }
+
+      autoRotate = false;
+      focusedCountryId = id;
+      focusedCountryBlend = 0;
+      focusedSpotKey = null;
+      hoveredCountryId = null;
+      hoveredSpotKey = null;
+      if (selectedRevealTimer) {
+        window.clearTimeout(selectedRevealTimer);
+        selectedRevealTimer = null;
+      }
+      setSelectionPhase('focusing');
+
+      const center = d3.geoCentroid(feature);
+      const targetRotate = [-center[0], -center[1], proj.rotate()[2]];
+
+      const prevRotate = proj.rotate().slice();
+      const prevScale = proj.scale();
+      proj.rotate(targetRotate);
+      const b = gpath.bounds(feature);
+      proj.rotate(prevRotate);
+      const bw = Math.max(1, b[1][0] - b[0][0]);
+      const bh = Math.max(1, b[1][1] - b[0][1]);
+      const viewportW = W * 0.72;
+      const viewportH = H * 0.72;
+      const fitByBox = prevScale * Math.min(viewportW / bw, viewportH / bh);
+      const fitScale = Math.max(baseRadius * 1.08, Math.min(baseRadius * 1.6, fitByBox));
+
+      renderCountryCards(id);
+      scheduleSelectedReveal();
+      await animateProjection(targetRotate, fitScale, FOCUS_MS, (progress) => {
+        focusedCountryBlend = progress;
+      });
+      focusedCountryBlend = 1;
+    }
+
+    async function focusSpot(spot) {
+      if (!spot || isAnimating) return;
+      if (!unfocusState) {
+        unfocusState = {
+          rotate: proj.rotate().slice(),
+          scale: proj.scale()
+        };
+      }
+      autoRotate = false;
+      focusedCountryId = null;
+      focusedCountryBlend = 1;
+      focusedSpotKey = spot.key;
+      hoveredCountryId = null;
+      hoveredSpotKey = null;
+      if (selectedRevealTimer) {
+        window.clearTimeout(selectedRevealTimer);
+        selectedRevealTimer = null;
+      }
+      setSelectionPhase('focusing');
+      const targetRotate = [-spot.lonLat[0], -spot.lonLat[1], proj.rotate()[2]];
+      const fitScale = Math.max(baseRadius * 1.16, Math.min(baseRadius * 1.72, baseRadius * 1.42));
+      renderSpotCards(spot);
+      scheduleSelectedReveal();
+      await animateProjection(targetRotate, fitScale, FOCUS_MS);
+    }
+
+    async function unfocusCountry() {
+      if (!unfocusState || isAnimating) return;
+      const target = unfocusState;
+      focusedCountryId = null;
+      focusedCountryBlend = 1;
+      focusedSpotKey = null;
+      if (selectedRevealTimer) {
+        window.clearTimeout(selectedRevealTimer);
+        selectedRevealTimer = null;
+      }
+      setSelectionPhase('idle');
+      await animateProjection(target.rotate, target.scale, UNFOCUS_MS);
+      unfocusState = null;
+      renderSelectedMemoirs([], 'Selected Memoirs', 'Select Places to Explore Memoirs.');
+      autoRotate = true;
+    }
+
+    function mountCards(targetEl, cards) {
+      targetEl.innerHTML = '';
+      cards.forEach((card, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'story-card';
+        btn.style.setProperty('--stagger', (idx * 45) + 'ms');
+        btn.innerHTML = '<div class="story-card-media"><img src="' + card.image + '" alt="' + card.title + '" loading="lazy" decoding="async"><div class="story-card-title">' + card.title + '</div></div>';
+        btn.addEventListener('click', () => openReader(card));
+        targetEl.appendChild(btn);
+      });
+    }
+
+    function renderCardsInto(targetEl, cards, options = {}) {
+      const animate = options.animate !== false;
+      const token = ++cardsTransitionToken;
+      if (!animate) {
+        targetEl.classList.remove('cards-leaving', 'cards-entering');
+        mountCards(targetEl, cards);
+        return;
+      }
+
+      targetEl.classList.remove('cards-entering');
+      targetEl.classList.add('cards-leaving');
+      window.setTimeout(() => {
+        if (token !== cardsTransitionToken) return;
+        mountCards(targetEl, cards);
+        targetEl.classList.remove('cards-leaving');
+        targetEl.classList.add('cards-entering');
+        window.setTimeout(() => {
+          if (token !== cardsTransitionToken) return;
+          targetEl.classList.remove('cards-entering');
+        }, 460);
+      }, 220);
+    }
+
+    function setSelectionPhase(phase) {
+      const isFocusing = phase === 'focusing' || phase === 'selected';
+      const isSelected = phase === 'selected';
+      sidePanel.classList.toggle('country-focusing', isFocusing);
+      sidePanel.classList.toggle('country-selected', isSelected);
+      selectedCardBox.setAttribute('aria-hidden', isSelected ? 'false' : 'true');
+    }
+
+    async function loadForeword() {
+      try {
+        const res = await fetch(FOREWORD_URL);
+        if (!res.ok) throw new Error('foreword-load-failed');
+        const text = await res.text();
+        forewordTextEl.textContent = text.trim();
+      } catch (_) {
+        forewordTextEl.textContent = 'Foreword could not be loaded right now.';
+      }
+    }
+
+    function renderAllMemoirs(options = {}) {
+      const cards = Object.values(STORIES).flatMap((arr) => arr || []);
+      renderCardsInto(storyCardsAll, cards, options);
+    }
+
+    function renderSelectedMemoirs(cards, title, hint, options = {}) {
+      selectedPanelTitle.textContent = title;
+      selectedPanelHint.textContent = hint;
+      renderCardsInto(storyCardsSelected, cards, { animate: false });
+    }
+
+    function renderCountryCards(countryId) {
+      const meta = COUNTRY_LIBRARY[countryId];
+      const cards = STORIES[meta.key] || [];
+      if (!cards.length) {
+        renderSelectedMemoirs([], meta.name, 'No memoir cards assigned for this country yet.');
+        return;
+      }
+      renderSelectedMemoirs(cards, meta.name, 'Click a card to open it in full-screen reader mode.');
+    }
+
+    function renderSpotCards(spot) {
+      const cards = STORIES[spot.key] || [];
+      if (!cards.length) {
+        renderSelectedMemoirs([], spot.name, 'No memoir cards assigned for this place yet.');
+        return;
+      }
+      renderSelectedMemoirs(cards, spot.name, 'Click a card to open it in full-screen reader mode.');
+    }
+
+    function renderReaderTextFlow(paragraphs) {
+      readerBodyEl.classList.remove('book-body-image-mode');
+      readerBodyEl.classList.add('book-body-text-flow');
+      readerBodyEl.innerHTML = paragraphs.map((p) => '<p>' + escapeHtml(p) + '</p>').join('');
+    }
+
+    function textPageHtml(paragraphs) {
+      return paragraphs.map((p) => {
+        if (typeof p === 'string') return '<p>' + escapeHtml(p) + '</p>';
+        const cls = p && p.continued ? ' class="continued"' : '';
+        const text = p && p.text ? p.text : '';
+        return '<p' + cls + '>' + escapeHtml(text) + '</p>';
+      }).join('');
+    }
+
+    function buildTextPages(paragraphs) {
+      const measure = document.createElement('div');
+      measure.className = 'book-body book-body-text-flow book-body-measure';
+      measure.style.width = readerBodyEl.clientWidth + 'px';
+      measure.style.height = readerBodyEl.clientHeight + 'px';
+      // Match the current reader typography exactly so pagination adapts to controls.
+      measure.style.setProperty('--reader-font-size', readerPrefs.fontSize + 'px');
+      measure.style.setProperty('--reader-line-height', String(readerPrefs.lineHeight));
+      measure.style.setProperty('--reader-text-pad', readerPrefs.textPad + 'px');
+      document.body.appendChild(measure);
+
+      const remaining = paragraphs.map((p) => ({ text: p, continued: false }));
+      const pages = [];
+
+      const fits = (paras) => {
+        measure.innerHTML = textPageHtml(paras);
+        return measure.scrollWidth <= (measure.clientWidth + 1);
+      };
+
+      while (remaining.length) {
+        let lo = 1;
+        let hi = remaining.length;
+        let best = 0;
+
+        while (lo <= hi) {
+          const mid = Math.floor((lo + hi) / 2);
+          if (fits(remaining.slice(0, mid))) {
+            best = mid;
+            lo = mid + 1;
+          } else {
+            hi = mid - 1;
+          }
+        }
+
+        if (best > 0) {
+          const pageItems = remaining.splice(0, best);
+          if (remaining.length) {
+            const next = remaining[0];
+            const words = next.text.split(/\s+/).filter(Boolean);
+            if (words.length > 1) {
+              let wlo = 1;
+              let whi = words.length - 1;
+              let wbest = 0;
+              while (wlo <= whi) {
+                const mid = Math.floor((wlo + whi) / 2);
+                const probe = words.slice(0, mid).join(' ');
+                if (fits(pageItems.concat({ text: probe, continued: next.continued }))) {
+                  wbest = mid;
+                  wlo = mid + 1;
+                } else {
+                  whi = mid - 1;
+                }
+              }
+              if (wbest >= 6 && wbest < words.length) {
+                const head = words.slice(0, wbest).join(' ');
+                const tail = words.slice(wbest).join(' ');
+                pageItems.push({ text: head, continued: next.continued });
+                remaining[0] = { text: tail, continued: true };
+              }
+            }
+          }
+          pages.push(pageItems);
+          continue;
+        }
+
+        const words = remaining[0].text.split(/\s+/).filter(Boolean);
+        if (words.length <= 1) {
+          pages.push([remaining.shift()]);
+          continue;
+        }
+
+        let wlo = 1;
+        let whi = words.length;
+        let wbest = 1;
+        while (wlo <= whi) {
+          const mid = Math.floor((wlo + whi) / 2);
+          const probe = words.slice(0, mid).join(' ');
+          if (fits([{ text: probe, continued: remaining[0].continued }])) {
+            wbest = mid;
+            wlo = mid + 1;
+          } else {
+            whi = mid - 1;
+          }
+        }
+
+        const head = words.slice(0, wbest).join(' ');
+        const tail = words.slice(wbest).join(' ');
+        pages.push([{ text: head, continued: remaining[0].continued }]);
+        remaining[0] = { text: tail, continued: true };
+      }
+
+      document.body.removeChild(measure);
+      return pages;
+    }
+
+    function renderReaderTextPage() {
+      if (!readerTextPages.length) return;
+      readerBodyEl.classList.remove('book-body-image-mode');
+      readerBodyEl.classList.add('book-body-text-flow');
+      readerBodyEl.innerHTML = textPageHtml(readerTextPages[readerTextPageIndex]);
+      readerPrevEl.disabled = readerTextPageIndex <= 0;
+      readerNextEl.disabled = readerTextPageIndex >= readerTextPages.length - 1;
+    }
+
+    function stepReaderPage(delta) {
+      if (!readerTextPages.length) return;
+      if (readerPageAnimating) return;
+      const nextIdx = Math.max(0, Math.min(readerTextPages.length - 1, readerTextPageIndex + delta));
+      if (nextIdx === readerTextPageIndex) return;
+      readerPageAnimating = true;
+      const outClass = delta > 0 ? 'page-turn-out-next' : 'page-turn-out-prev';
+      const inClass = delta > 0 ? 'page-turn-in-next' : 'page-turn-in-prev';
+
+      readerBodyEl.classList.remove('page-turn-out-next', 'page-turn-out-prev', 'page-turn-in-next', 'page-turn-in-prev');
+      readerBodyEl.classList.add(outClass);
+
+      window.setTimeout(() => {
+        readerTextPageIndex = nextIdx;
+        renderReaderTextPage();
+        readerBodyEl.classList.remove('page-turn-out-next', 'page-turn-out-prev');
+        readerBodyEl.classList.add(inClass);
+        window.setTimeout(() => {
+          readerBodyEl.classList.remove('page-turn-in-next', 'page-turn-in-prev');
+          readerPageAnimating = false;
+        }, 200);
+      }, 120);
+    }
+
+    function repaginateReader(keepRatio = true) {
+      if (!readerCurrentParagraphs.length) return;
+      const oldTotal = Math.max(1, readerTextPages.length);
+      const oldIdx = readerTextPageIndex;
+      readerTextPages = buildTextPages(readerCurrentParagraphs);
+      if (!readerTextPages.length) {
+        readerTextPageIndex = 0;
+        return;
+      }
+      if (!keepRatio) {
+        readerTextPageIndex = 0;
+      } else {
+        const ratio = oldIdx / oldTotal;
+        readerTextPageIndex = Math.max(0, Math.min(readerTextPages.length - 1, Math.round(ratio * (readerTextPages.length - 1))));
+      }
+      renderReaderTextPage();
+    }
+
+    async function openReader(card) {
+      readerEl.classList.add('open');
+      readerEl.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('reader-open');
+      readerTitleEl.textContent = card.title;
+      readerBodyEl.textContent = 'Loading...';
+      readerBodyEl.classList.remove('book-body-image-mode', 'book-body-text-flow');
+      try {
+        const textFile = card.textFile;
+        if (!textFile) throw new Error('missing-story-source');
+        const res = await fetch(textFile);
+        if (!res.ok) throw new Error('failed-story-load');
+        const text = await res.text();
+        if (!text.trim()) throw new Error('empty-story-source');
+        const paragraphs = extractStoryParagraphs(text, card.title);
+        if (!paragraphs.length) throw new Error('empty-story-paragraphs');
+        readerCurrentParagraphs = paragraphs;
+        applyReaderPrefs();
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        readerTextPages = buildTextPages(readerCurrentParagraphs);
+        readerTextPageIndex = 0;
+        readerPageNavEl.hidden = false;
+        readerPageLabelEl.hidden = true;
+        renderReaderTextPage();
+      } catch (_) {
+        readerPageNavEl.hidden = true;
+        readerTextPages = [];
+        readerTextPageIndex = 0;
+        readerCurrentParagraphs = [];
+        readerBodyEl.textContent = 'Could not load this story source.';
+      }
+    }
+
+    function closeReader() {
+      readerEl.classList.remove('open');
+      readerEl.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('reader-open');
+      readerPageNavEl.hidden = true;
+      readerPageAnimating = false;
+      readerBodyEl.classList.remove('page-turn-out-next', 'page-turn-out-prev', 'page-turn-in-next', 'page-turn-in-prev');
+      readerTextPages = [];
+      readerTextPageIndex = 0;
+      readerCurrentParagraphs = [];
+    }
+
+    function frame() {
+      if (autoRotate && !isAnimating && !focusedCountryId && !focusedSpotKey) {
+        const r = proj.rotate();
+        proj.rotate([r[0] + 0.08, r[1], r[2]]);
+        drawGlobe();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function bindGlobeInteractions() {
+      globeCanvas.addEventListener('mousedown', (e) => {
+        if (focusedCountryId || focusedSpotKey || isAnimating) return;
+        isDragging = false;
+        autoRotate = false;
+        const p0 = pointFromEvent(e);
+        const r0 = proj.rotate();
+        globeCanvas.style.cursor = 'grabbing';
+
+        function onMove(ev) {
+          const p1 = pointFromEvent(ev);
+          const dx = p1[0] - p0[0];
+          const dy = p1[1] - p0[1];
+          if (Math.abs(dx) > 2 || Math.abs(dy) > 2) isDragging = true;
+          proj.rotate([r0[0] + dx * 0.28, Math.max(-80, Math.min(80, r0[1] - dy * 0.28)), r0[2]]);
+          drawGlobe();
+        }
+
+        function onUp() {
+          globeCanvas.style.cursor = 'grab';
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+          setTimeout(() => { isDragging = false; }, 10);
+          setTimeout(() => { if (!focusedCountryId && !focusedSpotKey) autoRotate = true; }, 1800);
+        }
+
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+      });
+
+      globeCanvas.addEventListener('wheel', (e) => {
+        if (focusedCountryId || focusedSpotKey || isAnimating) return;
+        e.preventDefault();
+        autoRotate = false;
+        const factor = e.deltaY > 0 ? 0.92 : 1.08;
+        proj.scale(Math.max(baseRadius * 0.55, Math.min(baseRadius * 2.8, proj.scale() * factor)));
+        drawGlobe();
+        setTimeout(() => { if (!focusedCountryId && !focusedSpotKey) autoRotate = true; }, 1800);
+      }, { passive: false });
+
+      globeCanvas.addEventListener('mousemove', (e) => {
+        if (isDragging || isAnimating) {
+          clearTooltip();
+          return;
+        }
+        const p = pointFromEvent(e);
+        const spot = spotAt(p);
+        if (spot) {
+          if (hoveredSpotKey !== spot.key || hoveredCountryId !== null) {
+            hoveredSpotKey = spot.key;
+            hoveredCountryId = null;
+            drawGlobe();
+          }
+          globeCanvas.style.cursor = 'pointer';
+          const msg = focusedSpotKey === spot.key ? 'Focused · click outside to exit' : 'Click to focus memoirs';
+          showTooltip('<strong>' + spot.name + '</strong><br>' + msg, e.clientX, e.clientY);
+          return;
+        }
+        if (hoveredSpotKey !== null) {
+          hoveredSpotKey = null;
+          drawGlobe();
+        }
+        const f = countryAt(p);
+        const id = f ? +f.id : null;
+        if (id !== hoveredCountryId) {
+          hoveredCountryId = id;
+          drawGlobe();
+        }
+        if (!f) {
+          globeCanvas.style.cursor = (focusedCountryId || focusedSpotKey) ? 'default' : 'grab';
+          clearTooltip();
+          return;
+        }
+
+        const isVisited = visitedCountryIds.has(id);
+        const name = COUNTRY_LIBRARY[id] ? COUNTRY_LIBRARY[id].name : ((f.properties && (f.properties.name || f.properties.NAME)) || 'Country');
+        let msg = 'Not mapped yet';
+        if (isVisited && focusedCountryId === id) msg = 'Focused · click outside to exit';
+        else if (isVisited) msg = 'Click to focus memoirs';
+        else if (focusedCountryId || focusedSpotKey) msg = 'Click to exit current focus';
+
+        globeCanvas.style.cursor = isVisited ? 'pointer' : ((focusedCountryId || focusedSpotKey) ? 'default' : 'grab');
+        showTooltip('<strong>' + name + '</strong><br>' + msg, e.clientX, e.clientY);
+      });
+
+      globeCanvas.addEventListener('mouseleave', () => {
+        hoveredCountryId = null;
+        hoveredSpotKey = null;
+        clearTooltip();
+        drawGlobe();
+      });
+
+      globeCanvas.addEventListener('click', async (e) => {
+        if (isDragging || isAnimating) return;
+        const p = pointFromEvent(e);
+        const spot = spotAt(p);
+        if (spot) {
+          if (focusedSpotKey === spot.key) return;
+          await focusSpot(spot);
+          return;
+        }
+        const f = countryAt(p);
+        const id = f ? +f.id : null;
+
+        if (focusedCountryId || focusedSpotKey) {
+          if (id && visitedCountryIds.has(id) && id !== focusedCountryId) {
+            await focusCountry(id, f);
+            return;
+          }
+          if (!id || !visitedCountryIds.has(id)) {
+            await unfocusCountry();
+            return;
+          }
+          return;
+        }
+
+        if (id && visitedCountryIds.has(id)) {
+          await focusCountry(id, f);
+        }
+      });
+    }
+
+    async function init() {
+      setCanvasSize();
+      proj.rotate([-20, -20, 0]);
+      proj.scale(baseRadius);
+      globeCanvas.style.cursor = 'grab';
+      sidePanel.style.setProperty('--focus-ms', FOCUS_MS + 'ms');
+      sidePanel.style.setProperty('--unfocus-ms', UNFOCUS_MS + 'ms');
+      renderAllMemoirs({ animate: false });
+      setSelectionPhase('idle');
+      renderSelectedMemoirs([], 'Selected Memoirs', 'Select Places to Explore Memoirs.', { animate: false });
+      await loadForeword();
+
+      try {
+        const world = await d3.json(WORLD_URL);
+        worldGeo = topojson.feature(world, world.objects.countries);
+        countryBorders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+        drawGlobe();
+      } catch (_) {
+        selectedPanelHint.textContent = 'Could not load globe data. Please check network.';
+      }
+
+      bindGlobeInteractions();
+
+      readerCloseEl.addEventListener('click', closeReader);
+      readerPrevEl.addEventListener('click', () => stepReaderPage(-1));
+      readerNextEl.addEventListener('click', () => stepReaderPage(1));
+      readerFontDownEl.addEventListener('click', () => {
+        readerPrefs.fontSize = clamp(readerPrefs.fontSize - 1, 12, 26);
+        applyReaderPrefs();
+        repaginateReader(true);
+      });
+      readerFontUpEl.addEventListener('click', () => {
+        readerPrefs.fontSize = clamp(readerPrefs.fontSize + 1, 12, 26);
+        applyReaderPrefs();
+        repaginateReader(true);
+      });
+      readerLineCompactEl.addEventListener('click', () => setReaderLinePreset('compact'));
+      readerLineRegularEl.addEventListener('click', () => setReaderLinePreset('regular'));
+      readerLineLargeEl.addEventListener('click', () => setReaderLinePreset('large'));
+      readerThemeToggleEl.addEventListener('click', () => {
+        const siteThemeBtn = document.getElementById('theme-toggle');
+        if (siteThemeBtn) {
+          siteThemeBtn.click();
+        } else {
+          const isNowLight = !document.body.classList.contains('light-mode');
+          document.body.classList.toggle('light-mode', isNowLight);
+          try { localStorage.setItem('site:theme', isNowLight ? 'light' : 'dark'); } catch (_) {}
+        }
+        syncReaderThemeButton();
+      });
+      readerEl.addEventListener('click', (e) => {
+        if (e.target === readerEl) closeReader();
+      });
+      readerEl.addEventListener('wheel', (e) => {
+        e.preventDefault();
+      }, { passive: false });
+      readerEl.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+      }, { passive: false });
+      document.addEventListener('keydown', (e) => {
+        if (readerEl.classList.contains('open')) {
+          if (e.key === 'Escape') {
+            closeReader();
+          } else if (e.key === 'ArrowLeft') {
+            stepReaderPage(-1);
+          } else if (e.key === 'ArrowRight') {
+            stepReaderPage(1);
+          }
+          return;
+        }
+
+        if (e.key === 'Escape' && (focusedCountryId || focusedSpotKey) && !isAnimating) {
+          unfocusCountry();
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        const prevScaleRatio = proj.scale() / baseRadius;
+        setCanvasSize();
+        proj.scale(baseRadius * prevScaleRatio);
+        drawGlobe();
+      });
+
+      new MutationObserver(() => {
+        drawGlobe();
+        syncReaderThemeButton();
+      }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      applyReaderPrefs();
+      setReaderLinePreset('regular');
+      syncReaderThemeButton();
+
+      requestAnimationFrame(frame);
+    }
+
+    init();
+  </script>
+</body>
+</html>

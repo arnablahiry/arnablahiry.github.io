@@ -16,7 +16,7 @@
   <header>
     <div class="logo-container">
       <a href="index.html" aria-label="Home">
-        <img src="images/logo.png" alt="Logo" class="logo">
+        <img src="images/logo.png" alt="Logo" class="logo" loading="lazy" decoding="async">
       </a>
     </div>
     <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
@@ -32,6 +32,7 @@
           <a href="about.html">Me</a>
           <a href="travels.html">My Travels</a>
           <a href="mywildindia.html">My Wild India</a>
+                <a href="memoirs.html">Memoirs of a Vagabond</a>
         </div>
       </div>
       <a href="timeline.html">Timeline</a>
@@ -72,9 +73,9 @@
       <div class="right-column">
         <aside class="wild-tribute" aria-label="Tribute section">
           <div class="tribute-photos" aria-hidden="false">
-            <img src="images/mywildindia/baba/pralay_1.png" alt="Pralay Lahiry photo 1" loading="lazy">
-            <img src="images/mywildindia/baba/pralay_2.png" alt="Pralay Lahiry photo 2" loading="lazy">
-            <img src="images/mywildindia/baba/pralay_3.png" alt="Pralay Lahiry photo 3" loading="lazy">
+            <img src="images/mywildindia/baba/pralay_1.png" alt="Pralay Lahiry photo 1" loading="lazy" decoding="async">
+            <img src="images/mywildindia/baba/pralay_2.png" alt="Pralay Lahiry photo 2" loading="lazy" decoding="async">
+            <img src="images/mywildindia/baba/pralay_3.png" alt="Pralay Lahiry photo 3" loading="lazy" decoding="async">
           </div>
           <p class="travels-subtitle tribute-caption"><strong>Pralay Lahiry</strong> (1968 - 2020)</p>
         </aside>
@@ -105,12 +106,12 @@
       <div class="lightbox-inner" role="dialog" aria-modal="true" aria-label="Expanded photo viewer">
         <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Close fullscreen photo">×</button>
         <button id="lightbox-next" class="lightbox-next" type="button" aria-label="Next photo">›</button>
-        <img id="lightbox-image" src="" alt="Expanded location photo">
+        <img id="lightbox-image" src="" alt="Expanded location photo" loading="lazy" decoding="async">
         <div class="lightbox-caption-box">
           <p id="lightbox-caption"></p>
         </div>
         <div class="lightbox-credit">
-          <img id="lightbox-credit-image" src="images/mywildindia/credits/pralay.png" alt="Pralay">
+          <img id="lightbox-credit-image" src="images/mywildindia/credits/pralay.png" alt="Pralay" loading="lazy" decoding="async">
           <span id="lightbox-credit-name">Pralay</span>
         </div>
       </div>
@@ -675,7 +676,7 @@
       const thumbs = (capital.photos || []).slice(0, 2)
         .map((photo, i) => {
           const src = typeof photo === 'string' ? photo : photo.src;
-          return `<img src="${src}" alt="${capital.name} photo ${i + 1}">`;
+          return `<img src="${src}" alt="${capital.name} photo ${i + 1}" loading="lazy" decoding="async">`;
         })
         .join('');
       tooltipEl.classList.add('rich');
