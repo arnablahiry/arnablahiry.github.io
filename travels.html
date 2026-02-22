@@ -295,17 +295,17 @@ const VISITS = {
     function C() {
         const l = isLight();
         return {
-            ocean:         l ? '#8fc7ee' : '#0c1118',
-            land:          l ? '#d8bf78' : '#1c1f27',
-            landStroke:    l ? '#9a7a2f' : '#282c36',
-            visited:       l ? '#a97f12' : '#d8b537',
-            visitedHover:  l ? '#8d6700' : '#c79f1d',
-            visitedStroke: l ? '#7a5800' : '#5f4b18',
-            graticule:     l ? 'rgba(0,0,0,0.05)'        : 'rgba(255,255,255,0.035)',
-            borderStroke:  l ? 'rgba(82,60,18,0.30)'     : 'rgba(255,255,255,0.12)',
-            atmoCore:      l ? 'rgba(164,208,236,0.14)'  : 'rgba(98,164,255,0.16)',
-            atmoMid:       l ? 'rgba(164,208,236,0.07)'  : 'rgba(64,128,240,0.10)',
-            atmoOuter:     l ? 'rgba(164,208,236,0.00)'  : 'rgba(64,128,240,0.00)',
+            ocean:         l ? '#c6dff3' : '#0c1118',
+            land:          l ? '#e9f2fb' : '#1c1f27',
+            landStroke:    l ? '#6f90ad' : '#282c36',
+            visited:       l ? '#d7b43b' : '#d8b537',
+            visitedHover:  l ? '#c89f27' : '#c79f1d',
+            visitedStroke: l ? '#7a5b1a' : '#5f4b18',
+            graticule:     l ? 'rgba(43, 72, 102, 0.14)' : 'rgba(255,255,255,0.035)',
+            borderStroke:  l ? 'rgba(74, 104, 132, 0.34)' : 'rgba(255,255,255,0.12)',
+            atmoCore:      l ? 'rgba(186, 220, 246, 0.24)' : 'rgba(98,164,255,0.16)',
+            atmoMid:       l ? 'rgba(186, 220, 246, 0.11)' : 'rgba(64,128,240,0.10)',
+            atmoOuter:     l ? 'rgba(186, 220, 246, 0.00)' : 'rgba(64,128,240,0.00)',
             outline:       l ? 'rgba(0,0,0,0.08)'        : 'rgba(255,255,255,0.05)',
         };
     }
@@ -678,7 +678,7 @@ const VISITS = {
     /* ====================================================== INIT */
     syncTravelsHeaderOffset();
     setSize(false);
-    proj.rotate([-20, -20, 0]);
+    proj.rotate([157.9, -21.3, 0]);
     canvas.style.opacity = '0';
     canvas.style.cursor = 'grab';
     draw();

@@ -742,6 +742,20 @@ body.page-memoirs {
   margin-top: 0;
 }
 
+.book-body.book-body-text-flow.is-story-first-page p:first-child::first-letter {
+  float: left;
+  font-size: 4.35em;
+  line-height: 0.74;
+  padding-right: 0.1em;
+  margin-top: 0.05em;
+  margin-left: -0.01em;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #f1cc5c;
+  text-shadow: none !important;
+  font-family: "Cinzel Decorative", "Cormorant Garamond", "Garamond", "Baskerville", "Times New Roman", Georgia, serif;
+}
+
 .book-body.page-turn-out-next,
 .book-body.page-turn-out-prev,
 .book-body.page-turn-in-next,
@@ -1008,6 +1022,11 @@ body.light-mode .book-body.book-body-text-flow {
   column-rule-color: rgba(0, 0, 0, 0.2);
 }
 
+body.light-mode .book-body.book-body-text-flow.is-story-first-page p:first-child::first-letter {
+  color: #8a6600;
+  text-shadow: none !important;
+}
+
 @media (max-width: 960px) {
   body.page-memoirs {
     --memoirs-header-offset: 142px;
@@ -1188,9 +1207,11 @@ body.light-mode .book-body.book-body-text-flow {
     justify-content: center;
     margin: 0 auto;
     gap: 8px;
+    position: relative;
   }
 
   .reader-aa-toggle,
+  .reader-line-toggle,
   .reader-theme-toggle-mobile {
     width: 38px !important;
     height: 38px !important;
@@ -1201,6 +1222,12 @@ body.light-mode .book-body.book-body-text-flow {
   .reader-aa-toggle {
     font-size: 0.95rem;
     font-weight: 700;
+  }
+
+  .reader-line-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .book-close {
@@ -1226,11 +1253,11 @@ body.light-mode .book-body.book-body-text-flow {
 
   .reader-mobile-menu {
     position: absolute;
-    top: 44px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: calc(100% + 6px);
+    left: 0;
+    transform: translateX(0);
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
     padding: 8px;
     border-radius: 10px;
@@ -1247,11 +1274,23 @@ body.light-mode .book-body.book-body-text-flow {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(0) translateY(0);
   }
 
   .reader-mobile-menu .book-page-btn {
     height: 34px;
     min-width: 34px;
+  }
+
+  .reader-mobile-line-menu {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Galaxy S23 class phones (≈390px CSS width) */
+@media (max-width: 430px) {
+  .memoirs-heading h1 {
+    font-size: clamp(1.42rem, 7.1vw, 1.88rem);
+    letter-spacing: 0.01em;
   }
 }

@@ -9,25 +9,25 @@
 @media (prefers-reduced-motion: no-preference) {
     /* Smooth transitions for theme toggles on all pages EXCEPT the homepage.
        Pages that should opt-out (homepage) add `body.no-theme-transition`. */
-    body:not(.no-theme-transition),
-    body:not(.no-theme-transition) header,
-    body:not(.no-theme-transition) nav,
-    body:not(.no-theme-transition) main,
-    body:not(.no-theme-transition) footer,
-    body:not(.no-theme-transition) .page-wrapper,
-    body:not(.no-theme-transition) .project-card,
-    body:not(.no-theme-transition) .contact-card,
-    body:not(.no-theme-transition) .contact-details,
-    body:not(.no-theme-transition) .meme-overlay,
-    body:not(.no-theme-transition) #image-overlay,
-    body:not(.no-theme-transition) #bg-image,
-    body:not(.no-theme-transition) .social-card img,
-    body:not(.no-theme-transition) .project-card img,
-    body:not(.no-theme-transition) button,
-    body:not(.no-theme-transition) a,
-    body:not(.no-theme-transition) input,
-    body:not(.no-theme-transition) textarea,
-    body:not(.no-theme-transition) select {
+    body.reader-open:not(.no-theme-transition),
+    body.reader-open:not(.no-theme-transition) header,
+    body.reader-open:not(.no-theme-transition) nav,
+    body.reader-open:not(.no-theme-transition) main,
+    body.reader-open:not(.no-theme-transition) footer,
+    body.reader-open:not(.no-theme-transition) .page-wrapper,
+    body.reader-open:not(.no-theme-transition) .project-card,
+    body.reader-open:not(.no-theme-transition) .contact-card,
+    body.reader-open:not(.no-theme-transition) .contact-details,
+    body.reader-open:not(.no-theme-transition) .meme-overlay,
+    body.reader-open:not(.no-theme-transition) #image-overlay,
+    body.reader-open:not(.no-theme-transition) #bg-image,
+    body.reader-open:not(.no-theme-transition) .social-card img,
+    body.reader-open:not(.no-theme-transition) .project-card img,
+    body.reader-open:not(.no-theme-transition) button,
+    body.reader-open:not(.no-theme-transition) a,
+    body.reader-open:not(.no-theme-transition) input,
+    body.reader-open:not(.no-theme-transition) textarea,
+    body.reader-open:not(.no-theme-transition) select {
         /* Slightly longer durations for a smooth, pleasant cross-fade */
         transition: background-color 420ms ease, color 420ms ease,
                     border-color 420ms ease, box-shadow 420ms ease,
@@ -35,10 +35,10 @@
     }
 
     /* Images and svg filter transitions (slower for smoother feel) */
-    body:not(.no-theme-transition) #bg-image,
-    body:not(.no-theme-transition) .meme-wrapper img,
-    body:not(.no-theme-transition) .project-card img,
-    body:not(.no-theme-transition) .social-card img {
+    body.reader-open:not(.no-theme-transition) #bg-image,
+    body.reader-open:not(.no-theme-transition) .meme-wrapper img,
+    body.reader-open:not(.no-theme-transition) .project-card img,
+    body.reader-open:not(.no-theme-transition) .social-card img {
         transition: filter 520ms ease, opacity 420ms ease;
         will-change: filter, opacity;
     }
@@ -46,17 +46,18 @@
        theme-related properties while the temporary `.theme-animate` class is
        present on the root. This keeps all other animations (transforms,
        element-specific hover transitions, keyframes) unaffected. */
-        html.theme-animate *, body.theme-animate * {
+        html.theme-animate body.reader-open,
+        html.theme-animate body.reader-open * {
             transition: background-color 420ms ease, color 420ms ease,
                         border-color 420ms ease, box-shadow 420ms ease,
                         opacity 380ms ease, filter 420ms ease, backdrop-filter 420ms ease;
         }
 
         /* Image/filter transitions slightly slower for a pleasant cross-fade */
-        html.theme-animate #bg-image, body.theme-animate #bg-image,
-        html.theme-animate .meme-wrapper img, body.theme-animate .meme-wrapper img,
-        html.theme-animate .project-card img, body.theme-animate .project-card img,
-        html.theme-animate .social-card img, body.theme-animate .social-card img {
+        html.theme-animate body.reader-open #bg-image,
+        html.theme-animate body.reader-open .meme-wrapper img,
+        html.theme-animate body.reader-open .project-card img,
+        html.theme-animate body.reader-open .social-card img {
             transition: filter 600ms ease, opacity 420ms ease;
             will-change: filter, opacity;
         }

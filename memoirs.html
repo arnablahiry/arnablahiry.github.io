@@ -94,6 +94,7 @@
             </div>
             <div class="book-reader-tools-mobile" aria-label="Reader controls (mobile)">
               <button id="reader-aa-toggle" class="book-page-btn reader-aa-toggle" type="button" aria-label="Text controls" aria-expanded="false">Aa</button>
+              <button id="reader-line-toggle" class="book-page-btn reader-line-toggle" type="button" aria-label="Line spacing controls" aria-expanded="false"><span class="line-icon line-icon-regular" aria-hidden="true"></span></button>
               <button id="reader-theme-toggle-mobile" class="theme-toggle reader-theme-toggle reader-theme-toggle-mobile" type="button" aria-label="Toggle light/dark mode">☀</button>
             </div>
             <button id="book-close" class="book-close" type="button" aria-label="Close story">×</button>
@@ -101,6 +102,8 @@
           <div id="reader-mobile-menu" class="reader-mobile-menu" aria-hidden="true">
             <button id="reader-font-down-mobile" class="book-page-btn" type="button" aria-label="Decrease font size">A-</button>
             <button id="reader-font-up-mobile" class="book-page-btn" type="button" aria-label="Increase font size">A+</button>
+          </div>
+          <div id="reader-mobile-line-menu" class="reader-mobile-menu reader-mobile-line-menu" aria-hidden="true">
             <button id="reader-line-compact-mobile" class="book-page-btn reader-line-option" type="button" data-line="compact" aria-label="Compact line spacing"><span class="line-icon line-icon-compact" aria-hidden="true"></span></button>
             <button id="reader-line-regular-mobile" class="book-page-btn reader-line-option" type="button" data-line="regular" aria-label="Regular line spacing"><span class="line-icon line-icon-regular" aria-hidden="true"></span></button>
             <button id="reader-line-large-mobile" class="book-page-btn reader-line-option" type="button" data-line="large" aria-label="Large line spacing"><span class="line-icon line-icon-large" aria-hidden="true"></span></button>
@@ -287,7 +290,9 @@
     const readerLineRegularEl = document.getElementById('reader-line-regular');
     const readerLineLargeEl = document.getElementById('reader-line-large');
     const readerAaToggleEl = document.getElementById('reader-aa-toggle');
+    const readerLineToggleEl = document.getElementById('reader-line-toggle');
     const readerMobileMenuEl = document.getElementById('reader-mobile-menu');
+    const readerMobileLineMenuEl = document.getElementById('reader-mobile-line-menu');
     const readerFontDownMobileEl = document.getElementById('reader-font-down-mobile');
     const readerFontUpMobileEl = document.getElementById('reader-font-up-mobile');
     const readerLineCompactMobileEl = document.getElementById('reader-line-compact-mobile');
@@ -320,6 +325,7 @@
     let introActive = true;
     let introStartTs = null;
     let isAnimating = false;
+    let projectionAnimToken = 0;
     let unfocusState = null;
     let cardsTransitionToken = 0;
     const FOCUS_MS = 3600;
@@ -346,6 +352,7 @@
 
     const proj = d3.geoOrthographic().clipAngle(90).precision(0.3);
     const gpath = d3.geoPath(proj, globeCtx);
+    const graticule = d3.geoGraticule().step([15, 15]);
 
     function isLight() {
       return document.body.classList.contains('light-mode');
@@ -413,11 +420,46 @@
       }
     }
 
-    function setMobileReaderMenu(open) {
+    function setMobileAaMenu(open) {
       if (!readerMobileMenuEl || !readerAaToggleEl) return;
+      if (open) positionMobileMenu(readerMobileMenuEl, readerAaToggleEl);
       readerMobileMenuEl.classList.toggle('open', !!open);
       readerMobileMenuEl.setAttribute('aria-hidden', open ? 'false' : 'true');
       readerAaToggleEl.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function setMobileLineMenu(open) {
+      if (!readerMobileLineMenuEl || !readerLineToggleEl) return;
+      if (open) positionMobileMenu(readerMobileLineMenuEl, readerLineToggleEl);
+      readerMobileLineMenuEl.classList.toggle('open', !!open);
+      readerMobileLineMenuEl.setAttribute('aria-hidden', open ? 'false' : 'true');
+      readerLineToggleEl.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function closeMobileReaderMenus() {
+      setMobileAaMenu(false);
+      setMobileLineMenu(false);
+    }
+
+    function positionMobileMenu(menuEl, anchorBtn) {
+      const head = document.querySelector('.book-head');
+      if (!menuEl || !anchorBtn || !head) return;
+      const headRect = head.getBoundingClientRect();
+      const anchorRect = anchorBtn.getBoundingClientRect();
+      // Temporarily make measurable without showing it.
+      const prevVis = menuEl.style.visibility;
+      const prevDisp = menuEl.style.display;
+      const prevPe = menuEl.style.pointerEvents;
+      menuEl.style.visibility = 'hidden';
+      menuEl.style.display = 'grid';
+      menuEl.style.pointerEvents = 'none';
+      const menuW = menuEl.offsetWidth || 120;
+      let left = (anchorRect.left - headRect.left) + (anchorRect.width / 2) - (menuW / 2);
+      left = Math.max(6, Math.min(headRect.width - menuW - 6, left));
+      menuEl.style.left = left + 'px';
+      menuEl.style.visibility = prevVis;
+      menuEl.style.display = prevDisp;
+      menuEl.style.pointerEvents = prevPe;
     }
 
     function syncMemoirsHeaderOffset() {
@@ -502,16 +544,17 @@
     function countryPalette() {
       const l = isLight();
       return {
-        ocean: l ? '#8fc7ee' : '#0d111a',
-        land: l ? '#d9c07a' : '#1b202b',
-        landStroke: l ? '#8f702a' : '#2c3442',
-        visited: l ? '#ad8215' : '#d7b43b',
-        visitedHover: l ? '#8c6500' : '#c89f27',
-        visitedFocused: l ? '#654600' : '#ffe89a',
-        visitedStroke: l ? '#715200' : '#5a4a1f',
-        border: l ? 'rgba(65,45,8,0.28)' : 'rgba(255,255,255,0.13)',
-        glowInner: l ? 'rgba(170,210,236,0.15)' : 'rgba(88,154,250,0.14)',
-        glowOuter: l ? 'rgba(170,210,236,0.00)' : 'rgba(88,154,250,0.00)'
+        ocean: l ? '#c6dff3' : '#0d111a',
+        land: l ? '#e9f2fb' : '#1b202b',
+        landStroke: l ? '#6f90ad' : '#2c3442',
+        graticule: l ? 'rgba(43, 72, 102, 0.14)' : 'rgba(255,255,255,0.055)',
+        visited: l ? '#d7b43b' : '#d7b43b',
+        visitedHover: l ? '#c89f27' : '#c89f27',
+        visitedFocused: l ? '#8f6400' : '#ffe89a',
+        visitedStroke: l ? '#7a5b1a' : '#5a4a1f',
+        border: l ? 'rgba(74, 104, 132, 0.34)' : 'rgba(255,255,255,0.13)',
+        glowInner: l ? 'rgba(186, 220, 246, 0.24)' : 'rgba(88,154,250,0.14)',
+        glowOuter: l ? 'rgba(186, 220, 246, 0.00)' : 'rgba(88,154,250,0.00)'
       };
     }
 
@@ -571,6 +614,13 @@
       gpath({ type: 'Sphere' });
       globeCtx.fillStyle = c.ocean;
       globeCtx.fill();
+
+      // Thin latitude/longitude guides.
+      globeCtx.beginPath();
+      gpath(graticule());
+      globeCtx.strokeStyle = c.graticule;
+      globeCtx.lineWidth = 0.35;
+      globeCtx.stroke();
 
       if (worldGeo) {
         worldGeo.features.forEach((f) => {
@@ -675,15 +725,31 @@
       return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
 
+    function shortestAngleTarget(fromDeg, toDeg) {
+      const delta = ((toDeg - fromDeg + 540) % 360) - 180;
+      return fromDeg + delta;
+    }
+
     function animateProjection(toRotate, toScale, duration, onProgress) {
+      const token = ++projectionAnimToken;
       const fromRotate = proj.rotate().slice();
       const fromScale = proj.scale();
-      const rotateInterp = d3.interpolate(fromRotate, toRotate);
+      const targetRotate = [
+        shortestAngleTarget(fromRotate[0], toRotate[0]),
+        toRotate[1],
+        shortestAngleTarget(fromRotate[2], toRotate[2] || 0)
+      ];
+      const rotateInterp = d3.interpolate(fromRotate, targetRotate);
       const scaleInterp = d3.interpolateNumber(fromScale, toScale);
       isAnimating = true;
       return new Promise((resolve) => {
         const t0 = performance.now();
         function tick(now) {
+          if (token !== projectionAnimToken) {
+            isAnimating = false;
+            resolve({ cancelled: true });
+            return;
+          }
           const p = Math.min(1, (now - t0) / duration);
           const ep = eased(p);
           if (onProgress) onProgress(ep);
@@ -695,10 +761,15 @@
             return;
           }
           isAnimating = false;
-          resolve();
+          resolve({ cancelled: false });
         }
         requestAnimationFrame(tick);
       });
+    }
+
+    function cancelProjectionAnimation() {
+      projectionAnimToken += 1;
+      isAnimating = false;
     }
 
     function scheduleSelectedReveal() {
@@ -751,9 +822,10 @@
 
       renderCountryCards(id);
       scheduleSelectedReveal();
-      await animateProjection(targetRotate, fitScale, FOCUS_MS, (progress) => {
+      const anim = await animateProjection(targetRotate, fitScale, FOCUS_MS, (progress) => {
         focusedCountryBlend = progress;
       });
+      if (anim && anim.cancelled) return;
       focusedCountryBlend = 1;
     }
 
@@ -780,21 +852,30 @@
       const fitScale = Math.max(baseRadius * 1.16, Math.min(baseRadius * 1.72, baseRadius * 1.42));
       renderSpotCards(spot);
       scheduleSelectedReveal();
-      await animateProjection(targetRotate, fitScale, FOCUS_MS);
+      const anim = await animateProjection(targetRotate, fitScale, FOCUS_MS);
+      if (anim && anim.cancelled) return;
     }
 
     async function unfocusCountry() {
-      if (!unfocusState || isAnimating) return;
+      if (!unfocusState) return;
+      if (isAnimating) cancelProjectionAnimation();
       const target = unfocusState;
-      focusedCountryId = null;
-      focusedCountryBlend = 1;
+      const hadFocusedCountry = focusedCountryId;
+      const startBlend = focusedCountryBlend;
       focusedSpotKey = null;
       if (selectedRevealTimer) {
         window.clearTimeout(selectedRevealTimer);
         selectedRevealTimer = null;
       }
       setSelectionPhase('idle');
-      await animateProjection(target.rotate, target.scale, UNFOCUS_MS);
+      const anim = await animateProjection(target.rotate, target.scale, UNFOCUS_MS, (progress) => {
+        if (hadFocusedCountry !== null) {
+          focusedCountryBlend = Math.max(0, startBlend * (1 - progress));
+        }
+      });
+      if (anim && anim.cancelled) return;
+      focusedCountryId = null;
+      focusedCountryBlend = 1;
       unfocusState = null;
       renderSelectedMemoirs([], 'Selected Memoirs', 'Select Places to Explore Memoirs.');
       autoRotate = true;
@@ -999,6 +1080,7 @@
       if (!readerTextPages.length) return;
       readerBodyEl.classList.remove('book-body-image-mode');
       readerBodyEl.classList.add('book-body-text-flow');
+      readerBodyEl.classList.toggle('is-story-first-page', readerTextPageIndex === 0);
       readerBodyEl.innerHTML = textPageHtml(readerTextPages[readerTextPageIndex]);
       readerPrevEl.disabled = readerTextPageIndex <= 0;
       readerNextEl.disabled = readerTextPageIndex >= readerTextPages.length - 1;
@@ -1047,7 +1129,7 @@
     }
 
     async function openReader(card) {
-      setMobileReaderMenu(false);
+      closeMobileReaderMenus();
       readerEl.classList.add('open');
       readerEl.setAttribute('aria-hidden', 'false');
       document.body.classList.add('reader-open');
@@ -1085,8 +1167,9 @@
       readerEl.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('reader-open');
       readerPageNavEl.hidden = true;
-      setMobileReaderMenu(false);
+      closeMobileReaderMenus();
       readerPageAnimating = false;
+      readerBodyEl.classList.remove('is-story-first-page');
       readerBodyEl.classList.remove('page-turn-out-next', 'page-turn-out-prev', 'page-turn-in-next', 'page-turn-in-prev');
       readerTextPages = [];
       readerTextPageIndex = 0;
@@ -1116,15 +1199,24 @@
     }
 
     async function handleGlobeSelectAtPoint(p) {
-      if (isDragging || isAnimating) return;
+      if (isDragging) return;
       const spot = spotAt(p);
+      const f = countryAt(p);
+      const id = f ? +f.id : null;
+
+      if (isAnimating) {
+        const clickedCurrentFocus = (spot && focusedSpotKey === spot.key) || (id && id === focusedCountryId);
+        if (!clickedCurrentFocus && (focusedCountryId || focusedSpotKey)) {
+          await unfocusCountry();
+        }
+        return;
+      }
+
       if (spot) {
         if (focusedSpotKey === spot.key) return;
         await focusSpot(spot);
         return;
       }
-      const f = countryAt(p);
-      const id = f ? +f.id : null;
 
       if (focusedCountryId || focusedSpotKey) {
         if (id && visitedCountryIds.has(id) && id !== focusedCountryId) {
@@ -1337,7 +1429,7 @@
     async function init() {
       syncMemoirsHeaderOffset();
       setCanvasSize();
-      proj.rotate([-20, -20, 0]);
+      proj.rotate([157.9, -21.3, 0]);
       proj.scale(baseRadius);
       globeCanvas.style.opacity = '0';
       globeCanvas.style.cursor = 'grab';
@@ -1394,7 +1486,15 @@
       if (readerAaToggleEl) {
         readerAaToggleEl.addEventListener('click', () => {
           const open = !(readerMobileMenuEl && readerMobileMenuEl.classList.contains('open'));
-          setMobileReaderMenu(open);
+          setMobileLineMenu(false);
+          setMobileAaMenu(open);
+        });
+      }
+      if (readerLineToggleEl) {
+        readerLineToggleEl.addEventListener('click', () => {
+          const open = !(readerMobileLineMenuEl && readerMobileLineMenuEl.classList.contains('open'));
+          setMobileAaMenu(false);
+          setMobileLineMenu(open);
         });
       }
       if (readerFontDownMobileEl) {
@@ -1414,8 +1514,11 @@
       }
       readerEl.addEventListener('click', (e) => {
         if (e.target === readerEl) closeReader();
-        if (readerMobileMenuEl && readerMobileMenuEl.classList.contains('open') && !readerMobileMenuEl.contains(e.target) && e.target !== readerAaToggleEl) {
-          setMobileReaderMenu(false);
+        if (
+          (readerMobileMenuEl && readerMobileMenuEl.classList.contains('open') && !readerMobileMenuEl.contains(e.target) && e.target !== readerAaToggleEl) ||
+          (readerMobileLineMenuEl && readerMobileLineMenuEl.classList.contains('open') && !readerMobileLineMenuEl.contains(e.target) && e.target !== readerLineToggleEl)
+        ) {
+          closeMobileReaderMenus();
         }
       });
       readerEl.addEventListener('wheel', (e) => {
@@ -1467,13 +1570,19 @@
           return;
         }
 
-        if (e.key === 'Escape' && (focusedCountryId || focusedSpotKey) && !isAnimating) {
+        if (e.key === 'Escape' && (focusedCountryId || focusedSpotKey)) {
           unfocusCountry();
         }
       });
 
       window.addEventListener('resize', () => {
         syncMemoirsHeaderOffset();
+        if (readerMobileMenuEl && readerMobileMenuEl.classList.contains('open') && readerAaToggleEl) {
+          positionMobileMenu(readerMobileMenuEl, readerAaToggleEl);
+        }
+        if (readerMobileLineMenuEl && readerMobileLineMenuEl.classList.contains('open') && readerLineToggleEl) {
+          positionMobileMenu(readerMobileLineMenuEl, readerLineToggleEl);
+        }
         const prevScaleRatio = proj.scale() / baseRadius;
         setCanvasSize();
         proj.scale(baseRadius * prevScaleRatio);
