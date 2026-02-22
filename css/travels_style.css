@@ -119,6 +119,7 @@ h2.intro-heading {
 #globe-canvas {
     display: block;
     border-radius: 50%;
+    touch-action: pan-y;
 }
 
 /* Hint label sits below the canvas, offset from its bottom */

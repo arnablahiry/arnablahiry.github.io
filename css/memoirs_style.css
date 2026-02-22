@@ -1,10 +1,11 @@
 body.page-memoirs {
   background: #060606;
   color: #e8e8e8;
+  --memoirs-header-offset: 110px;
 }
 
 .memoirs-heading {
-  padding-top: 110px;
+  padding-top: calc(var(--memoirs-header-offset) + env(safe-area-inset-top, 0px));
   padding-bottom: 28px;
   text-align: center;
 }
@@ -84,6 +85,7 @@ body.page-memoirs {
   inset: 0;
   margin: auto;
   display: block;
+  touch-action: pan-y;
   transition: transform 420ms cubic-bezier(.2,.9,.2,1);
   will-change: transform;
 }
@@ -992,6 +994,10 @@ body.light-mode .book-body.book-body-text-flow {
 }
 
 @media (max-width: 960px) {
+  body.page-memoirs {
+    --memoirs-header-offset: 142px;
+  }
+
   .memoirs-layout {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -1026,7 +1032,7 @@ body.light-mode .book-body.book-body-text-flow {
   }
 
   .book-body {
-    font-size: 16px;
+    font-size: var(--reader-font-size, 16px);
     height: calc(96vh - 104px);
     max-height: calc(96vh - 104px);
   }
@@ -1039,9 +1045,143 @@ body.light-mode .book-body.book-body-text-flow {
 }
 
 @media (max-width: 640px) {
+  body.page-memoirs {
+    --memoirs-header-offset: 136px;
+  }
+
+  .globe-side {
+    width: 82vw;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .story-side {
+    width: 88vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .story-side {
+    gap: 8px;
+  }
+
+  .foreword-card {
+    padding: 10px;
+    max-height: 54vh;
+  }
+
+  .foreword-head {
+    gap: 10px;
+  }
+
+  .foreword-avatar {
+    width: 46px;
+    height: 46px;
+  }
+
+  .foreword-head-text h2,
+  .foreword-head-text #foreword-name,
+  #foreword-name {
+    font-size: 0.72rem !important;
+    line-height: 1.08 !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  .foreword-dates {
+    font-size: 11px;
+  }
+
+  .foreword-text {
+    font-size: 13px;
+    margin-top: 8px;
+    height: auto;
+    max-height: calc(54vh - 72px);
+  }
+
+  .foreword-card::after {
+    left: 10px;
+    right: 10px;
+    height: 64px;
+  }
+
+  .selected-card-box {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .story-side.country-focusing .foreword-card {
+    flex-basis: 146px;
+    min-height: 146px;
+    padding: 10px 11px;
+  }
+
+  .story-side.country-selected .foreword-card {
+    flex-basis: 76px;
+    min-height: 76px;
+    padding: 8px 10px;
+  }
+
+  .story-side.country-selected .selected-card-box {
+    padding: 10px 10px 12px;
+  }
+
   .story-cards,
   .story-cards-selected,
   .story-cards-bottom {
     grid-template-columns: 1fr;
+  }
+
+  .book-sheet {
+    width: min(98vw, 98vw);
+    height: 96vh;
+    padding: 10px 10px 10px;
+  }
+
+  .book-title {
+    display: none;
+  }
+
+  .book-head {
+    padding-left: 0;
+    justify-content: center;
+    position: relative;
+    min-height: 38px;
+    margin-bottom: 8px;
+  }
+
+  .book-head-controls {
+    width: 100%;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .book-reader-tools {
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  .book-close {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+
+  .book-page-nav-sides,
+  .book-side-arrow {
+    display: none !important;
+  }
+
+  .book-body {
+    padding: 8px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    height: calc(96vh - 82px);
+    max-height: calc(96vh - 82px);
   }
 }

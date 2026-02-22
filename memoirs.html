@@ -48,7 +48,7 @@
   <main>
     <section class="memoirs-heading">
       <h1>Memoirs of a Vagabond</h1>
-      <p class="memoirs-subtitle">Drag to rotate · Scroll to zoom · Select Places to Explore Memoirs</p>
+      <p class="memoirs-subtitle">Drag to rotate · Scroll to zoom<br>Select Places to Explore Memoirs</p>
     </section>
 
     <section class="memoirs-layout" aria-label="Memoirs globe and story cards">
@@ -290,6 +290,13 @@
     let focusedCountryId = null;
     let focusedSpotKey = null;
     let isDragging = false;
+    let isPinching = false;
+    let pinchStartDist = 0;
+    let pinchStartScale = 0;
+    let touchRotateOrigin = null;
+    let touchRotateStart = null;
+    let suppressTouchTap = false;
+    let ignoreSyntheticClickUntil = 0;
     let autoRotate = true;
     let introActive = true;
     let introStartTs = null;
@@ -309,8 +316,11 @@
     let readerTextPageIndex = 0;
     let readerCurrentParagraphs = [];
     let readerPageAnimating = false;
+    let readerSwipeTracking = false;
+    let readerSwipeStartX = 0;
+    let readerSwipeStartY = 0;
     const readerPrefs = {
-      fontSize: 15,
+      fontSize: window.matchMedia('(max-width: 640px)').matches ? 13 : 15,
       lineHeight: LINE_PRESETS.regular,
       textPad: 14
     };
@@ -369,6 +379,14 @@
       }
       readerThemeToggleEl.textContent = document.body.classList.contains('light-mode') ? '☾' : '☀';
       readerThemeToggleEl.setAttribute('aria-pressed', document.body.classList.contains('light-mode') ? 'true' : 'false');
+    }
+
+    function syncMemoirsHeaderOffset() {
+      const headerEl = document.querySelector('header');
+      if (!headerEl) return;
+      const h = Math.ceil(headerEl.getBoundingClientRect().height || 0);
+      // Keep a breathing gap below the fixed nav in every viewport.
+      document.body.style.setProperty('--memoirs-header-offset', (h + 24) + 'px');
     }
 
     function extractStoryParagraphs(rawText, title) {
@@ -461,8 +479,9 @@
     function setCanvasSize() {
       const wrap = document.querySelector('.globe-side');
       const rect = wrap.getBoundingClientRect();
-      W = Math.max(380, Math.round(rect.width));
-      H = Math.max(380, Math.round(rect.height));
+      const minSize = window.matchMedia('(max-width: 640px)').matches ? 220 : 380;
+      W = Math.max(minSize, Math.round(rect.width));
+      H = Math.max(minSize, Math.round(rect.height));
       globeCanvas.width = W * devicePixelRatio;
       globeCanvas.height = H * devicePixelRatio;
       globeCanvas.style.width = W + 'px';
@@ -596,6 +615,12 @@
       const rect = globeCanvas.getBoundingClientRect();
       const src = e.touches ? e.touches[0] : e;
       return [src.clientX - rect.left, src.clientY - rect.top];
+    }
+
+    function touchDistance(t1, t2) {
+      const dx = t1.clientX - t2.clientX;
+      const dy = t1.clientY - t2.clientY;
+      return Math.hypot(dx, dy);
     }
 
     function countryAt(p) {
@@ -1049,6 +1074,34 @@
       requestAnimationFrame(frame);
     }
 
+    async function handleGlobeSelectAtPoint(p) {
+      if (isDragging || isAnimating) return;
+      const spot = spotAt(p);
+      if (spot) {
+        if (focusedSpotKey === spot.key) return;
+        await focusSpot(spot);
+        return;
+      }
+      const f = countryAt(p);
+      const id = f ? +f.id : null;
+
+      if (focusedCountryId || focusedSpotKey) {
+        if (id && visitedCountryIds.has(id) && id !== focusedCountryId) {
+          await focusCountry(id, f);
+          return;
+        }
+        if (!id || !visitedCountryIds.has(id)) {
+          await unfocusCountry();
+          return;
+        }
+        return;
+      }
+
+      if (id && visitedCountryIds.has(id)) {
+        await focusCountry(id, f);
+      }
+    }
+
     function bindGlobeInteractions() {
       globeCanvas.addEventListener('mousedown', (e) => {
         if (focusedCountryId || focusedSpotKey || isAnimating) return;
@@ -1088,6 +1141,99 @@
         drawGlobe();
         setTimeout(() => { if (!focusedCountryId && !focusedSpotKey) autoRotate = true; }, 1800);
       }, { passive: false });
+
+      globeCanvas.addEventListener('touchstart', (e) => {
+        if (focusedCountryId || focusedSpotKey || isAnimating) return;
+        autoRotate = false;
+        if (e.touches.length >= 2) {
+          e.preventDefault();
+          isPinching = true;
+          isDragging = true;
+          suppressTouchTap = true;
+          pinchStartDist = touchDistance(e.touches[0], e.touches[1]) || 1;
+          pinchStartScale = proj.scale();
+          touchRotateOrigin = null;
+          touchRotateStart = null;
+          return;
+        }
+        if (e.touches.length === 1) {
+          e.preventDefault();
+          isPinching = false;
+          isDragging = false;
+          const t = e.touches[0];
+          const rect = globeCanvas.getBoundingClientRect();
+          touchRotateOrigin = [t.clientX - rect.left, t.clientY - rect.top];
+          touchRotateStart = proj.rotate().slice();
+        }
+      }, { passive: false });
+
+      globeCanvas.addEventListener('touchmove', (e) => {
+        if (focusedCountryId || focusedSpotKey || isAnimating) return;
+        if (e.touches.length >= 2) {
+          e.preventDefault();
+          const dist = touchDistance(e.touches[0], e.touches[1]) || pinchStartDist || 1;
+          if (!isPinching) {
+            isPinching = true;
+            pinchStartDist = dist;
+            pinchStartScale = proj.scale();
+          }
+          const factor = dist / Math.max(1, pinchStartDist);
+          proj.scale(Math.max(baseRadius * 0.55, Math.min(baseRadius * 2.8, pinchStartScale * factor)));
+          isDragging = true;
+          suppressTouchTap = true;
+          drawGlobe();
+          return;
+        }
+
+        if (e.touches.length === 1 && !isPinching && touchRotateOrigin && touchRotateStart) {
+          e.preventDefault();
+          const t = e.touches[0];
+          const rect = globeCanvas.getBoundingClientRect();
+          const p1 = [t.clientX - rect.left, t.clientY - rect.top];
+          const dx = p1[0] - touchRotateOrigin[0];
+          const dy = p1[1] - touchRotateOrigin[1];
+          if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+            isDragging = true;
+            suppressTouchTap = true;
+          }
+          proj.rotate([touchRotateStart[0] + dx * 0.28, Math.max(-80, Math.min(80, touchRotateStart[1] - dy * 0.28)), touchRotateStart[2]]);
+          drawGlobe();
+        }
+      }, { passive: false });
+
+      globeCanvas.addEventListener('touchend', async (e) => {
+        if (isAnimating) return;
+        if (e.touches.length === 1 && isPinching) {
+          isPinching = false;
+          const t = e.touches[0];
+          const rect = globeCanvas.getBoundingClientRect();
+          touchRotateOrigin = [t.clientX - rect.left, t.clientY - rect.top];
+          touchRotateStart = proj.rotate().slice();
+          return;
+        }
+        if (e.touches.length === 0) {
+          if (!isPinching && !suppressTouchTap && !isDragging && e.changedTouches && e.changedTouches[0]) {
+            const t = e.changedTouches[0];
+            const rect = globeCanvas.getBoundingClientRect();
+            ignoreSyntheticClickUntil = Date.now() + 500;
+            await handleGlobeSelectAtPoint([t.clientX - rect.left, t.clientY - rect.top]);
+          }
+          isPinching = false;
+          touchRotateOrigin = null;
+          touchRotateStart = null;
+          suppressTouchTap = false;
+          setTimeout(() => { isDragging = false; }, 10);
+          setTimeout(() => { if (!focusedCountryId && !focusedSpotKey) autoRotate = true; }, 1800);
+        }
+      }, { passive: false });
+
+      globeCanvas.addEventListener('touchcancel', () => {
+        isPinching = false;
+        touchRotateOrigin = null;
+        touchRotateStart = null;
+        suppressTouchTap = false;
+        isDragging = false;
+      }, { passive: true });
 
       globeCanvas.addEventListener('mousemove', (e) => {
         if (isDragging || isAnimating) {
@@ -1142,36 +1288,13 @@
       });
 
       globeCanvas.addEventListener('click', async (e) => {
-        if (isDragging || isAnimating) return;
-        const p = pointFromEvent(e);
-        const spot = spotAt(p);
-        if (spot) {
-          if (focusedSpotKey === spot.key) return;
-          await focusSpot(spot);
-          return;
-        }
-        const f = countryAt(p);
-        const id = f ? +f.id : null;
-
-        if (focusedCountryId || focusedSpotKey) {
-          if (id && visitedCountryIds.has(id) && id !== focusedCountryId) {
-            await focusCountry(id, f);
-            return;
-          }
-          if (!id || !visitedCountryIds.has(id)) {
-            await unfocusCountry();
-            return;
-          }
-          return;
-        }
-
-        if (id && visitedCountryIds.has(id)) {
-          await focusCountry(id, f);
-        }
+        if (Date.now() < ignoreSyntheticClickUntil) return;
+        await handleGlobeSelectAtPoint(pointFromEvent(e));
       });
     }
 
     async function init() {
+      syncMemoirsHeaderOffset();
       setCanvasSize();
       proj.rotate([-20, -20, 0]);
       proj.scale(baseRadius);
@@ -1231,6 +1354,37 @@
       readerEl.addEventListener('touchmove', (e) => {
         e.preventDefault();
       }, { passive: false });
+      readerBodyEl.addEventListener('touchstart', (e) => {
+        if (!readerEl.classList.contains('open')) return;
+        if (!window.matchMedia('(max-width: 640px)').matches) return;
+        if (!readerTextPages.length || e.touches.length !== 1) return;
+        const t = e.touches[0];
+        readerSwipeTracking = true;
+        readerSwipeStartX = t.clientX;
+        readerSwipeStartY = t.clientY;
+      }, { passive: true });
+      readerBodyEl.addEventListener('touchmove', (e) => {
+        if (!readerSwipeTracking || e.touches.length !== 1) return;
+        const t = e.touches[0];
+        const dx = t.clientX - readerSwipeStartX;
+        const dy = t.clientY - readerSwipeStartY;
+        if (Math.abs(dx) > 14 && Math.abs(dx) > Math.abs(dy)) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+      readerBodyEl.addEventListener('touchend', (e) => {
+        if (!readerSwipeTracking || !e.changedTouches || !e.changedTouches[0]) return;
+        readerSwipeTracking = false;
+        if (!window.matchMedia('(max-width: 640px)').matches) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - readerSwipeStartX;
+        const dy = t.clientY - readerSwipeStartY;
+        if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy) * 1.2) return;
+        stepReaderPage(dx < 0 ? 1 : -1);
+      }, { passive: true });
+      readerBodyEl.addEventListener('touchcancel', () => {
+        readerSwipeTracking = false;
+      }, { passive: true });
       document.addEventListener('keydown', (e) => {
         if (readerEl.classList.contains('open')) {
           if (e.key === 'Escape') {
@@ -1249,6 +1403,7 @@
       });
 
       window.addEventListener('resize', () => {
+        syncMemoirsHeaderOffset();
         const prevScaleRatio = proj.scale() / baseRadius;
         setCanvasSize();
         proj.scale(baseRadius * prevScaleRatio);
@@ -1256,9 +1411,14 @@
       });
 
       new MutationObserver(() => {
+        syncMemoirsHeaderOffset();
         drawGlobe();
         syncReaderThemeButton();
       }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      const headerEl = document.querySelector('header');
+      if (headerEl) {
+        new MutationObserver(syncMemoirsHeaderOffset).observe(headerEl, { attributes: true, attributeFilter: ['class', 'style'] });
+      }
       applyReaderPrefs();
       setReaderLinePreset('regular');
       syncReaderThemeButton();

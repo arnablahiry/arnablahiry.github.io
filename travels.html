@@ -274,6 +274,12 @@ const VISITS = {
     let autoRotate = true, autoTimer = null;
     let W, H, R;
     let currentScale = 1;
+    let isPinching = false;
+    let pinchStartDist = 0;
+    let pinchStartScale = 1;
+    let touchRotateOrigin = null;
+    let touchRotateStart = null;
+    let suppressTap = false;
     let introActive = true;
     let introStartTs = null;
     let detailReturnScrollY = null;
@@ -424,6 +430,12 @@ const VISITS = {
         return [src.clientX - rect.left, src.clientY - rect.top];
     }
 
+    function touchDistance(t1, t2) {
+        const dx = t1.clientX - t2.clientX;
+        const dy = t1.clientY - t2.clientY;
+        return Math.hypot(dx, dy);
+    }
+
     function countryAt([x, y]) {
         if (!worldGeo) return null;
         const inv = proj.invert([x, y]);
@@ -455,24 +467,82 @@ const VISITS = {
         window.addEventListener('mouseup', up);
     });
 
-    /* ---- drag (touch) ---- */
+    /* ---- touch: one-finger scroll/tap + two-finger pinch zoom ---- */
     canvas.addEventListener('touchstart', e => {
-        e.preventDefault(); isDragging = false; pauseAuto();
-        const p0 = ptFrom(e), r0 = proj.rotate();
-        function mv(ev) {
-            ev.preventDefault();
-            const p1 = ptFrom(ev), dx = p1[0] - p0[0], dy = p1[1] - p0[1];
-            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) isDragging = true;
-            proj.rotate([r0[0] + dx * 0.28, Math.max(-80, Math.min(80, r0[1] - dy * 0.28)), r0[2]]);
-            draw();
+        pauseAuto();
+        if (e.touches.length >= 2) {
+            e.preventDefault();
+            isPinching = true;
+            isDragging = true;
+            suppressTap = true;
+            pinchStartDist = touchDistance(e.touches[0], e.touches[1]) || 1;
+            pinchStartScale = currentScale;
+            touchRotateOrigin = null;
+            touchRotateStart = null;
+            return;
         }
-        function up() {
-            canvas.removeEventListener('touchmove', mv);
-            setTimeout(() => { isDragging = false; }, 10); // reset AFTER touchend fires
+        if (e.touches.length === 1) {
+            isPinching = false;
+            isDragging = false;
+            suppressTap = false;
+            touchRotateOrigin = ptFrom(e);
+            touchRotateStart = null;
         }
-        canvas.addEventListener('touchmove', mv, { passive: false });
-        canvas.addEventListener('touchend', up, { once: true });
     }, { passive: false });
+
+    canvas.addEventListener('touchmove', e => {
+        if (e.touches.length >= 2) {
+            e.preventDefault();
+            const dist = touchDistance(e.touches[0], e.touches[1]) || pinchStartDist || 1;
+            if (!isPinching) {
+                isPinching = true;
+                pinchStartDist = dist;
+                pinchStartScale = currentScale;
+            }
+            const factor = dist / Math.max(1, pinchStartDist);
+            currentScale = Math.max(0.45, Math.min(3.5, pinchStartScale * factor));
+            setSize(true);
+            draw();
+            isDragging = true;
+            suppressTap = true;
+            return;
+        }
+
+        if (e.touches.length === 1 && !isPinching && touchRotateOrigin) {
+            const p1 = ptFrom(e);
+            const dx = p1[0] - touchRotateOrigin[0];
+            const dy = p1[1] - touchRotateOrigin[1];
+            if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+                isDragging = true;
+                suppressTap = true;
+            }
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', e => {
+        if (e.touches.length === 1 && isPinching) {
+            // Continue with one-finger gesture tracking after pinch ends with one finger still down.
+            isPinching = false;
+            const t = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            touchRotateOrigin = [t.clientX - rect.left, t.clientY - rect.top];
+            touchRotateStart = null;
+            return;
+        }
+        if (e.touches.length === 0) {
+            isPinching = false;
+            touchRotateOrigin = null;
+            touchRotateStart = null;
+            setTimeout(() => { isDragging = false; }, 10);
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchcancel', () => {
+        isPinching = false;
+        touchRotateOrigin = null;
+        touchRotateStart = null;
+        isDragging = false;
+    }, { passive: true });
 
     /* ---- zoom ---- */
     canvas.addEventListener('wheel', e => {
@@ -530,7 +600,10 @@ const VISITS = {
     });
 
     canvas.addEventListener('touchend', e => {
-        if (isDragging) return;
+        if (isDragging || isPinching || suppressTap) {
+            suppressTap = false;
+            return;
+        }
         const t = e.changedTouches[0], r = canvas.getBoundingClientRect();
         const f = countryAt([t.clientX - r.left, t.clientY - r.top]);
         if (f && visitedIds.has(+f.id)) openDetail(+f.id);
