@@ -312,7 +312,9 @@ const VISITS = {
 
     function setSize(keepZoom) {
         const wrap    = document.getElementById('globe-wrap');
-        const natural = Math.min(wrap.clientWidth, window.innerHeight * 0.92, 900);
+        const isPhone = window.matchMedia('(max-width: 600px)').matches;
+        const naturalBase = Math.min(wrap.clientWidth, window.innerHeight * 0.92, 900);
+        const natural = isPhone ? (naturalBase * 0.94) : naturalBase;
         if (!keepZoom) currentScale = 1;
         const sz = Math.round(natural * currentScale);
         W = H = sz;
@@ -323,6 +325,13 @@ const VISITS = {
         ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
         R = sz / 2 - 14;
         proj.scale(R).translate([sz / 2, sz / 2]);
+    }
+
+    function syncTravelsHeaderOffset() {
+        const headerEl = document.querySelector('header');
+        if (!headerEl) return;
+        const h = Math.ceil(headerEl.getBoundingClientRect().height || 0);
+        document.body.style.setProperty('--travels-header-offset', (h + 24) + 'px');
     }
 
     function draw() {
@@ -467,7 +476,7 @@ const VISITS = {
         window.addEventListener('mouseup', up);
     });
 
-    /* ---- touch: one-finger scroll/tap + two-finger pinch zoom ---- */
+    /* ---- touch: one-finger rotate + two-finger pinch zoom ---- */
     canvas.addEventListener('touchstart', e => {
         pauseAuto();
         if (e.touches.length >= 2) {
@@ -482,11 +491,11 @@ const VISITS = {
             return;
         }
         if (e.touches.length === 1) {
+            e.preventDefault();
             isPinching = false;
             isDragging = false;
-            suppressTap = false;
             touchRotateOrigin = ptFrom(e);
-            touchRotateStart = null;
+            touchRotateStart = proj.rotate().slice();
         }
     }, { passive: false });
 
@@ -508,7 +517,12 @@ const VISITS = {
             return;
         }
 
-        if (e.touches.length === 1 && !isPinching && touchRotateOrigin) {
+        if (e.touches.length === 1 && !isPinching) {
+            if (!touchRotateOrigin || !touchRotateStart) {
+                touchRotateOrigin = ptFrom(e);
+                touchRotateStart = proj.rotate().slice();
+            }
+            e.preventDefault();
             const p1 = ptFrom(e);
             const dx = p1[0] - touchRotateOrigin[0];
             const dy = p1[1] - touchRotateOrigin[1];
@@ -516,17 +530,19 @@ const VISITS = {
                 isDragging = true;
                 suppressTap = true;
             }
+            proj.rotate([touchRotateStart[0] + dx * 0.28, Math.max(-80, Math.min(80, touchRotateStart[1] - dy * 0.28)), touchRotateStart[2]]);
+            draw();
         }
     }, { passive: false });
 
     canvas.addEventListener('touchend', e => {
         if (e.touches.length === 1 && isPinching) {
-            // Continue with one-finger gesture tracking after pinch ends with one finger still down.
+            // Continue with one-finger rotate after pinch ends with one finger still down.
             isPinching = false;
             const t = e.touches[0];
             const rect = canvas.getBoundingClientRect();
             touchRotateOrigin = [t.clientX - rect.left, t.clientY - rect.top];
-            touchRotateStart = null;
+            touchRotateStart = proj.rotate().slice();
             return;
         }
         if (e.touches.length === 0) {
@@ -660,14 +676,22 @@ const VISITS = {
     });
 
     /* ====================================================== INIT */
+    syncTravelsHeaderOffset();
     setSize(false);
     proj.rotate([-20, -20, 0]);
     canvas.style.opacity = '0';
     canvas.style.cursor = 'grab';
     draw();
 
-    window.addEventListener('resize', () => { setSize(false); draw(); });
-    new MutationObserver(() => draw()).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('resize', () => { syncTravelsHeaderOffset(); setSize(false); draw(); });
+    new MutationObserver(() => {
+        syncTravelsHeaderOffset();
+        draw();
+    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    const headerEl = document.querySelector('header');
+    if (headerEl) {
+        new MutationObserver(syncTravelsHeaderOffset).observe(headerEl, { attributes: true, attributeFilter: ['class', 'style'] });
+    }
 
     d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
         worldGeo = topojson.feature(world, world.objects.countries);

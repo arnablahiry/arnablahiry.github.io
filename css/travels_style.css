@@ -11,6 +11,9 @@ body.no-theme-transition * {
 
 body { background-color: black; }
 .section-travels-heading { background-color: black; }
+body{
+    --travels-header-offset: 136px;
+}
 
 .container {
     width: 90vw;
@@ -20,7 +23,7 @@ body { background-color: black; }
 }
 
 .padding-vertical-xlarge {
-    padding-top: 136px;
+    padding-top: calc(var(--travels-header-offset) + env(safe-area-inset-top, 0px));
     padding-bottom: 0;
 }
 
@@ -119,7 +122,7 @@ h2.intro-heading {
 #globe-canvas {
     display: block;
     border-radius: 50%;
-    touch-action: pan-y;
+    touch-action: none;
 }
 
 /* Hint label sits below the canvas, offset from its bottom */
@@ -384,7 +387,8 @@ body.light-mode .placeholder-text  { color: #bbb; }
 
 /* ── Mobile ─────────────────────────────────────────────────── */
 @media (max-width: 600px) {
-    .padding-vertical-xlarge { padding-top: 62px; }
+    .padding-vertical-xlarge { padding-top: calc(var(--travels-header-offset) + env(safe-area-inset-top, 0px)); }
+    .margin-bottom-medium { margin-top: 0; }
     h2.intro-heading { font-size: 5.5vh; }
     .stat-item  { padding: 0 16px; }
     .stat-number{ font-size: 2rem; }

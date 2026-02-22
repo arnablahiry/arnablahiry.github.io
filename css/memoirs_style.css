@@ -85,7 +85,7 @@ body.page-memoirs {
   inset: 0;
   margin: auto;
   display: block;
-  touch-action: pan-y;
+  touch-action: none;
   transition: transform 420ms cubic-bezier(.2,.9,.2,1);
   will-change: transform;
 }
@@ -533,6 +533,16 @@ body.page-memoirs {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.book-reader-tools-mobile {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.reader-mobile-menu {
+  display: none;
 }
 
 .book-head-controls .theme-toggle.reader-theme-toggle{
@@ -989,6 +999,11 @@ body.light-mode .book-page-image {
   background: #f8f8f8;
 }
 
+body.light-mode .reader-mobile-menu {
+  border-color: rgba(0, 0, 0, 0.14);
+  background: rgba(252, 252, 252, 0.96);
+}
+
 body.light-mode .book-body.book-body-text-flow {
   column-rule-color: rgba(0, 0, 0, 0.2);
 }
@@ -1045,6 +1060,10 @@ body.light-mode .book-body.book-body-text-flow {
 }
 
 @media (max-width: 640px) {
+  .memoirs-heading h1 {
+    font-size: clamp(1.72rem, 9vw, 2.35rem);
+  }
+
   body.page-memoirs {
     --memoirs-header-offset: 136px;
   }
@@ -1147,7 +1166,7 @@ body.light-mode .book-body.book-body-text-flow {
 
   .book-head {
     padding-left: 0;
-    justify-content: center;
+    justify-content: flex-end;
     position: relative;
     min-height: 38px;
     margin-bottom: 8px;
@@ -1160,8 +1179,28 @@ body.light-mode .book-body.book-body-text-flow {
   }
 
   .book-reader-tools {
-    margin: 0 auto;
+    display: none;
+  }
+
+  .book-reader-tools-mobile {
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
+    margin: 0 auto;
+    gap: 8px;
+  }
+
+  .reader-aa-toggle,
+  .reader-theme-toggle-mobile {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 999px !important;
+  }
+
+  .reader-aa-toggle {
+    font-size: 0.95rem;
+    font-weight: 700;
   }
 
   .book-close {
@@ -1183,5 +1222,36 @@ body.light-mode .book-body.book-body-text-flow {
     padding-right: 8px !important;
     height: calc(96vh - 82px);
     max-height: calc(96vh - 82px);
+  }
+
+  .reader-mobile-menu {
+    position: absolute;
+    top: 44px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(9, 10, 14, 0.94);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+    z-index: 8;
+  }
+
+  .reader-mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .reader-mobile-menu .book-page-btn {
+    height: 34px;
+    min-width: 34px;
   }
 }

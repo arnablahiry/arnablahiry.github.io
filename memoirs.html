@@ -92,7 +92,18 @@
               <button id="reader-line-large" class="book-page-btn reader-line-option" type="button" data-line="large" aria-label="Large line spacing"><span class="line-icon line-icon-large" aria-hidden="true"></span></button>
               <button id="reader-theme-toggle" class="theme-toggle reader-theme-toggle" type="button" aria-label="Toggle light/dark mode">☀</button>
             </div>
+            <div class="book-reader-tools-mobile" aria-label="Reader controls (mobile)">
+              <button id="reader-aa-toggle" class="book-page-btn reader-aa-toggle" type="button" aria-label="Text controls" aria-expanded="false">Aa</button>
+              <button id="reader-theme-toggle-mobile" class="theme-toggle reader-theme-toggle reader-theme-toggle-mobile" type="button" aria-label="Toggle light/dark mode">☀</button>
+            </div>
             <button id="book-close" class="book-close" type="button" aria-label="Close story">×</button>
+          </div>
+          <div id="reader-mobile-menu" class="reader-mobile-menu" aria-hidden="true">
+            <button id="reader-font-down-mobile" class="book-page-btn" type="button" aria-label="Decrease font size">A-</button>
+            <button id="reader-font-up-mobile" class="book-page-btn" type="button" aria-label="Increase font size">A+</button>
+            <button id="reader-line-compact-mobile" class="book-page-btn reader-line-option" type="button" data-line="compact" aria-label="Compact line spacing"><span class="line-icon line-icon-compact" aria-hidden="true"></span></button>
+            <button id="reader-line-regular-mobile" class="book-page-btn reader-line-option" type="button" data-line="regular" aria-label="Regular line spacing"><span class="line-icon line-icon-regular" aria-hidden="true"></span></button>
+            <button id="reader-line-large-mobile" class="book-page-btn reader-line-option" type="button" data-line="large" aria-label="Large line spacing"><span class="line-icon line-icon-large" aria-hidden="true"></span></button>
           </div>
         </div>
         <div id="book-body" class="book-body">Loading...</div>
@@ -275,8 +286,16 @@
     const readerLineCompactEl = document.getElementById('reader-line-compact');
     const readerLineRegularEl = document.getElementById('reader-line-regular');
     const readerLineLargeEl = document.getElementById('reader-line-large');
+    const readerAaToggleEl = document.getElementById('reader-aa-toggle');
+    const readerMobileMenuEl = document.getElementById('reader-mobile-menu');
+    const readerFontDownMobileEl = document.getElementById('reader-font-down-mobile');
+    const readerFontUpMobileEl = document.getElementById('reader-font-up-mobile');
+    const readerLineCompactMobileEl = document.getElementById('reader-line-compact-mobile');
+    const readerLineRegularMobileEl = document.getElementById('reader-line-regular-mobile');
+    const readerLineLargeMobileEl = document.getElementById('reader-line-large-mobile');
     const readerLineOptionEls = [readerLineCompactEl, readerLineRegularEl, readerLineLargeEl].filter(Boolean);
     const readerThemeToggleEl = document.getElementById('reader-theme-toggle');
+    const readerThemeToggleMobileEl = document.getElementById('reader-theme-toggle-mobile');
 
     const visitedCountryIds = new Set(Object.keys(COUNTRY_LIBRARY).map(Number));
 
@@ -366,6 +385,11 @@
         el.classList.toggle('active', el.dataset.line === presetKey);
         el.setAttribute('aria-pressed', el.dataset.line === presetKey ? 'true' : 'false');
       });
+      [readerLineCompactMobileEl, readerLineRegularMobileEl, readerLineLargeMobileEl].forEach((el) => {
+        if (!el) return;
+        el.classList.toggle('active', el.dataset.line === presetKey);
+        el.setAttribute('aria-pressed', el.dataset.line === presetKey ? 'true' : 'false');
+      });
       applyReaderPrefs();
       repaginateReader(true);
     }
@@ -375,10 +399,25 @@
       if (siteThemeBtn) {
         readerThemeToggleEl.innerHTML = siteThemeBtn.innerHTML;
         readerThemeToggleEl.setAttribute('aria-pressed', siteThemeBtn.getAttribute('aria-pressed') || 'false');
+        if (readerThemeToggleMobileEl) {
+          readerThemeToggleMobileEl.innerHTML = siteThemeBtn.innerHTML;
+          readerThemeToggleMobileEl.setAttribute('aria-pressed', siteThemeBtn.getAttribute('aria-pressed') || 'false');
+        }
         return;
       }
       readerThemeToggleEl.textContent = document.body.classList.contains('light-mode') ? '☾' : '☀';
       readerThemeToggleEl.setAttribute('aria-pressed', document.body.classList.contains('light-mode') ? 'true' : 'false');
+      if (readerThemeToggleMobileEl) {
+        readerThemeToggleMobileEl.textContent = document.body.classList.contains('light-mode') ? '☾' : '☀';
+        readerThemeToggleMobileEl.setAttribute('aria-pressed', document.body.classList.contains('light-mode') ? 'true' : 'false');
+      }
+    }
+
+    function setMobileReaderMenu(open) {
+      if (!readerMobileMenuEl || !readerAaToggleEl) return;
+      readerMobileMenuEl.classList.toggle('open', !!open);
+      readerMobileMenuEl.setAttribute('aria-hidden', open ? 'false' : 'true');
+      readerAaToggleEl.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
     function syncMemoirsHeaderOffset() {
@@ -1008,6 +1047,7 @@
     }
 
     async function openReader(card) {
+      setMobileReaderMenu(false);
       readerEl.classList.add('open');
       readerEl.setAttribute('aria-hidden', 'false');
       document.body.classList.add('reader-open');
@@ -1045,6 +1085,7 @@
       readerEl.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('reader-open');
       readerPageNavEl.hidden = true;
+      setMobileReaderMenu(false);
       readerPageAnimating = false;
       readerBodyEl.classList.remove('page-turn-out-next', 'page-turn-out-prev', 'page-turn-in-next', 'page-turn-in-prev');
       readerTextPages = [];
@@ -1345,8 +1386,37 @@
         }
         syncReaderThemeButton();
       });
+      if (readerThemeToggleMobileEl) {
+        readerThemeToggleMobileEl.addEventListener('click', () => {
+          readerThemeToggleEl.click();
+        });
+      }
+      if (readerAaToggleEl) {
+        readerAaToggleEl.addEventListener('click', () => {
+          const open = !(readerMobileMenuEl && readerMobileMenuEl.classList.contains('open'));
+          setMobileReaderMenu(open);
+        });
+      }
+      if (readerFontDownMobileEl) {
+        readerFontDownMobileEl.addEventListener('click', () => readerFontDownEl.click());
+      }
+      if (readerFontUpMobileEl) {
+        readerFontUpMobileEl.addEventListener('click', () => readerFontUpEl.click());
+      }
+      if (readerLineCompactMobileEl) {
+        readerLineCompactMobileEl.addEventListener('click', () => setReaderLinePreset('compact'));
+      }
+      if (readerLineRegularMobileEl) {
+        readerLineRegularMobileEl.addEventListener('click', () => setReaderLinePreset('regular'));
+      }
+      if (readerLineLargeMobileEl) {
+        readerLineLargeMobileEl.addEventListener('click', () => setReaderLinePreset('large'));
+      }
       readerEl.addEventListener('click', (e) => {
         if (e.target === readerEl) closeReader();
+        if (readerMobileMenuEl && readerMobileMenuEl.classList.contains('open') && !readerMobileMenuEl.contains(e.target) && e.target !== readerAaToggleEl) {
+          setMobileReaderMenu(false);
+        }
       });
       readerEl.addEventListener('wheel', (e) => {
         e.preventDefault();
