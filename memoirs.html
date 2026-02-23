@@ -971,8 +971,19 @@
       updateForewordFadeState();
     }
 
+    function shuffledCards(cards) {
+      const out = (cards || []).slice();
+      for (let i = out.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = out[i];
+        out[i] = out[j];
+        out[j] = tmp;
+      }
+      return out;
+    }
+
     function renderAllMemoirs(options = {}) {
-      const cards = Object.values(STORIES).flatMap((arr) => arr || []);
+      const cards = shuffledCards(Object.values(STORIES).flatMap((arr) => arr || []));
       renderCardsInto(storyCardsAll, cards, options);
     }
 
@@ -984,7 +995,7 @@
 
     function renderCountryCards(countryId) {
       const meta = COUNTRY_LIBRARY[countryId];
-      const cards = STORIES[meta.key] || [];
+      const cards = shuffledCards(STORIES[meta.key] || []);
       if (!cards.length) {
         renderSelectedMemoirs([], meta.name, 'No memoir cards assigned for this country yet.');
         return;
@@ -993,7 +1004,7 @@
     }
 
     function renderSpotCards(spot) {
-      const cards = STORIES[spot.key] || [];
+      const cards = shuffledCards(STORIES[spot.key] || []);
       if (!cards.length) {
         renderSelectedMemoirs([], spot.name, 'No memoir cards assigned for this place yet.');
         return;
