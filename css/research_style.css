@@ -33,8 +33,9 @@ body:not(.light-mode) .container{
 .timeline-main-heading-wrapper{
     color: white;
     text-align: center;
-    /* increased width so the title and paragraph have more horizontal room */
-    max-width: 1100px;
+    /* let heading/subtitle use full container width */
+    max-width: none;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     position: relative; /* allow absolute-positioned controls (theme toggle) inside */
@@ -140,15 +141,192 @@ header nav .nav-hint-wrapper #theme-hint.theme-hint-hidden{
     gap: 1.6rem;
     align-items: stretch; /* ensure children match height */
     justify-content: center;
+    width: 100%;
 }
 .research-intro-text{
-    flex: 1 1 60%;
+    flex: 1 1 100%;
+    max-width: 1220px;
+    margin-left: auto;
+    margin-right: auto;
 }
 /* Intro paragraph styling (dark-mode defaults). Light mode overrides live in css/light_mode.css */
 .research-intro-text .research-intro{
     color: #ffffff;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.45;
+}
+
+.meme-hidden-trigger{
+    all: unset;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    padding: 0 !important;
+    margin: 0;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    border-radius: 0 !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.meme-hidden-trigger:hover,
+.meme-hidden-trigger:focus-visible{
+    outline: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+.meme-hidden-trigger::-moz-focus-inner{
+    border: 0;
+    padding: 0;
+}
+
+.meme-hidden-trigger::after{
+    content: "Bingo";
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 1px);
+    transform: translateX(-50%) translateY(-2px);
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+    color: inherit;
+    background: rgba(16, 18, 22, 0.88);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 999px;
+    padding: 3px 7px;
+    white-space: nowrap;
+}
+
+.meme-hidden-trigger:hover::after,
+.meme-hidden-trigger:focus-visible::after{
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+body.light-mode .meme-hidden-trigger::after{
+    color: inherit;
+    background: rgba(255,255,255,0.9);
+    border-color: rgba(0,0,0,0.14);
+}
+
+.meme-viewer{
+    position: fixed;
+    inset: 0;
+    z-index: 2600;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+.meme-viewer-backdrop{
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.02);
+    opacity: 0;
+    transition: opacity 420ms cubic-bezier(.22,.9,.18,1), background-color 420ms cubic-bezier(.22,.9,.18,1);
+}
+
+.meme-viewer-dialog{
+    position: relative;
+    width: min(395px, 50vw);
+    max-height: min(50vh, 460px);
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+    transition: opacity 420ms cubic-bezier(.22,.9,.18,1), transform 420ms cubic-bezier(.22,.9,.18,1);
+}
+
+.meme-viewer-dialog img{
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: min(50vh, 460px);
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+}
+
+body:not(.light-mode) .meme-viewer-dialog img{
+    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+body.light-mode .meme-viewer-dialog img{
+    filter: none !important;
+}
+
+.meme-viewer-close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(7, 9, 14, 0.96);
+    color: #fff;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    box-shadow: none;
+}
+
+.meme-viewer.open{
+    pointer-events: auto;
+}
+
+.meme-viewer.open .meme-viewer-backdrop{
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.68);
+}
+
+.meme-viewer.open .meme-viewer-dialog{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+body.meme-viewer-open{
+    overflow: hidden;
+}
+
+body.light-mode .meme-viewer.open .meme-viewer-backdrop{
+    background: rgba(18, 22, 28, 0.44);
+}
+
+body.light-mode .meme-viewer-close{
+    background: rgba(255, 255, 255, 0.99) !important;
+    color: #121212 !important;
+    border-color: rgba(0,0,0,0.12) !important;
+    opacity: 1 !important;
+}
+
+@media (max-width: 768px){
+    .meme-viewer-dialog{
+        width: min(350px, 70vw);
+        max-height: min(44vh, 380px);
+    }
+
+    .meme-viewer-dialog img{
+        max-height: min(44vh, 380px);
+    }
 }
 .research-meme{
     flex: 0 0 250px; /* slightly narrower so it sits closer to text */
@@ -327,6 +505,10 @@ h2.intro-heading{
    with equal left/right padding so they visually occupy the full phone
    width. We use 5vw padding on each side to keep comfortable margins. */
 @media (max-width: 520px){
+    .research-heading-row.margin-bottom-medium{
+        margin-top: 12px;
+    }
+
     .timeline-main-heading-wrapper{
         /* span the full viewport and center it */
         width: 100vw;
@@ -909,5 +1091,3 @@ body:not(.light-mode) img{
     margin-left: auto;
     margin-right: auto;
 }
-
-

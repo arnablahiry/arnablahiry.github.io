@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travels</title>
+    <meta name="description" content="Travel experiences and destinations explored by Arnab Lahiry.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="My Travels | Arnab Lahiry">
+    <meta property="og:description" content="Explore countries, places, and stories from Arnab's travels.">
+    <meta property="og:image" content="images/travels/greece/greece_5.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="My Travels | Arnab Lahiry">
+    <meta name="twitter:description" content="Explore countries, places, and stories from Arnab's travels.">
+    <meta name="twitter:image" content="images/travels/greece/greece_5.png">
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="shortcut icon" href="images/logo.png">
     <link href="css/utils.css" rel="stylesheet">
@@ -40,7 +49,6 @@
             <a href="software.html">Software</a>
             <a href="cv.html">CV / Résumé</a>
             <a href="publications.html">Publications</a>
-            <a href="repositories.html">Repositories</a>
             <a href="contact.html">Contact</a>
             <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
         </nav>
@@ -103,7 +111,24 @@
     </div>
 
     <footer>
-        <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
+    <div class="footer-social-buttons" aria-label="Social links">
+      <a href="https://github.com/arnablahiry" class="social-link" aria-label="GitHub" target="_blank" rel="noopener">
+        <img src="images/icons/github.png" alt="GitHub" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.linkedin.com/in/arnablahiry/" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+        <img src="images/icons/linkedin.png" alt="LinkedIn" loading="lazy" decoding="async">
+      </a>
+      <a href="https://x.com/lahiryarnab" class="social-link" aria-label="X (Twitter)" target="_blank" rel="noopener">
+        <img src="images/icons/twitter.png" alt="X (Twitter)" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.facebook.com/arnablahiry" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
+        <img src="images/icons/facebook.png" alt="Facebook" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.instagram.com/arnab_lahiry/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
+        <img src="images/icons/instagram.png" alt="Instagram" loading="lazy" decoding="async">
+      </a>
+    </div>
+    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
 
     <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
@@ -331,7 +356,9 @@ const VISITS = {
         const headerEl = document.querySelector('header');
         if (!headerEl) return;
         const h = Math.ceil(headerEl.getBoundingClientRect().height || 0);
-        document.body.style.setProperty('--travels-header-offset', (h + 24) + 'px');
+        const offset = (h + 10) + 'px';
+        document.documentElement.style.setProperty('--site-header-offset', offset);
+        document.body.style.setProperty('--travels-header-offset', offset);
     }
 
     function draw() {

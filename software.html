@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Softwares</title>
+    <meta name="description" content="Software projects, tools, and interfaces built by Arnab Lahiry.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Software | Arnab Lahiry">
+    <meta property="og:description" content="Discover software work spanning astronomy tools and interactive projects.">
+    <meta property="og:image" content="images/research/3d_denoising.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Software | Arnab Lahiry">
+    <meta name="twitter:description" content="Discover software work spanning astronomy tools and interactive projects.">
+    <meta name="twitter:image" content="images/research/3d_denoising.png">
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="css/utils.css">
@@ -52,7 +61,6 @@
             <a href="software.html">Software</a>
             <a href="cv.html">CV / Résumé</a>
             <a href="publications.html">Publications</a>
-            <a href="repositories.html">Repositories</a>
             <a href="contact.html">Contact</a>
             <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
             <!-- Page-specific hint wrapper (kept for parity with research page) -->
@@ -78,17 +86,7 @@
                         </div>
                         <div class="margin-bottom-medium research-heading-row">
                             <div class="research-intro-text">
-                                <p class="research-intro">I am proficient in developing well-structured and well-documented software packages, hosting them on platforms like GitHub, and ensuring they are user-friendly and maintainable. I thrive on collaborative workflows and continuous improvement.<br><br> Below are a couple of packages developed by me - individually as well as part of a group - both scientific, and fun exercises ;).</p>
-                            </div>
-
-                            <!-- Meme placed to the right of the intro text; height will match the text column -->
-                            <div class="research-meme">
-                                <div class="meme-wrapper" id="meme-wrapper">
-                                    <img src="images/softwares/meme.png" alt="Research meme" class="timeline-hero-image" loading="lazy" id="meme-image" decoding="async">
-                                    <div class="meme-overlay" id="meme-overlay">
-                                        <button class="reveal-btn" id="reveal-btn" aria-label="Reveal image">Reveal meme ;)</button>
-                                    </div>
-                                </div>
+                                <p class="research-intro">I am proficient in developing well-structured and well-documented software packages, hosting them on platforms like GitHub, and ensuring they are user-friendly and maintainable. I thrive on collaborative <strong><button type="button" class="software-meme-trigger" id="software-meme-trigger" aria-haspopup="dialog" aria-controls="software-meme-viewer" aria-expanded="false">workflows</button></strong> and continuous improvement.<br><br> Below are a couple of packages developed by me - individually as well as part of a group - both scientific, and fun exercises ;).</p>
                             </div>
                         </div>
                     </div>
@@ -545,7 +543,32 @@ function smoothMoveTo(node, x, y, opts){
         </div>
     </div>
 
+    <div id="software-meme-viewer" class="software-meme-viewer" aria-hidden="true">
+        <div class="software-meme-backdrop" data-close-software-meme="true"></div>
+        <div class="software-meme-dialog" role="dialog" aria-modal="true" aria-label="Software meme viewer">
+            <button type="button" id="software-meme-close" class="software-meme-close" aria-label="Close software meme">×</button>
+            <img src="images/softwares/meme.png" alt="Software meme" loading="lazy" decoding="async">
+        </div>
+    </div>
+
     <footer>
+    <div class="footer-social-buttons" aria-label="Social links">
+      <a href="https://github.com/arnablahiry" class="social-link" aria-label="GitHub" target="_blank" rel="noopener">
+        <img src="images/icons/github.png" alt="GitHub" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.linkedin.com/in/arnablahiry/" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+        <img src="images/icons/linkedin.png" alt="LinkedIn" loading="lazy" decoding="async">
+      </a>
+      <a href="https://x.com/lahiryarnab" class="social-link" aria-label="X (Twitter)" target="_blank" rel="noopener">
+        <img src="images/icons/twitter.png" alt="X (Twitter)" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.facebook.com/arnablahiry" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
+        <img src="images/icons/facebook.png" alt="Facebook" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.instagram.com/arnab_lahiry/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
+        <img src="images/icons/instagram.png" alt="Instagram" loading="lazy" decoding="async">
+      </a>
+    </div>
     <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
 
@@ -555,7 +578,7 @@ function smoothMoveTo(node, x, y, opts){
 
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/research.js"></script>
-    <script src="scripts/reveal-meme.js"></script>
+    <script src="scripts/software-meme-modal.js"></script>
     <script src="scripts/theme-toggle.js"></script>
     <!-- Highlight.js for client-side syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>

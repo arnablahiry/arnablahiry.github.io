@@ -168,12 +168,16 @@ body.page-memoirs {
   background: linear-gradient(
     to bottom,
     rgba(6, 8, 12, 0) 0%,
-    rgba(6, 8, 12, 0.2) 22%,
-    rgba(6, 8, 12, 0.52) 46%,
-    rgba(6, 8, 12, 0.82) 68%,
+    rgba(6, 8, 12, 0.26) 14%,
+    rgba(6, 8, 12, 0.56) 34%,
+    rgba(6, 8, 12, 0.84) 58%,
     rgba(6, 8, 12, 1) 100%
   );
   transition: opacity var(--focus-ms) cubic-bezier(.22,.9,.18,1);
+}
+
+.foreword-card.foreword-at-bottom::after {
+  opacity: 0;
 }
 
 .foreword-head {
@@ -861,9 +865,9 @@ body.light-mode .foreword-card::after {
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 0%,
-    rgba(252, 252, 252, 0.24) 22%,
-    rgba(252, 252, 252, 0.56) 46%,
-    rgba(252, 252, 252, 0.84) 68%,
+    rgba(252, 252, 252, 0.28) 14%,
+    rgba(252, 252, 252, 0.6) 34%,
+    rgba(252, 252, 252, 0.86) 58%,
     rgba(252, 252, 252, 1) 100%
   );
 }

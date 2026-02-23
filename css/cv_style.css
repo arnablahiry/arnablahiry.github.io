@@ -78,6 +78,12 @@ body.page-cv .section-timeline-heading .padding-vertical-xlarge{
   padding-top: 56px;   /* keep some top spacing for header */
 }
 
+@media (min-width: 1101px){
+  body.page-cv .section-timeline-heading .padding-vertical-xlarge{
+    padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px) + 8px) !important;
+  }
+}
+
 /* Reduce margin around the intro heading on CV page */
 body.page-cv .timeline-main-heading-wrapper{ padding-right: 10px; }
 body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom: 6px; margin-top: 0; }
@@ -124,6 +130,8 @@ h2.intro-heading{
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
   text-align: center;
 }
 
@@ -1070,16 +1078,16 @@ body.page-cv.light-mode:not(.no-theme-transition) header::before{
    content. Scoped to the CV page so other pages are unaffected. */
 body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom: 2px; }
 .intro-subtitle{
-  margin-top: 1px;    /* bring the subtitle closer to the heading */
+  margin-top: 25px;   /* add clearer space below the main heading */
   margin-bottom: 35px; /* increase spacing after the subtitle */
   font-size: 2.0vh;    /* readable but smaller than h2 */
   line-height: 1.45;
-  max-width: 93%;
+  max-width: 85%;
   margin-left: auto;
   margin-right: auto;
   color: rgba(230,230,230,0.92); /* default (dark mode) slightly muted */
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 /* In light-mode make the subtitle text black for maximum contrast */

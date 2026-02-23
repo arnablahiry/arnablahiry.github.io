@@ -4,6 +4,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('#site-nav');
   if (!header || !btn || !nav) return;
   const dropdowns = Array.from(nav.querySelectorAll('.nav-dropdown'));
+  const root = document.documentElement;
+
+  function syncMobileTitleLayout() {
+    const isResponsive = window.matchMedia('(max-width: 1100px)').matches;
+    const offsetExpr = 'calc(var(--site-header-offset) + env(safe-area-inset-top, 0px))';
+
+    const offsetEls = document.querySelectorAll(
+      '.memoirs-heading, .wild-india-heading, .section-travels-heading .padding-vertical-xlarge, .section-timeline-heading .padding-vertical-xlarge, body.page-about .about-hero'
+    );
+    offsetEls.forEach((el) => {
+      if (isResponsive) {
+        el.style.setProperty('padding-top', offsetExpr, 'important');
+      } else {
+        el.style.removeProperty('padding-top');
+      }
+    });
+  }
+
+  function syncHeaderOffsetVar() {
+    const h = Math.ceil(header.getBoundingClientRect().height || 0);
+    root.style.setProperty('--site-header-offset', (h + 10) + 'px');
+    syncMobileTitleLayout();
+  }
 
   function closeDropdowns() {
     dropdowns.forEach((dropdown) => {
@@ -18,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.classList.toggle('open', open);
     header.classList.toggle('nav-open', open);
     if (!open) closeDropdowns();
+    syncHeaderOffsetVar();
   }
 
   btn.addEventListener('click', () => {
@@ -41,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdown.classList.add('open');
         toggle.setAttribute('aria-expanded', 'true');
       }
+      syncHeaderOffsetVar();
     });
   });
 
@@ -57,5 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (header.contains(e.target)) return;
     if (header.classList.contains('nav-open')) setOpen(false);
     closeDropdowns();
+    syncHeaderOffsetVar();
   });
+
+  window.addEventListener('resize', syncHeaderOffsetVar);
+  new MutationObserver(syncHeaderOffsetVar).observe(header, {
+    attributes: true,
+    subtree: true,
+    childList: true
+  });
+  syncHeaderOffsetVar();
 });

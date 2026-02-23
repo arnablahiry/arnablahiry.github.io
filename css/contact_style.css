@@ -19,6 +19,12 @@
     padding-bottom: 20px;
 }
 
+@media (min-width: 1101px){
+    .section-timeline-heading .padding-vertical-xlarge{
+        padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px) + 8px) !important;
+    }
+}
+
 .timeline-main-heading-wrapper{
     color: white;
     text-align: center;
@@ -35,6 +41,8 @@ h2.intro-heading{
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 body{

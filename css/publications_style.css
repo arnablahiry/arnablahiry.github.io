@@ -26,11 +26,11 @@
 
 .margin-bottom-medium{
     margin-top: -4vh;
-    margin-bottom: 1vh;
+    margin-bottom: 0;
 }
 
 .section-timeline-heading .padding-vertical-xlarge{
-    padding-bottom: 2vh;
+    padding-bottom: 0;
 }
 
 h2.intro-heading{
@@ -126,10 +126,17 @@ body{
     padding: 12px 16px 20px 16px;
     font-size: 14px;
     line-height: 2;
+    font-family: Georgia, "Times New Roman", Times, serif;
     overflow: hidden;
     max-height: 0;
     transition: max-height 320ms ease;
     will-change: max-height;
+}
+
+.project-full p,
+.project-full li,
+.project-full span{
+    font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 .project-full[aria-expanded="true"]{

@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research</title>
+    <meta name="description" content="Research portfolio including publications, methods, and visual summaries.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Research | Arnab Lahiry">
+    <meta property="og:description" content="Explore research projects across astronomy, ML, and data-driven methods.">
+    <meta property="og:image" content="images/research/cnn_cosmo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Research | Arnab Lahiry">
+    <meta name="twitter:description" content="Explore research projects across astronomy, ML, and data-driven methods.">
+    <meta name="twitter:image" content="images/research/cnn_cosmo.png">
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="shortcut icon" href="images/logo.png">
     <link rel="stylesheet" href="css/utils.css">
@@ -50,7 +59,6 @@
             <a href="software.html">Software</a>
             <a href="cv.html">CV / Résumé</a>
             <a href="publications.html">Publications</a>
-            <a href="repositories.html">Repositories</a>
             <a href="contact.html">Contact</a>
             <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
             <!-- Research page: desktop-only dark-mode hint under the theme button -->
@@ -73,17 +81,7 @@
                         </div>
                         <div class="margin-bottom-medium research-heading-row">
                             <div class="research-intro-text">
-                                <p class="research-intro">I work at the intersection of machine learning and astrophysical research. I design end‑to‑end AI workflows - from data curation and denoising to model design, training, and deployment - with a strong emphasis on interpretability, reproducibility, and physically informed methods. My focus is on building robust, production‑ready ML/AI tools that bridge computer‑science practice and scientific research so models provide reliable, testable scientific insight rather than black‑box predictions.</p>
-                            </div>
-
-                            <!-- Meme placed to the right of the intro text; height will match the text column -->
-                            <div class="research-meme">
-                                <div class="meme-wrapper" id="meme-wrapper">
-                                    <img src="images/research/meme.png" alt="Research meme" class="timeline-hero-image" loading="lazy" id="meme-image" decoding="async">
-                                    <div class="meme-overlay" id="meme-overlay">
-                                        <button class="reveal-btn" id="reveal-btn" aria-label="Reveal image">Reveal meme ;)</button>
-                                    </div>
-                                </div>
+                                <p class="research-intro">I work at the intersection of machine learning and astrophysical research. I design end‑to‑end AI workflows - from data curation and denoising to model design, training, and deployment - with a strong emphasis on interpretability, reproducibility, and physically informed methods. My focus is on building robust, production‑ready <strong><button type="button" class="meme-hidden-trigger" id="meme-hidden-trigger" aria-haspopup="dialog" aria-controls="meme-viewer" aria-expanded="false">ML/AI</button></strong> tools that bridge computer‑science practice and scientific research so models provide reliable, testable scientific insight rather than black‑box predictions.</p>
                             </div>
                         </div>
                         <!-- Optional subtitle or hero image could go here -->
@@ -689,7 +687,32 @@
         </div>
     </div>
 
+    <div id="meme-viewer" class="meme-viewer" aria-hidden="true">
+        <div class="meme-viewer-backdrop" data-close-meme="true"></div>
+        <div class="meme-viewer-dialog" role="dialog" aria-modal="true" aria-label="Research meme viewer">
+            <button type="button" id="meme-viewer-close" class="meme-viewer-close" aria-label="Close meme viewer">×</button>
+            <img src="images/research/meme.png" alt="Research meme" loading="lazy" decoding="async">
+        </div>
+    </div>
+
     <footer>
+    <div class="footer-social-buttons" aria-label="Social links">
+      <a href="https://github.com/arnablahiry" class="social-link" aria-label="GitHub" target="_blank" rel="noopener">
+        <img src="images/icons/github.png" alt="GitHub" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.linkedin.com/in/arnablahiry/" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+        <img src="images/icons/linkedin.png" alt="LinkedIn" loading="lazy" decoding="async">
+      </a>
+      <a href="https://x.com/lahiryarnab" class="social-link" aria-label="X (Twitter)" target="_blank" rel="noopener">
+        <img src="images/icons/twitter.png" alt="X (Twitter)" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.facebook.com/arnablahiry" class="social-link" aria-label="Facebook" target="_blank" rel="noopener">
+        <img src="images/icons/facebook.png" alt="Facebook" loading="lazy" decoding="async">
+      </a>
+      <a href="https://www.instagram.com/arnab_lahiry/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
+        <img src="images/icons/instagram.png" alt="Instagram" loading="lazy" decoding="async">
+      </a>
+    </div>
     <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
 
@@ -699,7 +722,7 @@
 
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/research.js"></script>
-    <script src="scripts/reveal-meme.js"></script>
+    <script src="scripts/research-meme-modal.js"></script>
     <script src="scripts/theme-toggle.js"></script>
     <script>
         // Wire the research page theme hint to the main theme toggle.

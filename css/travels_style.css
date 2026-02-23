@@ -12,7 +12,7 @@ body.no-theme-transition * {
 body { background-color: black; }
 .section-travels-heading { background-color: black; }
 body{
-    --travels-header-offset: 136px;
+    --travels-header-offset: var(--site-header-offset, 136px);
 }
 
 .container {
@@ -36,7 +36,7 @@ body{
 }
 
 .margin-bottom-medium {
-    margin-top: -4vh;
+    margin-top: 0;
     margin-bottom: 0.2vh;
 }
 

@@ -5,6 +5,12 @@
 
 /* Timeline-specific styles (moved shared parts to css/utils.css) */
 
+/* Slightly tighter header-to-title offset on Timeline only. This variable is
+   consumed by nav-toggle.js when it sets inline heading padding. */
+:root{
+    --site-header-offset: 108px;
+}
+
 .timeline-component{
     flex-direction: column;
     justify-content: center;
@@ -52,7 +58,7 @@
 
 /* Lift only the timeline bar and items upward while keeping the heading spacing unchanged */
 .timeline-component{
-    margin-top: -40px; /* adjust this value to move the bar up more/less */
+    margin-top: -56px; /* pull timeline content closer to heading */
 }
 
 
@@ -62,6 +68,141 @@
     font-size: 15px;
     font-weight: 500;
     line-height: 1.3;
+}
+
+.timeline-heading-trigger{
+    all: unset;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    background: linear-gradient(to right, gold, #ee0979);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+    position: relative;
+    display: inline-block;
+}
+
+.timeline-heading-trigger::after{
+    content: "Bingo";
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 1px);
+    transform: translateX(-50%) translateY(-2px);
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+    color: #f3f3f3;
+    -webkit-text-fill-color: initial;
+    background: rgba(16, 18, 22, 0.88);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 999px;
+    padding: 3px 7px;
+    white-space: nowrap;
+}
+
+.timeline-heading-trigger:hover::after,
+.timeline-heading-trigger:focus-visible::after{
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.timeline-heading-viewer{
+    position: fixed;
+    inset: 0;
+    z-index: 2600;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+.timeline-heading-backdrop{
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.02);
+    transition: opacity 420ms cubic-bezier(.22,.9,.18,1), background-color 420ms cubic-bezier(.22,.9,.18,1);
+}
+
+.timeline-heading-dialog{
+    position: relative;
+    width: auto;
+    max-width: min(980px, 90vw);
+    max-height: min(86vh, 980px);
+    opacity: 0;
+    transform: translateY(16px) scale(0.965);
+    transition: opacity 420ms cubic-bezier(.22,.9,.18,1), transform 420ms cubic-bezier(.22,.9,.18,1);
+}
+
+.timeline-heading-dialog img{
+    width: auto;
+    max-width: min(980px, 90vw);
+    height: auto;
+    max-height: min(86vh, 980px);
+    object-fit: contain;
+    display: block;
+    border-radius: 0;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.timeline-heading-close{
+    position: absolute;
+    top: 25px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(7, 9, 14, 0.94);
+    color: #fff;
+    font-size: 16px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.timeline-heading-viewer.open{
+    pointer-events: auto;
+}
+
+.timeline-heading-viewer.open .timeline-heading-backdrop{
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.timeline-heading-viewer.open .timeline-heading-dialog{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+body.timeline-heading-open{
+    overflow: hidden;
+}
+
+@media (max-width: 768px){
+    .timeline-heading-dialog{
+        width: auto;
+        max-width: min(780px, 92vw);
+        max-height: min(72vh, 760px);
+    }
+
+    .timeline-heading-dialog img{
+        max-width: min(780px, 92vw);
+        max-height: min(72vh, 760px);
+    }
 }
 
 /* Ensure the reveal button on the timeline page matches Research page
@@ -147,8 +288,8 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 
 .section-timeline-heading .padding-vertical-xlarge{
     /* reduce vertical padding so the heading sits closer to the fixed header */
-    padding-top: 80px;
-    padding-bottom: 60px;
+    padding-top: 64px;
+    padding-bottom: 42px;
     margin-top: 0;
 }
 
@@ -207,8 +348,8 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 @media screen and (max-width: 768px){
     h2{font-size: 40px;}
     .paragraph-large{font-size: 18px;}
-    .padding-vertical-xlarge{
-        padding-top: 80px;
+    .section-timeline-heading .padding-vertical-xlarge{
+        padding-top: 68px;
         padding-bottom: 50px;
     }
     .timeline-item{

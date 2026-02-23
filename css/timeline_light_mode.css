@@ -31,6 +31,49 @@ body.light-mode #meme-wrapper {
   -webkit-filter: none !important;
 }
 
+body.light-mode .timeline-heading-viewer.open .timeline-heading-backdrop{
+  background: rgba(18, 22, 28, 0.44);
+}
+
+body.light-mode .timeline-heading-trigger,
+body.light-mode button.timeline-heading-trigger,
+body.light-mode .timeline-heading-trigger:hover,
+body.light-mode button.timeline-heading-trigger:hover,
+body.light-mode .timeline-heading-trigger:focus,
+body.light-mode button.timeline-heading-trigger:focus,
+body.light-mode .timeline-heading-trigger:focus-visible,
+body.light-mode button.timeline-heading-trigger:focus-visible,
+body.light-mode .timeline-heading-trigger:active,
+body.light-mode button.timeline-heading-trigger:active{
+  background: none !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border-radius: 0 !important;
+  background: linear-gradient(to right, rgb(169, 143, 0), #80003e) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.light-mode .timeline-heading-trigger::after{
+  color: #111111;
+  background: rgba(255,255,255,0.9);
+  border-color: transparent;
+}
+
+body.light-mode .timeline-heading-dialog img{
+  border: 0 !important;
+}
+
+body.light-mode .timeline-heading-close{
+  background: rgba(255, 255, 255, 0.99) !important;
+  color: #121212 !important;
+  border: 0 !important;
+}
+
 /* Keep the meme overlay and reveal button light-mode styles from shared file
    (we intentionally don't override overlay/background here). If you want the
    reveal button to look different on timeline, add rules here. */

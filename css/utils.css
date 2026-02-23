@@ -36,6 +36,57 @@ body{
 /* Footer baseline (color may be overridden per page) */
 footer{ text-align: center; margin: 0; padding: 28px 0; font-size: 15px;}
 
+/* Small social links for non-home page footers */
+.footer-social-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin: 10px 0 10px;
+}
+.footer-social-buttons .social-link{
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.footer-social-buttons .social-link img{
+    width: 58%;
+    height: auto;
+    display: block;
+    filter: brightness(0) invert(1) !important;
+    transition: opacity 220ms ease;
+}
+/* X logo file is not transparent: use pure invert only (no brightness). */
+.footer-social-buttons .social-link[aria-label="X (Twitter)"] img{
+    filter: invert(1) !important;
+}
+.footer-social-buttons .social-link:hover img,
+.footer-social-buttons .social-link:focus img{
+    opacity: 0.82;
+}
+html.light-mode .footer-social-buttons .social-link img,
+body.light-mode .footer-social-buttons .social-link img{
+    filter: brightness(0) !important;
+}
+html.light-mode .footer-social-buttons .social-link[aria-label="X (Twitter)"] img,
+body.light-mode .footer-social-buttons .social-link[aria-label="X (Twitter)"] img{
+    filter: invert(0) !important;
+}
+@media (max-width: 768px){
+    .footer-social-buttons{ gap: 2px; }
+    .footer-social-buttons .social-link{
+        width: 36px;
+        height: 36px;
+    }
+}
+
 /* -----------------------------
    Header & Navigation
    - fixed, translucent header shared across pages
@@ -487,6 +538,50 @@ body.light-mode .intro-section .intro-text h2{
     /* Reduce the base body font-size slightly on very small screens so
        paragraph/body text is less large and more comfortable to read. */
     body{ font-size: 1.6vh; }
+}
+
+/* Shared responsive page-title sizing and fixed-header overlap protection.
+   Applies across all major pages so mobile/tablet headings match Memoirs. */
+:root {
+    --site-header-offset: 120px;
+    --page-title-size: clamp(2rem, 4.5vw, 3.2rem);
+}
+
+/* Keep top-level page titles visually consistent with Memoirs across pages. */
+.memoirs-heading h1,
+.wild-india-heading h1,
+.section-travels-heading h2.intro-heading,
+.section-timeline-heading h2.intro-heading {
+    font-size: var(--page-title-size) !important;
+    line-height: 1.08 !important;
+}
+
+@media (min-width: 1101px) {
+    .memoirs-heading,
+    .wild-india-heading,
+    .section-travels-heading .padding-vertical-xlarge,
+    .section-timeline-heading .padding-vertical-xlarge,
+    body.page-about .about-hero {
+        padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px)) !important;
+    }
+}
+
+@media (max-width: 1100px) {
+
+    .memoirs-heading {
+        padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px)) !important;
+    }
+
+    .wild-india-heading {
+        padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px) + 2px) !important;
+    }
+
+    .section-travels-heading .padding-vertical-xlarge,
+    .section-timeline-heading .padding-vertical-xlarge,
+    body.page-cv .section-timeline-heading .padding-vertical-xlarge,
+    body.page-about .about-hero {
+        padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px)) !important;
+    }
 }
 
 /* Project card defaults (dark-mode) — page rules may override for light-mode */

@@ -17,8 +17,7 @@ body.page-software .section-timeline-heading .container {
    high-specificity selector here will override broader inversion rules.
  ------------------------------------------------------------------ */
 body.page-software:not(.light-mode) .image-pair img,
-body.page-software:not(.light-mode) .project-card img,
-body.page-software:not(.light-mode) img{
+body.page-software:not(.light-mode) .project-card img{
   filter: none !important;
   -webkit-filter: none !important;
 }
@@ -50,9 +49,10 @@ body.page-software .projects-grid {
   gap: 14px;
   align-items: center;
   justify-content: center; /* center the bar */
-  padding: 20px 5vw; /* larger vertical padding */
+  padding: 8px 5vw; /* tighter vertical spacing */
   box-sizing: border-box;
-  margin-bottom: 22px; /* add more space between filters and cards */
+  margin-top: -8px; /* bring filters closer to intro text */
+  margin-bottom: 18px; /* keep a small gap before cards */
   flex-wrap: wrap; /* allow wrap on small screens */
 }
 .project-filters .filter-btn {
@@ -225,7 +225,10 @@ body.page-software .research-heading-row {
 
 /* Intro text column */
 body.page-software .research-intro-text {
-  flex: 1 1 70%;
+  flex: 1 1 100%;
+  max-width: 1020px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Intro paragraph styling */
@@ -233,6 +236,202 @@ body.page-software .research-intro-text .research-intro {
   color: #ffffff;
   font-size: 16px;
   line-height: 1.45;
+}
+
+body.page-software .software-meme-trigger{
+  all: unset;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  padding: 0 !important;
+  margin: 0;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border-radius: 0 !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.page-software .software-meme-trigger::after{
+  content: "Bingo";
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 1px);
+  transform: translateX(-50%) translateY(-2px);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  color: inherit;
+  background: rgba(16, 18, 22, 0.88);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  padding: 3px 7px;
+  white-space: nowrap;
+}
+
+body.page-software .software-meme-trigger:hover::after,
+body.page-software .software-meme-trigger:focus-visible::after{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+body.page-software .software-meme-viewer{
+  position: fixed;
+  inset: 0;
+  z-index: 2600;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+body.page-software .software-meme-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.02);
+  opacity: 0;
+  transition: opacity 420ms cubic-bezier(.22,.9,.18,1), background-color 420ms cubic-bezier(.22,.9,.18,1);
+}
+
+body.page-software .software-meme-dialog{
+  position: relative;
+  width: auto;
+  max-width: min(700px, 68vw);
+  max-height: min(62vh, 620px);
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  transition: opacity 420ms cubic-bezier(.22,.9,.18,1), transform 420ms cubic-bezier(.22,.9,.18,1);
+}
+
+body.page-software .software-meme-dialog img{
+  display: block;
+  width: auto;
+  max-width: min(700px, 68vw);
+  height: auto;
+  max-height: min(62vh, 620px);
+  object-fit: contain;
+  border-radius: 0;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+body.page-software:not(.light-mode) .software-meme-dialog img{
+  filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
+body.page-software.light-mode .software-meme-dialog img{
+  filter: none !important;
+}
+
+body.page-software .software-meme-close{
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(7, 9, 14, 0.96);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+body.page-software .software-meme-dialog:hover .software-meme-close,
+body.page-software .software-meme-close:focus-visible{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.page-software .software-meme-viewer.open{
+  pointer-events: auto;
+}
+
+body.page-software .software-meme-viewer.open .software-meme-backdrop{
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.68);
+}
+
+body.page-software .software-meme-viewer.open .software-meme-dialog{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+body.page-software.software-meme-open{
+  overflow: hidden;
+}
+
+body.page-software.light-mode .software-meme-trigger,
+body.page-software.light-mode button.software-meme-trigger,
+body.page-software.light-mode .software-meme-trigger:hover,
+body.page-software.light-mode button.software-meme-trigger:hover,
+body.page-software.light-mode .software-meme-trigger:focus,
+body.page-software.light-mode button.software-meme-trigger:focus,
+body.page-software.light-mode .software-meme-trigger:focus-visible,
+body.page-software.light-mode button.software-meme-trigger:focus-visible,
+body.page-software.light-mode .software-meme-trigger:active,
+body.page-software.light-mode button.software-meme-trigger:active{
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+}
+
+body.page-software.light-mode .software-meme-trigger::after{
+  color: inherit;
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(0,0,0,0.14);
+}
+
+body.page-software.light-mode .software-meme-viewer.open .software-meme-backdrop{
+  background: rgba(18, 22, 28, 0.44);
+}
+
+body.page-software.light-mode .software-meme-close{
+  background: rgba(255, 255, 255, 0.99) !important;
+  color: #121212 !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
+
+@media (max-width: 768px){
+  body.page-software .software-meme-dialog{
+    max-width: min(520px, 78vw);
+    max-height: min(52vh, 440px);
+  }
+
+  body.page-software .software-meme-dialog img{
+    max-width: min(520px, 78vw);
+    max-height: min(52vh, 440px);
+  }
+}
+
+@media (hover: none){
+  body.page-software .software-meme-close{
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 /* Meme column */

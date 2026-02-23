@@ -13,3 +13,22 @@
   }
 }
 
+/* Research page: override global light-mode button chrome for the hidden meme trigger. */
+body.light-mode .meme-hidden-trigger,
+body.light-mode button.meme-hidden-trigger,
+body.light-mode .meme-hidden-trigger:hover,
+body.light-mode button.meme-hidden-trigger:hover,
+body.light-mode .meme-hidden-trigger:focus,
+body.light-mode button.meme-hidden-trigger:focus,
+body.light-mode .meme-hidden-trigger:focus-visible,
+body.light-mode button.meme-hidden-trigger:focus-visible,
+body.light-mode .meme-hidden-trigger:active,
+body.light-mode button.meme-hidden-trigger:active {
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+}
