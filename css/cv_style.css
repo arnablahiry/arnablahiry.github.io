@@ -43,6 +43,17 @@ body.page-cv, body.page-cv * , body.page-cv *::before, body.page-cv *::after{
   -webkit-transition: none !important;
 }
 
+/* CV dark-mode canvas fallback: any uncovered strip should render black */
+body.page-cv:not(.light-mode),
+body.page-cv:not(.light-mode) main.page-wrapper,
+body.page-cv:not(.light-mode) .page-wrapper,
+body.page-cv:not(.light-mode) .section-timeline,
+body.page-cv:not(.light-mode) .section-timeline-heading,
+body.page-cv:not(.light-mode) .container{
+  background: #000 !important;
+  color: #e6e6e6 !important;
+}
+
 /* CV layout: left contents column + main content area */
 .cv-layout{ display: flex; gap: 32px; align-items: flex-start; }
 .cv-contents{ width: 220px; position: sticky; top: 140px; align-self: flex-start; padding-right: 18px; }
@@ -947,6 +958,119 @@ body.light-mode nav#site-nav .nav-dropdown-menu{
 body.page-cv.light-mode .cv-contents a { color: #111111 !important; }
 body.page-cv.light-mode .cv-contents a.active { color: #aa7e00 !important; background: rgba(166,123,0,0.08) !important; }
 
+/* CV iPad portrait: hide section navigation rail */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait){
+  body.page-cv .cv-layout{ display: block !important; }
+  body.page-cv .cv-contents{ display: none !important; }
+  /* Keep hamburger/X above the slide-in panel on iPad portrait */
+  body.page-cv .hamburger{
+    z-index: 1202 !important;
+  }
+  body.page-cv header.nav-open .hamburger{
+    z-index: 1203 !important;
+  }
+  body.page-cv header.nav-open nav#site-nav{
+    z-index: 1201 !important;
+  }
+  /* Force visible, centered X bars in both themes */
+  body.page-cv .hamburger.open .bar1,
+  body.page-cv .hamburger.open .bar3{
+    top: 50% !important;
+    opacity: 1 !important;
+  }
+  body.page-cv .hamburger.open .bar3{
+    bottom: auto !important;
+  }
+  /* Explicit hamburger -> X animation on CV iPad portrait */
+  body.page-cv .hamburger .bar{
+    transition: transform 240ms ease, opacity 180ms ease, top 200ms ease !important;
+  }
+  body.page-cv .hamburger.open .bar1{
+    transform: translateX(-50%) translateY(-50%) rotate(45deg) !important;
+  }
+  body.page-cv .hamburger.open .bar2{
+    opacity: 0 !important;
+    transform: translateX(-50%) translateY(-50%) scaleX(0) !important;
+  }
+  body.page-cv .hamburger.open .bar3{
+    transform: translateX(-50%) translateY(-50%) rotate(-45deg) !important;
+  }
+  body.page-cv:not(.light-mode) .hamburger.open .bar1,
+  body.page-cv:not(.light-mode) .hamburger.open .bar3{
+    background-color: #ffffff !important;
+  }
+  body.page-cv.light-mode .hamburger.open .bar1,
+  body.page-cv.light-mode .hamburger.open .bar3{
+    background-color: #111111 !important;
+  }
+  /* CV light-mode iPad portrait: no page dim, slight panel shadow only */
+  body.page-cv.light-mode header.nav-open ~ .page-wrapper::before{
+    opacity: 0 !important;
+    pointer-events: none !important;
+    background: transparent !important;
+  }
+  body.page-cv.light-mode header.nav-open nav#site-nav,
+  body.page-cv.light-mode header.nav-open > nav{
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08) !important;
+  }
+  body.page-cv .cv-subheading{
+    font-size: 1.55vh !important;
+    margin-top: 16px !important;
+    margin-bottom: 8px !important;
+  }
+  body.page-cv .container,
+  body.page-cv .section-timeline .container,
+  body.page-cv .section-timeline-heading .container{
+    padding-left: 2.2vw !important;
+    padding-right: 2.2vw !important;
+  }
+  body.page-cv .projects-grid,
+  body.page-cv .projects-grid.cols-2,
+  body.page-cv .projects-grid.cols-4,
+  body.page-cv .projects-grid.cols-4-wide,
+  body.page-cv #skills .projects-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  /* Conferences + Publications stay full width */
+  body.page-cv #conferences .projects-grid,
+  body.page-cv #publications .projects-grid,
+  body.page-cv .projects-grid.cols-1{
+    grid-template-columns: 1fr !important;
+  }
+  /* Languages: 4 cards in one row */
+  body.page-cv .lang-cards-grid{
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  body.page-cv .project-title{
+    font-size: 1rem !important;
+    line-height: 1.25 !important;
+  }
+  body.page-cv .project-subtitle{
+    font-size: 0.82rem !important;
+    line-height: 1.3 !important;
+  }
+  body.page-cv .project-meta p,
+  body.page-cv .project-meta li,
+  body.page-cv .project-meta .cv-role-text,
+  body.page-cv .project-meta .cv-role-list{
+    font-size: 0.82rem !important;
+    line-height: 1.45 !important;
+  }
+  /* Smaller "View on ... page" links */
+  body.page-cv .cv-link{
+    font-size: 0.74rem !important;
+    line-height: 1.25 !important;
+  }
+  /* Smaller skill chips */
+  body.page-cv .skill-badges{
+    gap: 8px !important;
+  }
+  body.page-cv .skill-chip{
+    font-size: 0.74rem !important;
+    padding: 6px 8px !important;
+  }
+}
+
 /* Hamburger bars should be dark on the light header */
 body.light-mode .hamburger .bar{ background-color: #111 !important; }
 
@@ -1078,21 +1202,24 @@ body.page-cv.light-mode:not(.no-theme-transition) header::before{
    content. Scoped to the CV page so other pages are unaffected. */
 body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom: 2px; }
 .intro-subtitle{
-  margin-top: 25px;   /* add clearer space below the main heading */
+  margin-top: 34px;   /* add clearer space below the main heading */
   margin-bottom: 35px; /* increase spacing after the subtitle */
   font-size: 2.0vh;    /* readable but smaller than h2 */
   line-height: 1.45;
-  max-width: 85%;
+  max-width: 94%;
   margin-left: auto;
   margin-right: auto;
-  color: rgba(230,230,230,0.92); /* default (dark mode) slightly muted */
+  color: #ffffff; /* dark mode */
   text-align: center;
   font-size: 15px;
 }
 
 /* In light-mode make the subtitle text black for maximum contrast */
-body.light-mode .intro-subtitle{
+body.page-cv.light-mode .intro-subtitle{
   color: #000000 !important;
+}
+body.page-cv:not(.light-mode) .intro-subtitle{
+  color: #ffffff !important;
 }
 
 /* Phone-specific: reduce subtitle size and show whole card images on small screens */
@@ -1139,12 +1266,13 @@ body.light-mode .intro-subtitle{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 6.5rem;
+  min-width: 5.2rem;
   border-radius: 12px; /* rounded edges */
   border: 1px solid; /* border will be themed below */
   text-decoration: none !important; /* no underline */
   color: inherit;
-  padding: 0.6rem 1rem; /* ensure comfortable tap/click area */
+  padding: 0.42rem 0.72rem; /* smaller button */
+  font-size: 0.84rem;
   /* Override the global "no transitions" rule on this page by using a
      more specific selector with !important. This makes hover/focus feel
      smooth while leaving the rest of the CV page transition-free. */

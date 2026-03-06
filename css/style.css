@@ -220,6 +220,51 @@ header {
   }
 }
 
+@media (max-width: 1100px) {
+  .hamburger { display: block; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); }
+
+  header nav .nav-dropdown{ width: 100%; display: flex; flex-direction: column; align-items: center; }
+  header nav .nav-dropdown::after{ content: none; }
+  header nav .nav-dropdown-toggle{
+    width: 100%;
+    color: white;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+  }
+  header nav .nav-dropdown-toggle::after{ content: " \25BE"; font-size: 0.75em; vertical-align: middle; }
+  header nav .nav-dropdown-menu{
+    position: static;
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: none;
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+    transition: max-height 220ms ease;
+  }
+  header nav .nav-dropdown.open .nav-dropdown-menu{ max-height: 220px; }
+  header nav .nav-dropdown-menu a{
+    border-bottom: 0;
+    color: rgba(255,255,255,0.86);
+    font-size: 0.95rem;
+    padding: 0.45rem 0.4rem;
+  }
+}
+
 
 /* Navigation bar */
 nav {

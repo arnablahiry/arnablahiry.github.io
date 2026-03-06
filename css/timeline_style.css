@@ -28,6 +28,7 @@
     grid-row-gap: 0px;
     grid-template-rows: auto;
     grid-template-columns: 1fr 20vh 1fr;
+    grid-template-areas: "left center right";
     grid-auto-columns: 1fr;
     padding-top: 80px;
     padding-bottom: 80px;
@@ -36,14 +37,20 @@
 }
 
 .timeline-left{
+    grid-area: left;
     text-align: right;
     justify-content: flex-end;
     align-items: stretch;
 }
 
 .timeline-center{
+    grid-area: center;
     justify-content: center;
     display: flex;
+}
+
+.timeline-right{
+    grid-area: right;
 }
 
 .timeline-date-text{
@@ -56,6 +63,30 @@
     top: 50vh;
 }
 
+.timeline-date-text .timeline-year-part{
+    display: inline-block;
+    margin-top: 0.08em;
+    font-size: 0.58em;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    opacity: 0.9;
+}
+
+/* Alternate timeline sides on desktop:
+   odd rows -> date left, content right (default)
+   even rows -> date right, content left */
+@media screen and (min-width: 769px){
+    .timeline-item:nth-of-type(even){
+        grid-template-areas: "right center left";
+    }
+
+    .timeline-item:nth-of-type(even) .timeline-left{
+        text-align: left;
+        justify-content: flex-start;
+    }
+}
+
 /* Lift only the timeline bar and items upward while keeping the heading spacing unchanged */
 .timeline-component{
     margin-top: -56px; /* pull timeline content closer to heading */
@@ -65,9 +96,11 @@
 .timeline-text{
     color: white;
     /* slightly smaller for improved density on large screens */
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.3;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .timeline-heading-trigger{
@@ -238,7 +271,9 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 
 .timeline-circle{
     background-color: white;
+    border: 4px solid #000;
     border-radius: 100%;
+    box-sizing: border-box;
     width: 1.5vh;
     min-width: 1.5vh;
     max-width: 1.5vh;
@@ -247,7 +282,7 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     max-height: 1.5vh;
     position: sticky;
     top: 50vh;
-    box-shadow: 0 0 0 4px black;    
+    box-shadow: none;
 }
 
 .timeline-progress{
@@ -378,7 +413,7 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 
     .timeline-text{
         /* slightly reduced on small screens for better fit */
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .timeline-progress{
@@ -467,4 +502,96 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     header nav a{ color: #111 !important; }
     header .theme-toggle{ background: rgba(0,0,0,0.04) !important; color: #111 !important; border-color: rgba(0,0,0,0.06) !important; }
 }
+}
+
+/* iPad portrait timeline layout:
+   - dates always on the left
+   - progress line shifted left with date column
+   - content always on the right, using the wider column
+   - smaller date text */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait){
+    .timeline-item{
+        grid-template-columns: 23% 64px 1fr !important;
+        grid-template-areas: "left center right" !important;
+        padding-top: 66px !important;
+        padding-bottom: 66px !important;
+    }
+
+    .timeline-item:nth-of-type(even){
+        grid-template-areas: "left center right" !important;
+    }
+
+    .timeline-left,
+    .timeline-item:nth-of-type(even) .timeline-left{
+        text-align: right !important;
+        justify-content: flex-end !important;
+    }
+
+    .timeline-right{
+        grid-area: right !important;
+        padding-right: 5vw !important;
+    }
+
+    .timeline-date-text{
+        font-size: 2.7vh !important;
+        line-height: 1.15 !important;
+        top: 50vh !important;
+        /* Align first (month) line center with marker center */
+        transform: translateY(-1.05vh) !important;
+    }
+
+    .timeline-date-text .timeline-year-part{
+        font-size: 0.52em !important;
+    }
+
+    .timeline-circle{
+        top: 50vh !important;
+    }
+
+    /* First entry: start near top and align month line with marker + text start */
+    .timeline-item:first-of-type .timeline-date-text,
+    .timeline-item:first-of-type .timeline-circle{
+        top: 15.8vh !important;
+    }
+    .timeline-item:first-of-type .timeline-date-text{
+        transform: translateY(-0.25vh) !important;
+    }
+    .timeline-item:first-of-type .timeline-circle{
+        transform: translateY(-72px) !important;
+    }
+    .timeline-item:first-of-type .timeline-date-text{
+        transform: translateY(calc(-0.25vh - 72px)) !important;
+    }
+
+    .timeline-text{
+        font-size: 15px !important;
+        line-height: 1.35 !important;
+    }
+
+    .timeline-right .timeline-image-wrapper{
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .timeline-right .timeline-image-wrapper img{
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    .timeline-right .timeline-image-wrapper + .timeline-image-wrapper{
+        margin-top: 18px !important;
+    }
+
+    .timeline-progress,
+    .timeline-progress-bar{
+        left: calc(23% + 31px) !important;
+        right: auto !important;
+    }
+    .timeline-progress-bar{
+        /* Start exactly at the first marker anchor on iPad portrait */
+        height: auto !important;
+        inset: 15vh auto 50vh auto !important;
+    }
 }

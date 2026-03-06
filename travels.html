@@ -293,6 +293,7 @@ const VISITS = {
     const tooltip = document.getElementById('map-tooltip');
     const detail  = document.getElementById('travel-detail');
     const hint    = document.getElementById('globe-hint');
+    if (detail && detail.parentElement !== document.body) document.body.appendChild(detail);
 
     let worldGeo = null, borders = null;
     let hoveredId = null, isDragging = false;
@@ -308,6 +309,10 @@ const VISITS = {
     let introActive = true;
     let introStartTs = null;
     let detailReturnScrollY = null;
+    let focusAnimToken = 0;
+    let pendingOpenToken = 0;
+    let isDetailOpen = false;
+    const COUNTRY_FOCUS_SCROLL_MS = 2200;
     const INTRO_MS = 1200;
     const INTRO_FAST_SPIN = 2.8;
     const INTRO_NORMAL_SPIN = 0.10;
@@ -446,7 +451,7 @@ const VISITS = {
                 canvas.style.opacity = '1';
             }
         }
-        if (!introActive && autoRotate) {
+        if (!introActive && autoRotate && !isDetailOpen) {
             const r = proj.rotate();
             proj.rotate([r[0] + INTRO_NORMAL_SPIN, r[1], r[2]]);
             draw();
@@ -458,6 +463,91 @@ const VISITS = {
         autoRotate = false;
         clearTimeout(autoTimer);
         autoTimer = setTimeout(() => { autoRotate = true; }, 3500);
+    }
+
+    function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function shortestAngleDelta(from, to) {
+        return ((to - from + 540) % 360) - 180;
+    }
+
+    function smoothScrollTo(targetTop, duration = 1250) {
+        const startTop = window.pageYOffset || window.scrollY || 0;
+        const delta = targetTop - startTop;
+        if (Math.abs(delta) < 2) return Promise.resolve();
+        const startTs = performance.now();
+        return new Promise(resolve => {
+            function step(now) {
+                const t = Math.min(1, (now - startTs) / duration);
+                const eased = easeInOutCubic(t);
+                window.scrollTo(0, startTop + (delta * eased));
+                if (t < 1) requestAnimationFrame(step);
+                else resolve();
+            }
+            requestAnimationFrame(step);
+        });
+    }
+
+    function slowScrollToGlobeCenter(duration = COUNTRY_FOCUS_SCROLL_MS) {
+        const globeWrap = document.getElementById('globe-wrap');
+        if (!globeWrap) return;
+        const rect = globeWrap.getBoundingClientRect();
+        const centerY = window.pageYOffset + rect.top + (rect.height / 2);
+        const targetTop = centerY - (window.innerHeight / 2);
+        smoothScrollTo(Math.max(0, targetTop), duration);
+    }
+
+    function animateFocusOnFeature(feature, duration = COUNTRY_FOCUS_SCROLL_MS) {
+        if (!feature) return Promise.resolve();
+        const centroid = d3.geoCentroid(feature);
+        if (!centroid || centroid.length < 2) return Promise.resolve();
+
+        const targetLon = centroid[0];
+        const targetLat = centroid[1];
+        const startRot = proj.rotate().slice();
+        const targetRot = [
+            -targetLon,
+            Math.max(-80, Math.min(80, -targetLat)),
+            0
+        ];
+        const deltaLon = shortestAngleDelta(startRot[0], targetRot[0]);
+        const deltaLat = targetRot[1] - startRot[1];
+
+        const token = ++focusAnimToken;
+        const startTs = performance.now();
+        return new Promise(resolve => {
+            function tick(now) {
+                if (token !== focusAnimToken) { resolve(); return; }
+                const t = Math.min(1, (now - startTs) / duration);
+                const eased = easeInOutCubic(t);
+                proj.rotate([
+                    startRot[0] + (deltaLon * eased),
+                    startRot[1] + (deltaLat * eased),
+                    0
+                ]);
+                draw();
+                if (t < 1) {
+                    requestAnimationFrame(tick);
+                } else {
+                    resolve();
+                }
+            }
+            requestAnimationFrame(tick);
+        });
+    }
+
+    function focusCountryAndOpen(id, feature) {
+        const token = ++pendingOpenToken;
+        pauseAuto();
+        detailReturnScrollY = window.scrollY || window.pageYOffset || 0;
+        slowScrollToGlobeCenter(COUNTRY_FOCUS_SCROLL_MS);
+        animateFocusOnFeature(feature, COUNTRY_FOCUS_SCROLL_MS).then(() => {
+            if (token !== pendingOpenToken) return;
+            openDetail(id, { preserveReturnScroll: true });
+            if (hint) hint.style.opacity = '0';
+        });
     }
 
     function ptFrom(e) {
@@ -639,7 +729,7 @@ const VISITS = {
     canvas.addEventListener('click', e => {
         if (isDragging) return;
         const f = countryAt(ptFrom(e));
-        if (f && visitedIds.has(+f.id)) { openDetail(+f.id); if (hint) hint.style.opacity = '0'; }
+        if (f && visitedIds.has(+f.id)) focusCountryAndOpen(+f.id, f);
     });
 
     canvas.addEventListener('touchend', e => {
@@ -649,15 +739,17 @@ const VISITS = {
         }
         const t = e.changedTouches[0], r = canvas.getBoundingClientRect();
         const f = countryAt([t.clientX - r.left, t.clientY - r.top]);
-        if (f && visitedIds.has(+f.id)) openDetail(+f.id);
+        if (f && visitedIds.has(+f.id)) focusCountryAndOpen(+f.id, f);
     });
 
     /* dismiss hint */
     ['mousedown', 'touchstart'].forEach(ev => canvas.addEventListener(ev, () => { if (hint) hint.style.opacity = '0'; }, { once: true }));
 
     /* ====================================================== DETAIL PANEL */
-    function openDetail(id) {
-        detailReturnScrollY = window.scrollY || window.pageYOffset || 0;
+    function openDetail(id, opts = {}) {
+        if (!opts.preserveReturnScroll) {
+            detailReturnScrollY = window.scrollY || window.pageYOffset || 0;
+        }
         const v = VISITS[id];
         detail.querySelector('.detail-country-name').textContent = v.name;
         detail.querySelector('.detail-places-list').textContent  = v.places.join(' · ');
@@ -684,21 +776,45 @@ const VISITS = {
             }
             card.style.animationDelay = (i * 55) + 'ms'; grid.appendChild(card);
         });
+        detail.classList.remove('closing');
         detail.setAttribute('aria-hidden', 'false');
+        // reflow to restart keyframe animation on repeated opens
+        void detail.offsetWidth;
         detail.classList.add('open');
-        setTimeout(() => {
-            const headerEl = document.querySelector('header');
-            const headerOffset = headerEl ? headerEl.getBoundingClientRect().height : 0;
-            const targetTop = window.pageYOffset + detail.getBoundingClientRect().top - headerOffset - 8;
-            window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-        }, 80);
+        document.body.classList.add('travel-detail-open');
+        isDetailOpen = true;
+        autoRotate = false;
+        clearTimeout(autoTimer);
     }
 
     document.querySelector('.detail-close').addEventListener('click', () => {
-        detail.classList.remove('open'); detail.setAttribute('aria-hidden', 'true');
+        if (!detail.classList.contains('open') || detail.classList.contains('closing')) return;
+        detail.classList.remove('open');
+        detail.classList.add('closing');
+        isDetailOpen = false;
+        autoRotate = false;
+
+        const finalizeClose = () => {
+            detail.classList.remove('closing');
+            detail.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('travel-detail-open');
+            detail.removeEventListener('animationend', onCloseAnimationEnd);
+        };
+        const onCloseAnimationEnd = (ev) => {
+            if (ev && ev.animationName !== 'travel-detail-out') return;
+            finalizeClose();
+        };
+        detail.addEventListener('animationend', onCloseAnimationEnd);
+        setTimeout(finalizeClose, 460);
+
         if (detailReturnScrollY !== null) {
-            window.scrollTo({ top: detailReturnScrollY, behavior: 'smooth' });
+            const returnY = detailReturnScrollY;
             detailReturnScrollY = null;
+            smoothScrollTo(returnY, COUNTRY_FOCUS_SCROLL_MS).then(() => {
+                if (!isDetailOpen) autoRotate = true;
+            });
+        } else {
+            autoRotate = true;
         }
     });
 

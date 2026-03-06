@@ -460,6 +460,33 @@ h2.intro-heading{
     /* Ensure cloned project sticky meta spacing still fits on narrower viewports */
     .project-clone .project-meta{ padding-right: 80px !important; }
 }
+
+/* iPad portrait: match Memoirs heading size, add breathing room before subtitle,
+   and make the intro paragraph padded left/right for a cleaner column. */
+@media (max-width: 1100px) and (min-width: 768px) and (orientation: portrait){
+    h2.intro-heading{
+        font-size: var(--page-title-size) !important;
+    }
+    .timeline-main-heading-wrapper > .margin-bottom-medium:first-child{
+        margin-top: 0 !important;
+        margin-bottom: 3.4vh !important;
+    }
+    .research-heading-row.margin-bottom-medium{
+        margin-top: 0 !important;
+    }
+    .research-intro-text{
+        padding-left: 8vw;
+        padding-right: 8vw;
+    }
+    .project-image{
+        width: 88%;
+        margin: 14px auto 0;
+        border-radius: 8px;
+    }
+    .project-title{
+        font-size: 16px;
+    }
+}
     .research-meme .timeline-hero-image{
         /* reduce the meme size on phones to avoid visual dominance */
         max-height: 140px;
@@ -615,6 +642,7 @@ h2.intro-heading{
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+    height: 100%;
 }
 
 /* Defensive: ensure Research page cards stay dark unless light-mode is active. */
@@ -645,11 +673,12 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
 
 .project-meta{
     padding: 16px;
+    flex: 1 1 auto;
 }
 .project-title{
     margin: 0 0 6px 0;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
 }
 .project-subtitle{
     margin: 0;
@@ -666,6 +695,7 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
     font-weight: 700;
     cursor: pointer;
     border-top: 1px solid #222;
+    margin-top: auto;
 }
 
 /* Slight yellow overlay on the "Learn more" control when cards are closed.
@@ -1090,4 +1120,94 @@ body:not(.light-mode) img{
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* iPad portrait hard override: keep this at file end so it wins over page rules */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait){
+    .page-research h2.intro-heading{
+        font-size: var(--page-title-size) !important;
+        line-height: 1.08 !important;
+    }
+
+    .page-research .timeline-main-heading-wrapper{
+        padding-right: 0 !important;
+    }
+
+    .page-research .timeline-main-heading-wrapper > .margin-bottom-medium:first-child{
+        margin-bottom: 4.2vh !important;
+    }
+
+    .page-research .research-intro-text{
+        max-width: 100% !important;
+        padding-left: 7vw !important;
+        padding-right: 7vw !important;
+    }
+
+    .page-research .research-intro-text .research-intro{
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+    }
+
+    .page-research #projects-grid .project-image{
+        width: 92% !important;
+        margin: 10px auto 0 !important;
+        height: 150px !important;
+        border-radius: 8px !important;
+        object-fit: cover !important;
+    }
+
+    .page-research #projects-grid .project-title{
+        font-size: 14px !important;
+        line-height: 1.3 !important;
+    }
+}
+
+/* Final hard override: keep Research card titles from scaling via vh in light mode */
+@media (min-width: 769px){
+    .page-research #projects-grid .project-title{
+        font-size: 16px !important;
+        line-height: 1.3 !important;
+    }
+}
+
+/* Theme parity: Research card typography must be identical in dark/light */
+.page-research #projects-grid .project-title{
+    font-size: 17px !important;
+    line-height: 1.3 !important;
+}
+.page-research #projects-grid .project-subtitle{
+    font-size: 14.5px !important;
+    line-height: 1.45 !important;
+}
+.page-research #projects-grid .project-meta{
+    padding: 14px 16px 14px !important;
+}
+@media (max-width: 1100px){
+    .page-research #projects-grid .project-title{
+        font-size: 15px !important;
+    }
+    .page-research #projects-grid .project-subtitle{
+        font-size: 13.5px !important;
+    }
+}
+
+/* iPad portrait: 2 cards/row and slightly larger card titles */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait){
+    .page-research #projects-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    .page-research .section-timeline-heading .padding-vertical-xlarge{
+        padding-bottom: 2vh !important;
+    }
+    .page-research .research-heading-row.margin-bottom-medium{
+        margin-bottom: 0.8vh !important;
+    }
+    .page-research #projects-grid .project-meta{
+        padding: 14px 12px 14px !important;
+    }
+    .page-research #projects-grid .project-title{
+        font-size: 16px !important;
+        line-height: 1.32 !important;
+        margin: 0 0 10px 0 !important;
+    }
 }

@@ -82,7 +82,10 @@
           <div id="story-cards-selected" class="story-cards story-cards-selected"></div>
         </article>
       </aside>
-      <h3 class="all-memoirs-heading">All Memoirs</h3>
+      <div class="all-memoirs-head">
+        <h3 class="all-memoirs-heading">All Memoirs</h3>
+        <button id="read-full-book-btn" class="read-full-book-btn" type="button">Read as a full book</button>
+      </div>
       <p class="all-memoirs-hint">Click a card to open it in full-screen reader mode.</p>
       <div id="story-cards-all" class="story-cards story-cards-bottom"></div>
     </section>
@@ -95,6 +98,11 @@
             <div class="book-reader-tools" aria-label="Reader controls">
               <button id="reader-font-down" class="book-page-btn" type="button" aria-label="Decrease font size">A-</button>
               <button id="reader-font-up" class="book-page-btn" type="button" aria-label="Increase font size">A+</button>
+              <div class="reader-toc-wrap">
+                <button id="reader-toc-toggle" class="book-page-btn reader-toc-toggle" type="button" aria-label="Open table of contents" aria-expanded="false" hidden>
+                  <span class="toc-icon" aria-hidden="true"></span>
+                </button>
+              </div>
               <button id="reader-line-compact" class="book-page-btn reader-line-option" type="button" data-line="compact" aria-label="Compact line spacing"><span class="line-icon line-icon-compact" aria-hidden="true"></span></button>
               <button id="reader-line-regular" class="book-page-btn reader-line-option" type="button" data-line="regular" aria-label="Regular line spacing"><span class="line-icon line-icon-regular" aria-hidden="true"></span></button>
               <button id="reader-line-large" class="book-page-btn reader-line-option" type="button" data-line="large" aria-label="Large line spacing"><span class="line-icon line-icon-large" aria-hidden="true"></span></button>
@@ -103,8 +111,12 @@
             <div class="book-reader-tools-mobile" aria-label="Reader controls (mobile)">
               <button id="reader-aa-toggle" class="book-page-btn reader-aa-toggle" type="button" aria-label="Text controls" aria-expanded="false">Aa</button>
               <button id="reader-line-toggle" class="book-page-btn reader-line-toggle" type="button" aria-label="Line spacing controls" aria-expanded="false"><span class="line-icon line-icon-regular" aria-hidden="true"></span></button>
+              <button id="reader-toc-toggle-mobile" class="book-page-btn reader-toc-toggle reader-toc-toggle-mobile" type="button" aria-label="Open table of contents" aria-expanded="false" hidden>
+                <span class="toc-icon" aria-hidden="true"></span>
+              </button>
               <button id="reader-theme-toggle-mobile" class="theme-toggle reader-theme-toggle reader-theme-toggle-mobile" type="button" aria-label="Toggle light/dark mode">☀</button>
             </div>
+            <div id="reader-toc-menu" class="reader-toc-menu" aria-hidden="true"></div>
             <button id="book-close" class="book-close" type="button" aria-label="Close story">×</button>
           </div>
           <div id="reader-mobile-menu" class="reader-mobile-menu" aria-hidden="true">
@@ -156,6 +168,7 @@
   <script>
     const WORLD_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
     const FOREWORD_URL = 'stories/vagabond/foreword.txt';
+    const FULL_BOOK_SOURCE_URL = 'stories/vagabond/full_book_compiled.json?v=20260227';
     const BOOK_PAGES_PREFIX = 'images/memoirs/pages/07880038-aab2-46d1-b1f6-15f322b09de9_page-';
     const BOOK_PAGE_COUNT = 213;
 
@@ -190,7 +203,7 @@
     // Set custom card images here: "Exact Chapter Title": "image/path.ext"
     // If a title is not listed, the card uses the first page image by default.
     const CHAPTER_CARD_IMAGES = {
-      '12 Days in a Stable with 30 Cows and 1 Bull in Dibru Saikhowa National Park': 'images/memoirs/covers/1.jpg',
+      '12 Days in a Stable with 30 Cows and 1 Bull': 'images/memoirs/covers/1.jpg',
       'The Man Who Bought a Mountain': 'images/memoirs/covers/2.jpg',
       'Kaziranga': 'images/memoirs/covers/3.jpg',
       'Quest for the Feral Horse': 'images/memoirs/covers/4.jpg',
@@ -233,7 +246,7 @@
 
     const STORIES = {
       india: [
-        storyCard('12 Days in a Stable with 30 Cows and 1 Bull in Dibru Saikhowa National Park', 1, 7),
+        storyCard('12 Days in a Stable with 30 Cows and 1 Bull', 1, 7),
         storyCard('The Man Who Bought a Mountain', 8, 17),
         storyCard('Kaziranga', 18, 31),
         storyCard('Quest for the Feral Horse', 46, 54),
@@ -301,6 +314,7 @@
     const selectedPanelHint = document.getElementById('selected-panel-hint');
     const storyCardsSelected = document.getElementById('story-cards-selected');
     const storyCardsAll = document.getElementById('story-cards-all');
+    const readFullBookBtn = document.getElementById('read-full-book-btn');
 
     const readerEl = document.getElementById('book-reader');
     const readerTitleEl = document.getElementById('book-title');
@@ -317,6 +331,7 @@
     const readerLineLargeEl = document.getElementById('reader-line-large');
     const readerAaToggleEl = document.getElementById('reader-aa-toggle');
     const readerLineToggleEl = document.getElementById('reader-line-toggle');
+    const readerTocToggleMobileEl = document.getElementById('reader-toc-toggle-mobile');
     const readerMobileMenuEl = document.getElementById('reader-mobile-menu');
     const readerMobileLineMenuEl = document.getElementById('reader-mobile-line-menu');
     const readerFontDownMobileEl = document.getElementById('reader-font-down-mobile');
@@ -325,6 +340,8 @@
     const readerLineRegularMobileEl = document.getElementById('reader-line-regular-mobile');
     const readerLineLargeMobileEl = document.getElementById('reader-line-large-mobile');
     const readerLineOptionEls = [readerLineCompactEl, readerLineRegularEl, readerLineLargeEl].filter(Boolean);
+    const readerTocToggleEl = document.getElementById('reader-toc-toggle');
+    const readerTocMenuEl = document.getElementById('reader-toc-menu');
     const readerThemeToggleEl = document.getElementById('reader-theme-toggle');
     const readerThemeToggleMobileEl = document.getElementById('reader-theme-toggle-mobile');
 
@@ -366,6 +383,14 @@
     let readerTextPages = [];
     let readerTextPageIndex = 0;
     let readerCurrentParagraphs = [];
+    let readerIsFullBookMode = false;
+    let readerTocEntries = [];
+    let fullBookChaptersCache = null;
+    let fullBookBuildToken = 0;
+    let fullBookReflowTimer = null;
+    let fullBookReflowSeq = 0;
+    let readerResizeTimer = null;
+    let readerOverflowFixing = false;
     let readerPageAnimating = false;
     let readerSwipeTracking = false;
     let readerSwipeStartX = 0;
@@ -465,6 +490,72 @@
     function closeMobileReaderMenus() {
       setMobileAaMenu(false);
       setMobileLineMenu(false);
+    }
+
+    function setTocMenu(open) {
+      if (!readerTocMenuEl || (!readerTocToggleEl && !readerTocToggleMobileEl)) return;
+      const isOpen = !!open;
+      if (isOpen && readerTocToggleMobileEl && window.matchMedia('(max-width: 640px)').matches) {
+        readerTocMenuEl.style.right = 'auto';
+        positionMobileMenu(readerTocMenuEl, readerTocToggleMobileEl);
+      } else if (isOpen) {
+        readerTocMenuEl.style.left = '';
+        readerTocMenuEl.style.right = '';
+      }
+      readerTocMenuEl.classList.toggle('open', isOpen);
+      readerTocMenuEl.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      if (readerTocToggleEl) {
+        readerTocToggleEl.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+      if (readerTocToggleMobileEl) {
+        readerTocToggleMobileEl.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+    }
+
+    function rebuildTocFromPages() {
+      readerTocEntries = [];
+      if (!readerIsFullBookMode || !readerTextPages.length) return;
+      const singlePage = window.matchMedia('(max-width: 1100px)').matches;
+      for (let i = 0; i < readerTextPages.length; i += 1) {
+        const page = readerTextPages[i] || [];
+        const chapter = page.find((item) => item && item.type === 'chapter' && item.text);
+        if (chapter) {
+          const pageNumber = singlePage ? (i + 1) : ((i * 2) + 1);
+          readerTocEntries.push({ title: chapter.text, pageIndex: i, pageNumber });
+        }
+      }
+    }
+
+    function renderTocMenu() {
+      if (!readerTocMenuEl || !readerTocToggleEl) return;
+      if (!readerIsFullBookMode || !readerTocEntries.length) {
+        if (readerTocToggleEl) readerTocToggleEl.hidden = true;
+        if (readerTocToggleMobileEl) readerTocToggleMobileEl.hidden = true;
+        readerTocMenuEl.innerHTML = '';
+        setTocMenu(false);
+        return;
+      }
+      if (readerTocToggleEl) readerTocToggleEl.hidden = false;
+      if (readerTocToggleMobileEl) readerTocToggleMobileEl.hidden = false;
+      readerTocMenuEl.innerHTML = '';
+      readerTocEntries.forEach((entry) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'reader-toc-item';
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'reader-toc-title';
+        titleSpan.textContent = entry.title;
+        const pageSpan = document.createElement('span');
+        pageSpan.className = 'reader-toc-page';
+        pageSpan.textContent = 'p. ' + (entry.pageNumber || (entry.pageIndex + 1));
+        btn.appendChild(titleSpan);
+        btn.appendChild(pageSpan);
+        btn.addEventListener('click', () => {
+          jumpToReaderPage(entry.pageIndex);
+          setTocMenu(false);
+        });
+        readerTocMenuEl.appendChild(btn);
+      });
     }
 
     function positionMobileMenu(menuEl, anchorBtn) {
@@ -1021,6 +1112,9 @@
     function textPageHtml(paragraphs) {
       return paragraphs.map((p) => {
         if (typeof p === 'string') return '<p>' + escapeHtml(p) + '</p>';
+        if (p && p.type === 'chapter') {
+          return '<h4 class="reader-chapter-title">' + escapeHtml(p.text || '') + '</h4>';
+        }
         const cls = p && p.continued ? ' class="continued"' : '';
         const text = p && p.text ? p.text : '';
         return '<p' + cls + '>' + escapeHtml(text) + '</p>';
@@ -1030,7 +1124,8 @@
     function buildTextPages(paragraphs) {
       const measure = document.createElement('div');
       measure.className = 'book-body book-body-text-flow book-body-measure';
-      measure.style.width = readerBodyEl.clientWidth + 'px';
+      measure.classList.add('show-page-number');
+      measure.style.width = Math.max(0, readerBodyEl.clientWidth - 2) + 'px';
       measure.style.height = readerBodyEl.clientHeight + 'px';
       // Match the current reader typography exactly so pagination adapts to controls.
       measure.style.setProperty('--reader-font-size', readerPrefs.fontSize + 'px');
@@ -1038,12 +1133,19 @@
       measure.style.setProperty('--reader-text-pad', readerPrefs.textPad + 'px');
       document.body.appendChild(measure);
 
-      const remaining = paragraphs.map((p) => ({ text: p, continued: false }));
+      const remaining = paragraphs.map((p) => {
+        if (typeof p === 'string') return { type: 'paragraph', text: p, continued: false };
+        return {
+          type: p && p.type === 'chapter' ? 'chapter' : 'paragraph',
+          text: p && p.text ? p.text : '',
+          continued: !!(p && p.continued)
+        };
+      });
       const pages = [];
 
       const fits = (paras) => {
         measure.innerHTML = textPageHtml(paras);
-        return measure.scrollWidth <= (measure.clientWidth + 1);
+        return measure.scrollWidth <= measure.clientWidth;
       };
 
       while (remaining.length) {
@@ -1066,14 +1168,14 @@
           if (remaining.length) {
             const next = remaining[0];
             const words = next.text.split(/\s+/).filter(Boolean);
-            if (words.length > 1) {
+            if (next.type === 'paragraph' && words.length > 1) {
               let wlo = 1;
               let whi = words.length - 1;
               let wbest = 0;
               while (wlo <= whi) {
                 const mid = Math.floor((wlo + whi) / 2);
                 const probe = words.slice(0, mid).join(' ');
-                if (fits(pageItems.concat({ text: probe, continued: next.continued }))) {
+                if (fits(pageItems.concat({ type: 'paragraph', text: probe, continued: next.continued }))) {
                   wbest = mid;
                   wlo = mid + 1;
                 } else {
@@ -1083,12 +1185,17 @@
               if (wbest >= 6 && wbest < words.length) {
                 const head = words.slice(0, wbest).join(' ');
                 const tail = words.slice(wbest).join(' ');
-                pageItems.push({ text: head, continued: next.continued });
-                remaining[0] = { text: tail, continued: true };
+                pageItems.push({ type: 'paragraph', text: head, continued: next.continued });
+                remaining[0] = { type: 'paragraph', text: tail, continued: true };
               }
             }
           }
           pages.push(pageItems);
+          continue;
+        }
+
+        if (remaining[0].type === 'chapter') {
+          pages.push([remaining.shift()]);
           continue;
         }
 
@@ -1104,7 +1211,7 @@
         while (wlo <= whi) {
           const mid = Math.floor((wlo + whi) / 2);
           const probe = words.slice(0, mid).join(' ');
-          if (fits([{ text: probe, continued: remaining[0].continued }])) {
+          if (fits([{ type: 'paragraph', text: probe, continued: remaining[0].continued }])) {
             wbest = mid;
             wlo = mid + 1;
           } else {
@@ -1114,11 +1221,40 @@
 
         const head = words.slice(0, wbest).join(' ');
         const tail = words.slice(wbest).join(' ');
-        pages.push([{ text: head, continued: remaining[0].continued }]);
-        remaining[0] = { text: tail, continued: true };
+        pages.push([{ type: 'paragraph', text: head, continued: remaining[0].continued }]);
+        remaining[0] = { type: 'paragraph', text: tail, continued: true };
       }
 
       document.body.removeChild(measure);
+      return pages;
+    }
+
+    async function buildFullBookPagesSequential(chapters, startPageIndex = null, eagerRender = true) {
+      const token = ++fullBookBuildToken;
+      const pages = [];
+      let firstRenderDone = false;
+
+      for (let i = 0; i < chapters.length; i += 1) {
+        if (token !== fullBookBuildToken) return null;
+        const chapter = chapters[i];
+        const chapterItems = [{ type: 'chapter', text: chapter.title, continued: false }]
+          .concat((chapter.paragraphs || []).map((p) => ({ type: 'paragraph', text: p, continued: false })));
+        const chapterPages = buildTextPages(chapterItems);
+        chapterPages.forEach((p) => pages.push(p));
+
+        if (eagerRender && !firstRenderDone && pages.length) {
+          readerTextPages = pages.slice();
+          readerTextPageIndex = (startPageIndex === null ? readerTextPageIndex : startPageIndex);
+          rebuildTocFromPages();
+          renderTocMenu();
+          renderReaderTextPage();
+          firstRenderDone = true;
+        }
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+      }
+
+      if (token !== fullBookBuildToken) return null;
       return pages;
     }
 
@@ -1127,7 +1263,30 @@
       readerBodyEl.classList.remove('book-body-image-mode');
       readerBodyEl.classList.add('book-body-text-flow');
       readerBodyEl.classList.toggle('is-story-first-page', readerTextPageIndex === 0);
-      readerBodyEl.innerHTML = textPageHtml(readerTextPages[readerTextPageIndex]);
+      const singlePage = window.matchMedia('(max-width: 1100px)').matches;
+      const pageNumsHtml = (() => {
+        const leftVal = singlePage ? (readerTextPageIndex + 1) : ((readerTextPageIndex * 2) + 1);
+        const rightVal = leftVal + 1;
+        return (
+          '<div class="reader-page-numbers">' +
+          '<span class="reader-page-number reader-page-number-left">' + leftVal + '</span>' +
+          '<span class="reader-page-number reader-page-number-right">' + rightVal + '</span>' +
+          '</div>'
+        );
+      })();
+      readerBodyEl.classList.add('show-page-number');
+      readerBodyEl.innerHTML = textPageHtml(readerTextPages[readerTextPageIndex]) + pageNumsHtml;
+      // Hard clamp overflow: if text still spills, push a small trailing chunk to the next page.
+      if (readerBodyEl.scrollWidth > (readerBodyEl.clientWidth + 1)) {
+        const current = readerTextPages[readerTextPageIndex];
+        if (current && current.length > 1) {
+          const spill = current.pop();
+          if (spill) {
+            readerTextPages[readerTextPageIndex + 1] = [spill].concat(readerTextPages[readerTextPageIndex + 1] || []);
+            readerBodyEl.innerHTML = textPageHtml(current) + pageNumsHtml;
+          }
+        }
+      }
       readerPrevEl.disabled = readerTextPageIndex <= 0;
       readerNextEl.disabled = readerTextPageIndex >= readerTextPages.length - 1;
     }
@@ -1152,14 +1311,53 @@
         window.setTimeout(() => {
           readerBodyEl.classList.remove('page-turn-in-next', 'page-turn-in-prev');
           readerPageAnimating = false;
-        }, 200);
-      }, 120);
+        }, 120);
+      }, 80);
+    }
+
+    function jumpToReaderPage(targetIdx) {
+      if (!readerTextPages.length) return;
+      const nextIdx = Math.max(0, Math.min(readerTextPages.length - 1, targetIdx));
+      if (nextIdx === readerTextPageIndex) return;
+      if (readerPageAnimating) return;
+      readerPageAnimating = true;
+      readerBodyEl.classList.remove('page-turn-out-next', 'page-turn-out-prev', 'page-turn-in-next', 'page-turn-in-prev');
+      readerBodyEl.classList.add('page-jump-out');
+      window.setTimeout(() => {
+        readerTextPageIndex = nextIdx;
+        renderReaderTextPage();
+        readerBodyEl.classList.remove('page-jump-out');
+        readerBodyEl.classList.add('page-jump-in');
+        window.setTimeout(() => {
+          readerBodyEl.classList.remove('page-jump-in');
+          readerPageAnimating = false;
+        }, 100);
+      }, 60);
     }
 
     function repaginateReader(keepRatio = true) {
-      if (!readerCurrentParagraphs.length) return;
+      if (!readerCurrentParagraphs.length && !readerIsFullBookMode) return;
       const oldTotal = Math.max(1, readerTextPages.length);
       const oldIdx = readerTextPageIndex;
+      if (readerIsFullBookMode) {
+        if (fullBookReflowTimer) {
+          window.clearTimeout(fullBookReflowTimer);
+        }
+        const reflowSeq = ++fullBookReflowSeq;
+        fullBookReflowTimer = window.setTimeout(async () => {
+          await new Promise((resolve) => requestAnimationFrame(resolve));
+          const chapters = await loadFullBookChapters();
+          const pages = await buildFullBookPagesSequential(chapters, null, true);
+          if (!pages) return;
+          if (reflowSeq !== fullBookReflowSeq) return;
+          readerTextPages = pages;
+          readerTextPageIndex = Math.max(0, Math.min(readerTextPages.length - 1, readerTextPageIndex));
+          rebuildTocFromPages();
+          renderTocMenu();
+          renderReaderTextPage();
+        }, 60);
+        return;
+      }
       readerTextPages = buildTextPages(readerCurrentParagraphs);
       if (!readerTextPages.length) {
         readerTextPageIndex = 0;
@@ -1171,11 +1369,21 @@
         const ratio = oldIdx / oldTotal;
         readerTextPageIndex = Math.max(0, Math.min(readerTextPages.length - 1, Math.round(ratio * (readerTextPages.length - 1))));
       }
+      rebuildTocFromPages();
+      renderTocMenu();
       renderReaderTextPage();
     }
 
     async function openReader(card) {
+      readerIsFullBookMode = false;
       closeMobileReaderMenus();
+      readerEl.classList.remove('reader-fullbook');
+      if (readerTocToggleEl) readerTocToggleEl.hidden = true;
+      if (readerTocToggleMobileEl) readerTocToggleMobileEl.hidden = true;
+      if (readerTocMenuEl) {
+        readerTocMenuEl.innerHTML = '';
+        setTocMenu(false);
+      }
       readerEl.classList.add('open');
       readerEl.setAttribute('aria-hidden', 'false');
       document.body.classList.add('reader-open');
@@ -1196,6 +1404,8 @@
         await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         readerTextPages = buildTextPages(readerCurrentParagraphs);
         readerTextPageIndex = 0;
+        rebuildTocFromPages();
+        renderTocMenu();
         readerPageNavEl.hidden = false;
         readerPageLabelEl.hidden = true;
         renderReaderTextPage();
@@ -1204,12 +1414,82 @@
         readerTextPages = [];
         readerTextPageIndex = 0;
         readerCurrentParagraphs = [];
+        readerTocEntries = [];
+        renderTocMenu();
         readerBodyEl.textContent = 'Could not load this story source.';
+      }
+    }
+
+    async function loadStoryParagraphs(card) {
+      const textFile = card && card.textFile;
+      if (!textFile) return [];
+      try {
+        const res = await fetch(textFile);
+        if (!res.ok) return [];
+        const text = await res.text();
+        if (!text.trim()) return [];
+        return extractStoryParagraphs(text, card.title);
+      } catch (_) {
+        return [];
+      }
+    }
+
+    async function loadFullBookChapters() {
+      if (Array.isArray(fullBookChaptersCache) && fullBookChaptersCache.length) {
+        return fullBookChaptersCache;
+      }
+      const res = await fetch(FULL_BOOK_SOURCE_URL, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('full-book-load-failed');
+      const payload = await res.json();
+      const chapters = Array.isArray(payload && payload.chapters) ? payload.chapters : [];
+      fullBookChaptersCache = chapters
+        .map((c) => ({
+          title: String((c && c.title) || '').trim(),
+          paragraphs: Array.isArray(c && c.paragraphs) ? c.paragraphs.map((p) => String(p || '')).filter(Boolean) : []
+        }))
+        .filter((c) => c.title && c.paragraphs.length);
+      if (!fullBookChaptersCache.length) throw new Error('full-book-empty');
+      return fullBookChaptersCache;
+    }
+
+    async function openFullBookReader() {
+      readerIsFullBookMode = true;
+      closeMobileReaderMenus();
+      readerEl.classList.add('reader-fullbook');
+      readerEl.classList.add('open');
+      readerEl.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('reader-open');
+      readerTitleEl.textContent = '';
+      readerBodyEl.textContent = 'Loading full book...';
+      readerBodyEl.classList.remove('book-body-image-mode', 'book-body-text-flow');
+      try {
+        const loaded = await loadFullBookChapters();
+        if (!loaded.length) throw new Error('full-book-empty');
+        readerCurrentParagraphs = [];
+        applyReaderPrefs();
+        readerPageNavEl.hidden = false;
+        readerPageLabelEl.hidden = true;
+        const pages = await buildFullBookPagesSequential(loaded, 0);
+        if (!pages) return;
+        readerTextPages = pages;
+        readerTextPageIndex = 0;
+        rebuildTocFromPages();
+        renderTocMenu();
+        renderReaderTextPage();
+      } catch (_) {
+        readerPageNavEl.hidden = true;
+        readerTextPages = [];
+        readerTextPageIndex = 0;
+        readerCurrentParagraphs = [];
+        readerTocEntries = [];
+        renderTocMenu();
+        readerBodyEl.textContent = 'Could not load full book source.';
       }
     }
 
     function closeReader() {
       readerEl.classList.remove('open');
+      readerEl.classList.remove('reader-fullbook');
       readerEl.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('reader-open');
       readerPageNavEl.hidden = true;
@@ -1220,6 +1500,10 @@
       readerTextPages = [];
       readerTextPageIndex = 0;
       readerCurrentParagraphs = [];
+      readerTocEntries = [];
+      readerIsFullBookMode = false;
+      renderTocMenu();
+      setTocMenu(false);
     }
 
     function frame() {
@@ -1559,6 +1843,23 @@
       if (readerLineLargeMobileEl) {
         readerLineLargeMobileEl.addEventListener('click', () => setReaderLinePreset('large'));
       }
+      if (readerTocToggleEl) {
+        readerTocToggleEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const open = !(readerTocMenuEl && readerTocMenuEl.classList.contains('open'));
+          setTocMenu(open);
+        });
+      }
+      if (readerTocToggleMobileEl) {
+        readerTocToggleMobileEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const open = !(readerTocMenuEl && readerTocMenuEl.classList.contains('open'));
+          setTocMenu(open);
+        });
+      }
+      if (readFullBookBtn) {
+        readFullBookBtn.addEventListener('click', openFullBookReader);
+      }
       readerEl.addEventListener('click', (e) => {
         if (e.target === readerEl) closeReader();
         if (
@@ -1567,11 +1868,22 @@
         ) {
           closeMobileReaderMenus();
         }
+        if (
+          readerTocMenuEl &&
+          readerTocMenuEl.classList.contains('open') &&
+          !readerTocMenuEl.contains(e.target) &&
+          !(readerTocToggleEl && readerTocToggleEl.contains(e.target)) &&
+          !(readerTocToggleMobileEl && readerTocToggleMobileEl.contains(e.target))
+        ) {
+          setTocMenu(false);
+        }
       });
       readerEl.addEventListener('wheel', (e) => {
+        if (readerTocMenuEl && readerTocMenuEl.classList.contains('open') && readerTocMenuEl.contains(e.target)) return;
         e.preventDefault();
       }, { passive: false });
       readerEl.addEventListener('touchmove', (e) => {
+        if (readerTocMenuEl && readerTocMenuEl.classList.contains('open') && readerTocMenuEl.contains(e.target)) return;
         e.preventDefault();
       }, { passive: false });
       readerBodyEl.addEventListener('touchstart', (e) => {
@@ -1620,6 +1932,14 @@
         if (e.key === 'Escape' && (focusedCountryId || focusedSpotKey)) {
           unfocusCountry();
         }
+      });
+
+      window.addEventListener('resize', () => {
+        if (!readerEl.classList.contains('open')) return;
+        if (readerResizeTimer) window.clearTimeout(readerResizeTimer);
+        readerResizeTimer = window.setTimeout(() => {
+          repaginateReader(true);
+        }, 120);
       });
 
       window.addEventListener('resize', () => {

@@ -204,28 +204,37 @@ h2.intro-heading {
 
 /* ── Detail panel ───────────────────────────────────────────── */
 .travel-detail {
-    width: 88vw;
-    max-width: 900px;
-    margin: 0 auto;
+    position: fixed;
+    inset: 0;
+    transform: scale(0.985);
+    width: 100vw;
+    max-width: none;
+    margin: 0;
     background: #0f0f10;
     border: 1px solid #232325;
-    border-radius: 14px;
+    border-radius: 0;
     overflow: hidden;
     box-shadow: 0 8px 40px rgba(0,0,0,0.5);
     opacity: 0;
-    transition: max-height 420ms cubic-bezier(.2,.9,.2,1),
-                opacity 300ms ease;
     pointer-events: none;
-    max-height: 92vh; /* Gives the grid more vertical room */
+    max-height: 100vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    z-index: 2147483000 !important;
+    visibility: hidden;
 }
 
 .travel-detail.open {
-    max-height: 1200px;
-    opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    animation: travel-detail-in 520ms cubic-bezier(.22,.88,.25,1) both;
+}
+
+.travel-detail.closing {
+    visibility: visible;
+    pointer-events: none;
+    animation: travel-detail-out 420ms cubic-bezier(.22,.88,.25,1) both;
 }
 
 .detail-header {
@@ -236,7 +245,7 @@ h2.intro-heading {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    padding: 20px 24px 16px;
+    padding: 18px 24px 14px;
     border-bottom: 1px solid #1c1c1e;
 }
 
@@ -273,18 +282,46 @@ h2.intro-heading {
 /* ── Photo grid ─────────────────────────────────────────────── */
 .detail-photos {
     display: grid !important;
-    /* Changed to 1fr for stability */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    column-gap: 18px !important;
-    row-gap: 18px !important;
-    padding: 24px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: 20px !important;
+    row-gap: 20px !important;
+    padding: 14px 24px 24px;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     flex: 1 1 auto;
+    min-height: calc(100vh - 104px);
     grid-auto-flow: row;
     grid-auto-rows: auto;
     align-content: start;
+    opacity: 0;
+    transform: translateY(14px);
+}
+.travel-detail.open .detail-photos {
+    animation: detail-grid-in 560ms cubic-bezier(.22,.88,.25,1) 90ms both;
+}
+.travel-detail.closing .detail-photos {
+    animation: detail-grid-out 280ms cubic-bezier(.22,.88,.25,1) both;
+}
+
+@keyframes travel-detail-in {
+    0%   { opacity: 0; transform: scale(0.985); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes travel-detail-out {
+    0%   { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.985); }
+}
+
+@keyframes detail-grid-in {
+    0%   { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes detail-grid-out {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(10px); }
 }
 .photo-card {
     position: relative;
@@ -384,6 +421,13 @@ body.light-mode .photo-desc-overlay {
 body.light-mode .photo-placeholder { background: linear-gradient(135deg,#eeeef0,#e6e6ea); border-color: #d8d8dc; }
 body.light-mode .placeholder-icon  { opacity: 0.18; }
 body.light-mode .placeholder-text  { color: #bbb; }
+@media (max-width: 1200px) {
+    .detail-photos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 860px) {
+    .detail-photos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 
 /* ── Mobile ─────────────────────────────────────────────────── */
 @media (max-width: 600px) {
@@ -392,8 +436,22 @@ body.light-mode .placeholder-text  { color: #bbb; }
     h2.intro-heading { font-size: 5.5vh; }
     .stat-item  { padding: 0 16px; }
     .stat-number{ font-size: 2rem; }
-    .travel-detail { width: 94vw; border-radius: 10px; }
-    .detail-photos { grid-template-columns: repeat(2,1fr); padding: 14px 14px 18px; gap: 10px; }
+    .travel-detail {
+        inset: 0;
+        width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    .detail-photos {
+        grid-template-columns: repeat(2,1fr);
+        padding: 14px 14px 20px;
+        gap: 12px;
+        min-height: calc(100vh - 96px);
+    }
     .detail-header { padding: 14px 16px 12px; }
     .detail-country-name { font-size: 17px; }
+}
+
+body.travel-detail-open header {
+    z-index: 1 !important;
 }

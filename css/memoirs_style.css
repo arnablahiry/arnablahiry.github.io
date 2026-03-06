@@ -336,13 +336,42 @@ body.page-memoirs {
   overflow: visible;
 }
 
-.all-memoirs-heading {
+.all-memoirs-head {
   grid-area: allheading;
   margin: 18px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.all-memoirs-heading {
+  margin: 0;
   font-size: 1.26rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #feda4a;
+}
+
+.read-full-book-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid rgba(254, 218, 74, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f2d26e;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+
+.read-full-book-btn:hover,
+.read-full-book-btn:focus {
+  background: rgba(254, 218, 74, 0.11);
+  border-color: rgba(254, 218, 74, 0.62);
 }
 
 .all-memoirs-hint {
@@ -531,6 +560,7 @@ body.page-memoirs {
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
 }
 
 .book-reader-tools {
@@ -547,6 +577,115 @@ body.page-memoirs {
 
 .reader-mobile-menu {
   display: none;
+}
+
+.reader-toc-wrap {
+  position: relative;
+  margin-right: 12px;
+}
+
+.book-reader:not(.reader-fullbook) .reader-toc-toggle,
+.book-reader:not(.reader-fullbook) .reader-toc-toggle-mobile {
+  display: none !important;
+}
+
+.reader-toc-toggle {
+  min-width: 34px;
+  width: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toc-icon {
+  width: 16px;
+  height: 12px;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image:
+    radial-gradient(circle, currentColor 2px, transparent 2.5px),
+    radial-gradient(circle, currentColor 2px, transparent 2.5px),
+    radial-gradient(circle, currentColor 2px, transparent 2.5px),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  background-size: 4px 4px, 4px 4px, 4px 4px, 10px 2px, 10px 2px, 10px 2px;
+  background-position: 0 0, 0 4px, 0 8px, 6px 1px, 6px 5px, 6px 9px;
+}
+
+.reader-toc-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(420px, 52vw);
+  max-height: min(62vh, 520px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(16, 18, 22, 0.97);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  z-index: 8;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 220ms cubic-bezier(.2,.9,.2,1), visibility 180ms ease;
+}
+
+.reader-toc-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.reader-toc-item {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #dcdcdc;
+  text-align: left;
+  cursor: pointer;
+  font-family: "Cormorant Garamond", "Garamond", "Baskerville", "Times New Roman", Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.3;
+  padding: 8px 12px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.reader-toc-title {
+  flex: 1;
+  padding-right: 10px;
+}
+
+.reader-toc-page {
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+  text-transform: lowercase;
+  min-width: 60px;
+  text-align: right;
+}
+
+.reader-toc-item:hover,
+.reader-toc-item:focus {
+  background: rgba(254, 218, 74, 0.1);
+  color: #f1cc5c;
 }
 
 .book-head-controls .theme-toggle.reader-theme-toggle{
@@ -704,6 +843,7 @@ body.page-memoirs {
 }
 
 .book-body {
+  position: relative;
   white-space: normal;
   color: #d9d9d9;
   line-height: var(--reader-line-height, 1.72);
@@ -712,10 +852,37 @@ body.page-memoirs {
   height: calc(96vh - 104px);
   max-height: calc(96vh - 104px);
   overflow: hidden;
+  overflow-x: clip;
   padding: var(--reader-text-pad, 14px);
   padding-left: calc(var(--reader-text-pad, 14px) + 64px);
   padding-right: calc(var(--reader-text-pad, 14px) + 64px);
   box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  contain: paint;
+}
+
+.book-body.show-page-number {
+  padding-bottom: calc(var(--reader-text-pad, 14px) + 44px);
+}
+
+.reader-page-numbers {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  padding: 0 calc(var(--reader-text-pad, 14px) + 64px);
+  pointer-events: none;
+}
+
+.reader-page-number {
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .book-body.book-body-image-mode {
@@ -734,6 +901,23 @@ body.page-memoirs {
   column-fill: auto;
   column-gap: 44px;
   column-rule: 1px solid rgba(255, 255, 255, 0.18);
+  overflow-x: clip;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  word-break: break-word;
+  line-break: auto;
+}
+
+.book-reader.reader-fullbook .book-reader-tools .reader-toc-wrap {
+  margin-left: 12px;
+}
+
+.book-reader.reader-fullbook .book-reader-tools .reader-line-option:first-of-type {
+  margin-left: 12px;
+}
+
+.book-reader.reader-fullbook .book-reader-tools .reader-theme-toggle {
+  margin-left: 12px;
 }
 
 .book-body.book-body-text-flow p {
@@ -744,6 +928,38 @@ body.page-memoirs {
 
 .book-body.book-body-text-flow p.continued {
   margin-top: 0;
+}
+
+.book-body.book-body-text-flow .reader-chapter-title {
+  margin: 0 0 0.95em;
+  font-size: 2.15em;
+  line-height: 1.22;
+  text-align: center;
+  break-after: avoid;
+  break-inside: avoid;
+  page-break-after: avoid;
+  font-family: "Cinzel Decorative", "Cormorant Garamond", "Garamond", "Baskerville", "Times New Roman", Georgia, serif;
+  color: #f1cc5c;
+  padding: 0 72px 0.4em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.book-body.book-body-text-flow .reader-chapter-title + p {
+  margin-top: 0;
+}
+
+.book-body.book-body-text-flow .reader-chapter-title + p::first-letter {
+  float: left;
+  font-size: 4.35em;
+  line-height: 0.74;
+  padding-right: 0.1em;
+  margin-top: 0.05em;
+  margin-left: -0.01em;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #f1cc5c;
+  text-shadow: none !important;
+  font-family: "Cinzel Decorative", "Cormorant Garamond", "Garamond", "Baskerville", "Times New Roman", Georgia, serif;
 }
 
 .book-body.book-body-text-flow.is-story-first-page p:first-child::first-letter {
@@ -768,19 +984,32 @@ body.page-memoirs {
 }
 
 .book-body.page-turn-out-next {
-  animation: bookPageOutNext 120ms cubic-bezier(.33,0,.2,1) both;
+  animation: bookPageOutNext 80ms cubic-bezier(.33,0,.2,1) both;
 }
 
 .book-body.page-turn-out-prev {
-  animation: bookPageOutPrev 120ms cubic-bezier(.33,0,.2,1) both;
+  animation: bookPageOutPrev 80ms cubic-bezier(.33,0,.2,1) both;
 }
 
 .book-body.page-turn-in-next {
-  animation: bookPageInNext 200ms cubic-bezier(.22,.9,.18,1) both;
+  animation: bookPageInNext 120ms cubic-bezier(.22,.9,.18,1) both;
 }
 
 .book-body.page-turn-in-prev {
-  animation: bookPageInPrev 200ms cubic-bezier(.22,.9,.18,1) both;
+  animation: bookPageInPrev 120ms cubic-bezier(.22,.9,.18,1) both;
+}
+
+.book-body.page-jump-out,
+.book-body.page-jump-in {
+  will-change: transform, opacity;
+}
+
+.book-body.page-jump-out {
+  animation: bookPageJumpOut 60ms ease-out both;
+}
+
+.book-body.page-jump-in {
+  animation: bookPageJumpIn 100ms ease-out both;
 }
 
 @keyframes bookPageOutNext {
@@ -800,6 +1029,16 @@ body.page-memoirs {
 
 @keyframes bookPageInPrev {
   from { opacity: 0.35; transform: translateX(-20px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes bookPageJumpOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0.15; transform: translateY(4px); }
+}
+
+@keyframes bookPageJumpIn {
+  from { opacity: 0.15; transform: translateY(-2px); }
   to { opacity: 1; transform: none; }
 }
 
@@ -848,6 +1087,18 @@ body.light-mode .all-memoirs-hint {
 
 body.light-mode .all-memoirs-heading {
   color: #8a6600;
+}
+
+body.light-mode .read-full-book-btn {
+  color: #8a6600;
+  border-color: rgba(138, 102, 0, 0.38);
+  background: rgba(250, 242, 218, 0.85);
+}
+
+body.light-mode .read-full-book-btn:hover,
+body.light-mode .read-full-book-btn:focus {
+  background: rgba(239, 224, 177, 0.9);
+  border-color: rgba(138, 102, 0, 0.54);
 }
 
 body.light-mode .globe-side {
@@ -1012,6 +1263,10 @@ body.light-mode .book-page-label {
   color: #474747;
 }
 
+body.light-mode .reader-page-number {
+  color: rgba(0, 0, 0, 0.62);
+}
+
 body.light-mode .book-page-image {
   border-color: rgba(0, 0, 0, 0.14);
   background: #f8f8f8;
@@ -1031,7 +1286,32 @@ body.light-mode .book-body.book-body-text-flow.is-story-first-page p:first-child
   text-shadow: none !important;
 }
 
-@media (max-width: 960px) {
+body.light-mode .book-body.book-body-text-flow .reader-chapter-title {
+  color: #8a6600;
+  border-bottom-color: rgba(0, 0, 0, 0.16);
+}
+
+body.light-mode .book-body.book-body-text-flow .reader-chapter-title + p::first-letter {
+  color: #8a6600;
+  text-shadow: none !important;
+}
+
+body.light-mode .reader-toc-menu {
+  border-color: rgba(0, 0, 0, 0.16);
+  background: rgba(252, 252, 252, 0.98);
+}
+
+body.light-mode .reader-toc-item {
+  color: #303030;
+}
+
+body.light-mode .reader-toc-item:hover,
+body.light-mode .reader-toc-item:focus {
+  background: rgba(138, 102, 0, 0.12);
+  color: #8a6600;
+}
+
+@media (max-width: 1100px) {
   body.page-memoirs {
     --memoirs-header-offset: 142px;
   }
@@ -1080,6 +1360,21 @@ body.light-mode .book-body.book-body-text-flow.is-story-first-page p:first-child
     column-gap: 0;
     column-rule: none;
   }
+
+  .reader-page-numbers {
+    justify-content: center;
+    grid-template-columns: 1fr;
+    padding: 0 calc(var(--reader-text-pad, 14px) + 10px);
+    bottom: 0px;
+  }
+
+  .reader-page-number-right {
+    display: none;
+  }
+
+  .reader-toc-menu {
+    width: min(520px, 86vw);
+  }
 }
 
 @media (max-width: 640px) {
@@ -1089,6 +1384,44 @@ body.light-mode .book-body.book-body-text-flow.is-story-first-page p:first-child
 
   body.page-memoirs {
     --memoirs-header-offset: 136px;
+  }
+
+  .reader-page-numbers {
+    justify-content: center;
+    grid-template-columns: 1fr;
+    padding: 0 calc(var(--reader-text-pad, 14px) + 10px);
+  }
+
+  .reader-page-number-right {
+    display: none;
+  }
+
+  .reader-toc-menu {
+    width: min(92vw, 360px);
+    padding: 10px 12px;
+  }
+
+  .reader-toc-item {
+    font-size: 0.95rem;
+    padding: 8px 10px;
+  }
+
+  .reader-toc-page {
+    font-size: 0.78rem;
+    min-width: 46px;
+  }
+
+  .reader-toc-toggle-mobile {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .reader-toc-toggle-mobile .toc-icon {
+    width: 14px;
+    height: 12px;
   }
 
   .globe-side {
@@ -1192,7 +1525,7 @@ body.light-mode .book-body.book-body-text-flow.is-story-first-page p:first-child
     justify-content: flex-end;
     position: relative;
     min-height: 38px;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
   }
 
   .book-head-controls {
@@ -1251,8 +1584,17 @@ body.light-mode .book-body.book-body-text-flow.is-story-first-page p:first-child
     padding: 8px !important;
     padding-left: 8px !important;
     padding-right: 8px !important;
-    height: calc(96vh - 82px);
-    max-height: calc(96vh - 82px);
+    height: calc(96vh - 126px);
+    max-height: calc(96vh - 126px);
+  }
+
+  .book-body.show-page-number {
+    padding-bottom: calc(var(--reader-text-pad, 14px) + 58px);
+  }
+
+  .book-body.book-body-text-flow .reader-chapter-title {
+    font-size: 1.68em;
+    padding: 0 34px 0.36em;
   }
 
   .reader-mobile-menu {

@@ -392,8 +392,31 @@ body.light-mode nav#site-nav .nav-dropdown-menu{
     border-color: rgba(17,17,17,0.12) !important;
 }
 
+@media (max-width: 1100px){
+    body.light-mode header.nav-open{
+        background-color: rgba(255,255,255,0.98) !important;
+        backdrop-filter: blur(8px) !important;
+    }
+    body.light-mode header.nav-open nav{
+        background: rgba(255,255,255,0.98) !important;
+        box-shadow: 0 18px 48px rgba(0,0,0,0.18) !important;
+    }
+    body.light-mode header.nav-open ~ .page-wrapper::before{
+        background: rgba(255,255,255,0.72) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    body.light-mode header nav .nav-dropdown-toggle{
+        color: #111111 !important;
+    }
+    body.light-mode header nav .nav-dropdown-menu a{
+        color: rgba(17,17,17,0.78) !important;
+    }
+}
+
 /* Hamburger bars should be dark on the light header */
 body.light-mode .hamburger .bar{ background-color: #111 !important; }
+body.light-mode .hamburger.open .bar{ background-color: #111 !important; }
 
 /* When nav is open, show a frosted overlay over the page content so the
    navigation reads as an elevated layer. Uses the nav-open opacity and
@@ -403,6 +426,38 @@ body.light-mode header.nav-open ~ .page-wrapper::before{
     background: rgba(255,255,255,0) !important;
     pointer-events: none !important;
     opacity: 0 !important;
+}
+
+@media (max-width: 1100px){
+    body.light-mode .hamburger{
+        z-index: 10010 !important;
+    }
+    body.light-mode .hamburger .bar{
+        background-color: #111111 !important;
+        opacity: 1 !important;
+    }
+    body.light-mode .hamburger.open .bar1,
+    body.light-mode .hamburger.open .bar3{
+        background-color: #111111 !important;
+        opacity: 1 !important;
+    }
+    body.light-mode .hamburger.open .bar2{
+        opacity: 0 !important;
+    }
+    /* Light-mode hamburger overlay should mirror dark-mode layout (dim page, keep panel readable). */
+    body.light-mode header.nav-open{
+        background-color: rgba(255,255,255,0.96) !important;
+        backdrop-filter: blur(8px) !important;
+    }
+    body.light-mode header.nav-open nav{
+        background: rgba(255,255,255,0.97) !important;
+        box-shadow: 0 18px 48px rgba(0,0,0,0.22) !important;
+    }
+    body.light-mode header.nav-open ~ .page-wrapper::before{
+        background: rgba(0,0,0,0.38) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
 }
 
 /* Invert SVG icons that live inside project cards when in light mode so
@@ -870,6 +925,26 @@ body.light-mode nav#site-nav{
     -webkit-backdrop-filter: blur(8px) !important;
 }
 
+/* Light-mode: remove any WebKit focus/outline box around the hamburger/X */
+body.light-mode .hamburger,
+body.light-mode button.hamburger{
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+body.light-mode .hamburger:focus,
+body.light-mode .hamburger:focus-visible,
+body.light-mode button.hamburger:focus,
+body.light-mode button.hamburger:focus-visible{
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
 /* Be sure nav-open state keeps a slightly stronger background so the
    navigation remains readable when the menu is open on small screens. */
 body.light-mode header.nav-open,
@@ -881,3 +956,17 @@ body.light-mode nav#site-nav.nav-open{
    This keeps the main page sharp but visually dims it via the ::before
    overlay above. */
 /* (nav-open frosted blur removed — reverting to previous behavior) */
+
+/* iPad portrait (all pages, light mode):
+   keep menu open without dimming the page; use only a subtle panel shadow. */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait){
+    body.light-mode header.nav-open ~ .page-wrapper::before{
+        opacity: 0 !important;
+        pointer-events: none !important;
+        background: transparent !important;
+    }
+    body.light-mode header.nav-open nav#site-nav,
+    body.light-mode header.nav-open > nav{
+        box-shadow: 0 10px 24px rgba(0,0,0,0.08) !important;
+    }
+}

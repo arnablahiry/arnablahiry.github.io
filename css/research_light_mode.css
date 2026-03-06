@@ -32,3 +32,80 @@ body.light-mode button.meme-hidden-trigger:active {
   border-radius: 0 !important;
   color: inherit !important;
 }
+
+/* Research iPad portrait: force light mode to mirror dark mode card/heading metrics */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  body.light-mode h2.intro-heading {
+    font-size: var(--page-title-size) !important;
+    line-height: 1.08 !important;
+  }
+
+  body.light-mode .timeline-main-heading-wrapper {
+    padding-right: 0 !important;
+  }
+
+  body.light-mode .timeline-main-heading-wrapper > .margin-bottom-medium:first-child {
+    margin-bottom: 4.2vh !important;
+  }
+
+  body.light-mode .research-intro-text {
+    max-width: 100% !important;
+    padding-left: 7vw !important;
+    padding-right: 7vw !important;
+  }
+
+  body.light-mode .research-intro-text .research-intro {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+
+  body.light-mode.page-research #projects-grid .project-image {
+    width: 92% !important;
+    margin: 10px auto 0 !important;
+    height: 150px !important;
+    border-radius: 8px !important;
+    object-fit: cover !important;
+  }
+
+  body.light-mode.page-research #projects-grid .project-title {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    margin: 0 0 6px 0 !important;
+  }
+}
+
+/* Final light-mode parity lock for Research cards (wins over shared light_mode.css) */
+body.light-mode.page-research #projects-grid .project-title {
+  font-size: 17px !important;
+  line-height: 1.3 !important;
+}
+body.light-mode.page-research #projects-grid .project-subtitle {
+  font-size: 14.5px !important;
+  line-height: 1.45 !important;
+}
+body.light-mode.page-research #projects-grid .project-meta {
+  padding: 14px 16px 14px !important;
+}
+@media (max-width: 1100px) {
+  body.light-mode.page-research #projects-grid .project-title {
+    font-size: 15px !important;
+  }
+  body.light-mode.page-research #projects-grid .project-subtitle {
+    font-size: 13.5px !important;
+  }
+}
+
+/* iPad portrait: mirror dark mode for grid + title size */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  body.light-mode.page-research #projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  body.light-mode.page-research #projects-grid .project-meta {
+    padding: 14px 12px 14px !important;
+  }
+  body.light-mode.page-research #projects-grid .project-title {
+    font-size: 16px !important;
+    line-height: 1.32 !important;
+    margin: 0 0 10px 0 !important;
+  }
+}
