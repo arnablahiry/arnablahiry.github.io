@@ -101,13 +101,24 @@ h2.intro-heading {
 }
 
 /* ── Globe wrap ─────────────────────────────────────────────── */
-.travels-section { padding-bottom: 60px; }
+.travels-section {
+    padding-bottom: 60px;
+    min-height: calc(100vh - var(--travels-header-offset));
+    display: flex;
+    flex-direction: column;
+}
 
 #globe-wrap {
     display: flex;
     justify-content: center;
-    align-items: flex-start;   /* top-aligned so expanding downward doesn't shift stats */
-    padding: 8px 0 40px;
+    align-items: center;
+    --country-focus-progress: 0;
+    --country-opacity-progress: 0;
+    --globe-size-px: 560px;
+    gap: clamp(0px, calc(var(--country-focus-progress) * 2px), 2px);
+    padding: 8px 0 24px;
+    min-height: calc(100vh - var(--travels-header-offset) - 260px);
+    flex: 1 1 auto;
     /* allow the canvas to overflow if zoomed larger than viewport width */
     overflow-x: auto;
     overflow-y: visible;
@@ -117,12 +128,135 @@ h2.intro-heading {
     position: relative;
     display: inline-block;
     flex-shrink: 0;
+    transform: translateX(calc(var(--country-focus-progress) * -48px))
+        scale(calc(1 - (var(--country-focus-progress) * 0.16)));
+    transform-origin: center center;
 }
 
 #globe-canvas {
     display: block;
     border-radius: 50%;
     touch-action: none;
+}
+
+#country-map-panel {
+    width: clamp(0px, calc(var(--country-focus-progress) * 48vw), 760px);
+    max-width: clamp(0px, calc(var(--country-focus-progress) * 48vw), 760px);
+    height: var(--globe-size-px);
+    opacity: var(--country-opacity-progress);
+    pointer-events: none;
+    transform: translateX(calc((1 - var(--country-focus-progress)) * 10px));
+    overflow: visible;
+    display: flex;
+    align-items: center;
+}
+
+#country-map-panel.open {
+    pointer-events: auto;
+}
+
+.country-map-shell {
+    width: 100%;
+    border: 1px solid #232325;
+    background: #0f0f10;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+    padding: 2px;
+}
+
+.country-map-head {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    margin-bottom: 2px;
+    min-height: 24px;
+}
+
+.country-map-title {
+    margin: 0;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #feda4a;
+    padding: 6px 0 6px 12px;
+    opacity: 0;
+    transform: translateY(2px);
+    transition:
+        opacity var(--country-title-fade-ms, 220ms) ease,
+        transform var(--country-title-fade-ms, 220ms) ease;
+}
+
+#country-map-panel.title-visible .country-map-title{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.country-map-back {
+    appearance: none;
+    border: 1px solid #2b2b2f;
+    background: rgba(255,255,255,0.03);
+    color: #d8d8d8;
+    border-radius: 8px;
+    padding: 2px 6px;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.country-map-back:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+#country-map-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: auto;
+    height: 540px;
+    transition: height var(--country-grid-height-ms, 900ms) ease-in-out;
+    border-radius: 10px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 45%, #151821 0%, #0d1016 72%, #090c11 100%);
+    border: 1px solid #1f2430;
+}
+
+.focus-photo-pane{
+    display: flex;
+    flex-direction: column;
+}
+
+.focus-photo-grid{
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    padding: 8px;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    align-content: start;
+    grid-auto-flow: row;
+}
+
+.focus-photo-grid .photo-card{
+    aspect-ratio: 1/1;
+}
+
+.country-map-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: #6b6b6b;
+    text-transform: uppercase;
 }
 
 /* Hint label sits below the canvas, offset from its bottom */
@@ -342,6 +476,29 @@ h2.intro-heading {
 
 .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+.photo-card-button {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.photo-card.has-photo {
+    cursor: pointer;
+}
+
+.photo-card.has-photo img {
+    opacity: 1;
+}
+
+.photo-card.has-photo:hover img,
+.photo-card.has-photo:focus-within img {
+    opacity: 0.7;
+}
+
 .photo-desc-overlay {
     position: absolute;
     inset: 0;
@@ -356,6 +513,7 @@ h2.intro-heading {
     line-height: 1.35;
     opacity: 0;
     transition: opacity 180ms ease;
+    display: none !important;
 }
 
 .photo-card:hover .photo-desc-overlay,
@@ -382,6 +540,209 @@ h2.intro-heading {
     to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
+body.travel-lightbox-open {
+    overflow: hidden;
+}
+
+.photo-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 140;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: rgba(0, 0, 0, 0.88);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.photo-lightbox.open {
+    visibility: visible;
+    pointer-events: auto;
+    animation: travel-lightbox-backdrop-in 360ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.photo-lightbox.closing {
+    visibility: visible;
+    pointer-events: none;
+    animation: travel-lightbox-backdrop-out 240ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.lightbox-inner {
+    width: min(980px, 92vw);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: 10px;
+    row-gap: 6px;
+    align-items: start;
+    transform: translateY(18px) scale(0.965);
+    opacity: 0;
+}
+
+.photo-lightbox.open .lightbox-inner {
+    animation: travel-lightbox-panel-in 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.photo-lightbox.closing .lightbox-inner {
+    animation: travel-lightbox-panel-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.lightbox-close {
+    position: relative;
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    align-self: start;
+    transform: translateY(-110%);
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(0, 0, 0, 0.78);
+    color: #ffffff;
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.lightbox-next {
+    position: absolute;
+    right: -120px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.lightbox-prev {
+    position: absolute;
+    left: -120px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#lightbox-image {
+    width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    border-radius: 12px;
+    grid-column: 1;
+    grid-row: 1 / 5;
+}
+
+.lightbox-caption-box {
+    width: 100%;
+    background: rgba(8, 10, 14, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 10px 12px;
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#lightbox-caption {
+    margin: 0;
+    color: #efefef;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.lightbox-credit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.lightbox-credit img {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.lightbox-credit span {
+    color: #f4f4f4;
+    font-weight: 700;
+}
+
+@keyframes travel-lightbox-backdrop-in {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes travel-lightbox-backdrop-out {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes travel-lightbox-panel-in {
+    0%   { opacity: 0; transform: translateY(18px) scale(0.965); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes travel-lightbox-panel-out {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(10px) scale(0.98); }
+}
+
+@media (max-width: 900px) {
+    .lightbox-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #lightbox-image,
+    .lightbox-caption-box,
+    .lightbox-credit {
+        width: 100%;
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .lightbox-close {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        grid-column: auto;
+        grid-row: auto;
+        transform: none;
+    }
+}
+
 /* ── Light mode ─────────────────────────────────────────────── */
 body.light-mode { background: #fff; }
 body.light-mode .section-travels-heading { background: #fff; }
@@ -390,6 +751,37 @@ body.light-mode .stat-number       { color: #8a6600; }
 body.light-mode .stat-label        { color: #aaa; }
 body.light-mode .stat-divider      { background: #ddd; }
 body.light-mode .globe-hint        { color: #bbb; }
+body.light-mode #country-map-viewport {
+    background: radial-gradient(circle at 50% 45%, #f2f7fb 0%, #e7eef5 74%, #e0e7ef 100%);
+    border-color: #cfdbe7;
+}
+body.light-mode .country-map-shell {
+    background: #ffffff;
+    border-color: #e8e8e8;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.08);
+}
+body.light-mode .country-map-title { color: #8a6600; }
+body.light-mode .country-map-empty { color: #9b9b9b; }
+body.light-mode .country-map-back {
+    border-color: #d8d8d8;
+    background: #fafafa;
+    color: #444;
+}
+body.light-mode .country-map-back:hover { background: #f2f2f2; }
+body.light-mode .photo-lightbox { background: rgba(255, 255, 255, 0.84); }
+body.light-mode .lightbox-caption-box {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(0, 0, 0, 0.16);
+}
+body.light-mode #lightbox-caption,
+body.light-mode .lightbox-credit span { color: #111111; }
+body.light-mode .lightbox-close {
+    border-color: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+    color: #111111;
+}
+body.light-mode .lightbox-next { color: #111111; }
+body.light-mode .lightbox-prev { color: #111111; }
 
 body.light-mode .map-tooltip {
     background: rgba(255,255,255,0.96);
@@ -450,6 +842,25 @@ body.light-mode .placeholder-text  { color: #bbb; }
     }
     .detail-header { padding: 14px 16px 12px; }
     .detail-country-name { font-size: 17px; }
+
+    #globe-wrap.country-map-active {
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        min-height: auto;
+    }
+    #globe-wrap.country-map-active #globe-container {
+        transform: translateX(0) scale(calc(1 - (var(--country-focus-progress) * 0.1)));
+    }
+    #country-map-panel.open {
+        width: clamp(0px, calc(var(--country-focus-progress) * 90vw), 420px);
+        max-width: clamp(0px, calc(var(--country-focus-progress) * 90vw), 420px);
+        height: auto;
+    }
+    #country-map-viewport {
+        aspect-ratio: auto;
+        height: 380px;
+    }
 }
 
 body.travel-detail-open header {

@@ -761,6 +761,12 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
     overflow: visible;
 }
 
+/* Expanded card content uses a serif face for long-form readability. */
+.project-clone .project-full,
+.project-clone .project-full *{
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+
 /* When a project modal is open, make the image area show a normal pointer
    (indicating it's not text/selectable), while the textual content shows the
    text cursor so users get correct affordance for selecting/copying text. */

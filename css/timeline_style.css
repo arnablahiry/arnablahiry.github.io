@@ -9,6 +9,7 @@
    consumed by nav-toggle.js when it sets inline heading padding. */
 :root{
     --site-header-offset: 108px;
+    --timeline-circle-size: 1.5vh;
 }
 
 .timeline-component{
@@ -77,6 +78,10 @@
    odd rows -> date left, content right (default)
    even rows -> date right, content left */
 @media screen and (min-width: 769px){
+    :root{
+        --timeline-circle-size: clamp(18px, 2.6vh, 28px);
+    }
+
     .timeline-item:nth-of-type(even){
         grid-template-areas: "right center left";
     }
@@ -84,6 +89,11 @@
     .timeline-item:nth-of-type(even) .timeline-left{
         text-align: left;
         justify-content: flex-start;
+    }
+
+    .timeline-date-text{
+        /* Align the first date line center with the marker center on desktop. */
+        transform: translateY(calc((var(--timeline-circle-size) - 1.2em) / 2));
     }
 }
 
@@ -274,12 +284,12 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     border: 4px solid #000;
     border-radius: 100%;
     box-sizing: border-box;
-    width: 1.5vh;
-    min-width: 1.5vh;
-    max-width: 1.5vh;
-    height: 1.5vh;
-    min-height: 1.5vh;
-    max-height: 1.5vh;
+    width: var(--timeline-circle-size);
+    min-width: var(--timeline-circle-size);
+    max-width: var(--timeline-circle-size);
+    height: var(--timeline-circle-size);
+    min-height: var(--timeline-circle-size);
+    max-height: var(--timeline-circle-size);
     position: sticky;
     top: 50vh;
     box-shadow: none;
