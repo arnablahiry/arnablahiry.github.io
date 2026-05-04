@@ -52,6 +52,18 @@
     528: { name: 'Netherlands', continent: 'Europe', places: ['Amsterdam', 'Middelburg'], photos: [null, null] },
     56: { name: 'Belgium', continent: 'Europe', places: ['Brussels', 'Ghent'], photos: [null, null] },
     40: { name: 'Austria', continent: 'Europe', places: ['Vienna'], photos: [null] },
+    642: { name: 'Romania', continent: 'Europe', places: ['Turda', 'Sibiu', 'Alba Iulia', 'Sighisoara', 'Bucharest'],
+      photos: [
+        photo('images/travels/romania/romania_1.png', 'Romania photo 1'),
+        photo('images/travels/romania/romania_2.png', 'Romania photo 2'),
+        photo('images/travels/romania/romania_3.png', 'Romania photo 3'),
+        photo('images/travels/romania/romania_4.png', 'Romania photo 4'),
+        photo('images/travels/romania/romania_5.png', 'Romania photo 5'),
+        photo('images/travels/romania/romania_6.png', 'Romania photo 6'),
+        photo('images/travels/romania/romania_7.png', 'Romania photo 7'),
+        photo('images/travels/romania/romania_8.png', 'Romania photo 8'),
+      ]
+    },
     704: {
       name: 'Vietnam',
       continent: 'Asia',

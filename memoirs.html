@@ -75,6 +75,28 @@
             </div>
           </div>
           <p id="foreword-text" class="foreword-text">Loading foreword...</p>
+          <div class="foreword-editor-credit" aria-label="Edited and compiled by Teesta Lahiry">
+            <p class="foreword-editor-label">Edited and compiled by</p>
+            <div class="foreword-editor-person">
+              <img class="foreword-editor-avatar" src="images/about/kolkata4.jpeg" alt="Teesta Lahiry" loading="lazy" decoding="async">
+              <div class="foreword-editor-copy">
+                <h3 class="foreword-editor-name">Teesta Lahiry</h3>
+                <p class="foreword-editor-role">Daughter</p>
+              </div>
+              <div class="foreword-editor-socials" aria-label="Teesta Lahiry social links">
+                <a class="foreword-editor-social foreword-editor-social-mail" href="mailto:teestalahiry@gmail.com" aria-label="Email Teesta Lahiry" title="Email"></a>
+                <a class="foreword-editor-social" href="https://www.instagram.com/_teesta.__/" aria-label="Teesta Lahiry on Instagram" title="Instagram" target="_blank" rel="noopener">
+                  <img src="images/icons/instagram.png" alt="Instagram" loading="lazy" decoding="async">
+                </a>
+                <a class="foreword-editor-social" href="https://www.facebook.com/teesta.lahiry/" aria-label="Teesta Lahiry on Facebook" title="Facebook" target="_blank" rel="noopener">
+                  <img src="images/icons/facebook.png" alt="Facebook" loading="lazy" decoding="async">
+                </a>
+                <a class="foreword-editor-social" href="https://www.linkedin.com/" aria-label="Teesta Lahiry on LinkedIn" title="LinkedIn" target="_blank" rel="noopener">
+                  <img src="images/icons/linkedin.png" alt="LinkedIn" loading="lazy" decoding="async">
+                </a>
+              </div>
+            </div>
+          </div>
         </article>
         <article id="selected-card-box" class="selected-card-box" aria-hidden="true">
           <h3 id="selected-panel-title">Selected Memoirs</h3>
@@ -163,6 +185,7 @@
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
   <script src="scripts/nav-toggle.js"></script>
   <script src="scripts/theme-toggle.js"></script>
+  <script src="scripts/viewport-lazy.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
   <script>
@@ -1000,12 +1023,33 @@
 
     function mountCards(targetEl, cards) {
       targetEl.innerHTML = '';
+      const lazyRoot = targetEl.classList.contains('story-cards-selected') ? targetEl : null;
       cards.forEach((card, idx) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'story-card';
         btn.style.setProperty('--stagger', (idx * 45) + 'ms');
-        btn.innerHTML = '<div class="story-card-media"><img src="' + card.image + '" alt="' + card.title + '" loading="lazy" decoding="async"><div class="story-card-title">' + card.title + '</div></div>';
+
+        const media = document.createElement('div');
+        media.className = 'story-card-media';
+
+        const img = document.createElement('img');
+        img.alt = card.title;
+        if (window.viewportLazy) {
+          window.viewportLazy.observe(img, { root: lazyRoot, src: card.image });
+        } else {
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          img.src = card.image;
+        }
+
+        const title = document.createElement('div');
+        title.className = 'story-card-title';
+        title.textContent = card.title;
+
+        media.appendChild(img);
+        media.appendChild(title);
+        btn.appendChild(media);
         btn.addEventListener('click', () => openReader(card));
         targetEl.appendChild(btn);
       });

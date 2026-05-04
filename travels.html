@@ -162,6 +162,7 @@
     <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/theme-toggle.js"></script>
+    <script src="scripts/viewport-lazy.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
     <script src="data/travel_database.js"></script>
@@ -204,6 +205,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     const detail  = document.getElementById('travel-detail');
     const hint    = document.getElementById('globe-hint');
     const globeWrap = document.getElementById('globe-wrap');
+    const globeContainer = document.getElementById('globe-container');
     const countryMapPanel = document.getElementById('country-map-panel');
     const countryMapTitle = document.getElementById('country-map-title');
     const countryMapEmpty = document.getElementById('country-map-empty');
@@ -254,6 +256,9 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     const INTRO_MS = 1200;
     const INTRO_FAST_SPIN = 2.8;
     const INTRO_NORMAL_SPIN = 0.10;
+    const DEFAULT_GLOBE_SCALE = 1;
+    const MIN_GLOBE_SCALE = 0.45;
+    const MAX_GLOBE_SCALE = 3.5;
     const TRAVEL_DEFAULT_CREDIT = 'Arnab';
     const TRAVEL_DEFAULT_CREDIT_IMAGE = 'images/mywildindia/credits/arnab.png';
 
@@ -294,7 +299,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         const isPhone = window.matchMedia('(max-width: 600px)').matches;
         const naturalBase = Math.min(wrap.clientWidth, window.innerHeight * 0.84, 820);
         const natural = isPhone ? (naturalBase * 0.9) : (naturalBase * 0.88);
-        if (!keepZoom) currentScale = 1;
+        if (!keepZoom) currentScale = DEFAULT_GLOBE_SCALE;
         const sz = Math.round(natural * currentScale);
         W = H = sz;
         canvas.width  = sz * devicePixelRatio;
@@ -658,8 +663,14 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 btn.type = 'button';
                 btn.className = 'photo-card-button';
                 const img = document.createElement('img');
-                img.src = meta.src;
                 img.alt = `${(v && v.name) || 'Country'} ${i + 1}`;
+                if (window.viewportLazy) {
+                    window.viewportLazy.observe(img, { root: focusPhotoGrid, src: meta.src });
+                } else {
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
+                    img.src = meta.src;
+                }
                 btn.appendChild(img);
                 btn.addEventListener('click', (event) => {
                     event.stopPropagation();
@@ -828,16 +839,30 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         });
     }
 
-    function slowScrollToGlobeCenter(duration = COUNTRY_FOCUS_SCROLL_MS) {
-        const globeWrap = document.getElementById('globe-wrap');
-        if (!globeWrap) return;
-        const rect = globeWrap.getBoundingClientRect();
-        const centerY = window.pageYOffset + rect.top + (rect.height / 2);
-        const headerH = getHeaderHeightPx();
-        const usableH = Math.max(0, window.innerHeight - headerH);
-        const targetCenterInViewport = headerH + (usableH / 2);
-        const targetTop = centerY - targetCenterInViewport;
-        smoothScrollTo(Math.max(0, targetTop), duration);
+    function slowScrollToGlobeCenter(duration = COUNTRY_FOCUS_SCROLL_MS, animationToken = pendingOpenToken) {
+        if (!globeContainer) return Promise.resolve();
+        const startTop = window.pageYOffset || window.scrollY || 0;
+        const startTs = performance.now();
+        return new Promise(resolve => {
+            function step(now) {
+                if (animationToken !== pendingOpenToken) { resolve(); return; }
+                const rect = globeContainer.getBoundingClientRect();
+                const centerY = window.pageYOffset + rect.top + (rect.height / 2);
+                const headerH = getHeaderHeightPx();
+                const usableH = Math.max(0, window.innerHeight - headerH);
+                const targetCenterInViewport = headerH + (usableH / 2);
+                const targetTop = Math.max(0, centerY - targetCenterInViewport);
+                const t = Math.min(1, (now - startTs) / Math.max(1, duration));
+                const eased = easeInOutCubic(t);
+                window.scrollTo(0, startTop + ((targetTop - startTop) * eased));
+                if (t < 1) requestAnimationFrame(step);
+                else {
+                    window.scrollTo(0, targetTop);
+                    resolve();
+                }
+            }
+            requestAnimationFrame(step);
+        });
     }
 
     function animateFocusOnFeature(feature, duration = COUNTRY_FOCUS_SCROLL_MS, onProgress) {
@@ -848,6 +873,8 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         const targetLon = centroid[0];
         const targetLat = centroid[1];
         const startRot = proj.rotate().slice();
+        const startScale = currentScale;
+        const deltaScale = DEFAULT_GLOBE_SCALE - startScale;
         const targetRot = [
             -targetLon,
             Math.max(-80, Math.min(80, -targetLat)),
@@ -865,6 +892,8 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 const t = Math.min(1, (now - startTs) / duration);
                 const eased = easeInOutCubic(t);
                 if (onProgress) onProgress(eased);
+                currentScale = startScale + (deltaScale * eased);
+                setSize(true);
                 proj.rotate([
                     startRot[0] + (deltaLon * eased),
                     startRot[1] + (deltaLat * eased),
@@ -1018,7 +1047,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         focusedCountryId = id;
         focusedCountryBlend = 0;
         showCountryMapPanel(id);
-        slowScrollToGlobeCenter(COUNTRY_FOCUS_SCROLL_MS);
+        slowScrollToGlobeCenter(COUNTRY_FOCUS_SCROLL_MS, token);
         animateFocusOnFeature(feature, COUNTRY_FOCUS_SCROLL_MS, (progress) => {
             if (token !== pendingOpenToken) return;
             focusedCountryBlend = progress;
@@ -1115,7 +1144,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 pinchStartScale = currentScale;
             }
             const factor = dist / Math.max(1, pinchStartDist);
-            currentScale = Math.max(0.45, Math.min(3.5, pinchStartScale * factor));
+            currentScale = Math.max(MIN_GLOBE_SCALE, Math.min(MAX_GLOBE_SCALE, pinchStartScale * factor));
             setSize(true);
             draw();
             isDragging = true;
@@ -1172,7 +1201,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         e.preventDefault();
         pauseAuto();
         const factor = e.deltaY > 0 ? 0.90 : 1.11;
-        currentScale = Math.max(0.45, Math.min(3.5, currentScale * factor));
+        currentScale = Math.max(MIN_GLOBE_SCALE, Math.min(MAX_GLOBE_SCALE, currentScale * factor));
         setSize(true);
         draw();
     }, { passive: false });
@@ -1191,11 +1220,17 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             const ul = tooltip.querySelector('.tooltip-places');
             ul.innerHTML = '';
             if (isVisited) {
-                VISITS[id].places.forEach(c => {
+                if (Array.isArray(VISITS[id].places) && VISITS[id].places.length) {
+                    VISITS[id].places.forEach(c => {
+                        const li = document.createElement('li');
+                        li.textContent = c;
+                        ul.appendChild(li);
+                    });
+                } else {
                     const li = document.createElement('li');
-                    li.textContent = c;
+                    li.textContent = 'No places added yet';
                     ul.appendChild(li);
-                });
+                }
             }
             tooltip.querySelector('.tooltip-hint').textContent = isVisited ? 'click to focus map →' : 'Not visited yet!';
             const cr = document.getElementById('globe-container').getBoundingClientRect();
@@ -1265,7 +1300,9 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         const scopedPhotos = Array.isArray(opts.photos) ? opts.photos : null;
         const photosToRender = scopedPhotos !== null ? scopedPhotos : (Array.isArray(v.photos) ? v.photos : []);
         detail.querySelector('.detail-country-name').textContent = v.name;
-        detail.querySelector('.detail-places-list').textContent  = selectedPlace ? selectedPlace : v.places.join(' · ');
+        detail.querySelector('.detail-places-list').textContent  = selectedPlace
+            ? selectedPlace
+            : ((Array.isArray(v.places) && v.places.length) ? v.places.join(' · ') : 'No places added yet');
         const grid = document.getElementById('detail-photos'); grid.innerHTML = '';
         const lightboxMeta = [];
         const renderList = photosToRender.length ? photosToRender : [null];
@@ -1281,8 +1318,14 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 btn.type = 'button';
                 btn.className = 'photo-card-button';
                 const img = document.createElement('img');
-                img.src = meta.src;
                 img.alt = v.name + ' ' + (i + 1);
+                if (window.viewportLazy) {
+                    window.viewportLazy.observe(img, { root: grid, src: meta.src });
+                } else {
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
+                    img.src = meta.src;
+                }
                 btn.appendChild(img);
                 btn.addEventListener('click', (event) => {
                     event.stopPropagation();

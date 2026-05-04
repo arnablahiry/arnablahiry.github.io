@@ -147,6 +147,8 @@ body.page-memoirs {
 }
 
 .foreword-card {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
   padding: 16px;
@@ -224,12 +226,132 @@ body.page-memoirs {
   font-size: 14px;
   font-family: Georgia, "Times New Roman", Times, serif;
   white-space: pre-wrap;
-  max-height: 1000px;
+  flex: 0 1 auto;
+  max-height: min(380px, calc(100% - 164px));
   opacity: 1;
-  height: calc(100% - 84px);
+  height: auto;
   overflow: auto;
   padding-right: 6px;
   transition: opacity var(--fade-ms) cubic-bezier(.33,0,.2,1), max-height 360ms cubic-bezier(.22,.9,.18,1), margin-top 360ms ease;
+}
+
+.foreword-editor-credit {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1;
+  transition: opacity var(--fade-ms) cubic-bezier(.33,0,.2,1), max-height 360ms cubic-bezier(.22,.9,.18,1), margin-top 360ms ease, padding-top 360ms ease;
+}
+
+.foreword-editor-label {
+  margin: 0 0 8px;
+  color: #adadad;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.foreword-editor-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.foreword-editor-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  object-fit: cover;
+  object-position: 80% center;
+  border: 1px solid rgba(255,255,255,0.24);
+  flex: 0 0 auto;
+}
+
+.foreword-editor-copy {
+  min-width: 0;
+}
+
+.foreword-editor-role {
+  margin: 3px 0 0;
+  font-size: 11px;
+  color: #adadad;
+  letter-spacing: 0.05em;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.foreword-editor-name {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #feda4a;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 700;
+}
+
+.foreword-editor-socials {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding-left: 8px;
+  flex: 0 0 auto;
+}
+
+.foreword-editor-social {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 0;
+  background: transparent;
+  transition: opacity 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.foreword-editor-social:hover,
+.foreword-editor-social:focus {
+  opacity: 0.84;
+  outline: none;
+}
+
+.foreword-editor-social img {
+  width: 16px;
+  height: 16px;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.foreword-editor-social-mail::before,
+.foreword-editor-social-mail::after {
+  content: "";
+  position: absolute;
+}
+
+.foreword-editor-social-mail {
+  position: relative;
+}
+
+.foreword-editor-social-mail::before {
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 8px;
+  border: 1.4px solid rgba(255, 255, 255, 0.92);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+}
+
+.foreword-editor-social-mail::after {
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-top: 1.4px solid rgba(255, 255, 255, 0.92);
+  border-right: 1.4px solid rgba(255, 255, 255, 0.92);
+  transform: translate(-50%, calc(-50% - 1px)) rotate(135deg);
 }
 
 .selected-card-box {
@@ -298,6 +420,16 @@ body.page-memoirs {
 
 .story-side.country-focusing .foreword-text {
   opacity: 0;
+}
+
+.story-side.country-focusing .foreword-editor-credit,
+.story-side.country-selected .foreword-editor-credit {
+  opacity: 0;
+  max-height: 0;
+  margin-top: 0;
+  padding-top: 0;
+  overflow: hidden;
+  border-top-color: transparent;
 }
 
 .story-side.country-selected .foreword-text {
@@ -1146,6 +1278,31 @@ body.light-mode #foreword-name {
   -webkit-text-fill-color: currentColor !important;
 }
 
+body.light-mode .foreword-editor-credit {
+  border-top-color: rgba(138, 102, 0, 0.16);
+}
+
+body.light-mode .foreword-editor-name {
+  color: #8a6600;
+}
+
+body.light-mode .foreword-editor-role {
+  color: #6f6f6f;
+}
+
+body.light-mode .foreword-editor-social {
+  background: transparent;
+}
+
+body.light-mode .foreword-editor-social img {
+  filter: brightness(0);
+}
+
+body.light-mode .foreword-editor-social-mail::before,
+body.light-mode .foreword-editor-social-mail::after {
+  border-color: rgba(45, 45, 45, 0.92);
+}
+
 body.light-mode .foreword-text {
   color: #2d2d2d;
 }
@@ -1474,13 +1631,66 @@ body.light-mode .reader-toc-item:focus {
     font-size: 13px;
     margin-top: 8px;
     height: auto;
-    max-height: calc(54vh - 72px);
+    max-height: calc(54vh - 154px);
   }
 
   .foreword-card::after {
     left: 10px;
     right: 10px;
     height: 64px;
+  }
+
+  .foreword-editor-credit {
+    margin-top: auto;
+    padding-top: 10px;
+  }
+
+  .foreword-editor-person {
+    gap: 8px;
+  }
+
+  .foreword-editor-label {
+    font-size: 10px;
+  }
+
+  .foreword-editor-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .foreword-editor-name {
+    font-size: 0.72rem;
+    line-height: 1.08;
+    letter-spacing: 0.01em;
+  }
+
+  .foreword-editor-role {
+    font-size: 9px;
+  }
+
+  .foreword-editor-socials {
+    gap: 3px;
+    padding-left: 6px;
+  }
+
+  .foreword-editor-social {
+    width: 24px;
+    height: 24px;
+  }
+
+  .foreword-editor-social img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .foreword-editor-social-mail::before {
+    width: 10px;
+    height: 7px;
+  }
+
+  .foreword-editor-social-mail::after {
+    width: 7px;
+    height: 7px;
   }
 
   .selected-card-box {

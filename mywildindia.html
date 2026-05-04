@@ -150,6 +150,7 @@
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
   <script src="scripts/nav-toggle.js"></script>
   <script src="scripts/theme-toggle.js"></script>
+  <script src="scripts/viewport-lazy.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
   <script>
     const PHOTO_POOL = [
@@ -644,9 +645,14 @@
         btn.type = 'button';
         btn.className = 'photo-tile-btn';
         const img = document.createElement('img');
-        img.loading = 'lazy';
         img.alt = place.place + ' photo ' + (i + 1);
-        img.src = photo.src;
+        if (window.viewportLazy) {
+          window.viewportLazy.observe(img, { root: placePhotos, src: photo.src });
+        } else {
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          img.src = photo.src;
+        }
         btn.appendChild(img);
         btn.addEventListener('click', () => openLightboxAt(place, i, photoMeta));
         tile.appendChild(btn);
