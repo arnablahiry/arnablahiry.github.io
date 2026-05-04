@@ -128,6 +128,10 @@ body.light-mode .tag-chip{
   shifts when light-mode applies a visible border. Using a transparent
   border in the default state ensures inner content stays aligned. */
 body.page-software .project-card{ border: 1px solid transparent; box-sizing: border-box; }
+body.page-software #projects-grid .project-card,
+body.page-software.light-mode #projects-grid .project-card{
+  padding: 0 !important;
+}
 
 /* Project icons (GitHub / Sphinx / PyPI) shown under tags in condensed view */
 .project-icons{ display: flex; gap: 18px; align-items: center; margin-top: 18px; margin-bottom: 12px; }
@@ -940,6 +944,7 @@ body.light-mode .snitch-play-again {
     border-radius: 6px;
     opacity: 0.75;
     filter: none !important;
+    -webkit-filter: none !important;
 }
 
 .legend-item span {
@@ -948,7 +953,8 @@ body.light-mode .snitch-play-again {
 }
 
 body.light-mode .legend-item img {
-    filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+    filter: none !important;
+    -webkit-filter: none !important;
 }
 
 /* Theme parity: Software card typography must be identical in dark/light */
@@ -981,9 +987,9 @@ body.page-software.light-mode #projects-grid .project-subtitle{
 /* Software card spacing: reduce image side gutters and keep uniform inner padding */
 body.page-software #projects-grid .project-image,
 body.page-software.light-mode #projects-grid .project-image{
-    width: 92% !important;
-    margin: 10px auto 0 !important;
-    border-radius: 8px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
 }
 body.page-software #projects-grid .project-meta,
 body.page-software.light-mode #projects-grid .project-meta{
@@ -1027,9 +1033,11 @@ body.page-software.light-mode #projects-grid .project-meta{
     /* Narrower card images */
     body.page-software #projects-grid .project-image,
     body.page-software.light-mode #projects-grid .project-image{
-        width: 94% !important;
+        width: 100% !important;
         height: 132px !important;
         object-fit: cover !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
     }
 
     /* Reduce empty side gutters on iPad portrait */
