@@ -51,7 +51,7 @@ body.page-software .projects-grid {
   justify-content: center; /* center the bar */
   padding: 8px 5vw; /* tighter vertical spacing */
   box-sizing: border-box;
-  margin-top: -8px; /* bring filters closer to intro text */
+  margin-top: -22px; /* pull switches closer to the heading */
   margin-bottom: 18px; /* keep a small gap before cards */
   flex-wrap: wrap; /* allow wrap on small screens */
 }
@@ -59,12 +59,12 @@ body.page-software .projects-grid {
   background: rgba(255,255,255,0.04);
   color: #fff;
   border: 0;
-  padding: 10px 16px; /* larger touch target */
+  padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;
   font-weight: 700;
-  font-size: 15px; /* larger label */
-  min-width: 88px; /* consistent button width */
+  font-size: 14px;
+  min-width: 76px;
   text-align: center;
   transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
 }
@@ -99,7 +99,7 @@ body.light-mode .tag-chip{
 
 @media (max-width: 520px) {
   .project-filters { gap: 10px; padding-left: 4vw; padding-right: 4vw; }
-  .project-filters .filter-btn { min-width: 72px; padding: 8px 12px; font-size: 14px; }
+  .project-filters .filter-btn { min-width: 68px; padding: 7px 11px; font-size: 13px; }
 }
 
 /* Tag chips shown on each project card */
@@ -278,7 +278,8 @@ body.page-software .software-meme-trigger::after{
   opacity: 0;
   pointer-events: none;
   transition: opacity 180ms ease, transform 180ms ease;
-  color: inherit;
+  color: #f3f3f3;
+  -webkit-text-fill-color: initial;
   background: rgba(16, 18, 22, 0.88);
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 999px;
@@ -290,6 +291,22 @@ body.page-software .software-meme-trigger:hover::after,
 body.page-software .software-meme-trigger:focus-visible::after{
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+body.page-software .software-title-trigger{
+  cursor: pointer;
+  color: transparent;
+  font: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  background: linear-gradient(to right, gold, #ee0979) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
 }
 
 body.page-software .software-meme-viewer{
@@ -404,9 +421,33 @@ body.page-software.light-mode button.software-meme-trigger:active{
 }
 
 body.page-software.light-mode .software-meme-trigger::after{
-  color: inherit;
+  color: #111111;
+  -webkit-text-fill-color: initial;
   background: rgba(255,255,255,0.9);
   border-color: rgba(0,0,0,0.14);
+}
+
+body.page-software.light-mode .software-title-trigger,
+body.page-software.light-mode button.software-title-trigger,
+body.page-software.light-mode .software-title-trigger:hover,
+body.page-software.light-mode button.software-title-trigger:hover,
+body.page-software.light-mode .software-title-trigger:focus,
+body.page-software.light-mode button.software-title-trigger:focus,
+body.page-software.light-mode .software-title-trigger:focus-visible,
+body.page-software.light-mode button.software-title-trigger:focus-visible,
+body.page-software.light-mode .software-title-trigger:active,
+body.page-software.light-mode button.software-title-trigger:active{
+  background: none !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border-radius: 0 !important;
+  background: linear-gradient(to right, rgb(169, 143, 0), #80003e) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 body.page-software.light-mode .software-meme-viewer.open .software-meme-backdrop{
