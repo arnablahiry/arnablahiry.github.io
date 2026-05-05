@@ -87,6 +87,14 @@ body.light-mode .timeline-circle {
   box-shadow: none !important;
 }
 
+body.light-mode .timeline-breakout-line::before{
+  background: rgba(169, 143, 0, 0.52);
+}
+
+body.light-mode .timeline-breakout-line::after{
+  background: rgba(169, 143, 0, 0.52);
+}
+
 /* Make the header white with black text in light mode on the timeline page.
    Ensure links, nav items, and controls inside the header use dark text so
    the header reads correctly on a white background. Use !important to

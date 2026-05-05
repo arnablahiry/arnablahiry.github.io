@@ -65,7 +65,7 @@
                     <div class="padding-vertical-xlarge">
                         <div class="timeline-main-heading-wrapper">
                         <div class="margin-bottom-medium">
-                            <h2 class="intro-heading"><button type="button" class="timeline-heading-trigger" id="timeline-heading-trigger" aria-haspopup="dialog" aria-controls="timeline-heading-viewer" aria-expanded="false">My Career Timeline</button></h2>
+                            <h2 class="intro-heading"><button type="button" class="timeline-heading-trigger" id="timeline-heading-trigger" aria-haspopup="dialog" aria-controls="timeline-heading-viewer" aria-expanded="false">My Timeline</button></h2>
                         </div>
                     </div>
                 </div>
@@ -76,6 +76,34 @@
                 <div class="timeline-component">
                     <div class="timeline-progress">
                         <div class="timeline-progress-bar"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-left">
+                            <div class="timeline-date-text">April 2026</div>
+                        </div>
+                        <div class="timeline-center">
+                            <div class="timeline-circle"></div>
+                        </div>
+                        <div class="timeline-right">
+                            <div class="margin-bottom-xlarge">
+                                <div class="timeline-text">
+                                    Attended and contributed a talk at the DAOISM workshop oh ISM studies with data science and PPV spectral cubes, held at the Institut Astrophysique de Paris (IAP), France 🇫🇷, on my ongoing project on high-z interferometric denoising benchmarks and beyond moment-0 physical galactic property inference from high-z galaxy spectral data cubes using deep learning and sparsity. Was amazing to see Paris again during spring!
+                                </div>
+                            </div>
+                            <div class="timeline-image-wrapper">
+                                <img src="images/timeline/daoism.jpg" alt="Talk at MINOAS workshop"
+                                loading="lazy" width="480" decoding="async" />
+                            </div>
+                            <div class="timeline-image-wrapper">
+                                <img src="images/timeline/daoism_talk.png.jpeg" alt="Heraklion"
+                                loading="lazy" width="480" decoding="async" />
+                            </div>
+                            <div class="timeline-image-wrapper">
+                                <img src="images/timeline/paris_daoism.jpg" alt="Heraklion"
+                                loading="lazy" width="480" decoding="async" />
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="timeline-item">
@@ -99,6 +127,12 @@
                                 <img src="images/timeline/paris-2.png" alt="Heraklion"
                                 loading="lazy" width="480" decoding="async" />
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-breakout" data-timeline-breakout aria-hidden="true">
+                        <div class="timeline-breakout-sticky">
+                            <div class="timeline-breakout-line"></div>
                         </div>
                     </div>
 
@@ -241,6 +275,13 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="timeline-breakout" data-timeline-breakout aria-hidden="true">
+                        <div class="timeline-breakout-sticky">
+                            <div class="timeline-breakout-line"></div>
+                        </div>
+                    </div>
+
                     <div class="timeline-item">
                         <div class="timeline-left">
                             <div class="timeline-date-text">July 2024</div>
@@ -269,7 +310,7 @@
                         </div>
                     </div>
 
-                     <div class="timeline-item">
+                    <div class="timeline-item">
                         <div class="timeline-left">
                             <div class="timeline-date-text">May 2024</div>
                         </div>
@@ -294,6 +335,12 @@
                                 <img src="images/timeline/chania_cosmo21.jpg" alt="Cosmo21 Conference"
                                 loading="lazy" width="480" decoding="async" />
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-breakout" data-timeline-breakout aria-hidden="true">
+                        <div class="timeline-breakout-sticky">
+                            <div class="timeline-breakout-line"></div>
                         </div>
                     </div>
 
@@ -409,6 +456,52 @@
           const year = m[2].trim();
           el.innerHTML = (prefix ? (prefix + '<br>') : '') + '<span class="timeline-year-part">' + year + '</span>';
         });
+      })();
+
+      (function assignTimelineAlternation(){
+        const items = document.querySelectorAll('.timeline-component > .timeline-item');
+        items.forEach((item, index) => {
+          item.classList.toggle('timeline-item-even', index % 2 === 0);
+          item.classList.toggle('timeline-item-odd', index % 2 === 1);
+        });
+      })();
+
+      (function initTimelineBreakout(){
+        const bridges = Array.prototype.slice.call(document.querySelectorAll('[data-timeline-breakout]'));
+        if (!bridges.length) return;
+        if (window.innerWidth <= 768) return;
+
+        let rafId = 0;
+
+        function updateBreakouts() {
+          rafId = 0;
+          const viewportCenter = window.innerHeight * 0.5;
+
+          bridges.forEach((bridge) => {
+            const rect = bridge.getBoundingClientRect();
+            const lineCenter = rect.top + (rect.height * 0.5);
+            const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+            const distance = Math.abs(lineCenter - viewportCenter);
+            const proximity = Math.max(0, 1 - (distance / Math.max(window.innerHeight * 0.22, 1)));
+            const alpha = 0.2 + (0.4 * proximity);
+            const shadowAlpha = 0.1 + (0.62 * proximity);
+            const shadowSize = 3 + (18 * proximity);
+
+            bridge.classList.toggle('is-visible', visible);
+            bridge.style.setProperty('--timeline-breakout-alpha', alpha.toFixed(4));
+            bridge.style.setProperty('--timeline-breakout-shadow-alpha', shadowAlpha.toFixed(4));
+            bridge.style.setProperty('--timeline-breakout-shadow-size', shadowSize.toFixed(2) + 'px');
+          });
+        }
+
+        function requestUpdate() {
+          if (rafId) return;
+          rafId = window.requestAnimationFrame(updateBreakouts);
+        }
+
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+        updateBreakouts();
       })();
     </script>
 </body>

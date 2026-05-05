@@ -82,11 +82,11 @@
         --timeline-circle-size: clamp(18px, 2.6vh, 28px);
     }
 
-    .timeline-item:nth-of-type(even){
+    .timeline-item.timeline-item-even{
         grid-template-areas: "right center left";
     }
 
-    .timeline-item:nth-of-type(even) .timeline-left{
+    .timeline-item.timeline-item-even .timeline-left{
         text-align: left;
         justify-content: flex-start;
     }
@@ -97,7 +97,7 @@
         justify-self: end;
     }
 
-    .timeline-item:nth-of-type(even) .timeline-right{
+    .timeline-item.timeline-item-even .timeline-right{
         justify-self: start;
     }
 
@@ -327,6 +327,67 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     inset: 0 auto 50vh;
 }
 
+.timeline-breakout{
+    --timeline-breakout-alpha: 0.22;
+    --timeline-breakout-shadow-alpha: 0.06;
+    --timeline-breakout-shadow-size: 2px;
+    position: relative;
+    width: 100%;
+    height: 22vh;
+}
+
+.timeline-breakout-sticky{
+    position: relative;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.timeline-breakout-line{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 2px;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease;
+    box-shadow: 0 0 var(--timeline-breakout-shadow-size) rgba(255, 215, 0, var(--timeline-breakout-shadow-alpha));
+}
+
+.timeline-breakout-line::before,
+.timeline-breakout-line::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 0;
+    max-width: 50vw;
+    transition: width 900ms cubic-bezier(.22,.9,.18,1);
+}
+
+.timeline-breakout-line::before{
+    right: 50%;
+    background: rgba(255, 215, 0, 0.58);
+    opacity: var(--timeline-breakout-alpha);
+}
+
+.timeline-breakout-line::after{
+    left: 50%;
+    background: rgba(255, 215, 0, 0.58);
+    opacity: var(--timeline-breakout-alpha);
+}
+
+.timeline-breakout.is-visible .timeline-breakout-line{
+    opacity: 1;
+}
+
+.timeline-breakout.is-visible .timeline-breakout-line::before,
+.timeline-breakout.is-visible .timeline-breakout-line::after{
+    width: 50vw;
+}
+
 .section-timeline{
     z-index: -3;
     background-color: black;
@@ -445,6 +506,10 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
         left: 4.5px;
     }
 
+    .timeline-breakout{
+        display: none;
+    }
+
     /* Mobile nav: slide-in panel and open-state matching global styles */
     .hamburger { display: block; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); }
 
@@ -542,12 +607,12 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
         padding-bottom: 66px !important;
     }
 
-    .timeline-item:nth-of-type(even){
+    .timeline-item.timeline-item-even{
         grid-template-areas: "left center right" !important;
     }
 
     .timeline-left,
-    .timeline-item:nth-of-type(even) .timeline-left{
+    .timeline-item.timeline-item-even .timeline-left{
         text-align: right !important;
         justify-content: flex-end !important;
     }
@@ -618,5 +683,9 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
         /* Start exactly at the first marker anchor on iPad portrait */
         height: auto !important;
         inset: 15vh auto 50vh auto !important;
+    }
+
+    .timeline-breakout{
+        height: 18vh !important;
     }
 }
