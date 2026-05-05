@@ -362,16 +362,23 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a full-grid diffuse flux cube and a matching LOS-velocity cube.</span>
 
 <span class="sd">    Three additive components (only the halo is used when n_gal == 1):</span>
-<span class="sd">    - Halo: 3D Sérsic (n ≈ 0.5) centered on the first (central) galaxy with</span>
-<span class="sd">      broadened Re and hz and reduced amplitude.</span>
-<span class="sd">    - Bridges: Gaussian tubes along the 3D line between the central galaxy and</span>
-<span class="sd">      each satellite, with LOS velocity linearly interpolated between</span>
-<span class="sd">      endpoints.</span>
-<span class="sd">    - Tidal tails: Gaussian arcs starting at each satellite and extending in</span>
-<span class="sd">      the central→satellite direction with a small perpendicular curvature.</span>
+<span class="sd">    - Halo: 2D Sérsic profile in the disk plane (n = 0.5, Gaussian-like) times</span>
+<span class="sd">      an exponential vertical profile, centered on the central galaxy with</span>
+<span class="sd">      scaled Re, hz, and reduced amplitude via diffuse_params factors.</span>
+<span class="sd">    - Bridges: Gaussian tubes along the line connecting the central galaxy to</span>
+<span class="sd">      each satellite, with flux strictly clamped to [bridge_start_frac,</span>
+<span class="sd">      1 - bridge_stop_frac] along that line to prevent leakage. Width tapers</span>
+<span class="sd">      from halo end to satellite end. LOS velocity interpolates linearly</span>
+<span class="sd">      between endpoints.</span>
+<span class="sd">    - Tidal tails: Curved Gaussian arcs extending from each satellite away</span>
+<span class="sd">      from the central galaxy. Each tail is sampled at tail_n_samples points</span>
+<span class="sd">      along a quadratic curve with perpendicular curvature. One-sided sigmoid</span>
+<span class="sd">      gate suppresses emission on the side facing back toward the central.</span>
 
 <span class="sd">    The LOS velocity cube is a flux-weighted blend over the three components,</span>
 <span class="sd">    with per-voxel Gaussian noise added inside each component before blending.</span>
+<span class="sd">    All three components are binned into the final spectral cube using the</span>
+<span class="sd">    same velocity-channel masks as the per-galaxy disk components.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">rng</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
@@ -699,6 +706,12 @@
 <span class="sd">        seed : int or None</span>
 <span class="sd">            RNG seed used to make results reproducible across NumPy, PyTorch</span>
 <span class="sd">            and Python `random`.</span>
+<span class="sd">        diffuse_params : dict or None</span>
+<span class="sd">            Optional overrides for diffuse emission knobs (halo, bridges,</span>
+<span class="sd">            tidal tails). If provided, updates are merged with</span>
+<span class="sd">            ``DEFAULT_DIFFUSE_PARAMS``. If ``None``, all defaults are used.</span>
+<span class="sd">            Set ``diffuse_params[&#39;enabled&#39;] = False`` to disable diffuse</span>
+<span class="sd">            components. See ``DEFAULT_DIFFUSE_PARAMS`` for available keys.</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -1238,9 +1251,12 @@
 <span class="sd">        gal_params_list : list of dict, optional</span>
 <span class="sd">            Per-galaxy parameter dicts with keys &#39;Re&#39;, &#39;Se&#39;, &#39;hz&#39; (pixel</span>
 <span class="sd">            units). When provided and ``self.diffuse_params[&#39;enabled&#39;]`` is</span>
-<span class="sd">            True, a diffuse stellar/gaseous halo around the central galaxy</span>
-<span class="sd">            plus diffuse bridges and tidal-tail lookalikes connecting the</span>
-<span class="sd">            central to each satellite are added to the spectral cube.</span>
+<span class="sd">            True, three diffuse components are built on the full grid and</span>
+<span class="sd">            added to the spectral cube: (1) a halo (2D Sérsic × vertical</span>
+<span class="sd">            exponential) around the central galaxy, (2) one bridge (tapered</span>
+<span class="sd">            Gaussian tube with clamped spatial extent) per satellite, and</span>
+<span class="sd">            (3) one tidal tail (curved arc with one-sided sigmoid gate) per</span>
+<span class="sd">            satellite.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>

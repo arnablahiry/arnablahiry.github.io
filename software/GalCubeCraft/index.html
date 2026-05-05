@@ -302,6 +302,13 @@
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#high-fidelity-simulator-for-synthetic-ifu-integral-field-unit-spectral-cubes">High-fidelity simulator for synthetic IFU (Integral Field Unit) spectral cubes.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of contents</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-galcubecraft-does">What GalCubeCraft does</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#diffuse-emission-implementation">Diffuse emission implementation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#central-halo">1) Central halo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges">2) Bridges</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tidal-tails">3) Tidal tails</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combination-into-the-final-cube">4) Combination into the final cube</a></li>
+</ul>
+</li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#scientific-background-equations">Scientific background &amp; equations</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sersic-radial-profile-disk-plane">Sérsic radial profile (disk plane)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertical-exponential-profile">Vertical exponential profile</a></li>
@@ -407,6 +414,7 @@ to produce a physically motivated basis and test data for algorithm development,
 <h1>Table of contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h1>
 <ul class="simple">
 <li><p>What GalCubeCraft does</p></li>
+<li><p>Diffuse emission implementation</p></li>
 <li><p>Scientific background &amp; equations</p></li>
 <li><p>Installation (PyPI + source)</p></li>
 <li><p>Quick start examples</p></li>
@@ -432,6 +440,85 @@ and assigns tangential velocities to voxels.</p></li>
 </ul>
 <p>The package is intentionally clear and inspectable (readable loops, compact
 functions), making it suitable for method development and teaching.</p>
+</section>
+<section id="diffuse-emission-implementation">
+<h1>Diffuse emission implementation<a class="headerlink" href="#diffuse-emission-implementation" title="Link to this heading">#</a></h1>
+<p>GalCubeCraft can optionally add low-surface-brightness diffuse structure on top
+of the per-galaxy disks during cube assembly. The implementation lives in
+<code class="docutils literal notranslate"><span class="pre">src/GalCubeCraft/core.py</span></code> and is controlled through <code class="docutils literal notranslate"><span class="pre">diffuse_params</span></code>, which is
+merged with <code class="docutils literal notranslate"><span class="pre">DEFAULT_DIFFUSE_PARAMS</span></code> at initialisation time. Enable or disable
+the feature with <code class="docutils literal notranslate"><span class="pre">diffuse_params['enabled']</span></code>.</p>
+<p>The diffuse model is built on the full output grid before velocity binning, and
+it uses the same galaxy centres and systemic LOS velocities as the rotated disk
+components. The three additive structures are:</p>
+<ul class="simple">
+<li><p>A central halo around the first galaxy.</p></li>
+<li><p>One bridge per satellite, running from the central galaxy toward the
+satellite.</p></li>
+<li><p>One tidal tail per satellite, extending away from the central galaxy.</p></li>
+</ul>
+<section id="central-halo">
+<h2>1) Central halo<a class="headerlink" href="#central-halo" title="Link to this heading">#</a></h2>
+<p>The halo is a 2D Sérsic profile in the disk plane multiplied by an
+exponential vertical fall-off (creating a 3D structure):</p>
+<div class="math notranslate nohighlight">
+\[
+S_\text{halo}(x,y,z) = S_{e,\text{halo}}
+\exp\left[-b_n\left(\left(\frac{R}{R_{e,\text{halo}}}\right)^{1/n_\text{halo}} - 1\right)\right]
+\exp\left(-\frac{|z-z_0|}{h_{z,\text{halo}}}\right),
+\]</div>
+<p>where the defaults broaden the central disk by factors of <code class="docutils literal notranslate"><span class="pre">halo_Re_factor</span></code> and
+<code class="docutils literal notranslate"><span class="pre">halo_hz_factor</span></code>, reduce the amplitude with <code class="docutils literal notranslate"><span class="pre">halo_Se_factor</span></code>, and use a
+Gaussian-like Sérsic index <code class="docutils literal notranslate"><span class="pre">halo_n</span> <span class="pre">=</span> <span class="pre">0.5</span></code>. The halo LOS velocity is the
+central systemic velocity plus Gaussian scatter with width <code class="docutils literal notranslate"><span class="pre">halo_sigma_vz</span></code>.</p>
+</section>
+<section id="bridges">
+<h2>2) Bridges<a class="headerlink" href="#bridges" title="Link to this heading">#</a></h2>
+<p>For each satellite, the bridge is a Gaussian tube along the line connecting the
+central galaxy to the satellite. The coordinate along that link is clipped to
+the active interval</p>
+<div class="math notranslate nohighlight">
+\[
+s \in [s_\text{start}, s_\text{end}],\qquad
+s_\text{start} = \texttt{bridge\_start\_frac},\qquad
+s_\text{end} = 1 - \texttt{bridge\_stop\_frac}.
+\]</div>
+<p>This clamp is important: it keeps the bridge flux strictly inside the central
+to satellite segment and prevents leakage behind the central galaxy or beyond
+the satellite. The bridge width tapers smoothly from the halo end to the
+satellite end using <code class="docutils literal notranslate"><span class="pre">bridge_width_start_factor</span></code> and
+<code class="docutils literal notranslate"><span class="pre">bridge_width_end_factor</span></code>, with a trapezoidal fade controlled by
+<code class="docutils literal notranslate"><span class="pre">bridge_edge_fade</span></code>. The amplitude scales with
+<code class="docutils literal notranslate"><span class="pre">bridge_Se_factor</span> <span class="pre">*</span> <span class="pre">min(Se_central,</span> <span class="pre">Se_satellite)</span></code>, and the LOS velocity is
+linearly interpolated between the two galaxy systemic velocities with Gaussian
+scatter from <code class="docutils literal notranslate"><span class="pre">bridge_sigma_vz</span></code>.</p>
+</section>
+<section id="tidal-tails">
+<h2>3) Tidal tails<a class="headerlink" href="#tidal-tails" title="Link to this heading">#</a></h2>
+<p>Each satellite gets one curved tail extending away from the central galaxy.
+The code samples a quadratic curve with <code class="docutils literal notranslate"><span class="pre">tail_n_samples</span></code> points, then places a
+Gaussian blob at each sample position. The tail length is set by
+<code class="docutils literal notranslate"><span class="pre">tail_length_factor</span> <span class="pre">*</span> <span class="pre">separation</span></code>, while <code class="docutils literal notranslate"><span class="pre">tail_curvature</span></code> sets the
+perpendicular bend. The tail width scales with the satellite vertical scale
+height through <code class="docutils literal notranslate"><span class="pre">tail_width_factor</span> <span class="pre">*</span> <span class="pre">hz_satellite</span></code>, and the amplitude fades
+linearly along the tail via <code class="docutils literal notranslate"><span class="pre">tail_Se_factor</span></code>.</p>
+<p>To keep tails one-sided, the implementation applies a sigmoid gate on the side
+of the satellite facing away from the central galaxy. This suppresses emission
+that would otherwise bleed back through the satellite toward the central. The
+tail LOS velocity drifts along the curve by <code class="docutils literal notranslate"><span class="pre">tail_vel_gradient</span></code> and includes
+Gaussian scatter from <code class="docutils literal notranslate"><span class="pre">tail_sigma_vz</span></code>.</p>
+</section>
+<section id="combination-into-the-final-cube">
+<h2>4) Combination into the final cube<a class="headerlink" href="#combination-into-the-final-cube" title="Link to this heading">#</a></h2>
+<p>The diffuse flux and diffuse LOS-velocity fields are accumulated voxel by
+voxel, then each spectral channel reuses the same velocity-bin masks as the
+disk components. In practice, the diffuse cube is added only to the channels
+whose velocity limits contain the diffuse voxel velocity. This means the halo,
+bridges, and tails appear in the same final <code class="docutils literal notranslate"><span class="pre">(n_vel,</span> <span class="pre">ny,</span> <span class="pre">nx)</span></code> cube as the disk
+emission, instead of being post-processed as a separate overlay.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">n_gals</span> <span class="pre">==</span> <span class="pre">1</span></code>, only the halo is used; bridges and tails are only built when
+satellite galaxies are present.</p>
+</section>
 </section>
 <section id="scientific-background-equations">
 <h1>Scientific background &amp; equations<a class="headerlink" href="#scientific-background-equations" title="Link to this heading">#</a></h1>
@@ -811,6 +898,13 @@ Submitted to <strong>Astronomy &amp; Astrophysics (A&amp;A)</strong>, 2025.</p>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#high-fidelity-simulator-for-synthetic-ifu-integral-field-unit-spectral-cubes">High-fidelity simulator for synthetic IFU (Integral Field Unit) spectral cubes.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of contents</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-galcubecraft-does">What GalCubeCraft does</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#diffuse-emission-implementation">Diffuse emission implementation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#central-halo">1) Central halo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bridges">2) Bridges</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tidal-tails">3) Tidal tails</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combination-into-the-final-cube">4) Combination into the final cube</a></li>
+</ul>
+</li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#scientific-background-equations">Scientific background &amp; equations</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sersic-radial-profile-disk-plane">Sérsic radial profile (disk plane)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vertical-exponential-profile">Vertical exponential profile</a></li>

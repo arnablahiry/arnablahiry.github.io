@@ -510,9 +510,12 @@ computing relative Hubble-flow offsets when placing multiple
 galaxies along the LOS.</p></li>
 <li><p><strong>gal_params_list</strong> (<em>list</em><em> of </em><em>dict</em><em>, </em><em>optional</em>) – Per-galaxy parameter dicts with keys ‘Re’, ‘Se’, ‘hz’ (pixel
 units). When provided and <code class="docutils literal notranslate"><span class="pre">self.diffuse_params['enabled']</span></code> is
-True, a diffuse stellar/gaseous halo around the central galaxy
-plus diffuse bridges and tidal-tail lookalikes connecting the
-central to each satellite are added to the spectral cube.</p></li>
+True, three diffuse components are built on the full grid and
+added to the spectral cube: (1) a halo (2D Sérsic × vertical
+exponential) around the central galaxy, (2) one bridge (tapered
+Gaussian tube with clamped spatial extent) per satellite, and
+(3) one tidal tail (curved arc with one-sided sigmoid gate) per
+satellite.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
