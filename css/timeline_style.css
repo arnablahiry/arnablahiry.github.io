@@ -114,7 +114,13 @@
 
 
 .timeline-text{
-    color: white;
+    color: #e6e6e6;
+    background: #0f0f10;
+    border: 1px solid #343438;
+    border-radius: 10px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+    box-sizing: border-box;
+    padding: 18px;
     font-family: Georgia, "Times New Roman", Times, serif;
     /* slightly smaller for improved density on large screens */
     font-size: 13px;
@@ -122,6 +128,13 @@
     line-height: 1.3;
     text-align: justify;
     text-justify: inter-word;
+}
+
+body.light-mode .timeline-text{
+    background: rgba(255,255,255,0.96);
+    border: 1px solid rgba(0,0,0,0.14);
+    box-shadow: none;
+    color: #111;
 }
 
 .timeline-heading-trigger{
@@ -435,6 +448,19 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 
 .timeline-right .timeline-image-wrapper + .timeline-image-wrapper{
     margin-top: 12px;
+}
+
+.timeline-right .timeline-image-wrapper img{
+    border: 1px solid #343438;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: block;
+    overflow: hidden;
+}
+
+body.light-mode .timeline-right .timeline-image-wrapper img{
+    border-color: rgba(0,0,0,0.14);
+    box-shadow: none;
 }
 
 .link-icon{
