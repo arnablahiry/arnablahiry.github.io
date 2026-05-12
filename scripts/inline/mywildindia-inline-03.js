@@ -783,53 +783,72 @@
       }
     }
 
-    document.getElementById('close-place').addEventListener('click', () => {
-      panel.classList.remove('open');
-      activePlaceKey = null;
-    });
-    document.getElementById('close-place').addEventListener('click', (event) => {
-      event.stopPropagation();
-    });
-    toggleWildEl.addEventListener('change', () => {
-      showWildMarkers = toggleWildEl.checked;
-      refreshMarkersForCurrentView();
-    });
-    toggleNotWildEl.addEventListener('change', () => {
-      showNotWildMarkers = toggleNotWildEl.checked;
-      refreshMarkersForCurrentView();
-    });
+    const closePlaceEl = document.getElementById('close-place');
+    if (closePlaceEl) {
+      closePlaceEl.addEventListener('click', () => {
+        panel.classList.remove('open');
+        activePlaceKey = null;
+      });
+      closePlaceEl.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    }
+
+    if (toggleWildEl) {
+      toggleWildEl.addEventListener('change', () => {
+        showWildMarkers = toggleWildEl.checked;
+        refreshMarkersForCurrentView();
+      });
+    }
+    if (toggleNotWildEl) {
+      toggleNotWildEl.addEventListener('change', () => {
+        showNotWildMarkers = toggleNotWildEl.checked;
+        refreshMarkersForCurrentView();
+      });
+    }
+
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && lightboxEl.classList.contains('open')) {
+      if (event.key === 'Escape' && lightboxEl && lightboxEl.classList.contains('open')) {
         closeLightbox();
         return;
       }
       if (event.key === 'Escape' && activeFeature) resetMap();
     });
-    lightboxCloseEl.addEventListener('click', closeLightbox);
-    lightboxCloseEl.addEventListener('click', (event) => event.stopPropagation());
-    lightboxNextEl.addEventListener('click', nextLightboxPhoto);
-    lightboxNextEl.addEventListener('click', (event) => event.stopPropagation());
-    lightboxEl.addEventListener('click', (event) => {
-      if (event.target === lightboxEl) {
-        event.stopPropagation();
-        closeLightbox();
-      }
-    });
+
+    if (lightboxCloseEl) {
+      lightboxCloseEl.addEventListener('click', closeLightbox);
+      lightboxCloseEl.addEventListener('click', (event) => event.stopPropagation());
+    }
+    if (lightboxNextEl) {
+      lightboxNextEl.addEventListener('click', nextLightboxPhoto);
+      lightboxNextEl.addEventListener('click', (event) => event.stopPropagation());
+    }
+    if (lightboxEl) {
+      lightboxEl.addEventListener('click', (event) => {
+        if (event.target === lightboxEl) {
+          event.stopPropagation();
+          closeLightbox();
+        }
+      });
+    }
+
     document.addEventListener('click', (event) => {
-      if (event.target.closest('#photo-lightbox')) return;
-      if (event.target.closest('#place-panel')) return;
-      if (!event.target.closest('.map-panel')) {
+      if (event.target.closest && event.target.closest('#photo-lightbox')) return;
+      if (event.target.closest && event.target.closest('#place-panel')) return;
+      if (!event.target.closest || !event.target.closest('.map-panel')) {
         panel.classList.remove('open');
         activePlaceKey = null;
       }
       if (!activeFeature) return;
-      if (event.target.closest('.map-filters')) return;
-      if (event.target.closest('.state-layer path')) return;
-      if (event.target.closest('.marker')) return;
-      if (event.target.closest('.capital-marker')) return;
+      if (event.target.closest && event.target.closest('.map-filters')) return;
+      if (event.target.closest && event.target.closest('.state-layer path')) return;
+      if (event.target.closest && event.target.closest('.marker')) return;
+      if (event.target.closest && event.target.closest('.capital-marker')) return;
       resetMap();
     });
-    mapPanelEl.addEventListener('wheel', (event) => {
+
+    if (mapPanelEl) {
+      mapPanelEl.addEventListener('wheel', (event) => {
       if (!activeFeature || viewState.scale <= 1) return;
       event.preventDefault();
       const { minTx, maxTx, minTy, maxTy } = getPanBounds();
@@ -862,5 +881,37 @@
         }
       }, 120);
     }, { passive: false });
-    mapEl.on('mouseleave', hideTooltip);
-    initMap();
+      mapEl.on('mouseleave', hideTooltip);
+    }
+
+    // Initialize map when DOM and D3 are ready. This avoids errors if the
+    // script runs before the environment is prepared (some build tools may
+    // reorder or defer scripts). If D3 is missing, attempt to load it.
+    function ensureReadyAndInit() {
+      const start = () => {
+        try {
+          initMap();
+        } catch (err) {
+          console.error('Map initialization failed:', err);
+          if (placeDescription) placeDescription.textContent = 'Map initialization error. Check console for details.';
+        }
+      };
+
+      if (window.d3) return start();
+
+      // Dynamically load D3 and then init.
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+      s.onload = start;
+      s.onerror = () => {
+        console.error('Failed to load D3 from CDN');
+        if (placeDescription) placeDescription.textContent = 'Failed to load map library. Please check connectivity.';
+      };
+      document.body.appendChild(s);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', ensureReadyAndInit);
+    } else {
+      ensureReadyAndInit();
+    }

@@ -1,7 +1,7 @@
 /* Publications page styles */
 
 .section-timeline-heading{
-    background-color: black;
+    background: transparent;
 }
 
 .container{
@@ -31,6 +31,8 @@
 
 .section-timeline-heading .padding-vertical-xlarge{
     padding-bottom: 0;
+    margin-top: 50px;
+    margin-bottom: 20px
 }
 
 h2.intro-heading{
@@ -47,7 +49,32 @@ h2.intro-heading{
 }
 
 body{
-    background-color: black;
+    background-color: transparent;
+}
+
+.page-wrapper,
+main,
+.section-timeline,
+.section-timeline-heading,
+.container{
+    background: transparent !important;
+}
+
+.section-timeline{
+    position: relative;
+}
+
+.overlay-fade-top{
+    background-image: linear-gradient(black, #0a0a0a00);
+    height: 560px;
+    position: absolute;
+    inset: 0% 0% auto;
+    top: -180px;
+    left: -50%;
+    right: 0;
+    width: 300vw;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .projects-grid {
@@ -60,9 +87,9 @@ body{
 .project-card {
     display: flex;
     align-items: flex-start;
-    background: #0f0f10;
+    background: rgba(15, 15, 16, 0.84);
     transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
-    border: 1px solid #232325;
+    border: 1px solid rgba(255, 215, 0, 0.22);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
@@ -74,6 +101,10 @@ body{
 .project-card:hover {
     border-color: #feda4a35;
     box-shadow: 0 12px 30px rgba(0,0,0,0.65);
+}
+
+footer{
+    background: transparent !important;
 }
 
 .project-image {
@@ -93,6 +124,25 @@ body{
     margin: 0 0 8px 0;
     color: white;
     font-size: 18px;
+}
+
+/* Revert project/paper titles to site default serif/sans font (not pixel font) */
+.project-title {
+    font-family: Georgia, "Times New Roman", Times, serif !important;
+    font-weight: 700;
+    font-size: 17px !important;
+    letter-spacing: normal !important;
+}
+
+/* Make authors, journal and related meta use serif for consistent paper styling */
+.project-authors,
+.project-journal,
+.project-meta,
+.project-full,
+.project-full p,
+.project-full li,
+.project-full span {
+    font-family: Georgia, "Times New Roman", Times, serif !important;
 }
 
 .project-authors {

@@ -1,19 +1,24 @@
 /* Research page styles — copied heading styles from timeline_style.css
    and adjusted to force a single-line title. */
 
-/* Ensure the section heading area has a black background */
+/* Keep the Research page background image visible behind the content. */
 .section-timeline-heading{
-    background-color: black;
+    background: transparent;
 }
 
-/* Defensive: ensure the main sections and containers on the Research page
-   remain dark in non-light-mode (prevent accidental white background). */
+/* Defensive: keep the main sections and containers transparent so the fixed
+   background image can show through behind the research content. */
 body:not(.light-mode) .section-timeline,
 body:not(.light-mode) .section-timeline-heading,
 body:not(.light-mode) .page-wrapper,
 body:not(.light-mode) .container{
-    background: #000000 !important;
+    background: transparent !important;
     color: #e6e6e6 !important;
+}
+
+body.page-research footer{
+    background: transparent !important;
+    color: #ffffff !important;
 }
 
 /* Container and spacing to match timeline page */
@@ -26,8 +31,9 @@ body:not(.light-mode) .container{
 
 .padding-vertical-xlarge{
     /* Nudge the whole page content a bit closer to the fixed header */
-    padding-top: 80px;
-    padding-bottom: 80px;
+    margin-top: -10px;
+    padding-top: 0;
+    padding-bottom: 0px;
 }
 
 .timeline-main-heading-wrapper{
@@ -386,11 +392,39 @@ body:not(.light-mode) #meme-wrapper .reveal-btn:hover{
     margin-bottom: 1vh; /* keep a small gap between stacked elements */
 }
 
+/* Increase gap between page heading and subtitle on Research page */
+body.page-research .timeline-main-heading-wrapper > .margin-bottom-medium:first-child{
+    margin-bottom: 5.4vh !important;
+}
+
+body.page-research .timeline-main-heading-wrapper > .research-heading-row.margin-bottom-medium{
+    margin-top: 0 !important;
+}
+
 /* Reduce the large bottom padding under the heading for this page so the
    project cards sit closer to the subtitle. We scope to the heading section
    to avoid changing other pages that use the same utility class. */
 .section-timeline-heading .padding-vertical-xlarge{
+    margin-top: 48px;
+    padding-top: 0;
     padding-bottom: 6vh;
+}
+
+.section-timeline{
+    position: relative;
+}
+
+.overlay-fade-top{
+    background-image: linear-gradient(black, #0a0a0a00);
+    height: 760px;
+    position: absolute;
+    inset: 0% 0% auto;
+    top: -300px;
+    left: -50%;
+    right: 0;
+    width: 300vw;
+    z-index: -1;
+    pointer-events: none;
 }
 
 /* Exact gradient text styling copied from timeline_style.css but scoped to the
@@ -507,7 +541,7 @@ h2.intro-heading{
     .intro-heading .break-after{ display: block !important; }
 
     /* Increase spacing between the fixed header and the heading on phones */
-    .padding-vertical-xlarge{ padding-top: 100px; padding-bottom: 40px; }
+    .padding-vertical-xlarge{ margin-top: 100px; padding-top: 0; padding-bottom: 40px; }
 
     /* Prevent heading/subtitle from running under the top-right controls
        (close / theme buttons). On phones we allow the heading to wrap and
@@ -634,8 +668,8 @@ h2.intro-heading{
 }
 
 .project-card{
-    background: #0f0f10;
-    border: 1px solid #232325;
+    background: rgba(15, 15, 16, 0.84);
+    border: 1px solid rgba(255, 215, 0, 0.22);
     padding: 0;
     border-radius: 10px;
     overflow: hidden;
@@ -647,8 +681,8 @@ h2.intro-heading{
 
 /* Defensive: ensure Research page cards stay dark unless light-mode is active. */
 body:not(.light-mode) .project-card{
-    background: #0f0f10 !important;
-    border: 1px solid #232325 !important;
+    background: rgba(15, 15, 16, 0.84) !important;
+    border: 1px solid rgba(255, 215, 0, 0.22) !important;
     box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
     color: #e6e6e6 !important;
 }
@@ -678,12 +712,21 @@ body:not(.light-mode) .project-card .project-subtitle{ color: #cfcfcf !important
 .project-title{
     margin: 0 0 6px 0;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 700;
+}
+/* Ensure Research in-card titles use the original font and size (override global rules) */
+body.page-research #projects-grid .project-title,
+body.page-research .project-title {
+    font-family: inherit !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
 }
 .project-subtitle{
     margin: 0;
     color: #cfcfcf;
-    font-size: 14.5px;
+    font-size: 13.5px;
 }
 
 .project-toggle{
@@ -1029,10 +1072,12 @@ body.light-mode #projects-grid .project-toggle{
     /* Ensure title/subtitle margins mirror dark-mode */
     body.light-mode #projects-grid .project-title{
         margin: 0 0 6px 0 !important;
-        font-size: 2.4vh !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
     }
     body.light-mode #projects-grid .project-subtitle{
         margin: 0 !important;
+        font-size: 13.5px !important;
     }
 
     /* Desktop: keep heading centered via container centering (matches timeline)
@@ -1140,7 +1185,7 @@ body:not(.light-mode) img{
     }
 
     .page-research .timeline-main-heading-wrapper > .margin-bottom-medium:first-child{
-        margin-bottom: 4.2vh !important;
+        margin-bottom: 5.4vh !important;
     }
 
     .page-research .research-intro-text{
@@ -1171,18 +1216,20 @@ body:not(.light-mode) img{
 /* Final hard override: keep Research card titles from scaling via vh in light mode */
 @media (min-width: 769px){
     .page-research #projects-grid .project-title{
-        font-size: 16px !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
         line-height: 1.3 !important;
     }
 }
 
 /* Theme parity: Research card typography must be identical in dark/light */
 .page-research #projects-grid .project-title{
-    font-size: 17px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
     line-height: 1.3 !important;
 }
 .page-research #projects-grid .project-subtitle{
-    font-size: 14.5px !important;
+    font-size: 13.5px !important;
     line-height: 1.45 !important;
 }
 .page-research #projects-grid .project-meta{
@@ -1190,10 +1237,10 @@ body:not(.light-mode) img{
 }
 @media (max-width: 1100px){
     .page-research #projects-grid .project-title{
-        font-size: 15px !important;
+        font-size: 14px !important;
     }
     .page-research #projects-grid .project-subtitle{
-        font-size: 13.5px !important;
+        font-size: 12.8px !important;
     }
 }
 
@@ -1212,7 +1259,8 @@ body:not(.light-mode) img{
         padding: 14px 12px 14px !important;
     }
     .page-research #projects-grid .project-title{
-        font-size: 16px !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
         line-height: 1.32 !important;
         margin: 0 0 10px 0 !important;
     }

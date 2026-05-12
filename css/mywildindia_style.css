@@ -3,6 +3,15 @@ body.page-wild-india {
   color: #e9e9e9;
 }
 
+/* Revert global pixel heading font from utils.css for this page */
+body.page-wild-india h1,
+body.page-wild-india h2,
+body.page-wild-india h3,
+body.page-wild-india h4 {
+  font-family: inherit !important;
+  letter-spacing: normal !important;
+}
+
 body.page-wild-india,
 body.page-wild-india * {
   transition-property: color, background-color, border-color, box-shadow, fill, stroke !important;

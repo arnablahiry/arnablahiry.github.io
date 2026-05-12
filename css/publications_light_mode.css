@@ -10,3 +10,38 @@
     transition-timing-function: linear !important;
   }
 }
+
+body.light-mode #image-overlay{
+  background: rgba(255,255,255,0.75) !important;
+}
+
+body.light-mode #bg-image{
+  filter: invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.95) !important;
+}
+
+body.light-mode{
+  background-color: transparent !important;
+}
+
+body.light-mode .page-wrapper,
+body.light-mode main,
+body.light-mode .container,
+body.light-mode .section-timeline,
+body.light-mode .section-timeline-heading{
+  background: transparent !important;
+}
+
+body.light-mode .overlay-fade-top{
+  background-image: linear-gradient(white, rgba(255,255,255,0)) !important;
+}
+
+body.light-mode .project-card{
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1px solid rgba(140, 118, 28, 0.38) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12) !important;
+}
+
+body.light-mode footer{
+  background: transparent !important;
+  color: #111111 !important;
+}

@@ -12,6 +12,9 @@
   const manifest = (window.TRAVEL_PHOTO_MANIFEST && typeof window.TRAVEL_PHOTO_MANIFEST === 'object')
     ? window.TRAVEL_PHOTO_MANIFEST
     : {};
+  const captionManifest = (window.TRAVEL_CAPTIONS && typeof window.TRAVEL_CAPTIONS === 'object')
+    ? window.TRAVEL_CAPTIONS
+    : {};
 
   function titleFromSlug(value) {
     return String(value || '')
@@ -23,7 +26,12 @@
 
   function photosFromFolder(folder, countryName) {
     const files = Array.isArray(manifest[folder]) ? manifest[folder] : [];
-    return files.map((entry, index) => photo(entry, `${countryName || titleFromSlug(folder)} photo ${index + 1}`));
+    const captions = Array.isArray(captionManifest[folder]) ? captionManifest[folder] : [];
+    return files.map((entry, index) => {
+      const hasCaption = typeof captions[index] === 'string';
+      const fallback = `${countryName || titleFromSlug(folder)} photo ${index + 1}`;
+      return photo(entry, hasCaption ? captions[index] : fallback);
+    });
   }
 
   const countries = {

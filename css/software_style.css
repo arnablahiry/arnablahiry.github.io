@@ -11,6 +11,44 @@ body.page-software .section-timeline-heading .container {
   padding-right: 0 !important;
 }
 
+body.page-software .page-wrapper,
+body.page-software main,
+body.page-software .section-timeline,
+body.page-software .section-timeline-heading,
+body.page-software .container{
+  background: transparent !important;
+}
+
+body.page-software .section-timeline{
+  position: relative;
+}
+
+body.page-software .overlay-fade-top{
+  background-image: linear-gradient(black, #0a0a0a00);
+  height: 660px;
+  position: absolute;
+  inset: 0% 0% auto;
+  top: -180px;
+  left: -50%;
+  right: 0;
+  width: 300vw;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body.page-software footer{
+  background: transparent !important;
+}
+
+body.light-mode.page-software{
+  background-color: transparent !important;
+}
+
+body.light-mode.page-software footer{
+  background: transparent !important;
+  color: #111111 !important;
+}
+
 /* ------------------------------------------------------------------
    Prevent inversion of Astrolore screenshots on the Softwares page.
    This file is loaded after the site-wide theme CSS, so a page-scoped,
@@ -83,7 +121,7 @@ body.light-mode .project-filters .filter-btn{
 body.light-mode .project-filters .filter-btn:hover{
   background: rgba(0,0,0,0.08) !important;
 }
-body.light-mode .project-filters .filter-btn[aria-pressed="true"],
+  body.light-mode .project-filters .filter-btn[aria-pressed="true"],
 body.light-mode .project-filters .filter-btn.active{
   background: linear-gradient(90deg, rgba(250,228,150,0.22), rgba(200,170,80,0.14)) !important;
   color: #111 !important;
@@ -131,6 +169,18 @@ body.page-software .project-card{ border: 1px solid transparent; box-sizing: bor
 body.page-software #projects-grid .project-card,
 body.page-software.light-mode #projects-grid .project-card{
   padding: 0 !important;
+}
+
+body.page-software #projects-grid .project-card{
+  background: rgba(15, 15, 16, 0.84) !important;
+  border: 1px solid rgba(255, 215, 0, 0.22) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+}
+
+body.light-mode.page-software #projects-grid .project-card{
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1px solid rgba(140, 118, 28, 0.38) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12) !important;
 }
 
 /* Project icons (GitHub / Sphinx / PyPI) shown under tags in condensed view */
@@ -1002,6 +1052,14 @@ body.light-mode .legend-item img {
 body.page-software #projects-grid .project-title{
     font-size: 17px !important;
     line-height: 1.3 !important;
+}
+/* Ensure Software in-card titles keep their intended monospace styling */
+body.page-software #projects-grid .project-title,
+body.page-software .project-title {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
+  line-height: 1.3 !important;
 }
 body.page-software #projects-grid .project-subtitle{
     font-size: 14.5px !important;

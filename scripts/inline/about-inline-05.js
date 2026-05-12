@@ -3,7 +3,7 @@
     // on click and when the page regains focus/visibility.
     (function(){
       try{
-        const miniAnchors = Array.from(document.querySelectorAll('.about-mini-banner a.about-thumb'));
+        const miniAnchors = Array.from(document.querySelectorAll('.about-mini-banner a.about-thumb[target="_blank"]'));
         if(!miniAnchors.length) return;
 
         miniAnchors.forEach(a => {
@@ -19,7 +19,7 @@
           try{
             const ae = document.activeElement;
             if(!ae) return;
-            if(ae.matches && ae.matches('.about-mini-banner a.about-thumb')){
+            if(ae.matches && ae.matches('.about-mini-banner a.about-thumb[target="_blank"]')){
               ae.blur();
             }
           }catch(e){/* ignore */}

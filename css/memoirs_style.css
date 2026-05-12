@@ -4,6 +4,15 @@ body.page-memoirs {
   --memoirs-header-offset: 110px;
 }
 
+/* Revert global pixel heading font from utils.css for this page */
+body.page-memoirs h1,
+body.page-memoirs h2,
+body.page-memoirs h3,
+body.page-memoirs h4 {
+  font-family: inherit !important;
+  letter-spacing: normal !important;
+}
+
 .memoirs-heading {
   padding-top: calc(var(--memoirs-header-offset) + env(safe-area-inset-top, 0px));
   padding-bottom: 28px;
@@ -209,6 +218,36 @@ body.page-memoirs {
   -webkit-background-clip: border-box !important;
   background-clip: border-box !important;
   -webkit-text-fill-color: currentColor !important;
+}
+
+/* Make foreword/author and memoir-related titles smaller and distinct from the page title */
+#foreword-name,
+.foreword-editor-name,
+.all-memoirs-heading,
+.story-card-title {
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  letter-spacing: 0.02em !important;
+}
+
+#foreword-name {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.foreword-editor-name {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+}
+
+.all-memoirs-heading {
+  font-size: 0.95rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase;
+}
+
+.story-card-title {
+  font-size: clamp(0.85rem, 0.95vw, 0.98rem) !important;
+  font-weight: 700 !important;
 }
 
 .foreword-dates {

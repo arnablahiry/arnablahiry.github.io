@@ -91,5 +91,15 @@ function writeManifest(manifest) {
 const manifest = readManifest();
 writeManifest(manifest);
 
+try {
+  const captionSyncScript = path.join(__dirname, 'sync-travel-caption-spreadsheet.js');
+  if (fs.existsSync(captionSyncScript)) {
+    childProcess.execFileSync(process.execPath, [captionSyncScript], { stdio: 'inherit' });
+  }
+} catch (error) {
+  const reason = (error && error.message) ? error.message : String(error);
+  console.warn(`Skipped travel caption spreadsheet sync: ${reason}`);
+}
+
 const count = Object.values(manifest).reduce((sum, files) => sum + files.length, 0);
 console.log(`Wrote ${toWebPath(outputPath)} with ${count} photos and thumbnails across ${Object.keys(manifest).length} folders.`);

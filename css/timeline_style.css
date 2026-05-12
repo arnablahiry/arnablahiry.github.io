@@ -57,11 +57,12 @@
 .timeline-date-text{
     color: white;
     letter-spacing: -0.03em;
-    font-size: 6vh;
+    font-size: 4vh;
     font-weight: 600;
     line-height: 1.2;
     position: sticky;
     top: 50vh;
+    font-family: 'Press Start 2P', monospace;
 }
 
 .timeline-date-text .timeline-year-part{
@@ -115,10 +116,10 @@
 
 .timeline-text{
     color: #e6e6e6;
-    background: #0f0f10;
-    border: 1px solid #343438;
+    background: rgba(15, 15, 16, 0.52);
+    border: 1px solid rgba(255, 217, 0, 0.396);
     border-radius: 10px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.2);
     box-sizing: border-box;
     padding: 18px;
     font-family: Georgia, "Times New Roman", Times, serif;
@@ -338,6 +339,9 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     height: 50%;
     position: fixed;
     inset: 0 auto 50vh;
+    /* Fade to transparent at the top as it reaches the heading */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 120px);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 120px);
 }
 
 .timeline-breakout{
@@ -403,17 +407,17 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 
 .section-timeline{
     z-index: -3;
-    background-color: black;
+    /* background removed; now using fixed bg-image + overlay system */
     position: relative;
 }
 
-/* Heading division: keep heading text centered, ensure background is black
+/* Heading division: keep heading text centered
    and sit nearer to the top of the page (override the larger global padding). */
 .section-timeline-heading{
-    background-color: black;
     text-align: center;
     position: relative;
     top: 0;
+    margin-top: 20px;
 }
 
 .section-timeline-heading .padding-vertical-xlarge{
@@ -479,18 +483,39 @@ body.light-mode .timeline-right .timeline-image-wrapper img{
 
 .overlay-fade-top{
     background-image: linear-gradient(black, #0a0a0a00);
-    height: 80px;
+    height: 800px;
     position: absolute;
     inset: 0% 0% auto;
+    top: -150px;
+    left: -50%;
+    right: 0;
+    width: 300vw;
+    z-index: 1;
 }
 
-.overlay-fade-bottom{
+.overlay-fade-top-2{
     background-image: linear-gradient(black, #0a0a0a00);
-    height: 80px;
+    height: 400px;
     position: absolute;
     inset: 0% 0% auto;
+    top: -100px;
+    left: -50%;
+    right: 0;
+    width: 300vw;
+    z-index: 2;
 }
 
+.overlay-fade-top-3{
+    background-image: linear-gradient(black, #0a0a0a00);
+    height: 900px;
+    position: absolute;
+    inset: 0% 0% auto;
+    top: -80px;
+    left: -50%;
+    right: 0;
+    width: 300vw;
+    z-index: 3;
+}
 
 @media screen and (max-width: 768px){
     h2{font-size: 40px;}

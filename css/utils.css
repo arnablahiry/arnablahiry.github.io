@@ -15,6 +15,9 @@
          required using page-scoped CSS files.
 ------------------------------------------------------------------------- */
 
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap');
+
 /* -----------------------------
     Reset & Base
     ----------------------------- */
@@ -293,7 +296,7 @@ header.nav-open ~ .page-wrapper::before{ opacity: 1; pointer-events: auto; }
 .logo-container{ display: flex; align-items: center; gap: 0.8rem; }
 .logo{ height: 8vh; width: auto; }
 nav{ display: flex; align-items: center; gap: 2vw; margin-right: 4vw; }
-nav a{ color: white; text-decoration: none; font-size: 16px; font-weight: bold; transition: color 0.3s ease; }
+nav a{ color: white; text-decoration: none; font-size: 16px; font-weight: 100; font-family: 'Montserrat', sans-serif; transition: color 0.3s ease; }
 nav a:hover{ color: #feda4a; }
 nav .nav-dropdown{ position: relative; display: flex; align-items: center; }
 nav .nav-dropdown::after{
@@ -310,7 +313,8 @@ nav .nav-dropdown-toggle{
     border: 0;
     font: inherit;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 100;
+    font-family: 'Montserrat', sans-serif;
     cursor: pointer;
     padding: 0;
     line-height: 1.2;
@@ -345,6 +349,8 @@ nav .nav-dropdown-menu a{
     padding: 0.5rem 0.9rem;
     border-bottom: 0;
     white-space: nowrap;
+    font-weight: 100;
+    font-family: 'Montserrat', sans-serif;
 }
 nav .nav-dropdown:hover .nav-dropdown-menu,
 nav .nav-dropdown:focus-within .nav-dropdown-menu,
@@ -653,7 +659,7 @@ body.light-mode .intro-section .intro-text h2{
 
 /* Mobile-friendly heading size consistency */
 @media (max-width: 520px){
-    h2.intro-heading, h2{ font-size: 5.2vh !important; }
+    h2.intro-heading{ font-size: clamp(1.6rem, 8vw, 2.2rem) !important; }
     /* Reduce the base body font-size slightly on very small screens so
        paragraph/body text is less large and more comfortable to read. */
     body{ font-size: 1.6vh; }
@@ -663,18 +669,60 @@ body.light-mode .intro-section .intro-text h2{
    Applies across all major pages so mobile/tablet headings match Memoirs. */
 :root {
     --site-header-offset: 120px;
-    --page-title-size: clamp(2rem, 4.5vw, 3.2rem);
+    --page-title-size: clamp(1.5rem, 3.6vw, 2.2rem);
+    --heading-scale: 0.45;
+}
+
+/* Card vs Section heading sizing
+   - --card-title-size: used for titles inside project/story cards
+   - --section-heading-size: slightly larger to visually separate sections
+*/
+:root {
+    --card-title-size: clamp(0.9rem, 1.05vw, 1.05rem);
+    --section-heading-size: clamp(0.98rem, 1.12vw, 1.13rem);
+}
+
+/* Apply card & section sizing to common selectors so section headings
+   remain just larger than in-card titles. Use !important to ensure
+   these site-wide rules take precedence over page-level variations. */
+.project-title {
+    font-size: var(--card-title-size) !important;
+}
+
+.cv-subheading,
+.all-memoirs-heading,
+#selected-panel-title,
+.place-panel-header h2,
+.map-tooltip .tooltip-title {
+    font-size: var(--section-heading-size) !important;
 }
 
 /* Keep top-level page titles visually consistent with Memoirs across pages. */
+h2.intro-heading,
 .memoirs-heading h1,
-.wild-india-heading h1,
-.section-travels-heading h2.intro-heading,
-.section-timeline-heading h2.intro-heading {
+.wild-india-heading h1 {
+    font-family: 'Press Start 2P', monospace !important;
+    letter-spacing: 0.04em !important;
     font-size: var(--page-title-size) !important;
     line-height: 1.08 !important;
 }
 
+/* Apply unified pixel font and scaled title sizes across pages */
+.memoirs-heading h1,
+.wild-india-heading h1,
+.section-timeline-heading h2.intro-heading,
+.section-travels-heading h2.intro-heading {
+    font-size: var(--page-title-size) !important;
+    line-height: 1.08 !important;
+    font-family: 'Press Start 2P', monospace !important;
+}
+
+/* Generic headings scaled down site-wide */
+h1, h2, h3, h4 {
+    font-family: 'Press Start 2P', monospace !important;
+    font-size: calc(var(--page-title-size) * var(--heading-scale)) !important;
+    line-height: 1.06 !important;
+}
 @media (min-width: 1101px) {
     .memoirs-heading,
     .wild-india-heading,

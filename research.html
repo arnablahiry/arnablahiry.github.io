@@ -15,6 +15,7 @@
     <meta name="twitter:image" content="images/research/cnn_cosmo.png">
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="shortcut icon" href="images/logo.png">
+    <link href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="css/utils.css">
     <link rel="stylesheet" href="css/research_style.css">
     <link rel="stylesheet" href="css/light_mode.css">
@@ -25,6 +26,10 @@
     <script src="scripts/latex.js"></script>
 </head>
 <body class="page-research">
+
+    <img id="bg-image" src="images/background.jpg" alt="Background" loading="lazy" decoding="async" />
+
+    <div id="image-overlay"></div>
 
     <header>
         <div class="logo-container">
@@ -44,7 +49,7 @@
             <button class="nav-dropdown-toggle" type="button" aria-expanded="false">About</button>
             <div class="nav-dropdown-menu">
                 <a href="about.html">Me</a>
-                <a href="travels.html">My Travels</a>
+                <a href="travels.html">Travels</a>
                 <a href="mywildindia.html">My Wild India</a>
                 <a href="memoirs.html">Memoirs of a Vagabond</a>
             </div>
@@ -72,7 +77,7 @@
                     <div class="timeline-main-heading-wrapper">
                         <!-- Theme toggle moved to the navbar for site-wide placement -->
                             <div class="margin-bottom-medium">
-                            <h2 class="intro-heading">My Scientific <span class="break-after">Research</span></h2>
+                            <h2 class="intro-heading">Scientific <span class="break-after">Research</span></h2>
                         </div>
                         <div class="margin-bottom-medium research-heading-row">
                             <div class="research-intro-text">
@@ -86,6 +91,7 @@
         </div>
 
         <div class="section-timeline">
+            <div class="overlay-fade-top"></div>
             <div class="container">
                 <!-- Projects grid: each card has an image + subtitle; clicking expands details -->
                 <div class="projects-grid" id="projects-grid">

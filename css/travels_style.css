@@ -1,7 +1,6 @@
 /* ============================================================
    TRAVELS PAGE — globe version
    ============================================================ */
-
 html.theme-animate body.no-theme-transition,
 html.theme-animate body.no-theme-transition *,
 body.no-theme-transition,
@@ -40,8 +39,7 @@ body{
     margin-bottom: 0.2vh;
 }
 
-h2.intro-heading {
-    font-size: 8vh;
+.section-travels-heading h2.intro-heading {
     background: -webkit-linear-gradient(to right, gold, #ee0979);
     background: linear-gradient(to right, gold, #ee0979);
     -webkit-background-clip: text;
@@ -825,7 +823,6 @@ body.light-mode .placeholder-text  { color: #bbb; }
 @media (max-width: 600px) {
     .padding-vertical-xlarge { padding-top: calc(var(--travels-header-offset) + env(safe-area-inset-top, 0px)); }
     .margin-bottom-medium { margin-top: 0; }
-    h2.intro-heading { font-size: 5.5vh; }
     .stat-item  { padding: 0 16px; }
     .stat-number{ font-size: 2rem; }
     .travel-detail {

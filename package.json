@@ -1,0 +1,13 @@
+{
+  "name": "arnab-website-tools",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "travel:manifest": "node scripts/generate-travel-photo-manifest.js",
+    "travel:captions": "node scripts/sync-travel-caption-spreadsheet.js",
+    "travel:sync": "npm run travel:manifest && npm run travel:captions"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

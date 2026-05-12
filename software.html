@@ -15,6 +15,7 @@
     <meta name="twitter:image" content="images/research/3d_denoising.png">
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="shortcut icon" href="images/logo.png">
+    <link href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="css/utils.css">
     <link rel="stylesheet" href="css/research_style.css">
     <link rel="stylesheet" href="css/light_mode.css">
@@ -27,6 +28,10 @@
     <script src="scripts/latex.js"></script>
 </head>
 <body class="page-software">
+
+    <img id="bg-image" src="images/background.jpg" alt="Background" loading="lazy" decoding="async" />
+
+    <div id="image-overlay"></div>
 
     <header>
         <div class="logo-container">
@@ -46,7 +51,7 @@
             <button class="nav-dropdown-toggle" type="button" aria-expanded="false">About</button>
             <div class="nav-dropdown-menu">
                 <a href="about.html">Me</a>
-                <a href="travels.html">My Travels</a>
+                <a href="travels.html">Travels</a>
                 <a href="mywildindia.html">My Wild India</a>
                 <a href="memoirs.html">Memoirs of a Vagabond</a>
             </div>
@@ -85,6 +90,7 @@
         </div>
 
         <div class="section-timeline">
+            <div class="overlay-fade-top"></div>
             <div class="container">
                 <!-- Projects grid: each card has an image + subtitle; clicking expands details -->
                 <div class="project-filters" id="project-filters" aria-label="Filter projects">
