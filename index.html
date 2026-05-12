@@ -16,25 +16,11 @@
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="shortcut icon" href="images/logo.png">
     <!-- Apply stored theme early to avoid a flash of the wrong theme on first paint -->
-    <script>/* early theme apply: synchronous, runs before CSS to avoid flashes */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();</script>
+    <script src="scripts/inline/index-inline-01.js"></script>
     <!-- Enforce auto-skip ON on small screens (phones): set storage and add the
          auto-skip body class so the site behaves in auto-skip mode on phones. This
          runs early and also listens for viewport changes. -->
-    <script>(function(){
-        try{
-            var mq = window.matchMedia && window.matchMedia('(max-width: 768px)');
-            function apply(m){
-                if(m && m.matches){
-                    try{ localStorage.setItem('auto:skip','on'); }catch(e){}
-                    if(document.body && document.body.classList){ document.body.classList.add('auto-skip-enabled'); }
-                }
-            }
-            apply(mq);
-            if(mq && mq.addEventListener) mq.addEventListener('change', function(e){ apply(e); });
-            else if(mq && mq.addListener) mq.addListener(function(e){ apply(e); });
-            document.addEventListener('DOMContentLoaded', function(){ apply(mq); });
-        }catch(e){}
-    })();</script>
+    <script src="scripts/inline/index-inline-02.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/utils.css">
     <link rel="stylesheet" href="css/light_mode.css">
@@ -297,9 +283,7 @@
     <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
 
-    <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+    <script src="scripts/inline/index-inline-03.js"></script>
 
 
 <script src="scripts/home/audio-player.js"></script>

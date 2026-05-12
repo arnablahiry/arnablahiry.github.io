@@ -496,105 +496,12 @@
     <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
 </footer>
 
-<script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+<script src="scripts/inline/cv-inline-01.js"></script>
 
 <script src="scripts/nav-toggle.js"></script>
 <script src="scripts/theme-toggle.js"></script>
-<script>
-  (function(){
-    // Smooth scroll + scrollspy for CV contents
-    var links = Array.prototype.slice.call(document.querySelectorAll('.cv-contents a'));
-    var sections = links.map(function(l){ return document.getElementById(l.dataset.target); });
-    if (!links.length || !sections.length) return;
-
-    // click -> smooth scroll
-    links.forEach(function(a){
-      a.addEventListener('click', function(e){
-        e.preventDefault();
-        var id = a.dataset.target;
-        var el = document.getElementById(id);
-        if (!el) return;
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // update active state immediately
-        links.forEach(function(x){ x.classList.toggle('active', x === a); });
-      });
-    });
-
-    // Scrollspy: highlight the section currently near top of viewport
-    var ticking = false;
-    function onScroll(){
-      if (ticking) return; ticking = true;
-      requestAnimationFrame(function(){
-        var topOffset = 140; // account for header
-        var current = null;
-        sections.forEach(function(s){
-          if (!s) return;
-          var r = s.getBoundingClientRect();
-          if (r.top - topOffset <= 20) { current = s; }
-        });
-        if (!current) current = sections[0];
-        links.forEach(function(a){
-          var id = a.dataset.target;
-          a.classList.toggle('active', current && current.id === id);
-        });
-        ticking = false;
-      });
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    // initialize
-    setTimeout(onScroll, 200);
-  })();
-</script>
-<script>
-  // When returning to this page (back/forward or visibility change), some
-  // browsers restore focus on the previously-activated link which leaves the
-  // banner visually zoomed (we rely on :focus to trigger zoom). Blur any
-  // banner-related focused element on pageshow/visibilitychange so the image
-  // returns to its normal state unless the user actively focuses it again.
-  (function(){
-    function blurBannerFocus(){
-      try{
-        var a = document.activeElement;
-        if(!a) return;
-        if(a.classList && (a.classList.contains('banner-link') || a.classList.contains('split-link'))){
-          a.blur();
-        }
-      }catch(e){ /* noop */ }
-    }
-    window.addEventListener('pageshow', function(){ setTimeout(blurBannerFocus, 10); }, false);
-    document.addEventListener('visibilitychange', function(){ if(document.visibilityState === 'visible'){ setTimeout(blurBannerFocus, 10); } });
-  })();
-</script>
-<script>
-  // Ensure all anchors open in a new tab and use safe rel attributes.
-  (function(){
-    function setAllAnchorTargets(){
-      try{
-        var anchors = document.querySelectorAll('a');
-        anchors.forEach(function(a){
-          // Skip anchors inside the main header navigation so header links
-          // continue to navigate in the same tab.
-          if(a.closest && a.closest('nav#site-nav')) return;
-          // Skip internal anchors (hash links) so in-page navigation still works
-          var href = a.getAttribute('href') || '';
-          if(href.indexOf('#') === 0) return;
-
-          // force target to _blank so external links open in a new tab
-          a.setAttribute('target','_blank');
-          // force safe rel attributes
-          a.setAttribute('rel','noopener noreferrer');
-        });
-      }catch(e){ /* noop */ }
-    }
-    if(document.readyState === 'loading'){
-      document.addEventListener('DOMContentLoaded', setAllAnchorTargets);
-    } else {
-      setAllAnchorTargets();
-    }
-  })();
-</script>
+<script src="scripts/inline/cv-inline-02.js"></script>
+<script src="scripts/inline/cv-inline-03.js"></script>
+<script src="scripts/inline/cv-inline-04.js"></script>
 </body>
 </html>

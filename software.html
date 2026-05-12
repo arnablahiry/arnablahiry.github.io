@@ -22,12 +22,7 @@
     <link rel="stylesheet" href="css/software_style.css">
     <link rel="stylesheet" href="css/code.css">
     <!-- Math rendering: MathJax for this page -->
-    <script>
-        window.MathJax = window.MathJax || {
-            tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
-            options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
-        };
-    </script>
+    <script src="scripts/inline/software-inline-01.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
     <script src="scripts/latex.js"></script>
 </head>
@@ -37,7 +32,7 @@
         <div class="logo-container">
             <a href="index.html" aria-label="Home">
                 <img src="images/logo.png" alt="Logo" class="logo" loading="lazy" decoding="async">
-        <script>/* early theme apply */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();</script>
+        <script src="scripts/inline/software-inline-02.js"></script>
             </a>
         </div>
         <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
@@ -567,9 +562,7 @@ function smoothMoveTo(node, x, y, opts){
     <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
     </footer>
 
-    <script>
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+    <script src="scripts/inline/software-inline-03.js"></script>
 
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/research.js"></script>
@@ -577,169 +570,13 @@ function smoothMoveTo(node, x, y, opts){
     <script src="scripts/theme-toggle.js"></script>
     <!-- Highlight.js for client-side syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script>try{hljs.highlightAll();}catch(e){}</script>
-    <script>
-        // Wire the page theme hint to the main theme toggle (same logic as research page)
-        (function(){
-            var hint = document.getElementById('theme-hint');
-            var toggle = document.getElementById('theme-toggle');
-            if(!hint || !toggle) return;
-            function syncVisibility(){
-                if(document.body.classList && document.body.classList.contains('light-mode')){
-                    hint.setAttribute('aria-hidden','true');
-                } else {
-                    hint.setAttribute('aria-hidden','false');
-                }
-            }
-            syncVisibility();
-            document.addEventListener('theme:lock-changed', syncVisibility);
-            document.addEventListener('DOMContentLoaded', syncVisibility);
-            hint.addEventListener('click', function(e){ e.stopPropagation(); try{ toggle.click(); }catch(_){ } });
-            hint.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); hint.click(); } });
-            window.addEventListener('load', function(){ try{ if(window.matchMedia && !window.matchMedia('(min-width: 769px)').matches) return; if(document.body.classList.contains('light-mode')) return; setTimeout(function(){ document.body.classList.add('show-theme-hint'); }, 260); }catch(_){}});
-        })();
-    </script>
-        <script>
-            // Ensure project badges match the width/height of the first tag chip
-            (function(){
-                function syncBadges(){
-                    var cards = document.querySelectorAll('.project-card');
-                    cards.forEach(function(card){
-                        var tag = card.querySelector('.project-tags .tag-chip');
-                        var badges = card.querySelector('.project-badges');
-                        if(!tag || !badges) return;
-                        var tagRect = tag.getBoundingClientRect();
-                        var tagWidth = Math.round(tagRect.width);
-                        var tagHeight = Math.round(tagRect.height);
-                        // Make each individual badge match the tag width/height so
-                        // badges are the same size as the tag (not the whole block).
-                        var imgs = badges.querySelectorAll('img');
-                        imgs.forEach(function(img){
-                            img.style.height = tagHeight - 6 + 'px';
-                            img.style.objectFit = 'contain';
-                            img.style.display = 'inline-block';
-                        });
-                        // keep a consistent small gap between tag and badges
-                        badges.style.marginLeft = '6px';
-                    });
-                }
-                document.addEventListener('DOMContentLoaded', syncBadges);
-                window.addEventListener('load', syncBadges);
-                window.addEventListener('resize', function(){ setTimeout(syncBadges, 80); });
-            })();
-        </script>
+    <script src="scripts/inline/software-inline-04.js"></script>
+    <script src="scripts/inline/software-inline-05.js"></script>
+        <script src="scripts/inline/software-inline-06.js"></script>
     <!-- Home snitch script: expose launchSnitch(); loaded here so the button below can call it.
          We still add a safe loader in the event the script is not yet available when the button is clicked. -->
     <script src="scripts/home/home-snitch.js"></script>
-    <script>
-        (function(){
-            var slot = document.getElementById('snitch-slot');
-            function loadAndCallback(cb){
-                if (window.launchSnitch) { try{ cb(); }catch(e){} return; }
-                var s = document.createElement('script');
-                s.src = 'scripts/home/home-snitch.js';
-                s.onload = function(){ try{ cb(); }catch(e){} };
-                document.body.appendChild(s);
-            }
-
-            function openSnitchModal(){
-                if (!slot) slot = document.getElementById('snitch-slot');
-                if (!slot) return;
-
-                // create overlay
-                var overlay = document.createElement('div');
-                overlay.className = 'snitch-modal';
-                overlay.id = 'snitch-modal';
-
-                // close button
-                var closeBtn = document.createElement('button');
-                closeBtn.className = 'snitch-modal-close';
-                closeBtn.setAttribute('aria-label','Close');
-                closeBtn.innerHTML = '✕';
-                overlay.appendChild(closeBtn);
-
-                // remember original slot position so we can restore it
-                var origParent = slot.parentNode;
-                var origNext = slot.nextSibling;
-
-                // preserve scroll position to avoid jump
-                var savedScrollY = window.scrollY || window.pageYOffset || 0;
-                // use fixed-body approach to lock viewport in place
-                document.body.style.position = 'fixed';
-                document.body.style.top = '-' + savedScrollY + 'px';
-                document.body.style.left = '0';
-                document.body.style.right = '0';
-
-                // append overlay and show it (visual only) without moving focus
-                document.body.appendChild(overlay);
-                requestAnimationFrame(function(){ overlay.classList.add('show'); });
-
-                // move slot into overlay but keep it visually stable because body is fixed
-                overlay.appendChild(slot);
-
-                // start snitch immediately (or load script then start)
-                loadAndCallback(function(){ try{ window.launchSnitch(); }catch(e){} });
-
-                function close(){
-                    try{ if (window.teardownSnitch) window.teardownSnitch(); }catch(e){}
-                    // visually shrink/fade the slot then move it back for a smooth return
-                    try{ slot.classList.add('snitch-closing'); }catch(e){}
-                    // hide modal (fade out)
-                    overlay.classList.remove('show');
-                    // after transition, restore slot and cleanup
-                    setTimeout(function(){
-                        try{ if (origParent) origParent.insertBefore(slot, origNext); }catch(e){}
-                        try{ slot.classList.remove('snitch-closing'); }catch(e){}
-                        try{ overlay.remove(); }catch(e){}
-                        // undo fixed-body scroll lock and restore scroll position
-                        try{ document.body.style.position = ''; document.body.style.top = ''; document.body.style.left = ''; document.body.style.right = ''; window.scrollTo(0, savedScrollY); }catch(e){}
-                    }, 260);
-                }
-
-                closeBtn.addEventListener('click', function(e){ e.stopPropagation(); close(); });
-            }
-
-            var btn = document.querySelector('#proj-snitch .snitch-launch');
-            if (btn) btn.addEventListener('click', function(e){ e.stopPropagation(); openSnitchModal(); });
-        })();
-    </script>
-    <script>
-        (function(){
-            // Project tag filtering
-            var filterBar = document.getElementById('project-filters');
-            if (!filterBar) return;
-            var buttons = Array.prototype.slice.call(filterBar.querySelectorAll('.filter-btn'));
-            var cards = Array.prototype.slice.call(document.querySelectorAll('.project-card'));
-
-            function setFilter(filter){
-                buttons.forEach(function(b){
-                    var active = (b.dataset.filter === filter);
-                    b.classList.toggle('active', active);
-                    b.setAttribute('aria-pressed', active ? 'true' : 'false');
-                });
-
-                if (filter === 'all'){
-                    cards.forEach(function(c){ c.classList.remove('card-hidden'); });
-                } else {
-                    cards.forEach(function(c){
-                        var tags = (c.dataset.tags || '').toLowerCase().split(',').map(function(s){return s.trim();});
-                        if (tags.indexOf(filter) !== -1) c.classList.remove('card-hidden');
-                        else c.classList.add('card-hidden');
-                    });
-                }
-            }
-
-            filterBar.addEventListener('click', function(e){
-                var btn = e.target.closest('.filter-btn');
-                if (!btn) return;
-                setFilter(btn.dataset.filter);
-            });
-
-            // keyboard activation for buttons
-            buttons.forEach(function(b){
-                b.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); } });
-            });
-        })();
-    </script>
+    <script src="scripts/inline/software-inline-07.js"></script>
+    <script src="scripts/inline/software-inline-08.js"></script>
 </body>
 </html>

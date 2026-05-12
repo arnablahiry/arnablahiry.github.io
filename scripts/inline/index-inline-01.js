@@ -1,0 +1,1 @@
+/* early theme apply: synchronous, runs before CSS to avoid flashes */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();
