@@ -122,13 +122,18 @@
     box-shadow: 0 4px 18px rgba(0,0,0,0.2);
     box-sizing: border-box;
     padding: 18px;
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: 'Abaddon Light', sans-serif;
     /* slightly smaller for improved density on large screens */
     font-size: 13px;
     font-weight: 500;
     line-height: 1.3;
     text-align: justify;
     text-justify: inter-word;
+}
+
+.timeline-text,
+.timeline-text *{
+    font-family: 'Abaddon Light', sans-serif !important;
 }
 
 body.light-mode .timeline-text{
@@ -152,7 +157,6 @@ body.light-mode .timeline-text{
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-fill-color: transparent;
     position: relative;
     display: inline-block;
 }
@@ -306,7 +310,7 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 
 .timeline-circle{
     background-color: white;
-    border: 4px solid #000;
+    border: 4px solid #000000e7;
     border-radius: 100%;
     box-sizing: border-box;
     width: var(--timeline-circle-size);

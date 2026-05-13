@@ -1,6 +1,19 @@
 /* Research page styles — copied heading styles from timeline_style.css
    and adjusted to force a single-line title. */
 
+/* Use Abaddon Light for main research page text to match site typography */
+body.page-research,
+body.page-research p,
+body.page-research h1,
+body.page-research h2,
+body.page-research h3,
+body.page-research h4,
+body.page-research .project-subtitle,
+body.page-research .project-title {
+    font-family: 'Abaddon Light', sans-serif !important;
+    font-weight: 300 !important;
+}
+
 /* Keep the Research page background image visible behind the content. */
 .section-timeline-heading{
     background: transparent;
@@ -69,7 +82,7 @@ body.light-mode header nav .nav-hint-wrapper{ display: none !important; }
         position: absolute;
         top: calc(100% + 40px);
         /* anchor the hint to the right side of the header/nav area */
-        right: -60vw;
+        right: -50vw;
         padding: 0.6rem 0.7rem;
         border-radius: 6px;
         font-size: 0.8rem;
@@ -781,16 +794,28 @@ body.page-research .project-title {
     transition: top 480ms cubic-bezier(0.22, 0.1, 0.22, 1), left 480ms cubic-bezier(0.22, 0.1, 0.22, 1), width 480ms cubic-bezier(0.22, 0.1, 0.22, 1), height 480ms cubic-bezier(0.22, 0.1, 0.22, 1), border-radius 260ms ease, box-shadow 260ms ease;
     box-shadow: 0 18px 40px rgba(0,0,0,0.7);
     border-radius: 10px;
-    background: #0b0b0b;
+    background: #000000 !important;
+    opacity: 1 !important;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
+.project-clone,
+.project-clone *{
+    font-family: "Times New Roman", Times, serif !important;
+    font-weight: 400 !important;
+}
+
+.project-clone .project-title{
+    font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important;
+    font-weight: 700 !important;
+}
+
 .project-clone .project-image{ display: block; width: 100%; height: auto; object-fit: cover; }
-.project-clone .project-meta{ padding: 18px; }
-.project-clone .project-details{ padding: 12px 18px 20px 18px; color: #e6e6e6; }
-.project-clone .project-full{ padding: 12px 18px 20px 18px; color: #e6e6e6; font-size: 15px;}
+.project-clone .project-meta{ padding: 18px; background: #000000 !important; color: #ffffff !important; }
+.project-clone .project-details{ padding: 12px 18px 20px 18px; color: #ffffff !important; }
+.project-clone .project-full{ padding: 12px 18px 20px 18px; color: #ffffff !important; font-size: 15px; background: #000000 !important;}
 
 /* Make the entire cloned fullscreen card scrollable so the image scrolls
    together with the rest of the content. */
@@ -807,7 +832,7 @@ body.page-research .project-title {
 /* Expanded card content uses a serif face for long-form readability. */
 .project-clone .project-full,
 .project-clone .project-full *{
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: "Times New Roman", Times, serif !important;
 }
 
 /* When a project modal is open, make the image area show a normal pointer
@@ -954,7 +979,7 @@ body.scrolling .research-meme #meme-wrapper .reveal-btn:hover{
     top: 0; /* stick flush to the top of the viewport */
     z-index: 10001;
     /* ensure the sticky bar covers underlying content for readability */
-    background: rgba(11,11,11,0.9);
+    background: #000000 !important;
     padding-top: 15px;
     padding-bottom: 15px;
     padding-right: 112px; /* leave space for the close + theme buttons */
@@ -962,8 +987,29 @@ body.scrolling .research-meme #meme-wrapper .reveal-btn:hover{
 
 /* When in light-mode we want the sticky meta to be light as well */
 body.light-mode .project-clone .project-meta{
-    background: rgba(255,255,255,0.96) !important;
-    color: #111 !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+}
+
+body.light-mode .project-clone{
+    background: #ffffff !important;
+    opacity: 1 !important;
+    color: #111111 !important;
+}
+
+body.light-mode .project-clone,
+body.light-mode .project-clone .project-meta,
+body.light-mode .project-clone .project-details,
+body.light-mode .project-clone .project-full{
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+body.light-mode .project-clone .project-meta,
+body.light-mode .project-clone .project-details,
+body.light-mode .project-clone .project-full,
+body.light-mode .project-clone .project-full *{
+    color: #111111 !important;
 }
 
 /* The close button is fixed via JS when a clone is created; ensure it
@@ -987,14 +1033,14 @@ body.light-mode .MathJax_SVG,
 body.light-mode .mjx-svg,
 body.light-mode .mjx-chtml,
 body.light-mode .MathJax{
-    color: #ffffff !important;
+    color: #111111 !important;
     filter: none !important; /* ensure we don't double-invert */
 }
 body.light-mode .MathJax_SVG svg,
 body.light-mode .mjx-svg svg,
 body.light-mode .MathJax_SVG svg *{
-    fill: #ffffff !important;
-    stroke: #ffffff !important;
+    fill: #111111 !important;
+    stroke: #111111 !important;
 }
 
 /* Dark mode: light-medium grey (good contrast on black) */

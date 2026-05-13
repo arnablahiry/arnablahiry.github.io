@@ -15,19 +15,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (projectFull.style.maxHeight === 'none') {
                     projectFull.style.maxHeight = projectFull.scrollHeight + 'px';
                 }
+                projectFull.style.opacity = '0';
                 // Force reflow then set to 0 for transition
                 requestAnimationFrame(() => {
                     projectFull.style.maxHeight = '0px';
                 });
-                projectFull.setAttribute('aria-expanded', 'false');
                 toggle.setAttribute('aria-expanded', 'false');
                 toggle.textContent = 'Show Abstract';
+
+                const onCollapseEnd = (e) => {
+                    if (e.propertyName === 'max-height' && projectFull.getAttribute('aria-expanded') === 'false') {
+                        projectFull.removeEventListener('transitionend', onCollapseEnd);
+                    }
+                };
+
+                projectFull.addEventListener('transitionend', onCollapseEnd);
+                projectFull.setAttribute('aria-expanded', 'false');
             } else {
                 // Expand: set aria and animate to scrollHeight
                 projectFull.setAttribute('aria-expanded', 'true');
                 toggle.setAttribute('aria-expanded', 'true');
                 // ensure element can transition from 0 to measured height
                 const target = projectFull.scrollHeight;
+                requestAnimationFrame(() => {
+                    projectFull.style.opacity = '1';
+                });
                 projectFull.style.maxHeight = target + 'px';
                 toggle.textContent = 'Hide Abstract';
 

@@ -52,6 +52,10 @@ body{
     background-color: transparent;
 }
 
+body.page-publications #image-overlay{
+    background: rgba(0, 0, 0, 0.389) !important;
+}
+
 .page-wrapper,
 main,
 .section-timeline,
@@ -87,9 +91,9 @@ main,
 .project-card {
     display: flex;
     align-items: flex-start;
-    background: rgba(15, 15, 16, 0.84);
+    background: rgba(15, 15, 16, 0.383);
     transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
-    border: 1px solid rgba(255, 215, 0, 0.22);
+    border: 1px solid rgba(255, 217, 0, 0.311);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
@@ -168,7 +172,7 @@ footer{
     font-weight: 700;
     cursor: pointer;
     border-top: 1px solid #222;
-    margin-bottom: 0px;
+    margin-bottom: 15px;
 }
 
 .project-full{
@@ -179,8 +183,23 @@ footer{
     font-family: Georgia, "Times New Roman", Times, serif;
     overflow: hidden;
     max-height: 0;
-    transition: max-height 320ms ease;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 320ms ease, opacity 220ms ease;
     will-change: max-height;
+}
+
+.project-full[aria-expanded="false"]{
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 0;
+    line-height: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.project-full[aria-expanded="false"] *{
+    visibility: hidden;
 }
 
 .project-full p,
@@ -192,6 +211,8 @@ footer{
 .project-full[aria-expanded="true"]{
     max-height: 800px;
     line-height: 1.5;
+    opacity: 1;
+    visibility: visible;
 }
 
 .project-condense{

@@ -26,6 +26,24 @@ html, body {
   --page-dim-opacity: 0.45; /* controls the global page dim used when nav opens */
 }
 
+/* Load Abaddon Light for site navigation */
+@font-face{
+  font-family: 'Abaddon Light';
+  src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Abaddon Bold for emphasized titles inside expanded cards */
+@font-face{
+  font-family: 'Abaddon Bold';
+  src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Background image */
 #bg-image {
   position: fixed;
@@ -302,6 +320,56 @@ nav .nav-dropdown-toggle{
   cursor: pointer;
   padding: 0;
   transition: color 0.3s ease;
+}
+
+/* Apply Abaddon Light to site navigation across all pages */
+nav#site-nav,
+nav#site-nav a,
+nav#site-nav button,
+nav#site-nav .nav-dropdown-toggle,
+nav#site-nav .theme-toggle {
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
+}
+
+/* Page subtitles (hero / section subtitles) use Abaddon Light for visual consistency */
+.intro-subtitle,
+.travels-subtitle,
+.memoirs-subtitle,
+.travels-subtitle.tribute-caption,
+.prev-next-subtitle {
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
+}
+
+/* Styling for the fullscreen cloned project card opened on the Research page */
+.project-clone{
+  /* make the expanded card a solid canvas depending on theme */
+  background: rgba(0,0,0,1);
+  color: #ffffff;
+  /* ensure content sits above page overlay */
+  box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+  overflow: auto;
+}
+body.light-mode .project-clone{
+  background: #ffffff !important;
+  color: #111111 !important;
+}
+
+/* Inside an opened card, use Times New Roman for all content for readability */
+.project-clone, .project-clone *{
+  font-family: 'Times New Roman', Times, serif !important;
+}
+
+/* Project titles inside the opened card should use Abaddon Bold */
+.project-clone .project-title{
+  font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* Ensure headings and code/math inside the clone remain legible */
+.project-clone h1, .project-clone h2, .project-clone h3, .project-clone h4, .project-clone p, .project-clone li {
+  color: inherit !important;
 }
 nav .nav-dropdown-toggle::after{
   content: " \25BE";
@@ -1442,3 +1510,66 @@ footer {
     transform: translate(-50%, -50%) scale(0.9) rotate(-6deg) !important;
   }
 }
+
+
+
+.quest-log {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 280px;
+    background: rgba(20, 20, 20, 0.85);
+    border: 3px solid #fff8dc;
+    border-radius: 8px;
+    color: #fff8dc;
+    font-family: 'Abaddon Light', sans-serif;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.quest-header {
+    background: #fff8dc;
+    color: #1a1a1a;
+    padding: 8px 12px;
+    font-family: 'Abaddon Bold', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quest-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.quest-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.quest-item {
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    border-bottom: 1px dashed rgba(255, 248, 220, 0.3);
+    padding-bottom: 10px;
+}
+
+.quest-item:last-child {
+    border-bottom: none;
+}
+
+.quest-link {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+.quest-link:hover {
+    text-decoration: underline;
+}
+
+/* Custom Scrollbar for the retro feel */
+.quest-content::-webkit-scrollbar { width: 6px; }
+.quest-content::-webkit-scrollbar-thumb { background: #fff8dc; }

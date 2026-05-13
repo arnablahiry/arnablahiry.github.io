@@ -24,6 +24,8 @@
    so the CV page has an isolated stylesheet that can be customized safely.
 */
 
+/* Abaddon Light is loaded globally from css/style.css */
+
 /* Page container & spacing */
 .container{
   width: 90vw;
@@ -43,6 +45,62 @@ body.page-cv, body.page-cv * , body.page-cv *::before, body.page-cv *::after{
   -webkit-transition: none !important;
 }
 
+body.page-cv{
+  background-color: transparent !important;
+}
+
+body.page-cv #bg-image{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: -2;
+}
+
+body.page-cv #image-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.72);
+  z-index: -1;
+}
+
+body.light-mode.page-cv #image-overlay{
+  background: rgba(255, 255, 255, 0.804);
+}
+
+.section-timeline{
+  position: relative;
+}
+
+.overlay-fade-top{
+  background-image: linear-gradient(black, #0a0a0a00);
+  height: 760px;
+  position: absolute;
+  inset: 0% 0% auto;
+  top: 0px;
+  left: -50%;
+  right: 0;
+  width: 300vw;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body.page-cv .section-timeline-heading,
+body.page-cv .container,
+body.page-cv .cv-layout,
+body.page-cv .cv-main{
+  position: relative;
+  z-index: 1;
+}
+
 /* CV dark-mode canvas fallback: any uncovered strip should render black */
 body.page-cv:not(.light-mode),
 body.page-cv:not(.light-mode) main.page-wrapper,
@@ -50,7 +108,7 @@ body.page-cv:not(.light-mode) .page-wrapper,
 body.page-cv:not(.light-mode) .section-timeline,
 body.page-cv:not(.light-mode) .section-timeline-heading,
 body.page-cv:not(.light-mode) .container{
-  background: #000 !important;
+  background: transparent !important;
   color: #e6e6e6 !important;
 }
 
@@ -86,12 +144,12 @@ body.page-cv .container{ padding-left: 96px; padding-right: 6vw; box-sizing: bor
 /* Reduce gap between main heading and first subheading specifically for CV page */
 body.page-cv .section-timeline-heading .padding-vertical-xlarge{
   padding-bottom: 8px; /* reduce large bottom padding used on Research page */
-  padding-top: 56px;   /* keep some top spacing for header */
+  padding-top: 78px;   /* add more space below the fixed nav */
 }
 
 @media (min-width: 1101px){
   body.page-cv .section-timeline-heading .padding-vertical-xlarge{
-    padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px) + 8px) !important;
+    padding-top: calc(var(--site-header-offset) + env(safe-area-inset-top, 0px) + 24px) !important;
   }
 }
 
@@ -222,8 +280,8 @@ body.light-mode .cv-subheading{ color: #a67b00; }
 }
 
 .project-card{
-  background: #0f0f10;
-  border: 1px solid #232325;
+  background: rgba(15, 15, 16, 0.8);
+  border: 1px solid rgba(255, 215, 0, 0.22);
   padding: 0;
   border-radius: 10px;
   overflow: hidden;
@@ -231,8 +289,16 @@ body.light-mode .cv-subheading{ color: #a67b00; }
   flex-direction: column;
   box-shadow: 0 4px 18px rgba(0,0,0,0.6);
 }
-body:not(.light-mode) .project-card{ background: #0f0f10 !important; color: #e6e6e6 !important; }
-body.light-mode .project-card{ background: rgba(255,255,255,0.96); color: #111; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+.project-card:hover,
+.project-card:focus-within{
+  border-color: rgba(255, 215, 0, 0.42);
+}
+body:not(.light-mode) .project-card{ background: rgba(15, 15, 16, 0.8) !important; color: #e6e6e6 !important; border: 1px solid rgba(255, 215, 0, 0.22) !important; }
+body.light-mode .project-card{ background: rgba(255, 255, 255, 0.406); color: #111; border: 1px solid rgba(140, 118, 28, 0.38); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+body.light-mode .project-card:hover,
+body.light-mode .project-card:focus-within{
+  border-color: rgba(110, 90, 20, 0.62);
+}
 
 /* Narrower photo banner for CV page */
 .project-image{ width: 100%; height: 110px; object-fit: cover; display: block;
@@ -428,7 +494,7 @@ body.light-mode .project-subtitle{ color: #444 !important; }
 body.light-mode .person-link{ color: #aa7e00 !important; }
 
 /* Ensure the CV page mirrors Research page dark background */
-body.page-cv:not(.light-mode) .page-wrapper, body.page-cv:not(.light-mode) .section-timeline-heading{ background: #000; color: #e6e6e6; }
+body.page-cv:not(.light-mode) .page-wrapper, body.page-cv:not(.light-mode) .section-timeline-heading{ background: transparent; color: #e6e6e6; }
 
 /* subtle card inner text sizing */
 .project-card .project-meta p{ font-size: 1.6vh; margin: 6px 0 0 0; }
@@ -713,14 +779,18 @@ body.light-mode .hamburger .bar{
 
 /* Footer styling for light mode */
 body.light-mode footer{
-  background: #ffffff !important;
+  background: transparent !important;
   color: #111111 !important;
+}
+
+body.page-cv footer{
+  background: transparent !important;
 }
 
 /* Generic card / panel adjustments */
 body.light-mode .project-card{
-  background: #ffffff !important;
-  border-color: #e6e6e6 !important;
+  background: rgba(255,255,255,0.8) !important;
+  border-color: rgba(140, 118, 28, 0.38) !important;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
 }
 body.light-mode .project-title{ color: #111 !important; }
@@ -840,7 +910,7 @@ body.light-mode main,
 body.light-mode .container,
 body.light-mode .section-timeline,
 body.light-mode .section-timeline-heading{
-  background: #ffffff !important;
+  background: transparent !important;
 }
 
 /* Homepage-specific background-image / overlay styles were moved to
@@ -1041,7 +1111,7 @@ body.page-cv.light-mode .cv-contents a.active { color: #aa7e00 !important; backg
   }
   body.page-cv.light-mode header.nav-open nav#site-nav,
   body.page-cv.light-mode header.nav-open > nav{
-    box-shadow: 0 10px 24px rgba(0,0,0,0.08) !important;
+    box-shadow: none !important;
   }
   body.page-cv .cv-subheading{
     font-size: 1.55vh !important;
@@ -1221,6 +1291,7 @@ body.page-cv.light-mode:not(.no-theme-transition) nav#site-nav{
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   color: #111111 !important;
+  box-shadow: none !important;
 }
 
 body.page-cv.light-mode:not(.no-theme-transition) header::before{
@@ -1236,7 +1307,7 @@ body.page-cv .timeline-main-heading-wrapper .margin-bottom-medium{ margin-bottom
   margin-bottom: 35px; /* increase spacing after the subtitle */
   font-size: 2.0vh;    /* readable but smaller than h2 */
   line-height: 1.45;
-  max-width: 94%;
+  max-width: 78%;
   margin-left: auto;
   margin-right: auto;
   color: #ffffff; /* dark mode */
@@ -1290,20 +1361,38 @@ body.page-cv:not(.light-mode) .intro-subtitle{
   margin-bottom: 45px; /* larger space below button before subheadings */
 }
 
+
+
 .timeline-main-heading-wrapper .site-links .site-link{
   /* keep the global `.site-link` sizing but ensure it doesn't collapse
      when the wrapper has tight paddings on this page */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 5.2rem;
-  border-radius: 12px; /* rounded edges */
-  border: 1px solid; /* border will be themed below */
+  min-width: fit-content;
+  white-space: nowrap;
+  border-radius: 0;
+  border: 2px solid #705f1d70;
   text-decoration: none !important; /* no underline */
-  color: inherit;
-  padding: 0.42rem 0.72rem; /* smaller button */
-  font-size: 0.84rem;
-  /* Override the global "no transitions" rule on this page by using a
+  color: #ffe371 !important;
+  padding: 0.2rem 1rem;
+  font-size: 0.88rem;
+  font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  background: transparent !important;
+  box-shadow: none !important;
+  clip-path: polygon(
+      10px 0,                          /* Top-left */
+      calc(100% - 10px) 0,             /* Top-right start */
+      100% 10px,                       /* Top-right end */
+      100% calc(100% - 10px),          /* Bottom-right start */
+      calc(100% - 10px) 100%,          /* Bottom-right end */
+      10px 100%,                       /* Bottom-left start */
+      0 calc(100% - 10px),             /* Bottom-left end */
+      0 10px                           /* Top-left return */
+  );  /* Override the global "no transitions" rule on this page by using a
      more specific selector with !important. This makes hover/focus feel
      smooth while leaving the rest of the CV page transition-free. */
   transition: background-color 260ms cubic-bezier(.2,.9,.2,1),
@@ -1316,40 +1405,38 @@ body.page-cv:not(.light-mode) .intro-subtitle{
 
 /* Light / dark theme overrides scoped to CV page */
 body.page-cv.light-mode .timeline-main-heading-wrapper .site-links .site-link{
-  /* light-mode: use a pale dark-yellow overlay with a stronger warm border */
-  background: rgba(160,138,65,0.06) !important; /* very light dark-yellow overlay */
-  color: #111 !important;
-  border-color: rgba(160, 116, 14, 0.95) !important; /* warm dark-yellow */
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+  background: transparent !important;
+  color: #917b22 !important;
+  border-color: #957d1a !important;
+  box-shadow: none !important;
 }
 
 /* Hover / focus states for light mode: overlay gets darker on hover */
 body.page-cv.light-mode .timeline-main-heading-wrapper .site-links .site-link:hover,
 body.page-cv.light-mode .timeline-main-heading-wrapper .site-links .site-link:focus{
-  background: rgba(160, 138, 65, 0.106) !important; /* darker overlay on hover */
-  box-shadow: 0 8px 22px rgba(160,138,65,0.12) !important; /* subtle warm glow */
+  background: rgba(254,218,74,0.08) !important;
+  box-shadow: 0 0 0 2px rgba(254,218,74,0.18) !important;
 }
 
 body.page-cv:not(.light-mode) .timeline-main-heading-wrapper .site-links .site-link{
-  /* dark-mode: emphasize gold border and a very light gold overlay */
-  background: rgba(254,218,74,0.06) !important; /* very light gold overlay */
-  color: #fff !important; /* white text in dark mode */
-  border-color: #feda4a !important; /* gold */
-  box-shadow: 0 0 0.08rem rgba(254,218,74,0.16) !important;
+  background: transparent !important;
+  color: #feda4a !important;
+  border-color: #feda4a !important;
+  box-shadow: none !important;
 }
 
 /* Hover / focus states for dark mode: overlay gets lighter (brighter) on hover */
 body.page-cv:not(.light-mode) .timeline-main-heading-wrapper .site-links .site-link:hover,
 body.page-cv:not(.light-mode) .timeline-main-heading-wrapper .site-links .site-link:focus{
-  background: rgba(254, 218, 74, 0.186) !important; /* brighter gold overlay */
-  box-shadow: 0 8px 22px rgba(254,218,74,0.18) !important; /* subtle gold glow */
-  color: #fff !important;
+  background: rgba(254,218,74,0.08) !important;
+  box-shadow: 0 0 0 2px rgba(254,218,74,0.18) !important;
+  color: #feda4a !important;
 }
 
 @media (max-width: 780px){  
   /* make sure the button stays centered and doesn't overflow on small screens */
   .timeline-main-heading-wrapper .site-links{ width: 100%; padding: 0 6vw; box-sizing: border-box; margin-bottom: 36px; }
-  .timeline-main-heading-wrapper .site-links .site-link{ width: 100%; max-width: 420px; }
+  .timeline-main-heading-wrapper .site-links .site-link{ width: auto; max-width: none; }
 }
 
 /* Phone-only: ensure any whitespace before the footer inherits the dark
@@ -1361,7 +1448,7 @@ body.page-cv:not(.light-mode) .timeline-main-heading-wrapper .site-links .site-l
   body.page-cv:not(.light-mode) .page-wrapper,
   body.page-cv:not(.light-mode) .container,
   body.page-cv:not(.light-mode) footer {
-    background: #000 !important;
+    background: transparent !important;
     color: #e6e6e6 !important;
   }
 }
