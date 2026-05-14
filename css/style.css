@@ -18,6 +18,13 @@ html, body {
   line-height: 1.6;
 }
 
+/* Homepage only: lock the page to the viewport so the intro behaves like a
+   non-scrollable landing screen while keeping the footer fixed at the bottom. */
+body.no-theme-transition{
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
 :root{
   /* default intro shift (no extra shift) */
   --intro-shift: 0px;
@@ -1156,11 +1163,20 @@ h3 {
 
 /* Footer (match repositories styling for consistent look across pages) */
 footer {
-  background: transparent;
+  background: transparent !important;
   color: #ffffff;
   text-align: center;
   margin: 0;
   padding: 28px 0;
+}
+
+body.no-theme-transition footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 20;
+  background: transparent !important;
 }
 
 

@@ -49,6 +49,16 @@ body.page-cv{
   background-color: transparent !important;
 }
 
+/* Force CV nav typography to Abaddon Bold on this page */
+body.page-cv nav#site-nav,
+body.page-cv nav#site-nav a,
+body.page-cv nav#site-nav button,
+body.page-cv nav#site-nav .nav-dropdown-toggle,
+body.page-cv nav#site-nav .theme-toggle{
+  font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important;
+  font-weight: 700 !important;
+}
+
 body.page-cv #bg-image{
   position: fixed;
   top: 50%;
@@ -116,7 +126,7 @@ body.page-cv:not(.light-mode) .container{
 .cv-layout{ display: flex; gap: 32px; align-items: flex-start; }
 .cv-contents{ width: 220px; position: sticky; top: 140px; align-self: flex-start; padding-right: 18px; }
 .cv-contents ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.cv-contents a{ color: rgba(255,255,255,0.86); text-decoration: none; font-weight: 700; padding: 6px 8px; border-radius: 6px; display: inline-block; }
+.cv-contents a{ color: rgba(255,255,255,0.86); text-decoration: none; font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important; font-weight: 700; padding: 6px 8px; border-radius: 6px; display: inline-block; }
 .cv-contents a:hover{ background: rgba(255,255,255,0.03); }
 .cv-contents a.active{ color: #feda4a; background: rgba(254,218,74,0.08); }
 body.light-mode .cv-contents a{ color: #222; }
@@ -214,6 +224,12 @@ body.page-cv h6 {
   letter-spacing: normal !important;
 }
 
+/* Section headings like Education/Skills need to stay Abaddon Bold */
+body.page-cv h3.cv-subheading{
+  font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important;
+  font-weight: 700 !important;
+}
+
 /* Ensure subheadings and project titles use the intended serif/sans styles */
 .cv-subheading,
 .project-title,
@@ -256,7 +272,8 @@ body.light-mode img.light-img.cv-download{ filter: none !important; }
 
 /* Subheading styling for CV page: slightly smaller than main heading and gold/dark-yellow per theme */
 .cv-subheading{
-  font-size: 3.2vh;
+  font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important;
+  font-size: calc(3.2vh + 1pt);
   font-weight: 700;
   margin-top: 28px;
   margin-bottom: 12px;
@@ -414,7 +431,7 @@ body.light-mode .project-subtitle{ color: #444 !important; }
   .projects-grid.cols-2, .projects-grid.cols-4, .projects-grid.cols-4-wide{ grid-template-columns: 1fr; }
   h2.intro-heading{ white-space: normal; font-size: 2.6vh; }
   /* Make subheadings a bit smaller on tablet-sized screens */
-  .cv-subheading{ font-size: 3.0vh; }
+  .cv-subheading{ font-size: calc(3.0vh + 1pt); }
 
   .cv-download{ width: 40px; height: auto; opacity: 0.85; }
   .cv-download-link{
@@ -466,7 +483,7 @@ body.light-mode .project-subtitle{ color: #444 !important; }
   }
 
   /* Make subheadings smaller and tighten their top margin */
-  .cv-subheading{ font-size: 2.6vh; margin-top: 6px; margin-bottom: 8px; }
+  .cv-subheading{ font-size: calc(2.6vh + 1pt); margin-top: 6px; margin-bottom: 8px; }
 
   /* Specifically reduce the first subheading offset so it sits closer to the heading */
   .cv-main section:first-of-type .cv-subheading { margin-top: 2px; }
@@ -1114,7 +1131,7 @@ body.page-cv.light-mode .cv-contents a.active { color: #aa7e00 !important; backg
     box-shadow: none !important;
   }
   body.page-cv .cv-subheading{
-    font-size: 1.55vh !important;
+    font-size: calc(1.55vh + 1pt) !important;
     margin-top: 16px !important;
     margin-bottom: 8px !important;
   }
@@ -1401,6 +1418,22 @@ body.page-cv:not(.light-mode) .intro-subtitle{
               color 200ms ease,
               border-color 200ms ease !important;
   will-change: background-color, box-shadow, transform;
+}
+
+.timeline-main-heading-wrapper .site-links .cv-download-image-link{
+  display: inline-block;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+  line-height: 0;
+}
+
+.timeline-main-heading-wrapper .site-links .cv-download-image-link img{
+  display: block;
+  width: min(260px, 78vw);
+  height: auto;
 }
 
 /* Light / dark theme overrides scoped to CV page */
