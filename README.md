@@ -42,3 +42,23 @@ node scripts/generate-about-thumbnails.js
 ```
 
 The About page's visible image tags use `images/about/thumbs/` so the page does not decode the original full-size photos just to show small cards.
+
+## My Wild India
+
+Drop MyWildIndia photos into `images/mywildindia/<place-folder>/` using any browser-friendly image extension (`.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.gif`). Filenames can be anything.
+
+Run the combined MyWildIndia sync to refresh the manifest, thumbnails, and caption workbook:
+
+```sh
+node scripts/generate-mywildindia-photo-manifest.js
+```
+
+The caption workbook lives at `data/mywildindia-captions.xlsx`. It is organized by folder, with rows keyed by filename only. The columns are `Photo`, `Caption`, and `Author`.
+
+When you edit the workbook or add files, rerun the same sync command. The page reads `scripts/mywildindia-photo-manifest.js` and `scripts/mywildindia-captions.js`, so refreshing the browser after the sync picks up the new images immediately.
+
+For live watching while you edit files, use:
+
+```sh
+node scripts/watch-mywildindia-caption-spreadsheet.js
+```

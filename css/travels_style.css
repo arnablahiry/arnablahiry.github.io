@@ -1,6 +1,22 @@
 /* ============================================================
    TRAVELS PAGE — globe version
    ============================================================ */
+@font-face {
+    font-family: 'Abaddon Light';
+    src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Abaddon Bold';
+    src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 html.theme-animate body.no-theme-transition,
 html.theme-animate body.no-theme-transition *,
 body.no-theme-transition,
@@ -46,9 +62,7 @@ body.page-travels .section-travels-heading,
 body.page-travels .container,
 body.page-travels #globe-wrap,
 body.page-travels #globe-container,
-body.page-travels #country-map-panel,
-body.page-travels #travel-detail,
-body.page-travels #photo-lightbox{
+body.page-travels #country-map-panel{
     position: relative;
     z-index: 1;
 }
@@ -76,7 +90,7 @@ body.light-mode.page-travels footer{
 }
 
 .padding-vertical-xlarge {
-    padding-top: calc(var(--travels-header-offset) + env(safe-area-inset-top, 0px) + 18px);
+    padding-top: calc(var(--travels-header-offset) + env(safe-area-inset-top, 0px) + 60px);
     padding-bottom: 0;
 }
 
@@ -237,11 +251,13 @@ body.page-travels nav#site-nav .theme-toggle{
 
 .country-map-title {
     margin: 0;
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #feda4a;
     padding: 6px 0 6px 12px;
+    font-family: 'Abaddon Bold', sans-serif !important;
+    font-weight: 700 !important;
     opacity: 0;
     transform: translateY(2px);
     transition:
@@ -446,8 +462,9 @@ body.page-travels nav#site-nav .theme-toggle{
 }
 
 .detail-country-name {
-    font-size: 21px;
-    font-weight: 800;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Abaddon Bold', sans-serif !important;
     margin: 0 0 5px 0;
     background: linear-gradient(to right, gold, #ee0979);
     -webkit-background-clip: text;
@@ -734,6 +751,8 @@ body.travel-lightbox-open {
     color: #efefef;
     font-size: 14px;
     line-height: 1.45;
+    font-family: 'Abaddon Light', sans-serif !important;
+    font-weight: 300 !important;
 }
 
 .lightbox-credit {
@@ -756,7 +775,8 @@ body.travel-lightbox-open {
 
 .lightbox-credit span {
     color: #f4f4f4;
-    font-weight: 700;
+    font-family: 'Abaddon Bold', sans-serif !important;
+    font-weight: 700 !important;
 }
 
 @keyframes travel-lightbox-backdrop-in {
@@ -837,6 +857,14 @@ body.light-mode .lightbox-caption-box {
 }
 body.light-mode #lightbox-caption,
 body.light-mode .lightbox-credit span { color: #111111; }
+body.light-mode #lightbox-caption {
+    font-family: 'Abaddon Light', sans-serif !important;
+    font-weight: 300 !important;
+}
+body.light-mode .lightbox-credit span {
+    font-family: 'Abaddon Bold', sans-serif !important;
+    font-weight: 700 !important;
+}
 body.light-mode .lightbox-close {
     border-color: rgba(0, 0, 0, 0.2);
     background: rgba(255, 255, 255, 0.95);

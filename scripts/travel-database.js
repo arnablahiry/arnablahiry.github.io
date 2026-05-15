@@ -28,9 +28,10 @@
     const files = Array.isArray(manifest[folder]) ? manifest[folder] : [];
     const captions = Array.isArray(captionManifest[folder]) ? captionManifest[folder] : [];
     return files.map((entry, index) => {
-      const hasCaption = typeof captions[index] === 'string';
+      const captionValue = typeof captions[index] === 'string' ? captions[index].trim() : '';
+      const hasCaption = captionValue.length > 0;
       const fallback = `${countryName || titleFromSlug(folder)} photo ${index + 1}`;
-      return photo(entry, hasCaption ? captions[index] : fallback);
+      return photo(entry, hasCaption ? captionValue : fallback);
     });
   }
 

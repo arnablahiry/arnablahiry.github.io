@@ -34,13 +34,45 @@
       'People, place, and pace in one view'
     ];
 
-    const NON_WILD_CREDITS = ['Arnab', 'Mohua', 'Teesta', 'Bhomra'];
+    const MYWILDINDIA_PHOTO_MANIFEST = window.MYWILDINDIA_PHOTO_MANIFEST || {};
+    const MYWILDINDIA_CAPTIONS = window.MYWILDINDIA_CAPTIONS || {};
+    const NON_WILD_CREDITS = ['Pralay', 'Arnab', 'Mohua', 'Teesta'];
     const NON_WILD_CREDIT_IMAGES = {
-      Arnab: 'images/mywildindia/credits/arnab.png',
-      Mohua: 'images/mywildindia/credits/mohua.png',
-      Teesta: 'images/mywildindia/credits/teesta.png',
-      Bhomra: 'images/mywildindia/credits/bhomra.png'
+      Pralay: 'images/mywildindia/credits/pralay.svg',
+      Arnab: 'images/mywildindia/credits/arnab.svg',
+      Mohua: 'images/mywildindia/credits/mohua.svg',
+      Teesta: 'images/mywildindia/credits/teesta.svg'
     };
+
+    const PHOTO_FOLDER_ALIASES = {
+      'manas national park': 'manas',
+      'dibru-saikhowa national park': 'dibru',
+      'tadoba-andhari tiger reserve': 'tadoba',
+      'darya bugyal': 'bugyal',
+      'jabalpur': 'jabalpur'
+    };
+
+    function slugifyFolderKey(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function resolvePhotoFolder(place) {
+      const rawName = String(place && place.place ? place.place : '').toLowerCase();
+      return PHOTO_FOLDER_ALIASES[rawName] || slugifyFolderKey(place && place.place);
+    }
+
+    function authorImageFor(author) {
+      return NON_WILD_CREDIT_IMAGES[author] || NON_WILD_CREDIT_IMAGES.Pralay;
+    }
+
+    function captionEntryFor(folderKey, src) {
+      const folderCaptions = MYWILDINDIA_CAPTIONS[folderKey] || {};
+      const fileName = src ? String(src).split('/').pop() : '';
+      return folderCaptions[fileName] || folderCaptions[src] || null;
+    }
 
     const WILD_PLACES = [
       {
@@ -452,30 +484,35 @@
       return WILD_PLACES.filter((p) => normalize(p.state) === target);
     }
 
-    function getPhotoMeta(place, photoEntry, index) {
+    function getPhotoMeta(place, photoEntry, index, folderKey) {
       const isNotWild = place.markerType === 'notwild';
       const src = typeof photoEntry === 'string' ? photoEntry : photoEntry.src;
+      const thumbSrc = (photoEntry && typeof photoEntry === 'object' && photoEntry.thumbSrc)
+        ? photoEntry.thumbSrc
+        : src;
       const captionTemplates = isNotWild ? NOT_WILD_CAPTION_TEMPLATES : WILD_CAPTION_TEMPLATES;
       const defaultCaption = `${captionTemplates[index % captionTemplates.length]} (${index + 1}) - ${place.place}.`;
       const defaultCredit = isNotWild ? NON_WILD_CREDITS[index % NON_WILD_CREDITS.length] : 'Pralay';
-      const defaultCreditImage = isNotWild
-        ? (NON_WILD_CREDIT_IMAGES[defaultCredit] || 'images/logo.png')
-        : 'images/mywildindia/credits/pralay.png';
+      const defaultCreditImage = authorImageFor(defaultCredit);
+      const captionOverride = folderKey ? captionEntryFor(folderKey, src) : null;
+      const caption = (captionOverride && captionOverride.caption)
+        || (typeof photoEntry === 'object' && photoEntry && photoEntry.caption)
+        || defaultCaption;
+      const credit = (captionOverride && captionOverride.author)
+        || (typeof photoEntry === 'object' && photoEntry && photoEntry.credit)
+        || defaultCredit;
+      const creditImage = (typeof photoEntry === 'object' && photoEntry && photoEntry.creditImage)
+        ? photoEntry.creditImage
+        : authorImageFor(credit || defaultCredit);
 
-      if (typeof photoEntry === 'string') {
-        return { src, caption: defaultCaption, credit: defaultCredit, creditImage: defaultCreditImage };
-      }
-
-      return {
-        src,
-        caption: photoEntry.caption || defaultCaption,
-        credit: photoEntry.credit || defaultCredit,
-        creditImage: photoEntry.creditImage || defaultCreditImage
-      };
+      return { src, thumbSrc, caption, credit, creditImage: creditImage || defaultCreditImage };
     }
 
     function getPlacePhotoMeta(place) {
-      return (place.photos || []).map((photoEntry, index) => getPhotoMeta(place, photoEntry, index));
+      const folderKey = resolvePhotoFolder(place);
+      const manifestPhotos = folderKey ? MYWILDINDIA_PHOTO_MANIFEST[folderKey] : null;
+      const sourcePhotos = Array.isArray(manifestPhotos) && manifestPhotos.length ? manifestPhotos : (place.photos || []);
+      return sourcePhotos.map((photoEntry, index) => getPhotoMeta(place, photoEntry, index, folderKey));
     }
 
     function renderPanel(place) {
@@ -492,11 +529,11 @@
         const img = document.createElement('img');
         img.alt = place.place + ' photo ' + (i + 1);
         if (window.viewportLazy) {
-          window.viewportLazy.observe(img, { root: placePhotos, src: photo.src });
+          window.viewportLazy.observe(img, { root: placePhotos, src: photo.thumbSrc || photo.src });
         } else {
           img.loading = 'lazy';
           img.decoding = 'async';
-          img.src = photo.src;
+          img.src = photo.thumbSrc || photo.src;
         }
         btn.appendChild(img);
         btn.addEventListener('click', () => openLightboxAt(place, i, photoMeta));

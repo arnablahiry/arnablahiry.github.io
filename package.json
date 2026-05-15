@@ -5,7 +5,12 @@
   "scripts": {
     "travel:manifest": "node scripts/generate-travel-photo-manifest.js",
     "travel:captions": "node scripts/sync-travel-caption-spreadsheet.js",
-    "travel:sync": "npm run travel:manifest && npm run travel:captions"
+    "travel:captions:watch": "node scripts/watch-travel-caption-spreadsheet.js",
+    "travel:sync": "npm run travel:manifest && npm run travel:captions",
+    "mywildindia:manifest": "node scripts/generate-mywildindia-photo-manifest.js",
+    "mywildindia:captions": "node scripts/sync-mywildindia-caption-spreadsheet.js",
+    "mywildindia:captions:watch": "node scripts/watch-mywildindia-caption-spreadsheet.js",
+    "mywildindia:sync": "npm run mywildindia:manifest"
   },
   "dependencies": {
     "xlsx": "^0.18.5"

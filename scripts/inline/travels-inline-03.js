@@ -90,7 +90,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     const MIN_GLOBE_SCALE = 0.45;
     const MAX_GLOBE_SCALE = 3.5;
     const TRAVEL_DEFAULT_CREDIT = 'Arnab';
-    const TRAVEL_DEFAULT_CREDIT_IMAGE = 'images/mywildindia/credits/arnab.png';
+    const TRAVEL_DEFAULT_CREDIT_IMAGE = 'images/pfp_no_pixel.jpeg';
 
     const proj  = d3.geoOrthographic().clipAngle(90).precision(0.3);
     const gpath = d3.geoPath(proj, ctx);

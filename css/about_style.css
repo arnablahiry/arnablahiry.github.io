@@ -1,5 +1,76 @@
 /* About page styles - mirror Research page theming for light/dark consistency */
 
+@font-face {
+  font-family: 'Abaddon Light';
+  src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Abaddon Bold';
+  src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply background and overlay styling matching Research page */
+body.page-about #bg-image {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: -2;
+}
+
+body.page-about #image-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.72);
+    z-index: -1;
+}
+
+body.light-mode.page-about #image-overlay {
+    background: rgba(255,255,255,0.804);
+}
+
+/* Make sections and containers transparent so background shows through */
+body.page-about .about-hero {
+    background: transparent !important;
+    position: relative;
+}
+
+body.page-about .about-text,
+body.page-about .container {
+    background: transparent !important;
+    position: relative;
+    z-index: 1;
+}
+
+body.page-about .page-wrapper {
+    background: transparent !important;
+    position: relative;
+}
+
+body.page-about footer {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+body.light-mode.page-about footer {
+    background: transparent !important;
+    color: #111111 !important;
+}
+
 .container{ width: 90vw; max-width: 1200px; margin-left: auto; margin-right: auto; }
 
 .about-hero{ padding: 28px 0 48px 0; }
@@ -129,13 +200,15 @@ main.page-wrapper { flex: 1 1 auto; }
 .about-mini-banner a.about-thumb .thumb-text{
   color: #fff;
   font-weight: 600;
-  font-size: 0.98rem;
+  font-size: calc(0.98rem + 1pt);
   line-height: 1.1;
   transform: translateY(6px);
   opacity: 0;
   transition: transform 260ms ease, opacity 260ms ease;
   display: inline-block;
   padding: 0 20px; /* horizontal breathing room inside overlay */
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
 }
 .about-mini-banner a.about-thumb:focus .thumb-text,
 .about-mini-banner a.about-thumb:hover .thumb-text{
@@ -144,9 +217,10 @@ main.page-wrapper { flex: 1 1 auto; }
 }
 .about-mini-banner a.about-thumb .thumb-text strong{
   display: block;
-  font-weight: 800;
+  font-weight: 300;
   font-size: 1.02rem;
   margin-bottom: 4px;
+  font-family: 'Abaddon Light', sans-serif !important;
 }
 .about-mini-banner a.about-thumb .thumb-desc{
   display: block;
@@ -154,6 +228,7 @@ main.page-wrapper { flex: 1 1 auto; }
   font-size: 0.86rem;
   line-height: 1.15;
   opacity: 0.95;
+  font-family: 'Abaddon Light', sans-serif !important;
 }
 
 /* Any inline/about page images should have rounded corners for visual
@@ -255,11 +330,13 @@ main.page-wrapper { flex: 1 1 auto; }
 .about-photo-grid a.about-thumb .thumb-text{
   color: #fff;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: calc(1rem + 1pt);
   transform: translateY(6px);
   opacity: 0;
   transition: transform 260ms ease, opacity 260ms ease;
   padding: 0 20px; /* horizontal breathing room inside overlay */
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
 }
 .about-photo-grid a.about-thumb:focus .thumb-text,
 .about-photo-grid a.about-thumb:hover .thumb-text{
@@ -268,9 +345,10 @@ main.page-wrapper { flex: 1 1 auto; }
 }
 .about-photo-grid a.about-thumb .thumb-text strong{
   display: block;
-  font-weight: 800;
+  font-weight: 300;
   font-size: 1.02rem;
   margin-bottom: 4px;
+  font-family: 'Abaddon Light', sans-serif !important;
 }
 .about-photo-grid a.about-thumb .thumb-desc{
   display: block;
@@ -278,6 +356,7 @@ main.page-wrapper { flex: 1 1 auto; }
   font-size: 0.84rem;
   line-height: 1.15;
   opacity: 0.95;
+  font-family: 'Abaddon Light', sans-serif !important;
 }
 
 body.travel-lightbox-open{
@@ -663,8 +742,8 @@ body.light-mode footer{ color: #222 !important; }
   /* subtle top/backdrop shadow to lift the tooltip off bright/dark images,
     plus a faint gold glow to match site accents */
   box-shadow: 0 -6px 18px rgba(0,0,0,0.35), 0 0 0.08rem rgba(254,218,74,0.45);
-  font-family: "Poppins", "Montserrat", sans-serif;
-  font-weight: 200;
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
   font-size: 13px;
   line-height: 1.2;
   white-space: normal;
@@ -725,9 +804,11 @@ body.light-mode .about-text a.forth-link{
 }
 .about-timeline .timeline-year{
   margin-top: 10px;
-  font-size: 1.5vh; /* slightly increased for better readability */
+  font-size: calc(1.5vh + 1pt); /* slightly increased for better readability */
   color: #fff;
   opacity: 0.95;
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
 }
 
 /* Light mode adjustments: make years dark and dot border subtle if needed */
@@ -782,4 +863,45 @@ body.light-mode .about-photo-grid a.about-thumb:hover .thumb-overlay{
 }
 body.light-mode .about-photo-grid a.about-thumb .thumb-text{
   color: #111 !important;
+}
+
+/* Final About-page-specific font lock for all hover labels */
+body.page-about .about-mini-banner a.about-thumb .thumb-text,
+body.page-about .about-mini-banner a.about-thumb .thumb-text strong,
+body.page-about .about-mini-banner a.about-thumb .thumb-desc,
+body.page-about .about-photo-grid a.about-thumb .thumb-text,
+body.page-about .about-photo-grid a.about-thumb .thumb-text strong,
+body.page-about .about-photo-grid a.about-thumb .thumb-desc,
+body.page-about .about-timeline .timeline-tooltip {
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
+  font-style: normal !important;
+}
+
+.about-hero {
+    position: relative;
+    overflow: visible;
+}
+
+/* Apply Abaddon Light to About page navigation */
+body.page-about nav#site-nav,
+body.page-about nav#site-nav a,
+body.page-about nav#site-nav button,
+body.page-about nav#site-nav .nav-dropdown-toggle,
+body.page-about nav#site-nav .theme-toggle {
+    font-family: 'Abaddon Light', sans-serif !important;
+    font-weight: 300 !important;
+}
+
+.overlay-fade-top{
+    background-image: linear-gradient(black, #0a0a0a00);
+    height: 560px;
+    position: absolute;
+    inset: 0% 0% auto;
+    top: -2;
+    left: -50%;
+    right: 0;
+    width: 300vw;
+    z-index: 0;
+    pointer-events: none;
 }
