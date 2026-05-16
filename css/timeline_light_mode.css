@@ -32,11 +32,11 @@ body.light-mode #meme-wrapper {
 }
 
 body.light-mode #image-overlay{
-  background: rgba(255,255,255,0.75) !important;
+  background: rgba(255,255,255,0.88) !important;
 }
 
 body.light-mode #bg-image{
-  filter: invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.95) !important;
+  filter: none !important;
 }
 
 body.light-mode .page-wrapper,
@@ -45,6 +45,10 @@ body.light-mode .container,
 body.light-mode .section-timeline,
 body.light-mode .section-timeline-heading{
   background: transparent !important;
+}
+
+body.light-mode.page-timeline .section-timeline-heading::before{
+  background: white !important;
 }
 
 body.light-mode .timeline-heading-viewer.open .timeline-heading-backdrop{

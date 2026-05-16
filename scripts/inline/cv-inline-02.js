@@ -8,37 +8,61 @@
     links.forEach(function(a){
       a.addEventListener('click', function(e){
         e.preventDefault();
-        var id = a.dataset.target;
-        var el = document.getElementById(id);
+        var el = document.getElementById(a.dataset.target);
         if (!el) return;
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // update active state immediately
         links.forEach(function(x){ x.classList.toggle('active', x === a); });
       });
     });
 
-    // Scrollspy: highlight the section currently near top of viewport
-    var ticking = false;
-    function onScroll(){
-      if (ticking) return; ticking = true;
-      requestAnimationFrame(function(){
-        var topOffset = 140; // account for header
-        var current = null;
-        sections.forEach(function(s){
-          if (!s) return;
-          var r = s.getBoundingClientRect();
-          if (r.top - topOffset <= 20) { current = s; }
-        });
-        if (!current) current = sections[0];
-        links.forEach(function(a){
-          var id = a.dataset.target;
-          a.classList.toggle('active', current && current.id === id);
-        });
-        ticking = false;
+    function setActive(id){
+      links.forEach(function(a){
+        a.classList.toggle('active', a.dataset.target === id);
       });
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    // initialize
-    setTimeout(onScroll, 200);
+
+    // Initialize to first section
+    if (sections[0]) setActive(sections[0].id);
+
+    // Use IntersectionObserver: the topmost intersecting section wins.
+    // rootMargin shrinks the root box so only the upper viewport band triggers.
+    if ('IntersectionObserver' in window){
+      var visible = new Set();
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
+        });
+        // Pick the topmost section that is currently visible
+        var best = null;
+        sections.forEach(function(s){
+          if (s && visible.has(s)){
+            if (!best || s.getBoundingClientRect().top < best.getBoundingClientRect().top) best = s;
+          }
+        });
+        if (best) setActive(best.id);
+      }, { rootMargin: '-80px 0px -40% 0px', threshold: 0 });
+      sections.forEach(function(s){ if (s) observer.observe(s); });
+    } else {
+      // Fallback: scroll event on both window and document
+      var ticking = false;
+      function onScroll(){
+        if (ticking) return; ticking = true;
+        requestAnimationFrame(function(){
+          var topOffset = 140;
+          var current = null;
+          sections.forEach(function(s){
+            if (!s) return;
+            if (s.getBoundingClientRect().top - topOffset <= 20) current = s;
+          });
+          if (!current) current = sections[0];
+          if (current) setActive(current.id);
+          ticking = false;
+        });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      setTimeout(onScroll, 200);
+    }
   })();

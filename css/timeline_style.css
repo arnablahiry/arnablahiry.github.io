@@ -124,7 +124,7 @@
     padding: 18px;
     font-family: 'Abaddon Light', sans-serif;
     /* slightly smaller for improved density on large screens */
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.3;
     text-align: justify;
@@ -349,9 +349,9 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 }
 
 .timeline-breakout{
-    --timeline-breakout-alpha: 0.22;
     --timeline-breakout-shadow-alpha: 0.06;
     --timeline-breakout-shadow-size: 2px;
+    --breakout-line-opacity: 0.5;
     position: relative;
     width: 100%;
     height: 22vh;
@@ -373,7 +373,7 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     transform: translate(-50%, -50%);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 280ms ease;
+    transition: opacity 220ms ease;
     box-shadow: 0 0 var(--timeline-breakout-shadow-size) rgba(255, 215, 0, var(--timeline-breakout-shadow-alpha));
 }
 
@@ -390,18 +390,25 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
 
 .timeline-breakout-line::before{
     right: 50%;
-    background: rgba(255, 215, 0, 0.58);
-    opacity: var(--timeline-breakout-alpha);
+    background: gold;
 }
 
 .timeline-breakout-line::after{
     left: 50%;
-    background: rgba(255, 215, 0, 0.58);
-    opacity: var(--timeline-breakout-alpha);
+    background: gold;
+}
+
+/* Light mode: dark yellow line */
+body.light-mode .timeline-breakout-line::before,
+body.light-mode .timeline-breakout-line::after{
+    background: #a06800;
+}
+body.light-mode .timeline-breakout-line{
+    box-shadow: 0 0 var(--timeline-breakout-shadow-size) rgba(140, 90, 0, var(--timeline-breakout-shadow-alpha));
 }
 
 .timeline-breakout.is-visible .timeline-breakout-line{
-    opacity: 1;
+    opacity: var(--breakout-line-opacity, 0.5);
 }
 
 .timeline-breakout.is-visible .timeline-breakout-line::before,
@@ -424,10 +431,24 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     margin-top: 20px;
 }
 
+/* Full-viewport-width black box behind the timeline title */
+body.page-timeline .section-timeline-heading::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background: black;
+    z-index: -1;
+    pointer-events: none;
+}
+
 .section-timeline-heading .padding-vertical-xlarge{
     /* reduce vertical padding so the heading sits closer to the fixed header */
-    padding-top: 64px;
-    padding-bottom: 42px;
+    padding-top: 36px;
+    padding-bottom: 6px;
     margin-top: 0;
 }
 
@@ -487,10 +508,10 @@ body.light-mode .timeline-right .timeline-image-wrapper img{
 
 .overlay-fade-top{
     background-image: linear-gradient(black, #0a0a0a00);
-    height: 800px;
+    height: 400px;
     position: absolute;
     inset: 0% 0% auto;
-    top: -150px;
+    top: 50px;
     left: -50%;
     right: 0;
     width: 300vw;

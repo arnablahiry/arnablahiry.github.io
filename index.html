@@ -15,6 +15,20 @@
     <meta name="twitter:image" content="images/background.jpeg">
     <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="shortcut icon" href="images/logo.png">
+    <script>
+        (function () {
+            try {
+                const stored = localStorage.getItem('auto:skip');
+                const enabled = stored === null ? true : stored === 'on';
+                document.documentElement.classList.toggle('travel-overlay-instant', !enabled);
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        document.documentElement.classList.add('travel-overlay-ready');
+                    });
+                });
+            } catch (e) {}
+        })();
+    </script>
     <!-- Apply stored theme early to avoid a flash of the wrong theme on first paint -->
     <script src="scripts/inline/index-inline-01.js"></script>
     <!-- Enforce auto-skip ON on small screens (phones): set storage and add the
@@ -108,6 +122,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@500;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
 
     <img id="bg-image" src="images/background.jpeg" alt="Background"  loading="lazy" decoding="async" />
+    <img id="travel-overlay" src="images/travel_bg.jpeg" alt="Travel background overlay" aria-hidden="true" loading="lazy" decoding="async" />
 
 
     <div id="image-overlay"></div>
@@ -153,25 +168,25 @@
 
                 <!-- Snitch slot: hidden until activated by script (auto-skip must be OFF and intro visible) -->
                 <div id="snitch-slot" aria-hidden="true"></div>
+
+                <!-- Snitch launch button: bottom-right corner, only shown when auto-skip is OFF and intro revealed -->
+                <button id="snitch-launch-btn" aria-label="Catch the snitch!" title="Catch the snitch!">
+                    <img src="images/home/snitch.png" alt="Golden snitch" loading="lazy" decoding="async">
+                </button>
  
     <!-- Floating audio player -->
 
     <div id="audio-controls">
-                <!-- Immersive hint wrapper: contains the hint and the Star Wars button so hover on either
-                         can expand the hint via CSS-only selectors -->
-                <div class="hint-wrapper">
-                    <div id="immersive-hint" role="note" tabindex="0" aria-hidden="false">
-                        <span class="hint-line"><strong>Hover here to enable ADHD Mode ;)</strong></span>
-                        <div class="alt-text">Exactly how it sounds haha. Only for <italic>people of culture</italic> ;) [hint: turn the volume up], and it automatically sets the site to dark mode. You can change the theme again of course, but..c'mon</div>
-                    </div>
-                    <!-- Auto-skip toggle: enables/disables auto-clicking skip on load -->
-                    <button id="auto-skip-button" aria-pressed="false" aria-label="Toggle auto-skip">
+                <!-- Auto-skip toggle: enables/disables auto-clicking skip on load -->
+                <button id="auto-skip-button" aria-pressed="false" aria-label="Toggle auto-skip">
                             <img src="images/icons/star-wars.svg" alt="Auto skip" loading="lazy" decoding="async">
                     </button>
-                </div>
         <div id="audio-player">
             <audio id="my-audio" loop>
                 <source src="audio/swtheme.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="hp-audio" loop>
+                <source src="audio/hptheme.mp3" type="audio/mpeg">
             </audio>
         <button id="play-pause">♫</button>
         </div>
@@ -228,12 +243,23 @@
     </section>
 
 
+    <!-- Left sidebar with vertically stacked images -->
+    <div class="home-left-sidebar">
+        <a href="about.html" class="sidebar-link" title="About">
+            <img src="images/home/about_box.png" alt="About" class="sidebar-icon" loading="lazy" decoding="async">
+        </a>
+        <a href="timeline.html" class="sidebar-link" title="Timeline">
+            <img src="images/home/timeline_box.png" alt="Timeline" class="sidebar-icon" loading="lazy" decoding="async">
+        </a>
+        <a href="research.html" class="sidebar-link" title="Research">
+            <img src="images/home/research_box.png" alt="Research" class="sidebar-icon" loading="lazy" decoding="async">
+        </a>
+    </div>
+
     <!-- Fade-in section -->
     <div class="intro-section" id="photo-container">
         <div class="photo-wrapper">
             <img src="images/pfp.jpeg" alt="My Photo" class="intro-photo" id="intro-photo" tabindex="0" loading="lazy" decoding="async">
-            <!-- 8-bit sunglasses overlay (transparent PNG). Add or replace file at images/8bit-sunglasses.png -->
-            <img src="images/sunglasses.png" alt="8-bit sunglasses" class="sunglasses" aria-hidden="true" loading="lazy" decoding="async">
         </div>
         <div class="intro-text" id="intro-text">
             <p style="color: #fff8dc; font-size: 1.6rem; margin:0 0 0.85rem 0; font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif; font-weight:700;">
@@ -249,9 +275,9 @@
                 margin: 0.3rem 0 0 0; font-size: clamp(2rem, 1.6vw, 1.6rem) !important;">Arnab's Website</h2>
             <p id="tagline"><strong style="font-weight:700;">PhD Candidate</strong> - Astrophysics | Computer Science</p>
             <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin: 1.5rem 0;">
-                <p style="color: #fff8dc; font-size: 2rem; font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
+                <p id="start-prompt" style="color: #fff8dc; font-size: 2rem; font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
                     Press
-                    <button type="button" aria-label="Start" style="background: transparent; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                    <button type="button" aria-label="Start" class="start-button" style="background: transparent; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
                         <img src="images/start.png" alt="Start" loading="lazy" decoding="async" style="display: block; width: 5.5rem; height: auto; object-fit: contain;">
                     </button>
                     to begin
@@ -293,7 +319,6 @@
 <script src="scripts/home/skip-button.js"></script>
 <script src="scripts/home/pause-scroll.js"></script>
 <script src="scripts/nav-toggle.js"></script>
-<script src="scripts/home/sunglasses-focus.js"></script>
     <script src="scripts/home/theme-lock.js"></script>
     <script src="scripts/theme-toggle.js"></script>
     <script src="scripts/home/auto-skip.js"></script>

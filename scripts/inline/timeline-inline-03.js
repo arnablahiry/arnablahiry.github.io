@@ -26,24 +26,38 @@
         if (!bridges.length) return;
         if (window.innerWidth <= 768) return;
 
+        const progressBar = document.querySelector('.timeline-progress-bar');
+
         let rafId = 0;
 
         function updateBreakouts() {
           rafId = 0;
-          const viewportCenter = window.innerHeight * 0.5;
+
+          // Get the viewport Y of the progress bar's leading edge (its bottom)
+          let barEdgeY = window.innerHeight * 0.5; // fallback to center
+          if (progressBar) {
+            const barRect = progressBar.getBoundingClientRect();
+            barEdgeY = barRect.bottom;
+          }
+
+          const proximityWindow = window.innerHeight * 0.28; // how far away the effect reaches
 
           bridges.forEach((bridge) => {
             const rect = bridge.getBoundingClientRect();
             const lineCenter = rect.top + (rect.height * 0.5);
             const visible = rect.bottom > 0 && rect.top < window.innerHeight;
-            const distance = Math.abs(lineCenter - viewportCenter);
-            const proximity = Math.max(0, 1 - (distance / Math.max(window.innerHeight * 0.22, 1)));
-            const alpha = 0.2 + (0.4 * proximity);
-            const shadowAlpha = 0.1 + (0.62 * proximity);
-            const shadowSize = 3 + (18 * proximity);
+
+            // Distance from progress bar edge to this breakout line
+            const distance = Math.abs(lineCenter - barEdgeY);
+            const proximity = Math.max(0, 1 - (distance / Math.max(proximityWindow, 1)));
+
+            // Opacity: 0.5 at rest, rises to 1 at peak proximity
+            const lineOpacity = 0.5 + 0.5 * proximity;
+            const shadowAlpha = 0.06 + 0.5 * proximity;
+            const shadowSize = 2 + 14 * proximity;
 
             bridge.classList.toggle('is-visible', visible);
-            bridge.style.setProperty('--timeline-breakout-alpha', alpha.toFixed(4));
+            bridge.style.setProperty('--breakout-line-opacity', lineOpacity.toFixed(4));
             bridge.style.setProperty('--timeline-breakout-shadow-alpha', shadowAlpha.toFixed(4));
             bridge.style.setProperty('--timeline-breakout-shadow-size', shadowSize.toFixed(2) + 'px');
           });

@@ -147,6 +147,7 @@ function _rafLoop(){
           if (sectionEl && !sectionEl.classList.contains('visible')){
             sectionEl.classList.add('visible');
           }
+          document.body.classList.add('intro-revealed');
         } catch(e){}
         meta.started = true;
         _introEls._lastStarted = Math.max(_introEls._lastStarted || 0, virtualElapsedSec);

@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Reflect the enabled state in the document so CSS can style other controls
   try { document.body.classList.toggle('auto-skip-enabled', enabled); } catch (e) {}
+  try { document.body.classList.toggle('travel-overlay-active', !enabled); } catch (e) {}
 
   // Update meme overlays according to auto-skip state:
   // - when auto-skip is enabled -> memes should be blurred (overlay visible)
@@ -145,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAudioPointerEvents(enabled);
     // show/hide the overlay immediately
     toggleAudioControlsOverlay(enabled);
+    try { document.body.classList.toggle('travel-overlay-active', !enabled); } catch (e) {}
     try { window.location.reload(); } catch (e){}
   });
 

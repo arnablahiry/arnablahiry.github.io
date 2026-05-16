@@ -44,6 +44,7 @@ skipButton.addEventListener("click", () => {
     setTimeout(() => {
       introPhoto.style.transition = "opacity 1s ease";
       introPhoto.style.opacity = "1";
+      try { document.body.classList.add('intro-revealed'); } catch(e){}
       // Mark the intro section visible now that the photo is being shown so
       // links and site navigation become clickable.
       try {

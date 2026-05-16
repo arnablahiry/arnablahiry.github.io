@@ -105,13 +105,19 @@ body.light-mode .site-link,
 }
 
 body.light-mode header::before{
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.274); /* white overlay strength; tune as needed */
+    background: transparent !important;
+}
 
-    pointer-events: none;
-    z-index: 0;
+/* Homepage light mode: transparent header and footer */
+body.light-mode.no-theme-transition header,
+body.light-mode.no-theme-transition nav#site-nav{
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body.light-mode.no-theme-transition footer{
+    background: transparent !important;
 }
 
 /* Homepage-only: ensure audio controls are centered on phone in both themes.
@@ -224,12 +230,12 @@ body.light-mode .social-link:focus {
    other pages don't visually transition from dark -> light on initial load.
    This file is only included on `index.html`, so the site-wide theme toggle
    still works everywhere but the heavy visual effects are scoped to home. */
-:root{ --light-image-overlay-opacity: 0.75; --nav-bg-opacity: 0.0; --nav-open-opacity: 0.95; --hamburger-bg-opacity: 0.0; --hamburger-blur: 0px; }
+:root{ --light-image-overlay-opacity: 0.88; --nav-bg-opacity: 0.0; --nav-open-opacity: 0.95; --hamburger-bg-opacity: 0.0; --hamburger-blur: 0px; }
 body.light-mode #image-overlay{
     background: rgba(255,255,255,var(--light-image-overlay-opacity)) !important;
 }
 
-/* Light-mode: invert and tone the full background image for a light feel */
+/* Light-mode: keep background image natural (no hue inversion) */
 body.light-mode #bg-image{
-    filter: invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.95) !important;
+    filter: none !important;
 }

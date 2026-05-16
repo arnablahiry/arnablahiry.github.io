@@ -1,27 +1,13 @@
-/* Inline snitch launcher (migrated from index.html)
-   Mounts the snitch into #snitch-slot only on index, when auto-skip is OFF
-   and the intro/photo section has become visible. Behavior is scoped and
-   intentionally lightweight. */
+/* Snitch launcher: mounts the catch-the-snitch minigame into #snitch-slot.
+   The game starts only when the user clicks the #snitch-launch-btn button. */
 (function(){
     const slot = document.getElementById('snitch-slot');
-    const photoContainer = document.getElementById('photo-container');
     const header = document.querySelector('header');
-    // Allow this module to run on pages without the home-only `photoContainer`.
-    // The auto-init logic will only run where `photoContainer` exists; however
-    // we still need `slot` and `header` to be present to initialize the snitch.
     if (!slot || !header) return;
 
-    // shared state for the currently active snitch instance. Stored here so
-    // other pages can call teardown and so we can cancel timers/raf handlers.
     let SNITCH_STATE = null;
 
-    // keep the slot hidden by default until all visibility conditions are met
-    // (photo visible + pause button grayed). This prevents any early flashes.
     try { slot.style.opacity = '0'; slot.style.display = 'none'; slot.setAttribute('aria-hidden','true'); } catch(e){}
-
-    function isAutoSkipOff(){
-        try { return localStorage.getItem('auto:skip') === 'off'; } catch(e){ return false; }
-    }
 
     function placeSlotUnderHeader(){
         const h = header.getBoundingClientRect();
@@ -33,95 +19,98 @@
     placeSlotUnderHeader();
     window.addEventListener('resize', placeSlotUnderHeader);
 
-    // Only initialize snitch when auto-skip is OFF and the intro/site-links
-    // have become visible. We wait for the intro to finish (photoContainer
-    // acquiring the `visible` class) to avoid showing the snitch during the
-    // initial crawl/intro animation.
-    function tryInit(){
-        if (!isAutoSkipOff()) return; // remain inactive when auto-skip is ON
-
-        // Helper: detect whether the pause button has been grayed out (disabled)
-        function isPauseGrayed(){
-            const pause = document.getElementById('pause-scroll');
-            if (!pause) return false;
-            if (pause.classList && pause.classList.contains('disabled')) return true;
-            if (pause.hasAttribute && pause.hasAttribute('disabled')) return true;
-            try {
-                const s = window.getComputedStyle(pause);
-                const op = parseFloat(s && s.opacity) || 1;
-                if (op <= 0.55) return true; // treat low opacity as 'grayed'
-            } catch(e){}
-            return false;
-        }
-
-        // If we don't have a photoContainer (i.e., not the index page), skip
-        // the auto-init observation logic and leave initialization to callers
-        // (for example, the explicit launcher button on other pages).
-        if (!photoContainer){
-            return;
-        }
-
-        // If the intro has already been marked visible AND the pause button is grayed,
-        // initialize immediately.
-        if (photoContainer.classList && photoContainer.classList.contains('visible') && isPauseGrayed()){
-            initSnitch();
-            return;
-        }
-
-        // Watch for the intro gaining the `visible` class. Use a MutationObserver
-        // because the class is toggled by other scripts when the intro finishes.
-        const mo = new MutationObserver((mutations)=>{
-            if (photoContainer.classList && photoContainer.classList.contains('visible') && isPauseGrayed()){
-                mo.disconnect();
-                if (pauseObserver) pauseObserver.disconnect();
+    // Wire up the launch button: click starts the game; click again stops it
+    function bindLaunchButton(){
+        const btn = document.getElementById('snitch-launch-btn');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            if (SNITCH_STATE) {
+                if (typeof window.teardownSnitch === 'function') window.teardownSnitch();
+            } else {
                 initSnitch();
             }
         });
-        mo.observe(photoContainer, { attributes: true, attributeFilter: ['class'] });
-
-        // As a safety fallback, also observe intersection (in case the page
-        // doesn't toggle the class but the element scrolls into view).
-        const io = new IntersectionObserver((entries)=>{
-            entries.forEach(en=>{
-                if (en.isIntersecting && isPauseGrayed()) {
-                    io.disconnect();
-                    mo.disconnect();
-                    if (pauseObserver) pauseObserver.disconnect();
-                    initSnitch();
-                }
-            });
-        }, { threshold: 0.35 });
-        io.observe(photoContainer);
-
-        // Observe the pause button for class/attribute changes so we can initialize
-        // as soon as it becomes grayed out. If it already matches the condition,
-        // init will occur via the photo observers above.
-        const pause = document.getElementById('pause-scroll');
-        let pauseObserver = null;
-        if (pause){
-            pauseObserver = new MutationObserver((muts)=>{
-                if (isPauseGrayed() && (photoContainer.classList && photoContainer.classList.contains('visible'))){
-                    if (io) io.disconnect();
-                    if (mo) mo.disconnect();
-                    pauseObserver.disconnect();
-                    initSnitch();
-                }
-            });
-            pauseObserver.observe(pause, { attributes: true, attributeFilter: ['class','disabled','style'] });
-        }
     }
-
-    // If storage changes (rare) we can also attempt init on storage events
-    window.addEventListener('storage', (e)=>{ if (e.key==='auto:skip') tryInit(); });
-
-    // run on DOMContentLoaded too
-    document.addEventListener('DOMContentLoaded', tryInit);
+    if (document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', bindLaunchButton);
+    } else {
+        bindLaunchButton();
+    }
 
     // --- create snitch behavior (lightweight copy of test harness, scoped) ---
     function initSnitch(){
         if (SNITCH_STATE) return; // already created
         // ensure slot exists
         if (!slot) return;
+        try { document.body.classList.add('snitch-active'); } catch(e){}
+
+        // Stop SW music if playing (audio-player.js listens to the pause event and syncs its icon)
+        try { const swAudio = document.getElementById('my-audio'); if (swAudio && !swAudio.paused) swAudio.pause(); } catch(e){}
+
+        // Create HP theme audio + button (only when the audio element exists — home page only)
+        const hpMusicSvg = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 3v10.5A3.5 3.5 0 1 0 13.5 17V7h4V3h-5.5z" fill="currentColor"/></svg>`;
+        const hpMusicCrossedSvg = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 3v10.5A3.5 3.5 0 1 0 13.5 17V7h4V3h-5.5z" fill="currentColor"/><line x1="4" y1="20" x2="20" y2="4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" transform="rotate(-12 12 12)"/></svg>`;
+
+        const hpAudio = document.getElementById('hp-audio');
+        let hpBtn = null;
+
+        if (hpAudio) {
+            hpBtn = document.createElement('button');
+            hpBtn.id = 'hp-music-btn';
+            hpBtn.setAttribute('aria-label', 'Toggle Harry Potter theme');
+            hpBtn.setAttribute('aria-pressed', 'false');
+            hpBtn.title = 'Harry Potter theme';
+            hpBtn.innerHTML = hpMusicSvg;
+            document.body.appendChild(hpBtn);
+
+            hpBtn.addEventListener('click', () => {
+                if (hpAudio.paused) { hpAudio.play().catch(()=>{}); }
+                else { hpAudio.pause(); }
+            });
+            hpAudio.addEventListener('play',  () => { hpBtn.innerHTML = hpMusicCrossedSvg; hpBtn.setAttribute('aria-pressed','true'); });
+            hpAudio.addEventListener('pause', () => { hpBtn.innerHTML = hpMusicSvg;        hpBtn.setAttribute('aria-pressed','false'); });
+
+            // fade in to resting opacity
+            requestAnimationFrame(() => { hpBtn.style.opacity = '0.5'; });
+        }
+
+        // Software-page-only: create HP audio, music button (full size), and instructions text
+        let swHpAudio = null, swHpBtn = null, instrDiv = null;
+        if (document.body.classList.contains('page-software')) {
+            swHpAudio = document.createElement('audio');
+            swHpAudio.src = 'audio/hptheme.mp3';
+            swHpAudio.loop = true;
+            document.body.appendChild(swHpAudio);
+
+            swHpBtn = document.createElement('button');
+            swHpBtn.id = 'hp-music-btn';
+            swHpBtn.setAttribute('aria-label', 'Toggle Harry Potter theme');
+            swHpBtn.setAttribute('aria-pressed', 'false');
+            swHpBtn.title = 'Harry Potter theme';
+            swHpBtn.innerHTML = hpMusicSvg;
+            swHpBtn.style.width = '8vh';
+            swHpBtn.style.height = '8vh';
+            swHpBtn.style.opacity = '0';
+            swHpBtn.style.zIndex = '100520';
+            document.body.appendChild(swHpBtn);
+
+            swHpBtn.addEventListener('click', () => {
+                if (swHpAudio.paused) { swHpAudio.play().catch(()=>{}); }
+                else { swHpAudio.pause(); }
+            });
+            swHpAudio.addEventListener('play',  () => { swHpBtn.innerHTML = hpMusicCrossedSvg; swHpBtn.setAttribute('aria-pressed','true'); });
+            swHpAudio.addEventListener('pause', () => { swHpBtn.innerHTML = hpMusicSvg;        swHpBtn.setAttribute('aria-pressed','false'); });
+
+            requestAnimationFrame(() => { swHpBtn.style.opacity = '1'; });
+
+            instrDiv = document.createElement('div');
+            instrDiv.id = 'snitch-instructions';
+            instrDiv.style.cssText = 'position:fixed;bottom:calc(3rem + 8vh + 0.9rem);right:2.8vw;font-family:"Abaddon Light",sans-serif;font-size:0.85rem;color:rgba(255,248,220,0.9);text-align:center;opacity:0;transition:opacity 0.6s ease;z-index:100520;max-width:360px;line-height:1.5;pointer-events:none;';
+            instrDiv.innerHTML = 'Chase the golden snitch with your mouse.<br>The bar fills the longer you pursue it —<br>faster the more relentless you are.<br>When it\'s full, the snitch slows down.<br><em style="color:gold;">Click it to catch it and win 150 points!</em>';
+            document.body.appendChild(instrDiv);
+            requestAnimationFrame(() => { instrDiv.style.opacity = '1'; });
+        }
+
         // reveal the slot for accessibility, but animate in via CSS so it
         // appears smoothly (fade, deblur, scale). Remove direct opacity
         // writes so CSS animation controls the appearance.
@@ -145,6 +134,11 @@
         SNITCH_STATE = {
             slot: slot,
             img: img,
+            hpAudio: hpAudio,
+            hpBtn: hpBtn,
+            swHpAudio: swHpAudio,
+            swHpBtn: swHpBtn,
+            instrDiv: instrDiv,
             driftRaf: null,
             smoothRaf: null,
             dartTimeout: null,
@@ -170,21 +164,26 @@
         }
 
         let bounds = getBounds();
-        const EDGE_PADDING = 64; // large padding so the snitch does not reach page edges
-        // start well inside the padded area
-        let x = EDGE_PADDING + 12, y = EDGE_PADDING + 12;
+        const EDGE_PADDING = 80;
+        const WALL_WARN = EDGE_PADDING * 2.2; // start redirecting well before the hard edge
+        let x = EDGE_PADDING + 40, y = EDGE_PADDING + 40;
         let prevX = x, prevY = y;
-        const speed = 0.9, fleeDistance = 100, dartDistance = 120;
+        const speed = 0.5;
+        const fleeDistance = 180;  // trigger flee much earlier
+        const dartDistance = 240;  // flee much farther
 
-        function clampToBounds(nx, ny){
+        function getBoundsLimits(){
             const b = getBounds();
             const maxX = Math.max(0, b.width - img.width);
             const maxY = Math.max(0, b.height - img.height);
             const minX = EDGE_PADDING;
             const minY = EDGE_PADDING;
-            const maxClampX = Math.max(minX, maxX - EDGE_PADDING);
-            const maxClampY = Math.max(minY, maxY - EDGE_PADDING);
-            return [ Math.max(minX, Math.min(maxClampX, nx)), Math.max(minY, Math.min(maxClampY, ny)) ];
+            return { minX, minY, maxX: Math.max(minX, maxX - EDGE_PADDING), maxY: Math.max(minY, maxY - EDGE_PADDING), rawMaxX: maxX, rawMaxY: maxY };
+        }
+
+        function clampToBounds(nx, ny){
+            const { minX, minY, maxX, maxY } = getBoundsLimits();
+            return [ Math.max(minX, Math.min(maxX, nx)), Math.max(minY, Math.min(maxY, ny)) ];
         }
 
         function updateImgPos(){
@@ -192,7 +191,7 @@
             img.style.top = Math.round(y) + 'px';
         }
 
-        function smoothMoveTo(tx, ty, duration = 220){
+        function smoothMoveTo(tx, ty, duration = 180){
             if (SNITCH_STATE.smoothRaf) cancelAnimationFrame(SNITCH_STATE.smoothRaf);
             SNITCH_STATE.animating = true;
             const start = performance.now();
@@ -210,6 +209,80 @@
             SNITCH_STATE.smoothRaf = requestAnimationFrame(step);
         }
 
+        // Rotate a unit vector by `angle` radians
+        function rotateVec(ux, uy, angle){
+            const c = Math.cos(angle), s = Math.sin(angle);
+            return [ux * c - uy * s, ux * s + uy * c];
+        }
+
+        // Given a desired flee direction (ux,uy), deflect it away from nearby walls
+        // and return a safe target point dartDist away.
+        function safeFleeTarget(ux, uy, dartDist){
+            const { minX, minY, maxX, maxY, rawMaxX, rawMaxY } = getBoundsLimits();
+
+            // Wall proximity flags (using WALL_WARN zone)
+            const nearLeft   = x - minX   < WALL_WARN;
+            const nearRight  = maxX - x   < WALL_WARN;
+            const nearTop    = y - minY    < WALL_WARN;
+            const nearBottom = maxY - y    < WALL_WARN;
+
+            // If fleeing toward a wall, flip that axis
+            if (nearLeft   && ux < 0) ux = Math.abs(ux);
+            if (nearRight  && ux > 0) ux = -Math.abs(ux);
+            if (nearTop    && uy < 0) uy = Math.abs(uy);
+            if (nearBottom && uy > 0) uy = -Math.abs(uy);
+
+            // Corner: near two walls → aim for center with jitter
+            const inCorner = (nearLeft || nearRight) && (nearTop || nearBottom);
+            if (inCorner){
+                const cx = rawMaxX / 2, cy = rawMaxY / 2;
+                let cdx = cx - x, cdy = cy - y;
+                const cdist = Math.sqrt(cdx*cdx + cdy*cdy) || 1;
+                ux = cdx / cdist;
+                uy = cdy / cdist;
+                // random angle offset ±50° so it's not predictably straight to center
+                const [rx, ry] = rotateVec(ux, uy, (Math.random() - 0.5) * 1.75);
+                ux = rx; uy = ry;
+            } else {
+                // add ±35° jitter for erratic movement
+                const [rx, ry] = rotateVec(ux, uy, (Math.random() - 0.5) * 1.2);
+                ux = rx; uy = ry;
+            }
+
+            // re-normalize after adjustments
+            const len = Math.sqrt(ux*ux + uy*uy) || 1;
+            ux /= len; uy /= len;
+
+            return clampToBounds(x + ux * dartDist, y + uy * dartDist);
+        }
+
+        // Proactive wall flee: called every drift frame; triggers a fast redirect
+        // whenever the snitch drifts into the warn zone.
+        function proactiveWallFlee(){
+            const { minX, minY, maxX, maxY } = getBoundsLimits();
+            const nearLeft   = x - minX  < WALL_WARN;
+            const nearRight  = maxX - x  < WALL_WARN;
+            const nearTop    = y - minY   < WALL_WARN;
+            const nearBottom = maxY - y   < WALL_WARN;
+            if (!(nearLeft || nearRight || nearTop || nearBottom)) return;
+
+            // Build repulsion vector away from all nearby walls
+            let rx = 0, ry = 0;
+            if (nearLeft)   rx += 1;
+            if (nearRight)  rx -= 1;
+            if (nearTop)    ry += 1;
+            if (nearBottom) ry -= 1;
+
+            // Fallback: no clear direction (exact center) → pick random outward
+            if (rx === 0 && ry === 0){ rx = (Math.random() - 0.5); ry = (Math.random() - 0.5); }
+
+            const rlen = Math.sqrt(rx*rx + ry*ry) || 1;
+            rx /= rlen; ry /= rlen;
+
+            const [tx, ty] = safeFleeTarget(rx, ry, dartDistance * 1.3);
+            smoothMoveTo(tx, ty, SNITCH_STATE.slowMode ? 1400 : 380);
+        }
+
         // drift
         function randomDrift(){
             if (!SNITCH_STATE.animating){
@@ -218,44 +291,41 @@
                 y += (Math.random() - 0.5) * speed;
                 [x, y] = clampToBounds(x, y);
                 updateImgPos();
-                checkCornerAndFlee();
+                proactiveWallFlee();
             }
             SNITCH_STATE.driftRaf = requestAnimationFrame(randomDrift);
         }
         SNITCH_STATE.driftRaf = requestAnimationFrame(randomDrift);
 
         function scheduleRandomDart(){
-            const delay = SNITCH_STATE.slowMode ? (20000 + (Math.random() * 10000 - 5000)) : (500 + Math.random() * 1200);
+            const delay = SNITCH_STATE.slowMode ? (20000 + (Math.random() * 10000 - 5000)) : (400 + Math.random() * 900);
             SNITCH_STATE.dartTimeout = setTimeout(()=>{
                 const angle = Math.random() * Math.PI * 2;
-                const effective = SNITCH_STATE.slowMode ? (dartDistance * 0.25) : dartDistance;
-                const dx = Math.cos(angle) * effective;
-                const dy = Math.sin(angle) * effective;
-                const [tx, ty] = clampToBounds(x + dx, y + dy);
-                const dur = SNITCH_STATE.slowMode ? 800 : 220;
+                const effective = SNITCH_STATE.slowMode ? (dartDistance * 0.08) : dartDistance;
+                const [tx, ty] = safeFleeTarget(Math.cos(angle), Math.sin(angle), effective);
+                const dur = SNITCH_STATE.slowMode ? 1600 : 750;
                 smoothMoveTo(tx, ty, dur);
-                setTimeout(checkCornerAndFlee, dur + 40);
                 scheduleRandomDart();
             }, delay);
         }
         scheduleRandomDart();
 
-        // proximity flee: listen globally so other UI (audio buttons, overlays)
-        // can sit above the slot and still receive clicks. Compute mouse
-        // position relative to the slot rect on every move.
-        // proximity flee handler
+        // proximity flee — cancel any ongoing move and immediately redirect
         function handleProximity(ev){
             if (!SNITCH_STATE || !SNITCH_STATE.mouseEnabled) return;
             const rect = slot.getBoundingClientRect();
             const mx = ev.clientX - rect.left;
             const my = ev.clientY - rect.top;
-            const dx = x - mx; const dy = y - my; const dist = Math.sqrt(dx*dx + dy*dy);
+            const dx = x - mx; const dy = y - my;
+            const dist = Math.sqrt(dx*dx + dy*dy);
             if (dist < fleeDistance){
+                // scale flee distance by proximity: much closer = much farther flee
+                const factor = 1 + 1.2 * (1 - dist / fleeDistance);
                 const ux = dx / (dist || 1), uy = dy / (dist || 1);
-                const [tx, ty] = clampToBounds(x + ux * dartDistance, y + uy * dartDistance);
-                const dur = SNITCH_STATE.slowMode ? 500 : 260;
+                const slowFactor = SNITCH_STATE.slowMode ? 0.25 : 1;
+                const [tx, ty] = safeFleeTarget(ux, uy, dartDistance * factor * slowFactor);
+                const dur = SNITCH_STATE.slowMode ? 1100 : 280;
                 smoothMoveTo(tx, ty, dur);
-                setTimeout(checkCornerAndFlee, dur + 40);
             }
         }
         SNITCH_STATE.handlers.proximity = handleProximity;
@@ -288,8 +358,9 @@
                         SNITCH_STATE.progressWrap.classList.remove('show');
                         clearInterval(SNITCH_STATE.movementChecker); SNITCH_STATE.movementChecker = null; return;
                     }
-                    // compute fraction toward 20s
-                    const fraction = Math.max(0, Math.min(1, (now2 - SNITCH_STATE.movementStart) / 20000));
+                    // accelerating fill: slow at first, faster the longer you chase
+                    const raw = Math.max(0, Math.min(1, (now2 - SNITCH_STATE.movementStart) / 14000));
+                    const fraction = raw * raw;
                     SNITCH_STATE.progressBar.style.width = Math.round(fraction * 100) + '%';
                     if (fraction >= 1){
                         SNITCH_STATE.slowTriggered = true; SNITCH_STATE.movementTracking = false;
@@ -403,32 +474,6 @@
             // Do NOT auto-hide the box — it should remain until Play again is pressed.
         }
 
-        // corner bounce: reflect incoming vector (mirror direction) and instantly jump
-        function checkCornerAndFlee(){
-            const rect = slot.getBoundingClientRect();
-            const maxX = Math.max(0, rect.width - img.width);
-            const maxY = Math.max(0, rect.height - img.height);
-            const margin = EDGE_PADDING;
-            const atLeft = x <= margin;
-            const atRight = x >= (maxX - margin);
-            const atTop = y <= margin;
-            const atBottom = y >= (maxY - margin);
-            if (!(atLeft || atRight || atTop || atBottom)) return;
-
-            // incoming vector
-            let inDx = x - prevX, inDy = y - prevY;
-            let inDist = Math.sqrt(inDx*inDx + inDy*inDy);
-            if (inDist < 1){ const cx = atLeft?0:(atRight?maxX:x); const cy = atTop?0:(atBottom?maxY:y); inDx = x - cx; inDy = y - cy; inDist = Math.sqrt(inDx*inDx + inDy*inDy) || 1; }
-            const ux = -inDx / inDist; const uy = -inDy / inDist;
-            const fleeAmount = Math.max(dartDistance, fleeDistance) * 1.2;
-            const [tx, ty] = clampToBounds(x + ux * fleeAmount, y + uy * fleeAmount);
-            if (SNITCH_STATE && SNITCH_STATE.smoothRaf) cancelAnimationFrame(SNITCH_STATE.smoothRaf);
-            SNITCH_STATE.animating = false;
-            x = tx; y = ty; updateImgPos();
-            img.style.transform = 'scale(1.06)';
-            setTimeout(()=> img.style.transform = '', 140);
-        }
-
         // keep bounds up to date on resize/scroll
         function handleResize(){ bounds = getBounds(); }
         SNITCH_STATE.handlers.resize = handleResize;
@@ -454,8 +499,16 @@
                 try{ const r = slot.querySelector('#snitch-runner'); if (r) r.remove(); }catch(e){}
                 // remove any win boxes appended to body
                 try{ Array.from(document.querySelectorAll('.snitch-win')).forEach(n=>n.remove()); }catch(e){}
+                // stop HP music and remove its button
+                try{ if (SNITCH_STATE.hpAudio) SNITCH_STATE.hpAudio.pause(); }catch(e){}
+                try{ if (SNITCH_STATE.hpBtn) SNITCH_STATE.hpBtn.remove(); }catch(e){}
+                // software-page-only elements
+                try{ if (SNITCH_STATE.swHpAudio) { SNITCH_STATE.swHpAudio.pause(); SNITCH_STATE.swHpAudio.remove(); } }catch(e){}
+                try{ if (SNITCH_STATE.swHpBtn) SNITCH_STATE.swHpBtn.remove(); }catch(e){}
+                try{ if (SNITCH_STATE.instrDiv) SNITCH_STATE.instrDiv.remove(); }catch(e){}
                 // hide slot
                 try{ slot.classList.remove('snitch-appear'); slot.style.display = 'none'; slot.setAttribute('aria-hidden','true'); }catch(e){}
+                try { document.body.classList.remove('snitch-active'); } catch(e){}
             }catch(e){}
             SNITCH_STATE = null;
             try{ window.teardownSnitch = null; }catch(e){}

@@ -65,6 +65,40 @@ body.no-theme-transition{
   z-index: -2;
 }
 
+/* Travel overlay shown during the crawl, then fades upward to reveal the base background. */
+#travel-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0;
+  transform: translateY(0);
+  filter: brightness(0.55) saturate(0.9);
+  pointer-events: none;
+  transition: opacity 1800ms ease, transform 1800ms ease, filter 1800ms ease;
+}
+
+html.travel-overlay-instant #travel-overlay {
+  opacity: 1;
+  transition: none;
+}
+
+html.travel-overlay-ready #travel-overlay {
+  transition: opacity 1800ms ease, transform 1800ms ease, filter 1800ms ease;
+}
+
+body.travel-overlay-active #travel-overlay {
+  opacity: 1;
+}
+
+body.intro-revealed #travel-overlay {
+  opacity: 0;
+  transform: translateY(-8vh);
+  filter: brightness(0.45) saturate(0.85);
+}
+
 /* Dark overlay sitting above the background image. Reduce opacity so the
    background image reads through more. */
 #image-overlay {
@@ -587,6 +621,201 @@ body.auto-skip-enabled #restart-button {
   100% { transform: scale(1); }
 }
 
+/* Start button continuous breathing animation (shrink to 0.99, expand back to 1) */
+@keyframes start-button-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+
+/* Start button click animation (compress and bounce back) */
+@keyframes start-button-click {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+/* Start button styles: continuous pulse + hover zoom + click animation */
+.start-button {
+  animation: start-button-pulse 1200ms ease-in-out infinite !important;
+  transition: transform 240ms cubic-bezier(0.22, 0.1, 0.22, 1) !important;
+  will-change: transform;
+}
+
+.start-button.unlocked {
+  animation: none !important;
+  transform: scale(1) !important;
+}
+
+.start-button:hover {
+  animation: none !important;
+  transform: scale(1.03) !important;
+}
+
+.start-button:active {
+  animation: none !important;
+  transform: scale(0.91) !important;
+}
+
+#start-prompt.unlocked {
+  opacity: 0.5;
+  transition: opacity 300ms ease;
+}
+
+/* HP theme music button: appears when snitch minigame is active */
+#hp-music-btn {
+  position: fixed;
+  bottom: calc(2.8rem);
+  right: calc(2.8vw + 60px + 0.6rem);
+  background-color: #343128;
+  color: white;
+  border: 0.05rem solid gold;
+  border-radius: 50%;
+  width: 4vh;
+  height: 4vh;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0.1rem rgba(254, 218, 74, 0.6);
+  opacity: 0;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+  z-index: 100;
+}
+
+#hp-music-btn svg {
+  width: 50%;
+  height: 50%;
+  display: block;
+}
+
+#hp-music-btn:hover {
+  opacity: 1 !important;
+  transform: scale(1.1);
+  box-shadow: 0 0 0.2rem rgba(254, 218, 74, 0.8);
+}
+
+/* Snitch launch button: aligned with audio controls column, auto-skip OFF + intro revealed only */
+#snitch-launch-btn {
+  position: fixed;
+  bottom: 3rem;
+  right: 2.8vw;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 100;
+  display: none;
+  width: 60px;
+  opacity: 1;
+  transition: transform 200ms cubic-bezier(0.22, 0.1, 0.22, 1), opacity 300ms ease;
+  will-change: transform;
+}
+
+body.snitch-active #snitch-launch-btn {
+  opacity: 0.4;
+}
+
+#snitch-launch-btn img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#snitch-launch-btn:hover {
+  transform: scale(1.03);
+}
+
+#snitch-launch-btn:active {
+  transform: scale(0.91);
+}
+
+body:not(.auto-skip-enabled).intro-revealed #snitch-launch-btn {
+  display: block;
+}
+
+/* Home left sidebar with vertically stacked images */
+.home-left-sidebar {
+  position: fixed;
+  left: 5.8vw;
+  top: 50%;
+  transform: translateY(-40%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.home-left-sidebar.start-hovered {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.home-left-sidebar.start-clicked {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 200ms ease;
+}
+
+.sidebar-icon {
+  width: 21vw;
+  min-width: 100px;
+  max-width: 550px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 200ms ease, filter 200ms ease;
+  filter: brightness(0.9);
+}
+
+.sidebar-icon:hover {
+  transform: scale(1.1);
+  filter: brightness(1);
+}
+
+.sidebar-icon:active {
+  transform: scale(0.95);
+}
+
+.sidebar-link:hover .sidebar-icon {
+  transform: scale(1.1);
+  filter: brightness(1);
+}
+
+.sidebar-link:active .sidebar-icon {
+  transform: scale(0.95);
+}
+
+/* Hide sidebar on tablets and smaller screens */
+@media (max-width: 1024px) {
+  .home-left-sidebar {
+    left: 1vw;
+    gap: 1rem;
+  }
+  
+  .sidebar-icon {
+    width: 3.5vw;
+    min-width: 35px;
+    max-width: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-left-sidebar {
+    display: none;
+  }
+}
+
 /* Keep the auto-skip button active and visually prominent */
 body.auto-skip-enabled #auto-skip-button {
   opacity: 1 !important;
@@ -613,132 +842,8 @@ body.light-mode #auto-skip-button img {
   filter: none;
 }
 
-/* Immersive hint box styling (appears after intro loads when auto-skip enabled) */
-/* compact hint box */
-/* place hint next to the Star Wars button using a local wrapper; wrapper sits inside #audio-controls */
+/* Audio controls styling */
 #audio-controls { position: fixed; }
-.hint-wrapper { position: relative; display: inline-block; }
-.hint-wrapper #immersive-hint{
-  position: absolute;
-  right: calc(100% + 18px); /* sit to the left of the controls stack */
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0.6rem 0.7rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  line-height: 1.25;
-  width: 270px; /* force 3-line wrapping at this size */
-  text-align: left;
-  z-index: 2000; /* stay above most UI */
-  transition: opacity 260ms ease, transform 260ms ease, max-height 320ms ease;
-  opacity: 0;
-  pointer-events: none; /* only active when auto-skip enabled */
-  display: inline-block;
-  border: 1px solid rgba(0,0,0,0.12);
-  white-space: normal;
-  word-break: break-word;
-  overflow: hidden;
-  max-height: 3.2rem; /* compact height (~3 lines) — keep alt-text hidden until hover */
-}
-
-/* animate in class */
-/* show and auto-hide after 10s using CSS animation; hover pauses animation */
-@keyframes hint-stay-hide {
-  0% { opacity: 0.6; transform: translateY(-50%); }
-  90% { opacity: 0.6; transform: translateY(-50%); }
-  100% { opacity: 0; transform: translateY(-40%); }
-}
-
-@keyframes hint-in {
-  from { opacity: 0; transform: translateY(-60%); }
-  to { opacity: 0.6; transform: translateY(-50%); }
-}
-
-/* when auto-skip enabled, display hint and start the entrance + hide animations
-   - entrance delayed by 3s, duration 800ms; then visible for 10s before hiding */
-body.auto-skip-enabled #audio-controls .hint-wrapper #immersive-hint{
-  opacity: 0; /* start hidden; hint-in brings to visible */
-  pointer-events: auto;
-  /* make hint appear 1s earlier: reduce entrance and hide delays by 1s */
-  /* delay entrance by 1s, animate in over 1s, then keep visible for 10s before hiding */
-  animation: hint-in 1000ms ease 1s forwards, hint-stay-hide 10000s linear 2s forwards;
-}
-
-/* pause hide animation while hovered */
-/* pause hide animation while hovered */
-#audio-controls .hint-wrapper #immersive-hint:hover{ animation-play-state: paused; }
-
-/* dark theme: translucent black overlay, light yellow border, white text */
-
-/* dark theme: translucent black overlay, light yellow border, white text */
-body:not(.light-mode) #audio-controls .hint-wrapper #immersive-hint{
-  background: rgba(0,0,0,0.55);
-  color: #fff;
-  border-color: rgba(254, 218, 74, 0.9);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-}
-
-/* light theme: translucent white overlay, dark yellow border, black text */
-body.light-mode #audio-controls .hint-wrapper #immersive-hint{
-  background: rgba(255,255,255,0.92);
-  color: #111;
-  border-color: rgba(140,102,12,0.95);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-/* Hover: small glow and pointer cursor */
-/* Only allow hover/focus interactions when auto-skip mode is enabled */
-body.auto-skip-enabled .hint-wrapper:hover #immersive-hint{ cursor: pointer; transform: translateY(-8px); box-shadow: 0 8px 28px rgba(0,0,0,0.35); }
-
-/* small hint line styling with smooth fade/slide */
-#audio-controls .hint-wrapper #immersive-hint .hint-line{
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 260ms ease, transform 260ms ease;
-}
-
-/* strike-fun default (no strike) */
-#audio-controls .hint-wrapper #immersive-hint .strike-fun{ text-decoration: none; }
-
-/* reveal expanded alt-text and full opacity when wrapper is hovered or focused */
-.hint-wrapper:focus-within #immersive-hint{ /* keep non-interactive when auto-skip off */
-  max-height: 3.2rem; opacity: 0.6; pointer-events: none;
-}
-body.auto-skip-enabled .hint-wrapper:hover #immersive-hint, body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint{
-  max-height: 240px; /* expand downward */
-  opacity: 1 !important;
-  pointer-events: auto;
-}
-
-/* show the alt text smoothly; initially hidden */
-.hint-wrapper #immersive-hint .alt-text{
-  max-height: 0; opacity: 0; overflow: hidden; transition: max-height 260ms ease, opacity 260ms ease, transform 260ms ease;
-  margin-top: 6px; font-size: 0.82rem; color: inherit; transform: translateY(-6px);
-}
-
-/* On hover/focus: fade out the initial hint lines and fade in the alt text */
-.hint-wrapper:focus-within #immersive-hint .hint-line{ opacity: 1; transform: translateY(0); }
-.body-auto-skip-disabled .hint-wrapper #immersive-hint .hint-line{ opacity: 1; }
-body.auto-skip-enabled .hint-wrapper:hover #immersive-hint .hint-line,
-body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .hint-line{
-  opacity: 0; transform: translateY(-6px); pointer-events: none;
-}
-body.auto-skip-enabled .hint-wrapper:hover #immersive-hint .alt-text,
-body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .alt-text{
-  max-height: 160px; opacity: 1; transform: translateY(0);
-}
-
-/* Mobile placement: below and slightly left of the button */
-@media (max-width: 768px) {
-  #audio-controls .hint-wrapper #immersive-hint{
-    right: auto;
-    left: 0;
-    top: calc(100% + 8px);
-    transform: none;
-    width: 160px;
-  }
-}
 
 /* Hide the <audio> tag itself */
 #audio-player audio {
@@ -780,7 +885,6 @@ body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .alt-text{
   100% { 
     top: -6000px;
     transform: rotateX(25deg) translateZ(-2000px);
-    opacity: 0;
   }
 }
 
@@ -793,14 +897,25 @@ body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .alt-text{
   opacity: 1;
 }
 
+body.intro-revealed .crawl {
+  opacity: 0;
+}
+
 .crawl > .title {
   font-size: 90%;
   text-align: center;
 }
 
+.crawl > .title p {
+  font-size: 0.7em;
+}
+
 .crawl > .title h1 {
-  margin: 0 0 10vh;
+  margin: 0.15em 0 10vh;
   text-transform: uppercase;
+  font-family: 'Pathway Gothic One', sans-serif !important;
+  font-weight: inherit !important;
+  font-size: 2em !important;
 }
 
 /* Intro Section */
@@ -958,42 +1073,11 @@ body.auto-skip-enabled .hint-wrapper:focus-within #immersive-hint .alt-text{
   animation: snitch-image-settle 120ms ease 160ms both, snitch-twitch 5ms linear infinite;
 }
 
-/* Photo wrapper positions the sunglasses overlay */
 .photo-wrapper{
   position: relative;
   display: inline-block;
 }
 
-/* Sunglasses overlay (hidden by default) */
-.sunglasses{
-  position: absolute;
-  left:47%;
-  top: 46%;
-  transform: translate(-50%, -50%) scale(0.9) rotate(-6deg);
-  width: 45%;
-  max-width: 220px;
-  pointer-events: none;
-  opacity: 0;
-  /* slow fade for hover reveal; transform snaps slightly faster for a gentle pop */
-  transition: opacity 1.2s ease-in-out, transform 420ms cubic-bezier(.2,.9,.2,1);
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.45));
-}
-
-/* When auto-skip is enabled we keep the sunglasses hidden/disabled. When
-   auto-skip is OFF (no body.auto-skip-enabled class) the normal hover reveal
-   behavior is active. This ensures the accessory only appears in immersive
-   (non-auto-skip) mode. */
-body.auto-skip-enabled .photo-wrapper .sunglasses {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translate(-50%, -50%) scale(0.9) rotate(-6deg) !important;
-}
-
-/* Hover only: slowly fade in sunglasses on hover, but only when auto-skip is disabled */
-body:not(.auto-skip-enabled) .photo-wrapper:hover .sunglasses {
-  transform: translate(-50%, -50%) scale(1) rotate(0deg);
-  opacity: 1;
-}
 
 .social-link {
   display: inline-flex;
@@ -1177,6 +1261,12 @@ body.no-theme-transition footer{
   width: 100%;
   z-index: 20;
   background: transparent !important;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+body.intro-revealed footer {
+  opacity: 1;
 }
 
 
@@ -1518,13 +1608,6 @@ body.no-theme-transition footer{
     pointer-events: none !important;
   }
 
-  /* Disable hover-based reveals (sunglasses) on mobile to avoid accidental reveals */
-  .photo-wrapper .sunglasses,
-  .photo-wrapper:hover .sunglasses {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transform: translate(-50%, -50%) scale(0.9) rotate(-6deg) !important;
-  }
 }
 
 

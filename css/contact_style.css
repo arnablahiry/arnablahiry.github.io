@@ -1,5 +1,49 @@
 /* Contact page minimal styles — match other pages' heading and dark theme */
 
+.overlay-fade-top{
+    background-image: linear-gradient(black, #0a0a0a00);
+    height: 400px;
+    position: absolute;
+    inset: 0% 0% auto;
+    top: 50px;
+    left: -50%;
+    right: 0;
+    width: 300vw;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.page-contact #bg-image {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: -2;
+}
+
+body.page-contact #image-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.72);
+    z-index: -1;
+}
+
+body.light-mode.page-contact #image-overlay {
+    background: rgba(255,255,255,0.88);
+}
+
+body.page-contact .section-timeline-heading,
+body.page-contact .page-wrapper {
+    background: transparent !important;
+}
+
 .section-timeline-heading{
     background-color: black;
 }
@@ -258,6 +302,7 @@ body:not(.light-mode) .contact-card.revealed .details-text{
     border: 1px solid rgba(255, 255, 255, 0.307);
     box-shadow: 0 6px 22px rgba(0,0,0,0.6);
     padding: 22px; border-radius: 12px;
+    opacity: 0.7;
 }
 .contact-form-card .form-heading{
     margin: 0 0 12px 0; color: #fff0b2; font-size: 2.6vh; font-weight: 800; text-align: left; padding-bottom: 15px;

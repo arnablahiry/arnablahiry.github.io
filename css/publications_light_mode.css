@@ -12,11 +12,11 @@
 }
 
 body.light-mode #image-overlay{
-  background: rgba(255,255,255,0.75) !important;
+  background: rgba(255,255,255,0.88) !important;
 }
 
 body.light-mode #bg-image{
-  filter: invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.95) !important;
+  filter: none !important;
 }
 
 body.light-mode{

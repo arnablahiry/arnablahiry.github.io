@@ -1,3 +1,26 @@
+/* Keep background image natural in light mode (no hue inversion) */
+body.light-mode #bg-image {
+  filter: none !important;
+}
+
+/* Override global light_mode.css white backgrounds so the bg-image shows through */
+body.light-mode.page-contact .page-wrapper,
+body.light-mode.page-contact main,
+body.light-mode.page-contact .container,
+body.light-mode.page-contact .section-timeline,
+body.light-mode.page-contact .section-timeline-heading {
+  background: transparent !important;
+}
+
+body.light-mode.page-contact footer {
+  background: transparent !important;
+}
+
+/* Overlay fade should be white->transparent in light mode */
+body.light-mode.page-contact .overlay-fade-top {
+  background-image: linear-gradient(white, rgba(255,255,255,0)) !important;
+}
+
 /* Contact page: ensure theme changes are instantaneous here.
    Loaded only on `contact.html`. Targets only theme-related
    properties so other animations (transforms, keyframes, hovers) remain.

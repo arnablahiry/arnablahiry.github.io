@@ -26,6 +26,10 @@ function resetIntroAnimations() {
             introText.style.animation = "fadeInText 2s ease forwards";
         }, 50);
     }
+        try {
+            document.body.classList.remove('travel-overlay-active');
+            document.body.classList.remove('intro-revealed');
+        } catch(e){}
     // remove the visible class so links are not clickable immediately after restart
     try {
       const sec = document.querySelector('.intro-section');

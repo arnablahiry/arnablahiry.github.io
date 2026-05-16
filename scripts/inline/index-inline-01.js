@@ -1,1 +1,1 @@
-/* early theme apply: synchronous, runs before CSS to avoid flashes */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode');}catch(e){} })();
+/* early theme + auto-skip apply: synchronous, runs before CSS to avoid flashes */(function(){try{var t=localStorage.getItem('site:theme'); if(t==='light') document.documentElement.classList.add('light-mode'); var s=localStorage.getItem('auto:skip'); if(s===null || s==='on') document.documentElement.classList.add('auto-skip-enabled');}catch(e){} })();
