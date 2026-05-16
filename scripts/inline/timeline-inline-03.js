@@ -60,6 +60,13 @@
             bridge.style.setProperty('--breakout-line-opacity', lineOpacity.toFixed(4));
             bridge.style.setProperty('--timeline-breakout-shadow-alpha', shadowAlpha.toFixed(4));
             bridge.style.setProperty('--timeline-breakout-shadow-size', shadowSize.toFixed(2) + 'px');
+
+            // Position the fixed line to track this breakout's vertical center in the viewport
+            const line = bridge.querySelector('.timeline-breakout-line');
+            if (line) {
+              line.style.top = lineCenter.toFixed(1) + 'px';
+              line.style.transform = 'none';
+            }
           });
         }
 

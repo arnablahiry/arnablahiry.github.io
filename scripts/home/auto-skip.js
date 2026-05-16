@@ -125,17 +125,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e){}
     updateUI();
     try { document.body.classList.toggle('auto-skip-enabled', enabled); } catch (e){}
-    // If auto-skip was just disabled, request the audio player to click
-    // the music button after the reload so sound will start by default.
+    // When auto-skip is disabled, switch to dark mode and auto-play music on reload.
     try {
       if (!enabled) {
-        localStorage.setItem('audio:playOnLoad', 'on');
-        // Also set site theme to dark when auto-skip is disabled so the
-        // experience becomes immersive by default.
         try { localStorage.setItem('site:theme', 'dark'); } catch (e) {}
         try { document.documentElement.classList.remove('light-mode'); } catch (e) {}
+        try { localStorage.setItem('audio:playOnLoad', 'on'); } catch (e) {}
       } else {
-        localStorage.removeItem('audio:playOnLoad');
+        try { localStorage.removeItem('audio:playOnLoad'); } catch (e) {}
       }
     } catch (e){}
 

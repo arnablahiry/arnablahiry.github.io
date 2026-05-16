@@ -24,6 +24,7 @@
 <body class="page-contact">
 
     <img id="bg-image" src="images/contact_bg.jpeg" alt="Background" loading="lazy" decoding="async" />
+    <script src="scripts/bg-scifi.js"></script>
 
     <div id="image-overlay"></div>
 
@@ -56,7 +57,9 @@
             <a href="publications.html">Publications</a>
             <a href="cv.html">CV</a>
             <a href="contact.html">Contact</a>
-            <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+                        <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+<button id="scifi-toggle" class="scifi-toggle" aria-pressed="false" aria-label="Toggle sci-fi background">&#x1FA90;</button>
+            <button id="nav-music-toggle" class="nav-music-toggle" aria-pressed="false" aria-label="Toggle music">&#x266B;</button>
         </nav>
     </header>
 
@@ -217,5 +220,8 @@
     <script src="scripts/nav-toggle.js"></script>
     <script src="scripts/contact.js"></script>
     <script src="scripts/theme-toggle.js"></script>
+    <script src="scripts/scifi-toggle.js"></script>
+    <script src="scripts/nav-music.js"></script>
+    <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
 </body>
 </html>

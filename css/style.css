@@ -373,6 +373,8 @@ nav#site-nav .theme-toggle {
   font-weight: 300 !important;
 }
 
+/* Nav icon toggle styles are in utils.css (shared across all pages) */
+
 /* Page subtitles (hero / section subtitles) use Abaddon Light for visual consistency */
 .intro-subtitle,
 .travels-subtitle,
@@ -471,15 +473,22 @@ nav .nav-dropdown-toggle:focus{
 /* Container for both buttons */
 #audio-controls {
   position: fixed;
-  top: 50%;
-  right: 3vw;
-  transform: translateY(-50%);
+  top: calc(8vh + 2rem + 0.15rem);
+  /* horizontal position set by JS to center under the 3 nav icon buttons */
   display: flex;
-  flex-direction: column; /* stack vertically */
+  flex-direction: row;
   align-items: center;
-  gap: 1rem;               /* space between buttons */
-  /* Keep audio controls visually above everything else (snitch, overlays). */
+  gap: 2vw;
   z-index: 5000020;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+/* Make controls visible and clickable only when scifi theme is active */
+html.scifi-enabled #audio-controls {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Shared button style */
@@ -493,10 +502,10 @@ nav .nav-dropdown-toggle:focus{
   color: white;
   border: 0.05rem solid gold;
   border-radius: 50%;
-  width: 8vh;
-  height: 8vh;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -536,8 +545,8 @@ nav .nav-dropdown-toggle:focus{
 /* Ensure the Star Wars auto-skip button exactly matches the other control buttons
    (explicit sizing/padding to avoid any browser defaults or overrides) */
 #auto-skip-button {
-  width: 8vh;
-  height: 8vh;
+  width: 40px;
+  height: 40px;
   padding: 0;
   margin: 0;
   border-radius: 50%;
@@ -628,6 +637,12 @@ body.auto-skip-enabled #restart-button {
   100% { transform: scale(1); }
 }
 
+@keyframes sidebar-hover-pulse {
+  0%   { opacity: 0; }
+  50%  { opacity: 0.2; }
+  100% { opacity: 0; }
+}
+
 /* Start button click animation (compress and bounce back) */
 @keyframes start-button-click {
   0% { transform: scale(1); }
@@ -640,11 +655,14 @@ body.auto-skip-enabled #restart-button {
   animation: start-button-pulse 1200ms ease-in-out infinite !important;
   transition: transform 240ms cubic-bezier(0.22, 0.1, 0.22, 1) !important;
   will-change: transform;
+  position: relative;
+  top: -3px;
 }
 
 .start-button.unlocked {
   animation: none !important;
   transform: scale(1) !important;
+  pointer-events: none;
 }
 
 .start-button:hover {
@@ -730,8 +748,200 @@ body.snitch-active #snitch-launch-btn {
   transform: scale(0.91);
 }
 
-body:not(.auto-skip-enabled).intro-revealed #snitch-launch-btn {
+html:not(.scifi-enabled) #snitch-launch-btn {
   display: block;
+}
+
+/* Stop prompt above the right sidebar content */
+#stop-prompt {
+  color: #fff8dc;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+  font-size: 1.4rem;
+  font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+body.light-mode #stop-prompt {
+  color: #1a1a1a;
+  text-shadow: none;
+}
+#stop-button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 240ms cubic-bezier(0.22, 0.1, 0.22, 1);
+  will-change: transform;
+  transform: translateY(-3px);
+}
+#stop-button img {
+  display: block;
+  width: 3.5rem;
+  height: auto;
+  object-fit: contain;
+}
+#stop-button:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+#stop-button:active {
+  transform: translateY(-3px) scale(0.91);
+}
+
+/* Right sidebar: mirrors home-left-sidebar, revealed on Start click */
+#home-right-sidebar {
+  position: fixed;
+  right: calc(3vw + 8vh + 2.2rem);
+  top: 50%;
+  transform: translateY(-40%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 500;
+  pointer-events: none;
+}
+#home-right-sidebar.start-clicked {
+  pointer-events: auto;
+}
+
+/* Stop prompt: hidden until sidebar is opened — never previewed on hover */
+#stop-prompt {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+#home-right-sidebar.start-clicked #stop-prompt {
+  opacity: 1;
+}
+
+/* Right sidebar boxes: preview at 0.2 on hover, full when opened */
+#home-right-sidebar .sidebar-link {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+#home-right-sidebar.start-hovered .sidebar-link {
+  animation: sidebar-hover-pulse 2s ease-in-out infinite;
+}
+#home-right-sidebar.start-clicked .sidebar-link {
+  opacity: 1;
+}
+
+/* Good news box: sits inside #home-right-sidebar, not independently positioned */
+#good-news-box {
+  width: 21vw;
+  min-width: 100px;
+  max-width: 550px;
+  /* Lock height to image's native aspect ratio (1686×900) so it never reflows */
+  aspect-ratio: 1686 / 900;
+  overflow: hidden;
+  background: url('../images/home/news.png') no-repeat center center;
+  background-size: 100% 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2rem 2rem 2.6rem;
+  color: #111;
+  font-family: 'Abaddon Bold', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease; /* fast fade-out when sidebar closes */
+}
+#home-right-sidebar.start-hovered #good-news-box {
+  animation: sidebar-hover-pulse 2s ease-in-out infinite;
+}
+#home-right-sidebar.start-clicked #good-news-box.gn-ready {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.8s ease; /* slow fade-in when sidebar opens */
+}
+#good-news-header {
+  display: none;
+}
+#good-news-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  height: 100%;
+  overflow: visible;
+}
+#good-news-headline {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  transition: opacity 0.3s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+#good-news-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+#good-news-link {
+  flex: 0 1 auto;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 0.68rem;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.3s ease;
+}
+#good-news-link:hover {
+  color: #111;
+}
+#good-news-next {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 0.68rem;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s ease, opacity 0.3s ease;
+  white-space: nowrap;
+}
+#good-news-next:hover {
+  color: #111;
+}
+
+html.scifi-enabled #good-news-box {
+  background-image: url('../images/home/news_scifi.png');
+  color: #111;
+}
+html.scifi-enabled #good-news-headline {
+  color: #111;
+}
+html.scifi-enabled #good-news-link {
+  color: rgba(0, 0, 0, 0.55);
+}
+html.scifi-enabled #good-news-link:hover {
+  color: #111;
+}
+html.scifi-enabled #good-news-next {
+  color: rgba(0, 0, 0, 0.55);
+}
+html.scifi-enabled #good-news-next:hover {
+  color: #111;
+}
+#good-news-dots {
+  display: none;
+}
+
+
+/* Hide right sidebar on narrow screens where there's no room */
+@media (max-width: 1150px) {
+  #home-right-sidebar { display: none !important; }
 }
 
 /* Home left sidebar with vertically stacked images */
@@ -750,7 +960,7 @@ body:not(.auto-skip-enabled).intro-revealed #snitch-launch-btn {
 }
 
 .home-left-sidebar.start-hovered {
-  opacity: 0.2;
+  animation: sidebar-hover-pulse 2s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -845,8 +1055,8 @@ body.light-mode #auto-skip-button img {
 /* Audio controls styling */
 #audio-controls { position: fixed; }
 
-/* Hide the <audio> tag itself */
-#audio-player audio {
+/* Collapse the audio-player wrapper so it takes no space in the flex row */
+#audio-player {
   display: none;
 }
 
@@ -1472,21 +1682,11 @@ body.intro-revealed footer {
   }
 }
 
-/* Desktop / larger screens: ensure the audio controls are vertically stacked on the right
-   and use the original (larger) sizes. This overrides any mobile rules. */
+/* Desktop: JS handles horizontal centering; just ensure mobile overrides are cleared. */
 @media (min-width: 769px) {
   #audio-controls {
-    position: fixed;
-    top: 50%;
-    right: 3vw;
-    left: auto;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    z-index: 50;
-    pointer-events: auto;
+    top: calc(8vh + 2rem + 0.15rem);
+    transform: none;
   }
 
   #skip-button,
@@ -1494,9 +1694,9 @@ body.intro-revealed footer {
   #pause-scroll,
   #restart-button,
   #auto-skip-button {
-    width: 7vh;
-    height: 7vh;
-    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
   }
 }
 
@@ -1592,10 +1792,10 @@ body.intro-revealed footer {
   /* Lower audio controls so they appear below the header on mobile home page.
      We remove the vertical centering transform and place controls beneath the
      header height estimate (header ~ 8vh + 2rem padding) so they don't overlap. */
-  #audio-controls {
-    top: calc(8vh + 2rem + 8px) !important;
+  html.scifi-enabled #audio-controls {
+    top: calc(8vh + 2rem + 3px) !important;
     transform: none !important;
-    right: 3vw !important;
+    right: 4vw !important;
   }
 }
 

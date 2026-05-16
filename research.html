@@ -28,6 +28,7 @@
 <body class="page-research">
 
     <img id="bg-image" src="images/research_bg.jpeg" alt="Background" loading="lazy" decoding="async" />
+    <script src="scripts/bg-scifi.js"></script>
 
     <div id="image-overlay"></div>
 
@@ -60,7 +61,9 @@
             <a href="publications.html">Publications</a>
             <a href="cv.html">CV</a>
             <a href="contact.html">Contact</a>
-            <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+                        <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
+<button id="scifi-toggle" class="scifi-toggle" aria-pressed="false" aria-label="Toggle sci-fi background">&#x1FA90;</button>
+            <button id="nav-music-toggle" class="nav-music-toggle" aria-pressed="false" aria-label="Toggle music">&#x266B;</button>
             <!-- Research page: desktop-only dark-mode hint under the theme button -->
             <div class="hint-wrapper nav-hint-wrapper" aria-hidden="true">
                 <div id="theme-hint" role="button" tabindex="0" aria-label="Enable light mode">
@@ -763,6 +766,9 @@
     <script src="scripts/research.js"></script>
     <script src="scripts/research-meme-modal.js"></script>
     <script src="scripts/theme-toggle.js"></script>
+    <script src="scripts/scifi-toggle.js"></script>
+    <script src="scripts/nav-music.js"></script>
     <script src="scripts/inline/research-inline-04.js"></script>
+    <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
 </body>
 </html>

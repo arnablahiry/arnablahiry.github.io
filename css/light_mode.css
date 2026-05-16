@@ -606,6 +606,34 @@ body.light-mode nav .theme-toggle:focus{
     background: rgba(160,138,65,0.12) !important; /* slight dark-yellow */
     box-shadow: 0 0 0.2rem rgba(160,138,65,0.28) !important;
 }
+/* Scifi and music toggles: identical light-mode appearance to theme-toggle */
+body.light-mode nav #nav-music-toggle,
+body.light-mode nav #scifi-toggle {
+    background: rgba(0,0,0,0.06) !important;
+    color: #111111 !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+}
+body.light-mode nav #nav-music-toggle:hover,
+body.light-mode nav #nav-music-toggle:focus,
+body.light-mode nav #scifi-toggle:hover,
+body.light-mode nav #scifi-toggle:focus {
+    background: rgba(160,138,65,0.12) !important;
+    box-shadow: 0 0 0.2rem rgba(160,138,65,0.28) !important;
+}
+body.light-mode nav #nav-music-toggle.active,
+body.light-mode nav #scifi-toggle.active {
+    color: #7a6000 !important;
+    border-color: rgba(120,96,0,0.25) !important;
+}
 
 /* Publications page: make authors darker grey, abstracts black, and
    the 'Show Abstract' toggle use a dark-yellow accent in light mode. */

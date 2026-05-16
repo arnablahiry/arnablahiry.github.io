@@ -371,7 +371,6 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     left: 0;
     width: 100vw;
     height: 2px;
-    transform: translateY(-50%);
     opacity: 0;
     pointer-events: none;
     transition: opacity 300ms ease;
