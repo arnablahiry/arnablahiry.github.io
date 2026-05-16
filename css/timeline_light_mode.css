@@ -107,16 +107,9 @@ body.light-mode .timeline-circle {
   box-shadow: none !important;
 }
 
-body.light-mode .timeline-breakout-line::before{
-  background: rgba(169, 143, 0, 0.52);
-}
-
-body.light-mode .timeline-breakout-line::after{
-  background: rgba(169, 143, 0, 0.52);
-}
 
 body.light-mode .timeline-progress{
-  background-color: #8f8f8f !important;
+  background-color: #d0d0d0 !important;
 }
 
 body.light-mode .timeline-progress-bar{

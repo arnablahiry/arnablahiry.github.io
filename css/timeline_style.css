@@ -355,65 +355,39 @@ body:not(.light-mode) #meme-wrapper .meme-overlay{
     position: relative;
     width: 100%;
     height: 22vh;
+    /* ensure the breakout line renders above section-timeline's z-index: -3 */
+    z-index: 3;
 }
 
 .timeline-breakout-sticky{
     position: relative;
     height: 100%;
-    z-index: 1;
     pointer-events: none;
 }
 
 .timeline-breakout-line{
-    position: absolute;
+    position: fixed;
     top: 50%;
-    left: 50%;
+    left: 0;
     width: 100vw;
     height: 2px;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 220ms ease;
+    transition: opacity 300ms ease;
+    background: gold;
+    z-index: 9999;
     box-shadow: 0 0 var(--timeline-breakout-shadow-size) rgba(255, 215, 0, var(--timeline-breakout-shadow-alpha));
 }
 
-.timeline-breakout-line::before,
-.timeline-breakout-line::after{
-    content: "";
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 0;
-    max-width: 50vw;
-    transition: width 900ms cubic-bezier(.22,.9,.18,1);
-}
-
-.timeline-breakout-line::before{
-    right: 50%;
-    background: gold;
-}
-
-.timeline-breakout-line::after{
-    left: 50%;
-    background: gold;
-}
-
 /* Light mode: dark yellow line */
-body.light-mode .timeline-breakout-line::before,
-body.light-mode .timeline-breakout-line::after{
-    background: #a06800;
-}
 body.light-mode .timeline-breakout-line{
+    background: #a06800;
     box-shadow: 0 0 var(--timeline-breakout-shadow-size) rgba(140, 90, 0, var(--timeline-breakout-shadow-alpha));
 }
 
 .timeline-breakout.is-visible .timeline-breakout-line{
-    opacity: var(--breakout-line-opacity, 0.5);
-}
-
-.timeline-breakout.is-visible .timeline-breakout-line::before,
-.timeline-breakout.is-visible .timeline-breakout-line::after{
-    width: 50vw;
+    opacity: var(--breakout-line-opacity, 0.5) !important;
 }
 
 .section-timeline{
@@ -508,7 +482,7 @@ body.light-mode .timeline-right .timeline-image-wrapper img{
 
 .overlay-fade-top{
     background-image: linear-gradient(black, #0a0a0a00);
-    height: 400px;
+    height: 120px;
     position: absolute;
     inset: 0% 0% auto;
     top: 50px;
@@ -518,29 +492,6 @@ body.light-mode .timeline-right .timeline-image-wrapper img{
     z-index: 1;
 }
 
-.overlay-fade-top-2{
-    background-image: linear-gradient(black, #0a0a0a00);
-    height: 400px;
-    position: absolute;
-    inset: 0% 0% auto;
-    top: -100px;
-    left: -50%;
-    right: 0;
-    width: 300vw;
-    z-index: 2;
-}
-
-.overlay-fade-top-3{
-    background-image: linear-gradient(black, #0a0a0a00);
-    height: 900px;
-    position: absolute;
-    inset: 0% 0% auto;
-    top: -80px;
-    left: -50%;
-    right: 0;
-    width: 300vw;
-    z-index: 3;
-}
 
 @media screen and (max-width: 768px){
     h2{font-size: 40px;}
