@@ -87,9 +87,10 @@
       e.stopPropagation();
       e.stopImmediatePropagation && e.stopImmediatePropagation();
     }
-    // Block toggling scifi off until the intro photo/title has appeared
+    // Block toggling scifi off during home page intro only
+    var isHomePage = document.body.classList.contains('page-home');
     var introRevealed = document.body.classList.contains('intro-revealed');
-    if (!introRevealed && enabled) return;
+    if (isHomePage && !introRevealed && enabled) return;
     enabled = !enabled;
     try {
       if (enabled) localStorage.setItem(KEY, 'on');

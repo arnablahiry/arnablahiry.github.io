@@ -39,10 +39,22 @@
   The Research page already disables theme cross-fades; mirror that
   behavior here so toggling `body.light-mode` applies immediately
   with no animated cross-fade.
+  Exception: Allow smooth transitions for background images (sci-fi toggle).
 */
 body.page-cv, body.page-cv * , body.page-cv *::before, body.page-cv *::after{
   transition: none !important;
   -webkit-transition: none !important;
+}
+
+body.page-cv #bg-image, body.page-cv #bg-image * {
+  transition: opacity 700ms ease !important;
+  -webkit-transition: opacity 700ms ease !important;
+}
+
+/* Allow smooth transitions for dynamically-created overlay images (next to #bg-image) */
+body.page-cv #bg-image + img {
+  transition: opacity 700ms ease !important;
+  -webkit-transition: opacity 700ms ease !important;
 }
 
 body.page-cv{

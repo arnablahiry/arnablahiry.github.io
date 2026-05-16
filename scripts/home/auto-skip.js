@@ -131,8 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
         try { localStorage.setItem('site:theme', 'dark'); } catch (e) {}
         try { document.documentElement.classList.remove('light-mode'); } catch (e) {}
         try { localStorage.setItem('audio:playOnLoad', 'on'); } catch (e) {}
+        // Enable sci-fi backgrounds when auto-skip is disabled
+        try { localStorage.setItem('site:scifi', 'on'); } catch (e) {}
+        try { document.documentElement.classList.add('scifi-enabled'); } catch (e) {}
       } else {
         try { localStorage.removeItem('audio:playOnLoad'); } catch (e) {}
+        // Disable sci-fi backgrounds when auto-skip is enabled
+        try { localStorage.removeItem('site:scifi'); } catch (e) {}
+        try { document.documentElement.classList.remove('scifi-enabled'); } catch (e) {}
       }
     } catch (e){}
 
