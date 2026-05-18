@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>astrolore.gui &#8212; astrolore 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/astrolore/gui';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">astrolore 1.0.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../dataset.html">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gui.html">GUI</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/sharifikayvon/astrolore" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for astrolore.gui</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">astrolore.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="n">astrolore_dataset</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">astrolore.dataset</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.backends.backend_tkagg</span><span class="w"> </span><span class="kn">import</span> <span class="n">FigureCanvasTkAgg</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageTk</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
+
+
+<div class="viewcode-block" id="main_gui">
+<a class="viewcode-back" href="../../gui.html#astrolore.gui.main_gui">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">main_gui</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tkinter-based graphical interface for the Astrolore package.</span>
+
+<span class="sd">    On construction the GUI window is fully built and is ready to display.  Call</span>
+<span class="sd">    ``start_gui()`` to hand control to the Tk event loop.</span>
+
+<span class="sd">    Typical usage::</span>
+
+<span class="sd">        from astrolore import gui</span>
+<span class="sd">        gui.main_gui().start_gui()</span>
+
+<span class="sd">    The window lets the user search by either:</span>
+
+<span class="sd">    * **Name** — any resolvable astronomical identifier (Simbad/NED via ``astropy``).</span>
+<span class="sd">    * **Coordinates** — ICRS RA (h m s) and DEC (° ′ ″) entered field-by-field.</span>
+
+<span class="sd">    After a successful search the window reveals two extra buttons:</span>
+
+<span class="sd">    * **Full Sky Plot** — opens a popup with the Aitoff full-sky map.</span>
+<span class="sd">    * **View in Aladin** — launches a ``pywebview`` window pointing the Aladin Sky Atlas</span>
+<span class="sd">      at the nearest sci-fi object&#39;s coordinates.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        dataset (astrolore_dataset): The catalog instance shared across the session.</span>
+<span class="sd">        window (tk.Tk): The root Tkinter window.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Instantiate the dataset and build the full GUI window.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">astrolore_dataset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_main_gui</span><span class="p">()</span>
+
+<div class="viewcode-block" id="main_gui.aladin_webview">
+<a class="viewcode-back" href="../../gui.html#astrolore.gui.main_gui.aladin_webview">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aladin_webview</span><span class="p">(</span><span class="n">close_object</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the Aladin Sky Atlas in an embedded webview for the given catalog object.</span>
+
+<span class="sd">        Builds the Aladin Lite URL using the object&#39;s ICRS RA/DEC (in decimal degrees)</span>
+<span class="sd">        and a fixed field-of-view of 1.5°, then launches a ``pywebview`` window.  This</span>
+<span class="sd">        call blocks until the webview window is closed because ``webview.start()`` runs</span>
+<span class="sd">        its own event loop.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            close_object (pandas.Series): A row from ``scifi_dataframe`` containing at</span>
+<span class="sd">                minimum ``ra`` and ``dec`` columns (decimal degrees).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">coord_close_object</span> <span class="o">=</span> <span class="n">SkyCoord</span><span class="p">(</span><span class="n">ra</span><span class="o">=</span><span class="n">close_object</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="o">=</span><span class="n">close_object</span><span class="o">.</span><span class="n">dec</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://aladin.u-strasbg.fr/AladinLite/?target=</span><span class="si">{</span><span class="n">coord_close_object</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">deg</span><span class="si">}</span><span class="s2">%20</span><span class="si">{</span><span class="n">coord_close_object</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">deg</span><span class="si">}</span><span class="s2">&amp;fov=1.5&quot;</span>
+        <span class="c1"># Create the embedded webview window inside the Toplevel</span>
+        <span class="n">webview</span><span class="o">.</span><span class="n">create_window</span><span class="p">(</span>
+            <span class="s2">&quot;Aladin&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+            <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+            <span class="n">resizable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">webview</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="main_gui.setup_main_gui">
+<a class="viewcode-back" href="../../gui.html#astrolore.gui.main_gui.setup_main_gui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_main_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build all Tkinter widgets and wire up event handlers.</span>
+
+<span class="sd">        Creates and configures the following UI hierarchy:</span>
+
+<span class="sd">        * **Root window** (800×600, non-resizable) with a starfield ``background.png``</span>
+<span class="sd">          and a semi-transparent overlay rectangle for contrast.</span>
+<span class="sd">        * **Frame** (centered on the canvas) containing:</span>
+<span class="sd">            - Title and subtitle labels.</span>
+<span class="sd">            - A ``StringVar``-backed radio group to choose *Name* vs *Coordinates* mode.</span>
+<span class="sd">            - An input frame that swaps between a single name ``Entry`` and a pair of</span>
+<span class="sd">              RA/DEC entry groups (each with three sub-fields for h/m/s and °/′/″).</span>
+<span class="sd">            - An output ``Label`` that shows lore text after a search.</span>
+<span class="sd">            - A buttons frame with: *Search/Search Again*, *Reset*,</span>
+<span class="sd">              *Full Sky Plot* (hidden until after first search), and</span>
+<span class="sd">              *View in Aladin* (hidden until after first search).</span>
+
+<span class="sd">        Inner functions defined here (not exposed as methods because they close over</span>
+<span class="sd">        the local Tk widget references):</span>
+
+<span class="sd">        * ``reset_all()`` — clears all inputs, hides post-search buttons, resets mode.</span>
+<span class="sd">        * ``update_input_mode()`` — swaps the visible input widgets when the radio</span>
+<span class="sd">          selection changes.</span>
+<span class="sd">        * ``show_plot(get_fig_func)`` — opens a ``Toplevel`` popup embedding the</span>
+<span class="sd">          matplotlib figure returned by ``get_fig_func`` into a ``FigureCanvasTkAgg``.</span>
+<span class="sd">        * ``handle_click()`` — main search handler.  Reads input based on the current</span>
+<span class="sd">          mode, calls ``find_closest_object`` and ``output_lore``, updates the output</span>
+<span class="sd">          label, and reveals the post-search buttons.</span>
+
+<span class="sd">        The ``&lt;Return&gt;`` key is bound to ``handle_click`` so keyboard-only users can</span>
+<span class="sd">        trigger searches without reaching for the mouse.</span>
+
+<span class="sd">        Side effects:</span>
+<span class="sd">            Sets ``self.window`` to the constructed ``tk.Tk`` root window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Load your dataset (replace with your actual dataset loader)</span>
+        <span class="n">astrolore</span> <span class="o">=</span> <span class="n">astrolore_dataset</span><span class="p">()</span>
+
+        <span class="c1"># Constants for styling</span>
+        <span class="n">HEADER_FONT</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;italic&quot;</span><span class="p">)</span>
+        <span class="n">LABEL_FONT</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="s2">&quot;italic&quot;</span><span class="p">)</span>
+        <span class="n">OUTPUT_FONT</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="n">TEXT_FONT</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="n">RADIO_FONT</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Menlo&quot;</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="s2">&quot;italic&quot;</span><span class="p">)</span>
+        <span class="n">BG_COLOR</span> <span class="o">=</span> <span class="s2">&quot;#000000&quot;</span>  <span class="c1"># matches dark background with overlay</span>
+
+        <span class="c1"># Initialize main window</span>
+        <span class="n">window</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;AstroLore&quot;</span><span class="p">)</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="s2">&quot;800x600&quot;</span><span class="p">)</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">resizable</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Load and resize background image (change path to your actual image)</span>
+        <span class="n">background_path</span> <span class="o">=</span> <span class="n">files</span><span class="p">(</span><span class="s2">&quot;astrolore.data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;background.png&quot;</span><span class="p">)</span>
+        <span class="n">bg_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">background_path</span><span class="p">)</span>
+        <span class="n">bg_image</span> <span class="o">=</span> <span class="n">bg_image</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span> <span class="n">Image</span><span class="o">.</span><span class="n">LANCZOS</span><span class="p">)</span>
+        <span class="n">bg_photo</span> <span class="o">=</span> <span class="n">ImageTk</span><span class="o">.</span><span class="n">PhotoImage</span><span class="p">(</span><span class="n">bg_image</span><span class="p">)</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">bg_photo</span> <span class="o">=</span> <span class="n">bg_photo</span>  <span class="c1"># prevent GC</span>
+
+        <span class="c1"># Create canvas with background image</span>
+        <span class="n">canvas</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Canvas</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">highlightthickness</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">BOTH</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">create_image</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">NW</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">bg_photo</span><span class="p">)</span>
+
+        <span class="c1"># Semi-transparent black overlay rectangle for UI clarity</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">create_rectangle</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">650</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">stipple</span><span class="o">=</span><span class="s2">&quot;gray50&quot;</span><span class="p">,</span> <span class="n">outline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Container frame centered on canvas with dark background</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">canvas</span><span class="o">.</span><span class="n">create_window</span><span class="p">((</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="n">window</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span> <span class="n">anchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Title and description labels</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;✨ AstroLore ✨&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">HEADER_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">title</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+        <span class="n">subtitle</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Welcome to AstroLoreBot v1.0!</span><span class="se">\n</span><span class="s2">Given an astrophysical object of your choice,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;I output the nearest object on the sky referenced in sci-fi.&quot;</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">LABEL_FONT</span><span class="p">,</span>
+            <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+            <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span>
+            <span class="n">justify</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">wraplength</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+            <span class="n">padx</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">pady</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">subtitle</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+        <span class="c1"># Search mode selection</span>
+        <span class="n">search_label</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Search by:&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">LABEL_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">search_label</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="n">mode_input_var</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">StringVar</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+
+        <span class="n">radio_frame</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">radio_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+
+        <span class="n">name_radio</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Radiobutton</span><span class="p">(</span>
+            <span class="n">radio_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">mode_input_var</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span> <span class="n">selectcolor</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span> <span class="n">activebackground</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span>
+            <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">update_input_mode</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">name_radio</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+        <span class="n">coord_radio</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Radiobutton</span><span class="p">(</span>
+            <span class="n">radio_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Coordinates (RA/DEC)&quot;</span><span class="p">,</span> <span class="n">variable</span><span class="o">=</span><span class="n">mode_input_var</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;coords&quot;</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span> <span class="n">selectcolor</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span> <span class="n">activebackground</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span>
+            <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">update_input_mode</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">coord_radio</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="c1"># Input frame for name or coordinate entries</span>
+        <span class="n">input_frame</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">input_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="c1"># Name entry (default)</span>
+        <span class="n">name_entry</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">TEXT_FONT</span><span class="p">,</span> <span class="n">justify</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span>
+        <span class="n">name_entry</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+
+        <span class="c1"># RA inputs: h, m, s</span>
+        <span class="n">ra_frame</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">ra_h</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="n">ra_frame</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">ra_m</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="n">ra_frame</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">ra_s</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="n">ra_frame</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">ra_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;RA:&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">ra_h</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">ra_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">ra_m</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">ra_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">ra_s</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">ra_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+        <span class="c1"># DEC inputs: deg, arcmin, arcsec</span>
+        <span class="n">dec_frame</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">dec_d</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="n">dec_frame</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">dec_m</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="n">dec_frame</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">dec_s</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="n">dec_frame</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">dec_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;DEC:&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">dec_d</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">dec_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;°&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">dec_m</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">dec_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;′&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">dec_s</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">dec_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;″&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">RADIO_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Initially hide coordinate inputs</span>
+        <span class="n">ra_frame</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+        <span class="n">dec_frame</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+
+        <span class="c1"># Output label for results</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">OUTPUT_FONT</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">,</span> <span class="n">wraplength</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">justify</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">fill</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c1"># Buttons Frame</span>
+        <span class="n">buttons_frame</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">BG_COLOR</span><span class="p">)</span>
+        <span class="n">buttons_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="c1"># Search button</span>
+        <span class="n">button_state</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">StringVar</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;process&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">reset_all</span><span class="p">():</span>
+            <span class="n">name_entry</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">ra_h</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">ra_m</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">ra_s</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">dec_d</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">dec_m</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">dec_s</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">mode_input_var</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="n">update_input_mode</span><span class="p">()</span>
+            <span class="n">reset_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+            <span class="n">plot_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+            <span class="n">visualize_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">update_input_mode</span><span class="p">():</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span><span class="p">)</span>
+            <span class="n">button_state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;process&quot;</span><span class="p">)</span>
+            <span class="n">plot_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+            <span class="n">visualize_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">input_frame</span><span class="o">.</span><span class="n">winfo_children</span><span class="p">():</span>
+                <span class="n">widget</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">mode_input_var</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span>
+                <span class="n">name_entry</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ra_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+                <span class="n">dec_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="c1"># Plot button to show sample plot</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">show_plot</span><span class="p">(</span><span class="n">get_fig_func</span><span class="p">):</span>
+            <span class="c1"># Create a new pop-up window</span>
+            <span class="n">plot_window</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Toplevel</span><span class="p">(</span><span class="n">window</span><span class="p">)</span>
+            <span class="n">plot_window</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Full Sky Map&quot;</span><span class="p">)</span>
+            <span class="n">plot_window</span><span class="o">.</span><span class="n">geometry</span><span class="p">(</span><span class="s2">&quot;800x600&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Get figure from function</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">get_fig_func</span>
+
+            <span class="c1"># Embed plot in the pop-up window</span>
+            <span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvasTkAgg</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">master</span><span class="o">=</span><span class="n">plot_window</span><span class="p">)</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+            <span class="n">canvas</span><span class="o">.</span><span class="n">get_tk_widget</span><span class="p">()</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">BOTH</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1">#ttk.Button(plot_window, text=&quot;Close&quot;, command=plot_window.destroy).pack(pady=5)</span>
+
+
+
+        <span class="n">plot_button</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">buttons_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Full Sky Plot&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="n">show_plot</span><span class="p">)</span>
+
+        <span class="c1"># Visualize button for sky observation</span>
+        <span class="n">visualize_button</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">buttons_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;View in Aladin&quot;</span><span class="p">)</span>
+        <span class="n">visualize_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">handle_click</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">button_state</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;process&quot;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">mode_input_var</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">name_entry</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+                            <span class="n">output</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Please enter a name.&quot;</span><span class="p">)</span>
+                            <span class="k">return</span>
+                        <span class="n">closest_object</span> <span class="o">=</span> <span class="n">astrolore</span><span class="o">.</span><span class="n">find_closest_object</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                        <span class="n">visualize_button</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">aladin_webview</span><span class="p">(</span><span class="n">closest_object</span><span class="p">))</span>
+
+                    <span class="k">else</span><span class="p">:</span> 
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ra_h</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+                            <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ra_m</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+                            <span class="n">s</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ra_s</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+                            <span class="n">d</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dec_d</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+                            <span class="n">am</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dec_m</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+                            <span class="n">asec</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dec_s</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+                            <span class="n">ra_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">h</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">m</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">s&quot;</span>
+                            <span class="n">dec_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">d</span><span class="si">{</span><span class="n">am</span><span class="si">}</span><span class="s2">m</span><span class="si">{</span><span class="n">asec</span><span class="si">}</span><span class="s2">s&quot;</span>
+                            <span class="n">coords</span> <span class="o">=</span> <span class="p">(</span><span class="n">ra_str</span><span class="p">,</span> <span class="n">dec_str</span><span class="p">)</span>
+                            <span class="n">closest_object</span> <span class="o">=</span> <span class="n">astrolore</span><span class="o">.</span><span class="n">find_closest_object</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="n">coords</span><span class="p">)</span>
+                            <span class="n">visualize_button</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">aladin_webview</span><span class="p">(</span><span class="n">closest_object</span><span class="p">))</span>
+
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="n">output</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Invalid coordinates, please try again (Hint: ICRS) </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">return</span>
+
+                    <span class="n">lore</span> <span class="o">=</span> <span class="n">astrolore</span><span class="o">.</span><span class="n">output_lore</span><span class="p">(</span><span class="n">closest_object</span><span class="p">)</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">lore</span><span class="p">)</span>
+                    <span class="n">plot_button</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">show_plot</span><span class="p">(</span><span class="n">astrolore</span><span class="o">.</span><span class="n">get_catalog_map</span><span class="p">()))</span>
+                    <span class="n">plot_button</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+                    <span class="n">visualize_button</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+                    <span class="n">button</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Search Again&quot;</span><span class="p">)</span>
+                    <span class="n">button_state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;reset&quot;</span><span class="p">)</span>
+                    <span class="n">reset_button</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;It&#39;s dark out here...</span><span class="se">\n</span><span class="s2">Maybe verify the spelling?&quot;</span><span class="p">)</span>
+                    <span class="n">plot_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+                    <span class="n">visualize_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">reset_all</span><span class="p">()</span>
+                <span class="n">button</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span><span class="p">)</span>
+                <span class="n">button_state</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;process&quot;</span><span class="p">)</span>
+
+        <span class="n">button</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">buttons_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Search&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="n">handle_click</span><span class="p">)</span>
+        <span class="n">button</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">side</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="n">reset_button</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">buttons_frame</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Reset&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="n">reset_all</span><span class="p">)</span>
+        <span class="n">reset_button</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+
+        <span class="c1"># Bind Enter key to search</span>
+        <span class="n">window</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;&lt;Return&gt;&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">event</span><span class="p">:</span> <span class="n">handle_click</span><span class="p">())</span>
+
+        <span class="c1"># Start with correct input mode</span>
+        <span class="n">update_input_mode</span><span class="p">()</span>
+
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">on_closing</span><span class="p">():</span>
+            <span class="n">window</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+            <span class="n">window</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>  <span class="c1"># Ensures the mainloop stops and the process exits</span>
+
+        <span class="n">window</span><span class="o">.</span><span class="n">protocol</span><span class="p">(</span><span class="s2">&quot;WM_DELETE_WINDOW&quot;</span><span class="p">,</span> <span class="n">on_closing</span><span class="p">)</span>
+
+
+
+
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span> <span class="o">=</span> <span class="n">window</span></div>
+
+
+
+<div class="viewcode-block" id="main_gui.start_gui">
+<a class="viewcode-back" href="../../gui.html#astrolore.gui.main_gui.start_gui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enter the Tkinter main event loop and display the GUI window.</span>
+
+<span class="sd">        Blocks until the user closes the window.  The ``WM_DELETE_WINDOW`` protocol</span>
+<span class="sd">        handler calls both ``window.destroy()`` and ``window.quit()`` to ensure the</span>
+<span class="sd">        process exits cleanly rather than hanging after the window is dismissed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span></div>
+</div>
+
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Arnab Lahiry, Isabele Souza Vitorio, Joe Adamo, Kayvon Sharifi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Arnab Lahiry, Isabele Souza Vitorio, Joe Adamo, Kayvon Sharifi.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

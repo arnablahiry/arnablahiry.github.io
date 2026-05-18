@@ -1,0 +1,721 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Dataset &#8212; astrolore 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'dataset';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GUI" href="gui.html" />
+    <link rel="prev" title="Project overview" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">astrolore 1.0.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gui.html">GUI</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/sharifikayvon/astrolore" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/dataset.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Dataset</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.convert_to_plotting_rad"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.convert_to_plotting_rad()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.find_closest_object"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.find_closest_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.format_sources"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.format_sources()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.get_catalog_map"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.get_catalog_map()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.get_coords_from_name"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.get_coords_from_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.index_of_object"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.index_of_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.init_catalog_map"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.init_catalog_map()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.name_of_object"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.name_of_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.output_lore"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.output_lore()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-astrolore.dataset">
+<span id="dataset"></span><h1>Dataset<a class="headerlink" href="#module-astrolore.dataset" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">astrolore.dataset.</span></span><span class="sig-name descname"><span class="pre">astrolore_dataset</span></span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Dataset of real astronomical objects referenced in science fiction, with methods to query it.</p>
+<p>The bundled CSV (<code class="docutils literal notranslate"><span class="pre">astrolore/data/scifi_dataset.csv</span></code>) contains entries for stars, galaxies,
+nebulae, and other astrophysical objects that appear in science fiction works. Each row stores
+the object’s name, ICRS RA/DEC coordinates (in degrees), object type, the sci-fi titles that
+reference it, and a short lore description.</p>
+<p>Typical usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">astrolore_dataset</span><span class="p">()</span>
+<span class="n">closest</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">find_closest_object</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Betelgeuse&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">output_lore</span><span class="p">(</span><span class="n">closest</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_catalog_map</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.convert_to_plotting_rad">
+<span class="sig-name descname"><span class="pre">convert_to_plotting_rad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords_in_deg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.convert_to_plotting_rad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.convert_to_plotting_rad" title="Link to this definition">#</a></dt>
+<dd><p>Convert a single <code class="docutils literal notranslate"><span class="pre">SkyCoord</span></code> to matplotlib Aitoff-projection radian convention.</p>
+<p>The standard RA→x mapping for an Aitoff projection used by matplotlib negates RA
+so that east appears on the left (as seen on the sky), then wraps the result into
+[-π, π].  This helper encapsulates that transformation for a single coordinate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>coords_in_deg</strong> (<em>astropy.coordinates.SkyCoord</em>) – The sky position to convert.
+The <code class="docutils literal notranslate"><span class="pre">.ra</span></code> and <code class="docutils literal notranslate"><span class="pre">.dec</span></code> attributes are read in degrees.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ra_rad</strong> (float): RA in radians, remapped to [-π, π] with east-left
+orientation.</p></li>
+<li><p><strong>dec_rad</strong> (float): DEC in radians.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.find_closest_object">
+<span class="sig-name descname"><span class="pre">find_closest_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.find_closest_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.find_closest_object" title="Link to this definition">#</a></dt>
+<dd><p>Find the catalog object with the smallest angular separation from a given position.</p>
+<p>Exactly one of <em>name</em> or <em>coords</em> must be provided. When <em>name</em> is given, the
+position is resolved via the CDS Sesame name resolver (requires a network
+connection). When <em>coords</em> is given, the position is parsed directly without any
+network call.</p>
+<p>The angular separation between the resolved position and every row in
+<code class="docutils literal notranslate"><span class="pre">scifi_dataframe</span></code> is computed using <code class="docutils literal notranslate"><span class="pre">astropy.coordinates.SkyCoord.separation</span></code>
+and stored in a temporary <code class="docutils literal notranslate"><span class="pre">ang_sep</span></code> column (degrees). The row with the minimum
+separation is returned.</p>
+<dl class="simple">
+<dt>Side effects:</dt><dd><p>Sets <code class="docutils literal notranslate"><span class="pre">self.name</span></code>, <code class="docutils literal notranslate"><span class="pre">self.name_flag</span></code>, and <code class="docutils literal notranslate"><span class="pre">self.user_coords</span></code> on the
+instance so that <code class="docutils literal notranslate"><span class="pre">output_lore</span></code> and <code class="docutils literal notranslate"><span class="pre">get_catalog_map</span></code> can reference them.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Common or catalogue name of the target object, e.g.
+<code class="docutils literal notranslate"><span class="pre">&quot;Arcturus&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;M31&quot;</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>coords</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Sky position as a <code class="docutils literal notranslate"><span class="pre">(ra,</span> <span class="pre">dec)</span></code> pair of
+sexagesimal strings in the format <code class="docutils literal notranslate"><span class="pre">('HHhMMmSSs',</span> <span class="pre">'DDdMMmSSs')</span></code>, e.g.
+<code class="docutils literal notranslate"><span class="pre">('10h8m22.3s',</span> <span class="pre">'11d58m1.95s')</span></code>. The frame is assumed to be ICRS.
+Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The row from <code class="docutils literal notranslate"><span class="pre">scifi_dataframe</span></code> that is closest on the sky
+to the input position, including the computed <code class="docutils literal notranslate"><span class="pre">ang_sep</span></code> value in degrees.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.Series</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>astropy.coordinates.name_resolve.NameResolveError</strong> – If <em>name</em> is given but
+    cannot be resolved.</p></li>
+<li><p><strong>ValueError</strong> – If the coordinate strings in <em>coords</em> are malformed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.format_sources">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">format_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.format_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.format_sources" title="Link to this definition">#</a></dt>
+<dd><p>Format a list of sci-fi source titles into a human-readable Oxford-comma string.</p>
+<p>Converts a raw list produced by splitting the <code class="docutils literal notranslate"><span class="pre">scifi_source</span></code> CSV field into a
+grammatically correct English enumeration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sources</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Sci-fi titles, e.g. <code class="docutils literal notranslate"><span class="pre">['Star</span> <span class="pre">Trek',</span> <span class="pre">'Star</span> <span class="pre">Wars',</span> <span class="pre">'Dune']</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Formatted string.  Examples:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[]</span></code>                         → <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">['Dune']</span></code>                   → <code class="docutils literal notranslate"><span class="pre">&quot;Dune&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">['Star</span> <span class="pre">Trek',</span> <span class="pre">'Dune']</span></code>      → <code class="docutils literal notranslate"><span class="pre">&quot;Star</span> <span class="pre">Trek</span> <span class="pre">and</span> <span class="pre">Dune&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">['Star</span> <span class="pre">Trek',</span> <span class="pre">'Star</span> <span class="pre">Wars',</span> <span class="pre">'Dune']</span></code> → <code class="docutils literal notranslate"><span class="pre">&quot;Star</span> <span class="pre">Trek,</span> <span class="pre">Star</span> <span class="pre">Wars,</span> <span class="pre">and</span> <span class="pre">Dune&quot;</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.get_catalog_map">
+<span class="sig-name descname"><span class="pre">get_catalog_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.get_catalog_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.get_catalog_map" title="Link to this definition">#</a></dt>
+<dd><p>Generate a full-sky Aitoff projection map showing the search results.</p>
+<p>Plots three layers on a dark background:</p>
+<ul class="simple">
+<li><p><strong>White stars</strong> — all objects in the sci-fi catalog.</p></li>
+<li><p><strong>Gold star</strong> — the nearest catalog object to the user’s input.</p></li>
+<li><p><strong>Red star</strong> — the user’s input position.</p></li>
+</ul>
+<p>A dashed white arrow connects the user’s position to the nearest catalog object
+(omitted when both points are at the same sky location). Labels in gold and white
+identify the two highlighted points.</p>
+<p>Must be called <em>after</em> both <code class="docutils literal notranslate"><span class="pre">find_closest_object</span></code> and <code class="docutils literal notranslate"><span class="pre">output_lore</span></code>, as it
+reads <code class="docutils literal notranslate"><span class="pre">self.user_coords</span></code>, <code class="docutils literal notranslate"><span class="pre">self.close_object</span></code>, and <code class="docutils literal notranslate"><span class="pre">self.name</span></code> from instance
+state set by those methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The figure and axes
+objects.  The figure is closed before returning (<code class="docutils literal notranslate"><span class="pre">plt.close(fig)</span></code>), so it
+can safely be passed to <code class="docutils literal notranslate"><span class="pre">FigureCanvasTkAgg</span></code> without being displayed in a
+separate matplotlib window.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.get_coords_from_name">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_coords_from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.get_coords_from_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.get_coords_from_name" title="Link to this definition">#</a></dt>
+<dd><p>Resolve an astronomical object name to sky coordinates via CDS Sesame.</p>
+<p>Delegates to <code class="docutils literal notranslate"><span class="pre">astropy.coordinates.SkyCoord.from_name</span></code>, which queries the
+Simbad/NED name resolver over the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Common or catalogue name of the object, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;Andromeda&quot;</span></code>
+or <code class="docutils literal notranslate"><span class="pre">&quot;NGC</span> <span class="pre">224&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ICRS coordinates of the resolved object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>astropy.coordinates.SkyCoord</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>astropy.coordinates.name_resolve.NameResolveError</strong> – If the name cannot be
+    found in any of the queried catalogues.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.index_of_object">
+<span class="sig-name descname"><span class="pre">index_of_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.index_of_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.index_of_object" title="Link to this definition">#</a></dt>
+<dd><p>Return the integer position of a catalog object within <code class="docutils literal notranslate"><span class="pre">scifi_dataframe</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>object</strong> (<em>str</em>) – The name of the object to look up.  Must match exactly one
+entry in the <code class="docutils literal notranslate"><span class="pre">name</span></code> column of <code class="docutils literal notranslate"><span class="pre">scifi_dataframe</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Zero-based index of the object in <code class="docutils literal notranslate"><span class="pre">scifi_dataframe</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>NotImplementedError</strong> – If <em>object</em> is a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code> (lookup by Series
+    is not yet implemented).</p></li>
+<li><p><strong>ValueError</strong> – If <em>object</em> is neither a <code class="docutils literal notranslate"><span class="pre">str</span></code> nor a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.init_catalog_map">
+<span class="sig-name descname"><span class="pre">init_catalog_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">closest_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.init_catalog_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.init_catalog_map" title="Link to this definition">#</a></dt>
+<dd><p>Pre-compute plotting coordinates for every catalog object and for the closest match.</p>
+<p>Converts all RA/DEC values in <code class="docutils literal notranslate"><span class="pre">scifi_dataframe</span></code> from degrees to the radian
+convention used by matplotlib’s Aitoff projection (RA negated and remapped to
+[-π, π] so that east is to the left, matching the standard celestial orientation).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>closest_object</strong> (<em>pandas.Series</em>) – The catalog row for the nearest sci-fi object,
+as returned by <code class="docutils literal notranslate"><span class="pre">find_closest_object</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ra_rad</strong> (pandas.DataFrame): Plotting RA values (radians, Aitoff convention)
+for all catalog objects.</p></li>
+<li><p><strong>dec_rad</strong> (pandas.DataFrame): Plotting DEC values (radians) for all
+catalog objects.</p></li>
+<li><p><strong>closest_ra_rad</strong> (float): Plotting RA (radians) for <em>closest_object</em>.</p></li>
+<li><p><strong>closest_dec_rad</strong> (float): Plotting DEC (radians) for <em>closest_object</em>.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.name_of_object">
+<span class="sig-name descname"><span class="pre">name_of_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.name_of_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.name_of_object" title="Link to this definition">#</a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">name</span></code> field of a catalog row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>object</strong> (<em>pandas.Series</em>) – A single row from <code class="docutils literal notranslate"><span class="pre">scifi_dataframe</span></code>, as returned
+by <code class="docutils literal notranslate"><span class="pre">find_closest_object</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <code class="docutils literal notranslate"><span class="pre">name</span></code> column value for that row.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <em>object</em> is not a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrolore.dataset.astrolore_dataset.output_lore">
+<span class="sig-name descname"><span class="pre">output_lore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">close_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astrolore/dataset.html#astrolore_dataset.output_lore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrolore.dataset.astrolore_dataset.output_lore" title="Link to this definition">#</a></dt>
+<dd><p>Build a human-readable lore string for the closest sci-fi object.</p>
+<p>Produces one of two message styles:</p>
+<ul class="simple">
+<li><p><strong>Exact match</strong> (<code class="docutils literal notranslate"><span class="pre">ang_sep</span> <span class="pre">&lt;</span> <span class="pre">0.01°</span></code>): Announces that the user’s own object
+is referenced in science fiction and quotes its lore text directly.</p></li>
+<li><p><strong>Nearest match</strong>: Reports the angular distance to the closest catalog object
+and quotes its sci-fi references and lore.</p></li>
+</ul>
+<dl class="simple">
+<dt>Side effects:</dt><dd><p>Sets <code class="docutils literal notranslate"><span class="pre">self.close_object</span></code> on the instance so that <code class="docutils literal notranslate"><span class="pre">get_catalog_map</span></code> can
+reference it without re-running the search.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>close_object</strong> (<em>pandas.Series</em>) – The catalog row returned by
+<code class="docutils literal notranslate"><span class="pre">find_closest_object</span></code>.  Must contain the fields <code class="docutils literal notranslate"><span class="pre">ang_sep</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scifi_source</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">object_type</span></code>, and <code class="docutils literal notranslate"><span class="pre">lore</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted multi-line string ready to display in the GUI or print to
+the terminal.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Project overview</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="gui.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">GUI</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.convert_to_plotting_rad"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.convert_to_plotting_rad()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.find_closest_object"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.find_closest_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.format_sources"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.format_sources()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.get_catalog_map"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.get_catalog_map()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.get_coords_from_name"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.get_coords_from_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.index_of_object"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.index_of_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.init_catalog_map"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.init_catalog_map()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.name_of_object"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.name_of_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrolore.dataset.astrolore_dataset.output_lore"><code class="docutils literal notranslate"><span class="pre">astrolore_dataset.output_lore()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Arnab Lahiry, Isabele Souza Vitorio, Joe Adamo, Kayvon Sharifi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Arnab Lahiry, Isabele Souza Vitorio, Joe Adamo, Kayvon Sharifi.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
