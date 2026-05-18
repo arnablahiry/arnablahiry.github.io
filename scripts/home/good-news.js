@@ -2,8 +2,6 @@
   var box = document.getElementById('good-news-box');
   if (!box) return;
 
-  if (window.innerWidth <= 1150) return;
-
   // Clear any stale cached data from previous versions
   try {
     Object.keys(localStorage).forEach(function(k) {

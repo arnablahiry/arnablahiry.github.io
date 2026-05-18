@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const KEY = 'auto:skip';
   const btn = document.getElementById('auto-skip-button');
   const skipBtn = document.getElementById('skip-button');
-  if (!btn) return;
 
   // Default: enabled when no explicit pref set (first visit -> enabled)
   const stored = localStorage.getItem(KEY);
@@ -11,6 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (stored === null) {
     try { localStorage.setItem(KEY, 'on'); } catch (e){}
   }
+
+  // Skip crawl if auto-skip is on, OR if scifi mode is off (crawl is a scifi-only feature)
+  const scifiEnabled = localStorage.getItem('site:scifi') === 'on';
+  if ((enabled || !scifiEnabled) && skipBtn) {
+    setTimeout(() => {
+      try { skipBtn.click(); } catch (e){}
+    }, 100);
+  }
+
+  if (!btn) return;
 
   function updateUI(){
     btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
@@ -111,13 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // apply initial overlay state
   toggleAudioControlsOverlay(enabled);
 
-  // If enabled, try to click the skip button shortly after load so skip runs
-  if (enabled && skipBtn){
-    setTimeout(() => {
-      try { skipBtn.click(); } catch (e){}
-    }, 100);
-  }
-
   btn.addEventListener('click', () => {
     enabled = !enabled;
     try {
@@ -125,20 +127,20 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e){}
     updateUI();
     try { document.body.classList.toggle('auto-skip-enabled', enabled); } catch (e){}
-    // When auto-skip is disabled, switch to dark mode and auto-play music on reload.
     try {
       if (!enabled) {
+        // auto-skip OFF: switch to dark mode and auto-play music on reload
         try { localStorage.setItem('site:theme', 'dark'); } catch (e) {}
         try { document.documentElement.classList.remove('light-mode'); } catch (e) {}
         try { localStorage.setItem('audio:playOnLoad', 'on'); } catch (e) {}
-        // Enable sci-fi backgrounds when auto-skip is disabled
-        try { localStorage.setItem('site:scifi', 'on'); } catch (e) {}
-        try { document.documentElement.classList.add('scifi-enabled'); } catch (e) {}
       } else {
+        // auto-skip ON: stop music immediately and suppress it after reload
         try { localStorage.removeItem('audio:playOnLoad'); } catch (e) {}
-        // Disable sci-fi backgrounds when auto-skip is enabled
-        try { localStorage.removeItem('site:scifi'); } catch (e) {}
-        try { document.documentElement.classList.remove('scifi-enabled'); } catch (e) {}
+        try {
+          const aud = document.getElementById('my-audio');
+          if (aud && !aud.paused) aud.pause();
+          sessionStorage.setItem('music:playing', 'false');
+        } catch (e) {}
       }
     } catch (e){}
 

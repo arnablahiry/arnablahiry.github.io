@@ -1,47 +1,4 @@
-/* About page styles - mirror Research page theming for light/dark consistency */
-
-@font-face {
-  font-family: 'Abaddon Light';
-  src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Abaddon Bold';
-  src: url('../images/fonts/Abaddon_Fonts_v1.2/Abaddon Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Apply background and overlay styling matching Research page */
-body.page-about #bg-image {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-    z-index: -2;
-}
-
-body.page-about #image-overlay {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.72);
-    z-index: -1;
-}
-
-body.light-mode.page-about #image-overlay {
-    background: rgba(255,255,255,0.804);
-}
+/* About page styles */
 
 /* Make sections and containers transparent so background shows through */
 body.page-about .about-hero {
@@ -85,15 +42,9 @@ body.light-mode.page-about footer {
   }
 }
 
-/* Desktop (PC) tweak: hide horizontal scrollbar on the About page when using
-   the full-bleed collage layout. Some browsers include the vertical scrollbar
-   in 100vw which can produce a 1px horizontal overflow; hiding horizontal
-   overflow on the page prevents the unwanted scrollbar while preserving the
-   intended full-bleed visuals. Change/remove this if you prefer fixing the
-   root layout instead. */
-@media (min-width: 769px){
-  body.page-about { overflow-x: hidden; }
-}
+/* Hide horizontal scrollbar on the About page when using the full-bleed collage
+   layout (100vw width can cause 1px horizontal overflow on some browsers). */
+body.page-about { overflow-x: hidden; }
 
 /* Ensure these containers have transitions defined in their base state so
    returning from a focused/dimmed state animates smoothly (not only when
@@ -106,9 +57,6 @@ header{
 }
 
 .about-text{font-size: 16px;}
-/* Layout: make body a column flex so footer stays at the bottom when
-	content is short. Keep the main .page-wrapper flexible to grow. */
-html, body { height: 100%; }
 body.page-about { display: flex; flex-direction: column; min-height: 100vh; }
 main.page-wrapper { flex: 1 1 auto; }
 
@@ -659,31 +607,8 @@ body.light-mode .about-text p{ color: #222 !important; }
   body.light-mode .about-hero { padding-top: 100px; }
 }
 
-/* About-page-only: make header opaque in dark mode as well so the header
-   reads as a solid top bar on this page in both themes. Keep the rule
-   specific to `body.page-about` to avoid affecting other pages. */
-body.page-about:not(.light-mode) header{
-  background: #000 !important;
-  color: #e6e6e6 !important;
-  /* remove blur/backdrop if present and ensure a subtle shadow for depth */
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.45) !important;
-}
-
 /* Footer styling (ensure it's visually separated and sits at bottom) */
 footer{ padding: 22px 0; text-align: center; }
-
-/* Keep site-wide utilities available */
-
-/* Ensure full-page dark background when not in light mode (matches Research page)
-	 Some pages set the background on .page-wrapper but leaving the body white
-	 can leave portions of the viewport bright. Force the body background so
-	 the entire page appears dark in dark mode. */
-body:not(.light-mode){
-	background: #000 !important;
-	color: #e6e6e6 !important;
-}
 
 /* Footer styling (consistent with other pages) */
 footer{ padding: 22px 0; text-align: center; color: rgba(230,230,230,0.85); }

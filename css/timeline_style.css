@@ -499,41 +499,108 @@ body.light-mode .timeline-right .timeline-image-wrapper img{
         padding-top: 68px;
         padding-bottom: 50px;
     }
+    /* The timeline component has margin-top: -56px which pulls it up into the
+       heading section. Shrink the heading's black backdrop so it doesn't cover
+       the first item's date text in the overlapping zone. */
+    body.page-timeline .section-timeline-heading::before {
+        height: calc(100% - 64px);
+    }
+    /* Single-column: content is full width. Bar and progress bar keep their
+       existing absolute/fixed positioning. Circle is pulled out of flow via
+       absolute so it doesn't consume layout width, and its inner sticky
+       position still works relative to the viewport scroll. */
     .timeline-item{
-        grid-template-columns: 64px 1fr;
-        width: 100%
+        display: block;
+        position: relative;
+        padding-top: 24px;
+        padding-bottom: 24px;
+        padding-left: 28px; /* visual clearance so text doesn't run over the bar */
+        width: 100%;
+    }
+
+    .timeline-item.timeline-item-even {
+        grid-template-areas: unset;
+    }
+    .timeline-item.timeline-item-even .timeline-left,
+    .timeline-item.timeline-item-even .timeline-right {
+        grid-area: unset;
+        text-align: left;
+        justify-content: flex-start;
     }
 
     .timeline-left{
+        grid-area: unset;
         text-align: left;
-        grid-area: 1/2/2/3;
+        width: 100%;
     }
 
+    /* Absolutely positioned so it takes no layout space; circle inside stays
+       sticky to the viewport because absolute doesn't create a scroll boundary */
     .timeline-center{
-        justify-content: flex-start;
-        grid-area: 1/1/3/2;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 28px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 2px;
+        grid-area: unset;
+        pointer-events: none;
     }
 
     .timeline-right{
-        grid-area: span 1 / span 1 / span 1 / span 1;
+        grid-area: unset;
+        width: 100%;
+    }
+
+    /* Text box and images fill the full content width */
+    .timeline-right .timeline-text,
+    .timeline-right .timeline-image-wrapper {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .timeline-right .timeline-image-wrapper img {
+        width: 100%;
+        height: auto;
     }
 
     .timeline-date-text{
-        margin-bottom: 24px;
-        font-size: 36px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        position: static; /* disable sticky — not meaningful at this width */
+        z-index: 5;
     }
 
     .timeline-text{
-        /* slightly reduced on small screens for better fit */
         font-size: 14px;
     }
 
+    /* Progress line: 16px gap from left edge of the component (which starts at 5vw).
+       Fixed scroll bar uses the same screen-absolute offset: 5vw + 16px. */
     .timeline-progress{
-        left: 4.5px;
+        left: 12.6px;
+    }
+
+    .timeline-progress-bar{
+        left: calc(5vw + 12.6px);
     }
 
     .timeline-breakout{
         display: none;
+    }
+
+    .overlay-fade-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 120px;
+        background-image: linear-gradient(to bottom, black, transparent);
+        z-index: 5;
     }
 
     /* Mobile nav: slide-in panel and open-state matching global styles */

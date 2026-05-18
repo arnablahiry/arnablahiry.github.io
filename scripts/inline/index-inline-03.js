@@ -1,22 +1,5 @@
         document.getElementById("year").textContent = new Date().getFullYear();
 
-        // Center #audio-controls horizontally under the 3 nav icon buttons
-        // (theme-toggle → scifi-toggle → nav-music-toggle).
-        function positionAudioControls() {
-          var themeBtn  = document.getElementById('theme-toggle');
-          var musicBtn  = document.getElementById('nav-music-toggle');
-          var controls  = document.getElementById('audio-controls');
-          if (!themeBtn || !musicBtn || !controls) return;
-          var groupLeft  = themeBtn.getBoundingClientRect().left;
-          var groupRight = musicBtn.getBoundingClientRect().right;
-          var center     = (groupLeft + groupRight) / 2;
-          controls.style.left      = Math.round(center - controls.offsetWidth / 2) + 'px';
-          controls.style.right     = 'auto';
-          controls.style.transform = 'none';
-        }
-        requestAnimationFrame(positionAudioControls);
-        window.addEventListener('resize', positionAudioControls);
-
         // Handle start button hover and click for sidebar opacity
         const startButton = document.querySelector('.start-button');
         const sidebar = document.querySelector('.home-left-sidebar');
@@ -53,33 +36,78 @@
             }, durationMs);
           }
 
+          var mobileOverlay = document.getElementById('mobile-nav-overlay');
+          var mobileGoodNewsSlot = document.getElementById('mobile-good-news-slot');
+          var goodNewsBox = document.getElementById('good-news-box');
+          var goodNewsOriginalParent = goodNewsBox ? goodNewsBox.parentNode : null;
+          var goodNewsNextSibling = goodNewsBox ? goodNewsBox.nextSibling : null;
+
+          function openMobileOverlay() {
+            if (!mobileOverlay) return;
+            // Move good-news box into the slot so its live content shows
+            if (goodNewsBox && mobileGoodNewsSlot) {
+              mobileGoodNewsSlot.appendChild(goodNewsBox);
+            }
+            // Force animation replay by removing class, triggering reflow, re-adding
+            mobileOverlay.classList.remove('active');
+            mobileOverlay.offsetHeight; // reflow
+            mobileOverlay.classList.add('active');
+            mobileOverlay.setAttribute('aria-hidden', 'false');
+          }
+
+          function closeMobileOverlay() {
+            if (!mobileOverlay) return;
+            // Animate out: items pop out in reverse, then overlay fades
+            mobileOverlay.classList.remove('active');
+            mobileOverlay.classList.add('closing');
+            // After animations finish (~480ms), hide and restore DOM
+            setTimeout(function () {
+              mobileOverlay.classList.remove('closing');
+              mobileOverlay.setAttribute('aria-hidden', 'true');
+              // Return good-news box to its original position in the right sidebar
+              if (goodNewsBox && goodNewsOriginalParent) {
+                goodNewsOriginalParent.insertBefore(goodNewsBox, goodNewsNextSibling);
+              }
+              if (rightSidebar) rightSidebar.classList.remove('start-clicked');
+              sidebar.classList.remove('start-clicked');
+              startButton.classList.remove('unlocked');
+              if (startPrompt) startPrompt.classList.remove('unlocked');
+            }, 480);
+          }
+
+          var mobileStopBtn = document.getElementById('mobile-stop-button');
+          if (mobileStopBtn) {
+            mobileStopBtn.addEventListener('click', closeMobileOverlay);
+          }
+
           startButton.addEventListener('click', () => {
-            // Capture current opacities BEFORE class changes so CSS rules haven't overridden them yet
-            var sidebarFrom = parseFloat(getComputedStyle(sidebar).opacity);
-            var links = rightSidebar ? Array.from(rightSidebar.querySelectorAll('.sidebar-link')) : [];
-            var linksFrom = links.map(function (el) { return parseFloat(getComputedStyle(el).opacity); });
+            var isMobile = window.innerWidth <= 768;
 
-            sidebar.classList.remove('start-hovered');
-            sidebar.classList.add('start-clicked');
-            fadeInFrom(sidebar, sidebarFrom, 600);
+            if (isMobile) {
+              openMobileOverlay();
+            } else {
+              // Desktop: fade in the sidebars as before
+              var sidebarFrom = parseFloat(getComputedStyle(sidebar).opacity);
+              var links = rightSidebar ? Array.from(rightSidebar.querySelectorAll('.sidebar-link')) : [];
+              var linksFrom = links.map(function (el) { return parseFloat(getComputedStyle(el).opacity); });
 
-            if (rightSidebar) {
-              rightSidebar.classList.remove('start-hovered');
-              rightSidebar.classList.add('start-clicked');
-              links.forEach(function (el, i) { fadeInFrom(el, linksFrom[i], 600); });
-              fadeInFrom(document.getElementById('stop-prompt'), 0, 600);
+              sidebar.classList.remove('start-hovered');
+              sidebar.classList.add('start-clicked');
+              fadeInFrom(sidebar, sidebarFrom, 600);
+
+              if (rightSidebar) {
+                rightSidebar.classList.remove('start-hovered');
+                rightSidebar.classList.add('start-clicked');
+                links.forEach(function (el, i) { fadeInFrom(el, linksFrom[i], 600); });
+                fadeInFrom(document.getElementById('stop-prompt'), 0, 600);
+              }
+
+              const stopBtn = document.getElementById('stop-button');
+              if (stopBtn) {
+                stopBtn.addEventListener('click', closeMobileOverlay);
+              }
             }
 
-            const stopBtn = document.getElementById('stop-button');
-            if (stopBtn) {
-              stopBtn.addEventListener('click', () => {
-                rightSidebar.classList.remove('start-clicked');
-                sidebar.classList.remove('start-clicked');
-                startButton.classList.remove('unlocked');
-                if (startPrompt) startPrompt.classList.remove('unlocked');
-              });
-            }
-            
             // Add unlocked class to stop pulsing and dim the text
             startButton.classList.add('unlocked');
             if (startPrompt) {

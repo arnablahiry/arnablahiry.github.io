@@ -19,16 +19,20 @@
     var savedTime = 0;
     try { savedTime = parseFloat(sessionStorage.getItem(KEY_TIME) || '0') || 0; } catch (_) {}
 
-    // If auto-skip was just disabled, start music regardless of prior state
+    // One-shot flag set when auto-skip is toggled off
     var playOnLoad = false;
     try {
       playOnLoad = localStorage.getItem('audio:playOnLoad') === 'on';
       if (playOnLoad) localStorage.removeItem('audio:playOnLoad');
     } catch (_) {}
 
+    // When auto-skip is persistently off, music should always play on every load
+    var autoSkipOff = false;
+    try { autoSkipOff = localStorage.getItem('auto:skip') === 'off'; } catch (_) {}
+
     audio.volume = isHomePage ? 1 : CROSS_VOL;
 
-    if (wasPlaying || playOnLoad) {
+    if (wasPlaying || playOnLoad || autoSkipOff) {
       function startPlayback() {
         if (savedTime > 0 && !playOnLoad) {
           try { audio.currentTime = savedTime; } catch (_) {}

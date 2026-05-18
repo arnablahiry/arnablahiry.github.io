@@ -106,7 +106,7 @@ header{
     z-index: 10;
     transition: background-color 180ms ease, backdrop-filter 180ms ease;
     /* subtle translucent header with blur to create dimmed navbar effect */
-    background-color: rgba(0, 0, 0, 0.437);
+    background-color: rgba(0, 0, 0, 0.62);
     backdrop-filter: blur(8px);
 }
 

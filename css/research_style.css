@@ -8,10 +8,14 @@ body.page-research h1,
 body.page-research h2,
 body.page-research h3,
 body.page-research h4,
-body.page-research .project-subtitle,
-body.page-research .project-title {
+body.page-research .project-subtitle {
     font-family: 'Abaddon Light', sans-serif !important;
     font-weight: 300 !important;
+}
+
+body.page-research .project-title {
+    font-family: 'Abaddon Bold', sans-serif !important;
+    font-weight: 700 !important;
 }
 
 /* Keep the Research page background image visible behind the content. */
@@ -1028,34 +1032,44 @@ body.light-mode .project-close{
    Use slightly muted greys per theme so equations read well on both
    light and dark backgrounds. This page-scoped rule overrides any site-
    wide inversion or MathJax inline attributes. */
-/* Light mode: medium-dark grey (good contrast on white) */
+/* Light mode: black equations */
 body.light-mode .MathJax_SVG,
 body.light-mode .mjx-svg,
 body.light-mode .mjx-chtml,
-body.light-mode .MathJax{
+body.light-mode .MathJax,
+body.light-mode mjx-container {
     color: #111111 !important;
-    filter: none !important; /* ensure we don't double-invert */
+    filter: none !important;
 }
 body.light-mode .MathJax_SVG svg,
 body.light-mode .mjx-svg svg,
-body.light-mode .MathJax_SVG svg *{
+body.light-mode .MathJax svg,
+body.light-mode mjx-container svg,
+body.light-mode .MathJax_SVG svg *,
+body.light-mode .MathJax svg *,
+body.light-mode mjx-container svg * {
     fill: #111111 !important;
-    stroke: #111111 !important;
+    stroke: none !important;
 }
 
-/* Dark mode: light-medium grey (good contrast on black) */
+/* Dark mode: white equations */
 body:not(.light-mode) .MathJax_SVG,
 body:not(.light-mode) .mjx-svg,
 body:not(.light-mode) .mjx-chtml,
-body:not(.light-mode) .MathJax{
+body:not(.light-mode) .MathJax,
+body:not(.light-mode) mjx-container {
     color: #ffffff !important;
     filter: none !important;
 }
 body:not(.light-mode) .MathJax_SVG svg,
 body:not(.light-mode) .mjx-svg svg,
-body:not(.light-mode) .MathJax_SVG svg *{
+body:not(.light-mode) .MathJax svg,
+body:not(.light-mode) mjx-container svg,
+body:not(.light-mode) .MathJax_SVG svg *,
+body:not(.light-mode) .MathJax svg *,
+body:not(.light-mode) mjx-container svg * {
     fill: #ffffff !important;
-    stroke: #ffffff !important;
+    stroke: none !important;
 }
 
 body.project-modal-open .project-toggle{ visibility: hidden !important; pointer-events: none !important; }
@@ -1309,5 +1323,20 @@ body:not(.light-mode) img{
         font-weight: 700 !important;
         line-height: 1.32 !important;
         margin: 0 0 10px 0 !important;
+    }
+}
+
+/* Mobile: pin the fade gradient to the top of the viewport instead of
+   floating it above the timeline section */
+@media (max-width: 768px) {
+    .overlay-fade-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 640px;
+        background-image: linear-gradient(to bottom, black, transparent);
+        z-index: -1;
     }
 }

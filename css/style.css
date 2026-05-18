@@ -27,7 +27,7 @@ body.no-theme-transition{
 
 :root{
   /* default intro shift (no extra shift) */
-  --intro-shift: 0px;
+  --intro-shift: 35px;
   /* Background overlay opacities (0 = transparent, 1 = opaque) */
   --bg-image-opacity: 0.60; /* controls #image-overlay on the homepage (darker by default for dark mode) */
   --page-dim-opacity: 0.45; /* controls the global page dim used when nav opens */
@@ -132,6 +132,11 @@ header {
   top: 0;
   left: 0;
   z-index: 10;
+}
+
+/* Home page: keep header light/transparent so the crawl/intro feeling isn't killed by a heavy nav bar */
+.page-home header {
+  background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Logo + text */
@@ -242,6 +247,39 @@ header {
     color: rgba(255,255,255,0.86);
     font-size: 0.95rem;
     padding: 0.45rem 0.4rem;
+  }
+
+  /* Icon controls: horizontal row pinned to top of mobile nav panel */
+  .nav-icon-controls {
+    display: flex;
+    flex-direction: row;
+    order: -1;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    width: 100%;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 0.2rem;
+  }
+
+  /* Reset utils.css overrides that add margin/order to theme-toggle individually —
+     inside the controls row it's just one of three equal siblings */
+  .nav-icon-controls .theme-toggle,
+  header.nav-open .nav-icon-controls .theme-toggle {
+    order: 0 !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  /* Hamburger X sits above the nav panel so it's always pressable */
+  header.nav-open .hamburger {
+    position: fixed;
+    z-index: 1003;
+    right: 1rem;
+    top: 1rem;
   }
 
   /* When open, nudge the panel slightly to the right to match the site-wide layout */
@@ -363,6 +401,13 @@ nav .nav-dropdown-toggle{
   transition: color 0.3s ease;
 }
 
+/* On desktop the icon wrapper is transparent to the flex row */
+@media (min-width: 769px) {
+  .nav-icon-controls {
+    display: contents;
+  }
+}
+
 /* Apply Abaddon Light to site navigation across all pages */
 nav#site-nav,
 nav#site-nav a,
@@ -473,8 +518,10 @@ nav .nav-dropdown-toggle:focus{
 /* Container for both buttons */
 #audio-controls {
   position: fixed;
-  top: calc(8vh + 2rem + 0.15rem);
-  /* horizontal position set by JS to center under the 3 nav icon buttons */
+  bottom: 2rem;
+  right: 2rem;
+  top: auto;
+  left: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1154,10 +1201,10 @@ body.intro-revealed .crawl {
 .intro-section.visible { pointer-events: auto; }
 
 .intro-photo {
-  width: 30vw;
-  height: 30vw;
-  max-width: 300px;
-  max-height: 300px;
+  width: 13vw;
+  height: 13vw;
+  max-width: 230px;
+  max-height: 230px;
   border-radius: 50%;
   border: 0.25rem solid #ffffff; /* white border */
   object-fit: cover;
@@ -1441,7 +1488,7 @@ h3 {
 
 #tagline {
   font-family: monospace;
-  font-size: 1.5rem;
+  font-size: 0.8rem;
   margin-top: 1rem;
   color: white;
   font-weight: 200;
@@ -1527,6 +1574,8 @@ body.intro-revealed footer {
     hyphens: auto; /* optional, adds nice hyphenation when needed */}
   }
 
+@media (max-width: 768px) {
+
   /* Skip + audio + restart buttons smaller and closer in */
   #skip-button,
   #audio-player button,
@@ -1541,15 +1590,15 @@ body.intro-revealed footer {
   /* Place audio controls horizontally directly under the header on phones */
   #audio-controls {
     position: fixed;
-    top: 64px; /* sits just under typical header height on mobile */
+    top: 64px;
     left: 50%;
     right: auto;
     transform: translateX(-50%);
     display: flex;
-    flex-direction: row; /* horizontal layout */
+    flex-direction: row;
     align-items: center;
     gap: 0.5rem;
-    z-index: 60; /* sit above most content but below an open nav which raises z-index */
+    z-index: 60;
   }
 
   /* Slightly smaller buttons on phones when placed under header */
@@ -1564,21 +1613,44 @@ body.intro-revealed footer {
   }
 
   .no-underline {
-  text-decoration: none;
-}
+    text-decoration: none;
+  }
 
   /* Intro section adjustments */
   .intro-section {
     width: 90%;
-    /* nudge down by a variable amount on mobile */
-    --intro-shift: 40px;
+    --intro-shift: -20px;
+  }
+
+  /* Break "Astrophysics | Computer Science" onto its own line, hide the dash */
+  .tagline-dash { display: none; }
+  .tagline-field { display: block; }
+
+  /* Smaller social buttons on phones */
+  .social-link {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .social-link img {
+    width: 55% !important;
+  }
+  .social-buttons {
+    gap: 0.2rem !important;
+  }
+
+  /* Scale down start button image and prompt text to fit on small screens */
+  #start-prompt {
+    font-size: 1.4rem !important;
+  }
+  .start-button img {
+    width: 3.5rem !important;
   }
 
   .intro-photo {
-    width: 200px;
-    height: 200px;
-  margin-bottom: 3vh;
-  border: 0.26rem solid #ffffff;
+    width: 210px;
+    height: 210px;
+    margin-bottom: 2vh;
+    border: 0.26rem solid #ffffff;
   }
 
   .intro-text {
@@ -1602,6 +1674,8 @@ body.intro-revealed footer {
     padding: 8px 0;
   }
 
+}
+
 /* ================================================
    📱 EXTRA SMALL DEVICES (phones ≤ 480px)
    ================================================ */
@@ -1614,15 +1688,15 @@ body.intro-revealed footer {
   }
 
   .intro-photo {
-    width: 200px;
-    height: 200px;
-  margin-bottom: 2.5vh;
-  border: 0.22rem solid #ffffff;
+    width: 130px;
+    height: 130px;
+    margin-bottom: 1.5vh;
+    border: 0.22rem solid #ffffff;
   }
 
-  /* extra-small phones: increase the shift a bit more */
+  /* extra-small phones: nudge up a bit more */
   .intro-section {
-    --intro-shift: 60px;
+    --intro-shift: -30px;
   }
 
   .intro-text {
@@ -1682,10 +1756,13 @@ body.intro-revealed footer {
   }
 }
 
-/* Desktop: JS handles horizontal centering; just ensure mobile overrides are cleared. */
+/* Desktop: ensure mobile overrides are cleared. */
 @media (min-width: 769px) {
   #audio-controls {
-    top: calc(8vh + 2rem + 0.15rem);
+    bottom: 2rem;
+    right: 2rem;
+    top: auto;
+    left: auto;
     transform: none;
   }
 
@@ -1714,6 +1791,10 @@ body.intro-revealed footer {
   button img,
   nav .theme-toggle img {
     filter: brightness(0) saturate(100%) !important;
+  }
+
+  .start-button img {
+    filter: none !important;
   }
 
   header nav {
@@ -1785,17 +1866,161 @@ body.intro-revealed footer {
     justify-content: space-between !important;
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
   }
 
 
 
-  /* Lower audio controls so they appear below the header on mobile home page.
-     We remove the vertical centering transform and place controls beneath the
-     header height estimate (header ~ 8vh + 2rem padding) so they don't overlap. */
   html.scifi-enabled #audio-controls {
-    top: calc(8vh + 2rem + 3px) !important;
+    bottom: 1.5rem !important;
+    right: 1.5rem !important;
+    top: auto !important;
     transform: none !important;
-    right: 4vw !important;
+  }
+}
+
+/* Mobile nav overlay — shown on phones when start is pressed */
+#mobile-nav-overlay {
+  display: none; /* hidden on desktop always */
+}
+
+@keyframes mob-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes mob-overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes mob-item-popin {
+  from { opacity: 0; transform: scale(0.78) translateY(14px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+@keyframes mob-item-popout {
+  from { opacity: 1; transform: scale(1)    translateY(0);    }
+  to   { opacity: 0; transform: scale(0.78) translateY(14px); }
+}
+
+@media (max-width: 768px) {
+  /* Keep overlay rendered (flex) during closing animation too */
+  #mobile-nav-overlay.active,
+  #mobile-nav-overlay.closing {
+    display: flex;
+  }
+
+  #mobile-nav-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 9;
+    background: rgba(0, 0, 0, 0.88);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 70px 1rem 2rem;
+    gap: 1.1rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: none;
+  }
+
+  /* Open animations */
+  #mobile-nav-overlay.active {
+    animation: mob-overlay-in 280ms ease forwards;
+  }
+  #mobile-nav-overlay.active > * {
+    opacity: 0;
+    animation: mob-item-popin 320ms cubic-bezier(0.34,1.4,0.64,1) forwards;
+  }
+  #mobile-nav-overlay.active > *:nth-child(1) { animation-delay: 180ms; }
+  #mobile-nav-overlay.active > *:nth-child(2) { animation-delay: 340ms; }
+  #mobile-nav-overlay.active > *:nth-child(3) { animation-delay: 460ms; }
+  #mobile-nav-overlay.active > *:nth-child(4) { animation-delay: 580ms; }
+  #mobile-nav-overlay.active > *:nth-child(5) { animation-delay: 700ms; }
+  #mobile-nav-overlay.active > *:nth-child(6) { animation-delay: 820ms; }
+
+  /* Close animations — items pop out in reverse, then overlay fades */
+  #mobile-nav-overlay.closing {
+    animation: mob-overlay-out 200ms ease 280ms forwards;
+    pointer-events: none;
+  }
+  #mobile-nav-overlay.closing > * {
+    animation: mob-item-popout 180ms ease forwards;
+  }
+  #mobile-nav-overlay.closing > *:nth-child(6) { animation-delay: 0ms;   }
+  #mobile-nav-overlay.closing > *:nth-child(5) { animation-delay: 40ms;  }
+  #mobile-nav-overlay.closing > *:nth-child(4) { animation-delay: 80ms;  }
+  #mobile-nav-overlay.closing > *:nth-child(3) { animation-delay: 120ms; }
+  #mobile-nav-overlay.closing > *:nth-child(2) { animation-delay: 160ms; }
+  #mobile-nav-overlay.closing > *:nth-child(1) { animation-delay: 200ms; }
+
+  body.light-mode #mobile-nav-overlay {
+    background: rgba(230, 230, 230, 0.96);
+  }
+
+  #mobile-stop-prompt {
+    color: #fff8dc;
+    font-size: 1.3rem;
+    font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  body.light-mode #mobile-stop-prompt { color: #222; }
+
+  #mobile-stop-button {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  #mobile-stop-button img {
+    width: 3rem;
+    height: auto;
+    filter: none !important;
+  }
+
+  .mobile-sidebar-icon {
+    width: 70vw;
+    max-width: 300px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 200ms ease, filter 200ms ease;
+  }
+
+  .mobile-sidebar-link:active .mobile-sidebar-icon {
+    transform: scale(0.96);
+    filter: brightness(1.1);
+  }
+
+  /* Good news box inside the mobile overlay */
+  #mobile-good-news-slot {
+    width: 70vw;
+    max-width: 300px;
+  }
+
+  /* Override the default opacity:0 + desktop-only visibility rule */
+  #mobile-good-news-slot #good-news-box {
+    width: 100% !important;
+    box-sizing: border-box;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Slightly smaller text inside the news box on phones */
+  #mobile-good-news-slot #good-news-headline {
+    font-size: calc(0.9rem - 0.5pt) !important;
+  }
+  #mobile-good-news-slot #good-news-link,
+  #mobile-good-news-slot #good-news-next {
+    font-size: calc(0.68rem - 0.5pt) !important;
   }
 }
 
