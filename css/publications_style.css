@@ -91,7 +91,7 @@ main,
 .project-card {
     display: flex;
     align-items: flex-start;
-    background: rgba(15, 15, 16, 0.383);
+    background: rgba(15, 15, 16, 0.25);
     transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
     border: 1px solid rgba(255, 217, 0, 0.311);
     border-radius: 10px;
@@ -100,6 +100,11 @@ main,
     padding-top: 16px;
     padding-right: 16px;
     padding-left: 16px;
+}
+
+/* Dark mode: ensure card opacity stays low (0.25) */
+body:not(.light-mode) .project-card {
+    background: rgba(15, 15, 16, 0.776) !important;
 }
 
 .project-card:hover {
@@ -167,12 +172,15 @@ footer{
     background: transparent;
     color: #feda4a;
     padding-top: 16px;
-    padding-left: 0px;
+    padding-left: 16px;
+    padding-right: 16px;
     text-align: left;
     font-weight: 700;
     cursor: pointer;
     border-top: 1px solid #222;
     margin-bottom: 15px;
+    margin-left: -16px;
+    margin-right: -16px;
 }
 
 .project-full{
@@ -224,6 +232,8 @@ footer{
     font-weight: 700;
     cursor: pointer;
     border-top: 1px solid #222;
+    margin-left: -16px;
+    margin-right: -16px;
 }
 
 /* ── Unified paper button ───────────────────────────────────────────────── */

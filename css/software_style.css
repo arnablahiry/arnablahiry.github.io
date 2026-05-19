@@ -82,16 +82,39 @@ body.page-software .projects-grid {
 }
 
 /* Filter bar above the projects grid */
+.project-filters-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 5vw;
+  box-sizing: border-box;
+  margin-top: -22px;
+  margin-bottom: 18px;
+}
+
 .project-filters {
   display: flex;
   gap: 14px;
   align-items: center;
-  justify-content: center; /* center the bar */
-  padding: 8px 5vw; /* tighter vertical spacing */
+  justify-content: center;
+  padding: 0;
   box-sizing: border-box;
-  margin-top: -22px; /* pull switches closer to the heading */
-  margin-bottom: 18px; /* keep a small gap before cards */
-  flex-wrap: wrap; /* allow wrap on small screens */
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Abaddon Light', sans-serif;
+  font-weight: 300;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+body.light-mode .filter-label {
+  color: #111;
 }
 .project-filters .filter-btn {
   background: rgba(255,255,255,0.04);
@@ -138,8 +161,10 @@ body.light-mode .tag-chip{
 }
 
 @media (max-width: 520px) {
-  .project-filters { gap: 10px; padding-left: 4vw; padding-right: 4vw; }
+  .project-filters-wrapper { gap: 16px; padding-left: 4vw; padding-right: 4vw; flex-direction: column; align-items: center; }
+  .project-filters { gap: 10px; }
   .project-filters .filter-btn { min-width: 68px; padding: 7px 11px; font-size: 13px; }
+  .filter-label { font-size: 13px; }
 }
 
 /* Tag chips shown on each project card */
@@ -1126,7 +1151,7 @@ body.page-software.light-mode #projects-grid .project-meta{
     body.page-software .section-timeline-heading .padding-vertical-xlarge{
         padding-bottom: 2.2vh !important;
     }
-    body.page-software .project-filters{
+    body.page-software .project-filters-wrapper{
         margin-top: -14px !important;
     }
 
@@ -1145,4 +1170,71 @@ body.page-software.light-mode #projects-grid .project-meta{
         padding-left: 3vw !important;
         padding-right: 3vw !important;
     }
+}
+
+/* ========================================================================== 
+   CLOSED CARD STYLING (Software Page)
+   ========================================================================== */
+
+/* Closed card: project title in Abaddon Bold */
+body.page-software #projects-grid .project-title {
+    font-family: 'Abaddon Bold', sans-serif !important;
+    font-weight: 700 !important;
+}
+
+/* Closed card: project subtitle in Abaddon Light */
+body.page-software #projects-grid .project-subtitle {
+    font-family: 'Abaddon Light', sans-serif !important;
+    font-weight: 300 !important;
+}
+
+/* ========================================================================== 
+   EXPANDED CARD STYLING (Software Page - project-clone view)
+   ========================================================================== */
+
+/* Override project title in expanded view to Times New Roman, bigger, bold */
+body.page-software .project-clone .project-title {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+/* Override project subtitle in expanded view to Times New Roman, bigger */
+body.page-software .project-clone .project-subtitle {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 14.5px !important;
+    font-weight: 400 !important;
+}
+
+/* Make h3 headings bold and Times New Roman in expanded view */
+body.page-software .project-clone .project-full h3 {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-weight: 900 !important;
+    font-size: 16px !important;
+    line-height: 1.3;
+    color: #ffffff !important;
+    letter-spacing: 0.3px;
+    margin-top: 1.6rem;
+    margin-bottom: 0.8rem;
+}
+
+/* Make code blocks Courier in expanded view */
+body.page-software .project-clone .project-full code,
+body.page-software .project-clone .project-full pre {
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+/* Extend horizontal line (project-toggle and project-condense) to full width in expanded view */
+body.page-software .project-clone .project-toggle {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+body.page-software .project-clone .project-clone .project-condense {
+    margin-left: -16px;
+    margin-right: -16px;
 }

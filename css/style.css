@@ -857,6 +857,22 @@ body.light-mode #stop-prompt {
   pointer-events: auto;
 }
 
+#home-right-sidebar.start-hovered {
+  animation: sidebar-hover-pulse 2s ease-in-out infinite;
+}
+
+/* Show a low-opacity preview of the child boxes while the container pulses.
+   Right-sidebar children default to opacity:0, so container-only animation
+   doesn't reveal them; set a subtle preview opacity here to match left. */
+#home-right-sidebar.start-hovered .sidebar-link {
+  opacity: 0.85;
+  transition: opacity 300ms ease;
+}
+#home-right-sidebar.start-hovered #good-news-box {
+  opacity: 0.85;
+  transition: opacity 300ms ease;
+}
+
 /* Stop prompt: hidden until sidebar is opened — never previewed on hover */
 #stop-prompt {
   opacity: 0;
@@ -871,11 +887,53 @@ body.light-mode #stop-prompt {
   opacity: 0;
   transition: opacity 300ms ease;
 }
-#home-right-sidebar.start-hovered .sidebar-link {
-  animation: sidebar-hover-pulse 2s ease-in-out infinite;
-}
 #home-right-sidebar.start-clicked .sidebar-link {
   opacity: 1;
+}
+
+/* Pop-in animation for home cards when Start is pressed */
+@keyframes popIn {
+  0% { transform: scale(0.88); opacity: 0; }
+  60% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.sidebar-link.pop-out,
+#good-news-box.pop-out {
+  transform-origin: center center;
+  animation-name: popOut;
+  animation-duration: 280ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes popOut {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.88); opacity: 0; }
+}
+.sidebar-link.pop-in,
+#good-news-box.pop-in {
+  transform-origin: center center;
+  animation-name: popIn;
+  animation-duration: 360ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+/* Stop prompt pop-in/pop-out so it animates like the cards */
+#stop-prompt.pop-in,
+#mobile-stop-prompt.pop-in {
+  transform-origin: center center;
+  animation-name: popIn;
+  animation-duration: 360ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+#stop-prompt.pop-out,
+#mobile-stop-prompt.pop-out {
+  transform-origin: center center;
+  animation-name: popOut;
+  animation-duration: 280ms;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Good news box: sits inside #home-right-sidebar, not independently positioned */
@@ -899,9 +957,6 @@ body.light-mode #stop-prompt {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease; /* fast fade-out when sidebar closes */
-}
-#home-right-sidebar.start-hovered #good-news-box {
-  animation: sidebar-hover-pulse 2s ease-in-out infinite;
 }
 #home-right-sidebar.start-clicked #good-news-box.gn-ready {
   opacity: 1;
@@ -989,6 +1044,16 @@ html.scifi-enabled #good-news-next:hover {
 /* Hide right sidebar on narrow screens where there's no room */
 @media (max-width: 1150px) {
   #home-right-sidebar { display: none !important; }
+}
+
+/* Hide snitch launch button on small (phone) screens */
+@media (max-width: 768px) {
+  #snitch-launch-btn { display: none !important; }
+}
+
+/* Hide footer when mobile overlay is active */
+footer.mobile-hidden {
+  display: none !important;
 }
 
 /* Home left sidebar with vertically stacked images */
