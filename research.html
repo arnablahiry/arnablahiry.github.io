@@ -58,6 +58,7 @@
             <a href="timeline.html">Timeline</a>
             <a href="research.html">Research</a>
             <a href="software.html">Software</a>
+            <a href="talks.html">Talks</a>
             <a href="publications.html">Publications</a>
             <a href="cv.html">CV</a>
             <a href="contact.html">Contact</a>
@@ -100,6 +101,169 @@
             <div class="container">
                 <!-- Projects grid: each card has an image + subtitle; clicking expands details -->
                 <div class="projects-grid" id="projects-grid">
+                    <article class="project-card" id="proj-8">
+                        <img class="project-image" src="images/research/sourceid.png" alt="Project image" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <h3 class="project-title">Identification of non-stationary extragalactic emissions in IFU spectral cubes</h3>
+                            <p class="project-subtitle">Developing multiscale signal processing pipelines to isolate transient, non-stationary extragalactic emissions from noisy integral-field spectroscopic datasets.</p>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-8-desc">Learn more</button>
+                        <div class="project-full" id="proj-8-desc" hidden>
+                            <h3>Overview</h3>
+                            <p>
+                                Identifying and separating non-stationary extragalactic emission features—such as localized gas outflows, tidal bridges, shock fronts, and satellite systems—from noisy Integral-Field Unit (IFU) spectral cubes is a key challenge in observational astrophysics. This project integrates a physical kinematic modeling pipeline (using multiscale wavelets and optical-flow solvers from the <strong>N.E.M.O.</strong> framework) with a deep learning source separation pipeline (using a suite of <strong>3D U-Net</strong> architectures) to isolate non-stationary components and classify discrete galactic systems.
+                            </p>
+
+                            <h3>Wavelet + Kinematic Flow Analysis (N.E.M.O. Framework)</h3>
+                            <p>
+                                The **N.E.M.O.** (Non-stationary Extraction via Multiscale Optical-flow) framework applies a physical-kinematic prior to perform scale-space separation directly on the 3D spectral cube \(Y\) of shape \((N_{\mathrm{ch}}, H, W)\):
+                            </p>
+                            <ul>
+                                <li><strong>Morphological Component Analysis (MCA):</strong> 
+                                    Every slice \(Y[n]\) is modeled as a mixture of a sparse point-source component \(X_{\mathrm{point}}[n]\) (sparse in Dirac basis) and a sparse diffuse component \(X_{\mathrm{diffuse}}[n]\) (sparse in the isotropic Starlet / Isotropic Undecimated Wavelet Transform frame), plus a residual noise term \(R[n]\). The optimization objective is:
+                                    \[
+                                    \min_{X_{\mathrm{point}}, X_{\mathrm{diffuse}}} \frac{1}{2} \sum_{n} \| Y[n] - X_{\mathrm{point}}[n] - X_{\mathrm{diffuse}}[n] \|_F^2 + \lambda_{\mathrm{point}} \| X_{\mathrm{point}} \|_1 + \lambda_{\mathrm{diffuse}} \sum_{n} \sum_{j=1}^{J} \| \mathcal{S}_j (X_{\mathrm{diffuse}}[n]) \|_1 + \mu_{\mathrm{kin}} E_{\mathrm{kin}}
+                                    \]
+                                    where \(\mathcal{S}_j\) extracts detail coefficients at scale \(j\) and \(\mu_{\mathrm{kin}}\) weights the kinematic coupling prior. The problem is solved via the Iterative Shrinkage-Thresholding Algorithm (ISTA) with threshold annealing.
+                                </li>
+                                <li><strong>Dense Optical Flow and Kinematic Prior:</strong> 
+                                    Successive spectral slices are coupled by a dense displacement field estimated via variational TV-\(L_1\) or Farneback optical flow. A flux-preserving forward warp \(\mathcal{W}_n\) (bilinear-scatter mapping) transforms slice \(n \to n+1\). The kinematic energy term is:
+                                    \[
+                                    E_{\mathrm{kin}} = \sum_{n=1}^{N_{\mathrm{ch}}-1} \left( \| X_{\mathrm{point}}[n+1] - \mathcal{W}_n(X_{\mathrm{point}}[n]) \|_2^2 + \| X_{\mathrm{diffuse}}[n+1] - \mathcal{W}_n(X_{\mathrm{diffuse}}[n]) \|_2^2 \right)
+                                    \]
+                                    Gradient propagation for the prior uses the adjoint warp operator \(\mathcal{W}_n^T\) (which performs backward bilinear sampling at target coordinates):
+                                    \[
+                                    \nabla_{X[n]} E_{\mathrm{kin}} = 2 \mu_{\mathrm{kin}} \left( (X[n] - \mathcal{W}_{n-1}(X[n-1])) - \mathcal{W}_n^T (X[n+1] - \mathcal{W}_n(X[n])) \right)
+                                    \]
+                                </li>
+                                <li><strong>Centroid Detection and Trajectory Propagation:</strong> 
+                                    Centroids are detected on a high-pass starlet view of the moment-0 map to isolate compact embedded peaks from brighter halos (e.g. using <code>skimage.feature.peak_local_max</code> on \(\sum_{j \in \text{detail}} w_j\)). These peaks are integrated forward and backward along the optical flow trajectories:
+                                    \[
+                                    \mathbf{x}_{n+1} = \mathbf{x}_n + \mathbf{v}_n(\mathbf{x}_n) \quad (\text{forward}) \quad \text{and} \quad \mathbf{x}_{n-1} = \mathbf{x}_n - \mathbf{v}_{n-1}(\mathbf{x}_n) \quad (\text{backward})
+                                    \]
+                                </li>
+                                <li><strong>Non-Negative Least Squares (NNLS) Flux Partitioning:</strong> 
+                                    Gaussian templates \(T_k[n]\) (centered at trajectory coordinates \(\mathbf{x}_{n,k}\) with spatial widths \(\sigma_k\)) are fitted at each channel \(n\) to resolve spectra \(\mathbf{a}(n)\):
+                                    \[
+                                    \mathbf{a}(n) = \arg\min_{\mathbf{a} \ge \mathbf{0}} \left\| Y[n] - \sum_{k=1}^K a_k T_{k}[n] \right\|_2^2
+                                    \]
+                                    The pixel-level NNLS residual is distributed back to the sources based on their relative soft template weights to prevent halo bleeding:
+                                    \[
+                                    S_{k}[n](\mathbf{p}) \leftarrow S_{k}[n](\mathbf{p}) + \frac{a_k T_{k}[n](\mathbf{p})}{\sum_j a_j T_{j}[n](\mathbf{p})} \left( Y[n](\mathbf{p}) - \sum_j S_{j}[n](\mathbf{p}) \right)
+                                    \]
+                                </li>
+                            </ul>
+
+                            <h3>3D U-Net Deep Learning Architectures</h3>
+                            <p>
+                                Once non-stationary regions are isolated, a shared 3D U-Net backbone (3 downsampling stages using max pooling and double Conv3D-GroupNorm-ReLU blocks) is deployed. Depending on the task, specialized heads and loss configurations from the repository are used:
+                            </p>
+                            <ul>
+                                <li><strong><code>UNet3D</code> (Voxel-wise Heatmap Regression):</strong> 
+                                    Regresses 3D Gaussian heatmap targets at galaxy center coordinates <code>(channel, y, x)</code>. Heatmaps are decoded using class-aware Non-Maximum Suppression (NMS) to distinguish between <code>central</code> and <code>satellite</code> systems.
+                                </li>
+                                <li><strong><code>SeparationUNet3D</code> (Voxel-wise Source Separation):</strong> 
+                                    Regresses clean individual galaxy cubes. Final activation is replaced with a <code>softplus</code> function to directly predict non-negative flux, trained with <code>masked_separation_loss</code> to ignore empty padded galaxy slots.
+                                </li>
+                                <li><strong><code>EmbeddingUNet3D</code> (Per-Voxel Instance Segmentation):</strong> 
+                                    Learns per-voxel 8D instance embeddings. It incorporates <strong>CoordConv</strong> by prepending normalized \((z, y, x)\) coordinate grids in \([-1, 1]\) directly to the raw spectral input, allowing the network to use spatial location to separate identical-looking overlapping systems.
+                                </li>
+                                <li><strong><code>MaskedSeparationUNet3D</code> (Soft-Mask Separation):</strong> 
+                                    Outputs \(M+1\) logit channels (representing \(M\) galaxy slots plus \(1\) diffuse slot). Softmax across slots acts as a voxel-wise soft ownership mask, guaranteeing exact flux conservation (\(\sum \hat{G}_k + \hat{D} = Y\)).
+                                </li>
+                                <li><strong><code>TwoStageUNet3D</code>:</strong> 
+                                    Employs a single encoder and two separate decoders. The foreground decoder outputs a single sigmoid mask separating all galaxy voxels from the diffuse background. The slot decoder outputs softmax ownership weights across the \(M\) galaxy slots.
+                                </li>
+                                <li><strong><code>PositionGuidedMaskedSeparationUNet3D</code>:</strong> 
+                                    Injects positional Gaussian priors (centered at predicted or ground-truth coordinates) as logit biases before softmax to guide the spatial assignment of voxels.
+                                </li>
+                                <li><strong><code>SegMaskUNet3D</code> &amp; <code>JointDetSegUNet3D</code>:</strong> 
+                                    Supervised segmentation of per-galaxy binary masks.
+                                </li>
+                            </ul>
+
+                            <h3>Detailed Loss Formulations</h3>
+                            <ul>
+                                <li><strong>Hungarian Separation Loss:</strong> 
+                                    Solves slot permutation ambiguity during training by finding the optimal matching between predicted and valid target slots using the Hungarian linear assignment algorithm (on per-voxel MSE cost). Unmatched slots are penalized toward zero:
+                                    \[
+                                    \mathcal{L}_{\mathrm{gal\_hungarian}} = \min_{\pi} \sum_{i=1}^{M_{\mathrm{valid}}} \mathrm{MSE}\left(\hat{G}_{\pi(i)}, G_i\right) + \lambda_{\mathrm{empty}} \sum_{j \notin \mathrm{Im}(\pi)} \|\hat{G}_j\|_2^2
+                                    \]
+                                </li>
+                                <li><strong>Hungarian Loss with Diffuse &amp; Reconstruction:</strong> 
+                                    Supervises the diffuse slot directly against the emission residual and enforces reconstruction:
+                                    \[
+                                    \mathcal{L}_{\mathrm{total}} = \mathcal{L}_{\mathrm{gal\_hungarian}} + \lambda_{\mathrm{diffuse}} \|\hat{D} - (Y - \sum G_k)\|_2^2 + \lambda_{\mathrm{recon}} \|\sum \hat{G}_i + \hat{D} - Y\|_2^2
+                                    \]
+                                </li>
+                                <li><strong>Discriminative Clustering Loss:</strong> 
+                                    Optimizes the embedding space of <code>EmbeddingUNet3D</code>:
+                                    \[
+                                    \mathcal{L}_{\mathrm{disc}} = \alpha \mathcal{L}_{\mathrm{var}} + \beta \mathcal{L}_{\mathrm{dist}} + \gamma \mathcal{L}_{\mathrm{reg}} + \zeta \mathcal{L}_{\mathrm{bg}}
+                                    \]
+                                    where \(\mathcal{L}_{\mathrm{var}}\) pulls voxel embeddings of each source within a radius \(\delta_v\) of its mean embedding, \(\mathcal{L}_{\mathrm{dist}}\) pushes different source means apart by at least \(2\delta_d\), and \(\mathcal{L}_{\mathrm{bg}}\) pushes background/diffuse voxel embeddings away from all source means by a margin \(\delta_{\mathrm{bg}}\).
+                                </li>
+                                <li><strong>Softmax Entropy Penalty:</strong> 
+                                    Drives soft mask assignments to binary (hard) decisions:
+                                    \[
+                                    \mathcal{L}_{\mathrm{entropy}} = -\frac{1}{V} \sum_{\mathbf{p}} \sum_{k=1}^{M+1} M_k(\mathbf{p}) \log \left( M_k(\mathbf{p}) + \epsilon \right)
+                                    \]
+                                </li>
+                            </ul>
+
+                            <h3>PyTorch &amp; N.E.M.O. Implementation Example</h3>
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">import torch
+import numpy as np
+from torch.utils.data import DataLoader
+from galcubecraft_sourceid import CubeDataset, SeparationUNet3D, masked_separation_loss
+from galcubecraft_sourceid.mca_optical_flow import estimate_flow_field, separate_sources_kinematic
+
+# --- 1. Classical Wavelet & Optical Flow Kinematic Separation (N.E.M.O.) ---
+# cube: np.ndarray shape (n_ch, H, W)
+flow = estimate_flow_field(cube, method="tvl1")
+result = separate_sources_kinematic(cube, flow=flow)
+# result.sources shape (K, n_ch, H, W) - separated source cubes
+# result.trajectories shape (n_ch, K, 2) - tracked centroids (y, x)
+
+# --- 2. Deep Learning 3D U-Net Source Separation ---
+dataset = CubeDataset('experiments/sep_v1/data')
+loader = DataLoader(dataset, batch_size=2, shuffle=True)
+
+model = SeparationUNet3D(max_n_gals=dataset.max_n_gals, base=16).cuda()
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
+
+for batch in loader:
+    cube = batch['cube'].cuda()                  # (B, 1, C, Y, X) - observed cube
+    target = batch['galaxy_cubes'].cuda()        # (B, M, C, Y, X) - clean galaxy targets
+    valid = batch['galaxy_valid'].cuda()         # (B, M) - valid slots mask
+    
+    pred = model(cube)
+    loss = masked_separation_loss(pred, target, valid)
+    
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()</code></pre>
+                            </div>
+
+                            <h3>Repository &amp; Pipeline Layout</h3>
+                            <ul>
+                                <li><code>pipeline.py</code> — Coordinates the end-to-end workflow: **generate** (synthetic cubes with GalCubeCraft) &rarr; **train** (3D U-Net) &rarr; **evaluate** (test split metrics) &rarr; **analyse** (loss curves, peak decoding reports).</li>
+                                <li><code>dataset.py</code> — HDF5 loader for `cube_*.h5` files, building Gaussian heatmaps and compiling target variables.</li>
+                                <li><code>models.py</code> — Core `SeparationUNet3D` (multiple regression outputs) and `UNet3D` detection architectures.</li>
+                                <li><code>mca_optical_flow.py</code> — Classical wavelet-flow kinematic decomposition routines and NNLS partitioning.</li>
+                            </ul>
+
+                            <h3>Key Results</h3>
+                            <ul>
+                                <li><strong>Flow Preservation:</strong> Combining N.E.M.O.'s multiscale optical flow kinematic filters with U-Net separation preserves fine-scale velocity shapes (e.g., double-horned profiles) in high-z systems.</li>
+                                <li><strong>Background Suppression:</strong> Successfully isolates compact galactic sources from massive diffuse stellar halos and gas bridges.</li>
+                                <li><strong>Sub-pixel Peak Resolution:</strong> The center-heatmap detection achieves precision/recall rates &gt;90% down to peak SNRs of ~3.0.</li>
+                            </ul>
+                        </div>
+                    </article>
+
                     <article class="project-card"  id="proj-7">
                         <img class="project-image" src="images/research/diffusion.png" alt="Project image" loading="lazy" decoding="async">
                         <div class="project-meta">

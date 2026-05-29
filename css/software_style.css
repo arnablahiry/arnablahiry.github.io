@@ -1206,6 +1206,21 @@ body.page-software .project-clone .project-subtitle {
     font-weight: 400 !important;
 }
 
+/* Make h1 headings bold and Times New Roman in expanded view */
+body.page-software .project-clone .project-full h1 {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-weight: 900 !important;
+    font-size: 20px !important;
+    line-height: 1.3;
+    color: #ffffff !important;
+    letter-spacing: 0.3px;
+    margin-top: 1.6rem;
+    margin-bottom: 0.8rem;
+}
+body.page-software.light-mode .project-clone .project-full h1 {
+    color: #111111 !important;
+}
+
 /* Make h3 headings bold and Times New Roman in expanded view */
 body.page-software .project-clone .project-full h3 {
     font-family: 'Times New Roman', Times, serif !important;
@@ -1218,12 +1233,53 @@ body.page-software .project-clone .project-full h3 {
     margin-bottom: 0.8rem;
 }
 
-/* Make code blocks Courier in expanded view */
+
+/* Make code blocks and every token span Courier in expanded view
+   (.project-clone * !important in style.css would otherwise force Times New Roman) */
 body.page-software .project-clone .project-full code,
-body.page-software .project-clone .project-full pre {
+body.page-software .project-clone .project-full pre,
+body.page-software .project-clone .project-full pre *,
+body.page-software .project-clone .project-full code * {
     font-family: 'Courier New', Courier, monospace !important;
     font-size: 13px;
     font-weight: 400;
+}
+/* Restore italic for comments after the blanket reset above */
+body.page-software .project-clone .project-full .hljs-comment,
+body.page-software .project-clone .project-full .hljs-quote,
+body.page-software .project-clone .project-full .hljs-deletion {
+    font-style: italic;
+}
+
+/* Light-mode syntax highlighting colours inside expanded cards
+   (body.light-mode .project-clone sets color:#111 !important which washes them out) */
+body.page-software.light-mode .project-clone .project-full .hljs-comment,
+body.page-software.light-mode .project-clone .project-full .hljs-quote,
+body.page-software.light-mode .project-clone .project-full .hljs-deletion {
+    color: #2f6f2f !important;
+}
+body.page-software.light-mode .project-clone .project-full .hljs-keyword,
+body.page-software.light-mode .project-clone .project-full .hljs-selector-tag,
+body.page-software.light-mode .project-clone .project-full .hljs-literal,
+body.page-software.light-mode .project-clone .project-full .hljs-symbol,
+body.page-software.light-mode .project-clone .project-full .hljs-built_in,
+body.page-software.light-mode .project-clone .project-full .hljs-command {
+    color: #7b3fb0 !important;
+}
+body.page-software.light-mode .project-clone .project-full .hljs-title,
+body.page-software.light-mode .project-clone .project-full .hljs-section,
+body.page-software.light-mode .project-clone .project-full .hljs-name,
+body.page-software.light-mode .project-clone .project-full .hljs-function {
+    color: #7a5a00 !important;
+}
+body.page-software.light-mode .project-clone .project-full .hljs-string,
+body.page-software.light-mode .project-clone .project-full .hljs-addition {
+    color: #a31515 !important;
+}
+body.page-software.light-mode .project-clone .project-full .hljs-number,
+body.page-software.light-mode .project-clone .project-full .hljs-attribute,
+body.page-software.light-mode .project-clone .project-full .hljs-type {
+    color: #098658 !important;
 }
 
 /* Extend horizontal line (project-toggle and project-condense) to full width in expanded view */

@@ -1,0 +1,540 @@
+/* ==========================================================================
+   TALKS PAGE – GLOBAL LAYOUT ADJUSTMENTS
+   (Adapted from software_style.css — no filters, tags, badges, or icons)
+   ========================================================================== */
+
+/* Full-bleed container on the Talks page */
+body.page-talks .container,
+body.page-talks .section-timeline .container,
+body.page-talks .section-timeline-heading .container {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+body.page-talks .page-wrapper,
+body.page-talks main,
+body.page-talks .section-timeline,
+body.page-talks .section-timeline-heading,
+body.page-talks .container{
+  background: transparent !important;
+}
+
+body.page-talks .section-timeline{
+  position: relative;
+}
+
+body.page-talks .overlay-fade-top{
+  background-image: linear-gradient(black, #0a0a0a00);
+  height: 660px;
+  position: absolute;
+  inset: 0% 0% auto;
+  top: -180px;
+  left: -50%;
+  right: 0;
+  width: 300vw;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body.page-talks footer{
+  background: transparent !important;
+}
+
+body.light-mode.page-talks{
+  background-color: transparent !important;
+}
+
+body.light-mode.page-talks footer{
+  background: transparent !important;
+  color: #111111 !important;
+}
+
+/* Prevent inversion of card images */
+body.page-talks:not(.light-mode) .image-pair img,
+body.page-talks:not(.light-mode) .project-card img{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+.page-talks .image-wrapper.no-invert,
+.page-talks .image-wrapper.no-invert img{
+  filter: none !important;
+  -webkit-filter: none !important;
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+}
+
+/* Projects grid full width with internal padding */
+body.page-talks .projects-grid {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  grid-gap: 28px;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  box-sizing: border-box;
+}
+
+/* Keep a consistent 1px border space on project cards */
+body.page-talks .project-card{ border: 1px solid transparent; box-sizing: border-box; }
+body.page-talks #projects-grid .project-card,
+body.page-talks.light-mode #projects-grid .project-card{
+  padding: 0 !important;
+}
+
+body.page-talks #projects-grid .project-card{
+  background: rgba(15, 15, 16, 0.84) !important;
+  border: 1px solid rgba(255, 215, 0, 0.22) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+}
+
+body.light-mode.page-talks #projects-grid .project-card{
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1px solid rgba(140, 118, 28, 0.38) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12) !important;
+}
+
+/* Match Research page gutter on ultra-wide screens */
+@media (min-width: 1360px) {
+  body.page-talks .projects-grid {
+    padding-left: calc((100vw - 1360px)/2 + 24px);
+    padding-right: calc((100vw - 1360px)/2 + 24px);
+  }
+}
+
+/* Force 2-column layout on desktop only */
+@media (min-width: 769px) {
+  body.page-talks .projects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Nav-hint alignment fix (dark mode only) */
+@media (min-width: 769px) {
+  body:not(.light-mode) header nav .nav-hint-wrapper {
+    right: -48vw;
+  }
+}
+
+/* ==========================================================================
+   TALKS PAGE – HEADING
+   ========================================================================== */
+
+body.page-talks .talks-title-plain{
+  color: transparent;
+  font: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  background: linear-gradient(to right, gold, #ee0979) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: inline-block;
+}
+
+body.page-talks.light-mode .talks-title-plain{
+  background: linear-gradient(to right, rgb(169, 143, 0), #80003e) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* ==========================================================================
+   PROJECT CARD TYPOGRAPHY (Talks page only)
+   ========================================================================== */
+
+body.page-talks .project-title {
+  font-family: 'Abaddon Bold', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+body.page-talks .project-subtitle {
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300 !important;
+}
+
+body.page-talks .talk-date {
+  font-family: 'Abaddon Bold', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  color: gold !important;
+  margin-bottom: 6px;
+}
+body.page-talks.light-mode .talk-date {
+  color: #8c761c !important;
+}
+
+
+/* ==========================================================================
+   CARD FONT SIZING
+   ========================================================================== */
+
+body.page-talks #projects-grid .project-title{
+    font-size: 17px !important;
+    line-height: 1.3 !important;
+}
+body.page-talks #projects-grid .project-subtitle{
+    font-size: 14.5px !important;
+    line-height: 1.45 !important;
+}
+body.page-talks.light-mode #projects-grid .project-title{
+    font-size: 17px !important;
+}
+body.page-talks.light-mode #projects-grid .project-subtitle{
+    font-size: 14.5px !important;
+}
+@media (max-width: 1100px){
+    body.page-talks #projects-grid .project-title,
+    body.page-talks.light-mode #projects-grid .project-title{
+        font-size: 15px !important;
+    }
+    body.page-talks #projects-grid .project-subtitle,
+    body.page-talks.light-mode #projects-grid .project-subtitle{
+        font-size: 13.5px !important;
+    }
+}
+
+/* Talks page card preview image (canvas rendered dynamically from PDF Page 1) */
+body.page-talks #projects-grid canvas.project-image,
+body.page-talks.light-mode #projects-grid canvas.project-image {
+  width: 100% !important;
+  height: auto !important; /* Overrides the 180px fixed height */
+  aspect-ratio: 16 / 9; /* Slide aspect ratio placeholder */
+  display: block;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(15, 15, 16, 0.95);
+  box-sizing: border-box;
+}
+
+body.light-mode.page-talks #projects-grid canvas.project-image {
+  background: rgba(230, 230, 230, 0.95);
+}
+body.page-talks #projects-grid .project-meta,
+body.page-talks.light-mode #projects-grid .project-meta{
+    padding: 14px 16px 14px !important;
+}
+
+/* iPad portrait */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait){
+    body.page-talks #projects-grid .project-meta,
+    body.page-talks.light-mode #projects-grid .project-meta{
+        padding: 14px 12px 14px !important;
+    }
+    body.page-talks #projects-grid .project-title,
+    body.page-talks.light-mode #projects-grid .project-title{
+        margin: 0 0 10px 0 !important;
+    }
+    body.page-talks .timeline-main-heading-wrapper > .margin-bottom-medium:first-child{
+        margin-bottom: 4.8vh !important;
+    }
+    body.page-talks .section-timeline-heading .padding-vertical-xlarge{
+        padding-bottom: 2.2vh !important;
+    }
+    body.page-talks #projects-grid canvas.project-image,
+    body.page-talks.light-mode #projects-grid canvas.project-image{
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+    body.page-talks .projects-grid{
+        padding-left: 3vw !important;
+        padding-right: 3vw !important;
+    }
+}
+
+/* Mobile spacing adjustments */
+@media (max-width: 768px) {
+  body.page-talks .padding-vertical-xlarge {
+    padding-top: 60px !important;
+    padding-bottom: 40px !important;
+  }
+}
+
+/* ==========================================================================
+   EXPANDED CARD STYLING (project-clone view)
+   ========================================================================== */
+
+body.page-talks .project-clone .project-title {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+body.page-talks .project-clone .project-subtitle {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 14.5px !important;
+    font-weight: 400 !important;
+}
+
+body.page-talks .project-clone .project-full h3 {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-weight: 900 !important;
+    font-size: 16px !important;
+    line-height: 1.3;
+    color: #ffffff !important;
+    letter-spacing: 0.3px;
+    margin-top: 1.6rem;
+    margin-bottom: 0.8rem;
+}
+
+body.page-talks .project-clone .project-toggle {
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+/* ==========================================================================
+   PDF VIEWER OVERLAY – FULL SCREEN, ONE PAGE PER SCREEN
+   ========================================================================== */
+
+.talks-pdf-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms cubic-bezier(.22,.9,.18,1);
+}
+.talks-pdf-overlay.open{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.light-mode .talks-pdf-overlay{
+  background: rgba(255, 255, 255, 0.94);
+}
+
+/* Close button */
+.talks-pdf-close{
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(20, 20, 24, 0.88);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20010;
+  transition: background 160ms ease, opacity 160ms ease;
+}
+.talks-pdf-close:hover{
+  background: rgba(60, 60, 68, 0.95);
+}
+body.light-mode .talks-pdf-close{
+  background: rgba(255,255,255,0.95) !important;
+  color: #111 !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
+
+/* Page canvas container — centres the rendered page */
+.talks-pdf-page-container{
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.talks-pdf-page-container canvas{
+  max-width: 100%;
+  max-height: calc(100vh - 120px);
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+body.light-mode .talks-pdf-page-container canvas{
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+}
+
+/* Bottom toolbar: prev/next arrows + page counter */
+.talks-pdf-toolbar{
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px 0 20px;
+  user-select: none;
+}
+
+.talks-pdf-toolbar button{
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(20, 20, 24, 0.82);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 140ms ease, transform 100ms ease, opacity 140ms ease;
+}
+.talks-pdf-toolbar button:hover:not(:disabled){
+  background: rgba(60, 60, 68, 0.95);
+  transform: scale(1.06);
+}
+.talks-pdf-toolbar button:disabled{
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+body.light-mode .talks-pdf-toolbar button{
+  background: rgba(255,255,255,0.92) !important;
+  color: #111 !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
+body.light-mode .talks-pdf-toolbar button:hover:not(:disabled){
+  background: rgba(240,240,240,1) !important;
+}
+
+.talks-pdf-page-info{
+  color: #ccc;
+  font-family: 'Abaddon Light', sans-serif;
+  font-size: 14px;
+  min-width: 80px;
+  text-align: center;
+}
+body.light-mode .talks-pdf-page-info{
+  color: #333;
+}
+
+/* Lock page scroll when PDF viewer is open */
+body.talks-pdf-open{
+  overflow: hidden !important;
+}
+
+
+
+
+
+/* In the expanded talks card clone, hide elements that are not part of the PDF viewer */
+body.page-talks .project-clone .project-image,
+body.page-talks .project-clone .project-meta,
+body.page-talks .project-clone .project-toggle {
+  display: none !important;
+}
+
+/* Layout of the PDF viewer inside the expanded clone */
+body.page-talks .project-clone .project-full {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
+}
+
+body.page-talks .project-clone .talks-card-pdf-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+body.page-talks .project-clone .talks-card-pdf-viewer.loaded {
+  opacity: 1;
+}
+
+body.page-talks .project-clone .talks-pdf-page-container {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  padding: 24px 24px 8px 24px;
+  box-sizing: border-box;
+}
+
+body.page-talks .project-clone .talks-pdf-page-container canvas {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+body.light-mode.page-talks .project-clone .talks-pdf-page-container canvas {
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+}
+
+body.page-talks .project-clone .talks-pdf-toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px 0 24px;
+  user-select: none;
+}
+
+body.page-talks .project-clone .talks-pdf-toolbar button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(20, 20, 24, 0.82);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 140ms ease, transform 100ms ease, opacity 140ms ease;
+}
+
+body.page-talks .project-clone .talks-pdf-toolbar button:hover:not(:disabled) {
+  background: rgba(60, 60, 68, 0.95);
+  transform: scale(1.06);
+}
+
+body.page-talks .project-clone .talks-pdf-toolbar button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+body.light-mode.page-talks .project-clone .talks-pdf-toolbar button {
+  background: rgba(255,255,255,0.92) !important;
+  color: #111 !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
+
+body.page-talks .project-clone .talks-pdf-page-info {
+  color: #ccc;
+  font-family: 'Abaddon Light', sans-serif;
+  font-size: 14px;
+  min-width: 80px;
+  text-align: center;
+}
+
+body.light-mode.page-talks .project-clone .talks-pdf-page-info {
+  color: #333;
+}

@@ -60,6 +60,7 @@
             <a href="timeline.html">Timeline</a>
             <a href="research.html">Research</a>
             <a href="software.html">Software</a>
+            <a href="talks.html">Talks</a>
             <a href="publications.html">Publications</a>
             <a href="cv.html">CV</a>
             <a href="contact.html">Contact</a>
@@ -276,6 +277,73 @@ python gui.py</code></pre>
                             </div>
                     </article>
 
+                    <article class="project-card" data-tags="end-to-end, science">
+                        <img class="project-image" src="images/softwares/nemo_logo.png" alt="N.E.M.O. logo" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <h3 class="project-title">N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h3>
+                            <p class="project-subtitle">Python package for high-resolution motion estimation and non-stationary signal extraction from time-series and spectral cubes using multiscale optical-flow.</p>
+                            <div class="project-tags">
+                                <span class="tag-chip">End-to-end</span>
+                                <span class="tag-chip">Science</span>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="https://github.com/arnablahiry/nemo" aria-label="N.E.M.O. GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
+                                <a class="project-icon-link" href="software/nemo" aria-label="N.E.M.O. documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
+                            </div>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-nemo-desc">Learn more</button>
+                        <div class="project-full" id="proj-nemo-desc" hidden>
+                            <h1>N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h1>
+                            <p>
+                                <strong>N.E.M.O.</strong> is a high-performance Python software package specifically designed for motion estimation, tracking, and signal extraction in non-stationary physical and astronomical datasets. By combining multiscale wavelet decompositions with robust optical-flow algorithms, N.E.M.O. is capable of recovering velocity fields and extracting subtle non-stationary features from high-resolution time-series observations, solar imaging data, and interstellar spectral cubes.
+                            </p>
+
+                            <h3>Key Capabilities</h3>
+                            <ul>
+                                <li><strong>Multiscale Wavelet Decomposition</strong> — Separates the input images/cubes into different spatial scale channels using isotropic starlets, allowing optical-flow estimation to be performed scale-by-scale to capture both large-scale bulk motions and fine-scale turbulent eddies.</li>
+                                <li><strong>Non-Stationary Signal Extraction</strong> — Extracts transient, non-stationary signals and structural flows from background noise and stationary signals using adaptive thresholding and iterative reconstruction.</li>
+                                <li><strong>Robust Optical-Flow Solver</strong> — Implements advanced Horn-Schunck and Lucas-Kanade variational formulations optimized for fluid-like motions and physical conservation laws (e.g., continuity equation).</li>
+                                <li><strong>Multi-Dimensional Support</strong> — Operates seamlessly on 2D image time-series, 3D spectral data cubes (RA/Dec/Velocity), and temporal stacks of spatial maps.</li>
+                            </ul>
+
+                            <h3>API Example</h3>
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">import nemo
+from nemo.optical_flow import MultiscaleSolver
+
+# Load your spectral cube or time-series images
+data_cube = nemo.load_fits("solar_active_region.fits")
+
+# Initialize the multiscale optical-flow solver
+solver = MultiscaleSolver(
+    num_scales=4,
+    smoothness_weight=1.5,
+    max_iterations=100
+)
+
+# Estimate the velocity fields across scales
+velocities = solver.solve(data_cube)
+
+# Extract non-stationary velocity features
+flows = solver.extract_non_stationary(threshold=3.5)
+print("Velocity field shape:", velocities.shape)</code></pre>
+                            </div>
+
+                            <h3>Design & Architecture</h3>
+                            <ul>
+                                <li><strong>Core Solvers (<code>nemo/solvers/</code>)</strong> — Modular and highly optimized variational optical-flow backends implemented using NumPy/SciPy, with optional GPU acceleration support via CuPy.</li>
+                                <li><strong>Wavelet Engine (<code>nemo/wavelets/</code>)</strong> — Fast 2D starlet and 3D wavelet transforms designed for scale-space representation of astronomical data.</li>
+                                <li><strong>Visualization Module (<code>nemo/viz/</code>)</strong> — Streamlined plotting functions for rendering velocity vector fields, streamlines, and multiscale energy spectra.</li>
+                            </ul>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
+                            </ul>
+                        </div>
+                    </article>
+
 <article class="project-card" data-tags="collaboration, fun">
                         <img class="project-image" src="images/softwares/astrolore.png" alt="Project image" loading="lazy" decoding="async">
                         <div class="project-meta">
@@ -284,6 +352,12 @@ python gui.py</code></pre>
                             <div class="project-tags">
                                 <span class="tag-chip">Collaboration / Contributions</span>
                                 <span class="tag-chip">Fun</span>
+                                <div class="project-badges" aria-hidden="true">
+                                    <a href="https://github.com/arnablahiry/astrolore/actions/workflows/test.yaml" target="_blank" rel="noopener"><img src="https://github.com/arnablahiry/astrolore/actions/workflows/test.yaml/badge.svg" alt="Tests status" loading="lazy" decoding="async"></a>
+                                    <a href="https://pypi.org/project/astrolore/" target="_blank" rel="noopener"><img src="https://img.shields.io/pypi/v/astrolore" alt="PyPI version" loading="lazy" decoding="async"></a>
+                                    <a href="https://pypi.org/project/astrolore/" target="_blank" rel="noopener"><img src="https://img.shields.io/pypi/pyversions/astrolore" alt="Python versions" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/astrolore/blob/main/LICENSE" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License" loading="lazy" decoding="async"></a>
+                                </div>
                             </div>
                             <div class="project-icons">
                                 <a class="project-icon-link" href="#"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
@@ -418,7 +492,6 @@ gui.main_gui().start_gui()</code></pre>
                             </div>
                             <div class="project-icons">
                                 <a class="project-icon-link" href="https://github.com/CosmoStat/cosmostat" aria-label="CosmoStat GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
-                                <a class="project-icon-link" href="https://www.cosmostat.org/software" aria-label="CosmoStat software documentation" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
                                 <a class="project-icon-link" href="https://www.cosmostat.org/" aria-label="CosmoStat website" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/cosmostat.png" alt="CosmoStat" loading="lazy" decoding="async"></a>
                             </div>
                         </div>
@@ -426,14 +499,137 @@ gui.main_gui().start_gui()</code></pre>
 
                         <div class="project-full" id="proj-cosmostat-desc" hidden>
                             <p>
-                                <strong>CosmoStat</strong> is a software package for cosmo-statistics developed by the LCS group at CEA Paris-Saclay. It supports research workflows around statistical methods, signal processing, and cosmological data analysis.
+                                <strong>CosmoStat</strong> is a software package for cosmo-statistics developed by the LCS group at CEA Paris-Saclay. My contribution is <code>pycs/sparsity/sparse3d/</code> — a self-contained module for wavelet-based denoising of 3D IFU spectral cubes (velocity × y × x). It implements two iterative sparse-recovery algorithms on top of a hybrid 2D-1D undecimated wavelet transform, targeting low-SNR submillimetre and radio interferometric data such as ALMA [CII] cubes.
                             </p>
 
-                            <h3>Project context</h3>
+                            <h3>The 2D-1D wavelet decomposition</h3>
+                            <p>
+                                Standard 3D wavelets treat the spectral axis the same as spatial axes, which destroys spectral line profiles by mixing spatial morphology with kinematic structure. The 2D-1D approach separates the two:
+                            </p>
                             <ul>
-                                <li>Developed by the LCS group at CEA Paris-Saclay.</li>
-                                <li>Focused on cosmo-statistics and scientific software for cosmological analysis.</li>
-                                <li>Part of the broader CosmoStat Laboratory ecosystem.</li>
+                                <li><strong>2D spatial axis</strong> — undecimated isotropic starlet transform (à trous algorithm). Each scale \(j\) captures emission at a characteristic angular size \(\sim 2^j\) pixels while keeping the cube at full resolution (no downsampling). The starlet is isotropic and shift-invariant, well-matched to compact or extended emission without preferred direction.</li>
+                                <li><strong>1D spectral axis</strong> — undecimated filterbank along the frequency/velocity axis. Each scale captures emission across a characteristic line width, from narrow features at fine scales to broad wings at coarser scales.</li>
+                                <li><strong>Cross product</strong> — the full decomposition produces \(N_{2D} \times N_{1D}\) detail sub-bands (one per spatial-scale × spectral-scale pair) plus a single coarse approximation band, all at the original cube size. The coarse band carries the large-scale mean structure and is always passed through unthresholded.</li>
+                            </ul>
+                            <p>
+                                Because neither transform decimates, the frame is <em>overcomplete</em>: the total number of coefficients is \(N_{2D} \times N_{1D}\) times the cube size. This redundancy means the analysis operator \(A\) and its adjoint \(A^*\) satisfy \(A A^* \neq I\) — the frame operator is a blurring in coefficient space, not the identity. Iterative algorithms must account for this.
+                            </p>
+                            <p>The backend is the <code>pysparse</code> MR2D1D C extension wrapped in <code>Wavelet2D1DTransform</code>:</p>
+
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">from pycs.sparsity.sparse3d.wavelet2d1d_transform import Wavelet2D1DTransform
+
+wt = Wavelet2D1DTransform()
+# inds: nested list of (start, end) slices per sub-band
+# w:    flat 1-D coefficient array, length ≈ n2d * n1d * cube.size
+inds, shapes, w = wt.decompose(cube, num_scales_2d=5, num_scales_1d=5)
+
+# access a specific detail band
+scale2d, scale1d = 2, 1
+start, end = inds[scale2d][scale1d]
+band_coeffs = w[start:end]       # shape: (nz, ny, nx) flattened
+
+# reconstruct from modified coefficients
+cube_reconstructed = wt.reconstruct(w)</code></pre>
+                            </div>
+
+                            <p>A critical implementation detail: <code>pysparse</code> keeps the coarse band in an internal C-level cache after each <code>decompose</code> call. If you call <code>decompose</code> again before <code>reconstruct</code>, the cache is overwritten. All algorithms therefore copy the coefficient buffer immediately after decomposition and restore the coarse band slice explicitly before every reconstruction call.</p>
+
+                            <h3>Per-band noise estimation</h3>
+                            <p>Noise characteristics differ across sub-bands because the starlet and spectral filters have different frequency responses. The module estimates noise separately for each of the \(N_{2D} \times N_{1D} - 1\) detail bands (the coarse band is excluded):</p>
+                            <ul>
+                                <li><strong>With a noise cube</strong>: an independent noise realization (e.g. from a signal-free region of the observation) is transformed; the standard deviation of each band gives an unbiased per-band noise level \(\hat{\sigma}_{j,k}\).</li>
+                                <li><strong>Without a noise cube</strong>: the median absolute deviation (MAD) of each band's coefficients is used: \(\hat{\sigma} = 1.48 \times \mathrm{median}(|c - \mathrm{median}(c)|)\). The factor 1.48 makes MAD consistent with the Gaussian standard deviation. MAD is robust because most coefficients in a sparse signal are noise-dominated.</li>
+                            </ul>
+                            <p>The finest 2D scale (<code>scale2d == 0</code>) is the noisiest — its starlet filter passes the highest spatial frequencies, which carry the largest noise fraction. Both algorithms apply an additional threshold increment \(\Delta\) at this scale only: the effective detection threshold becomes \((\lambda + \Delta)\,\hat{\sigma}_{0,k}\) instead of \(\lambda\,\hat{\sigma}_{0,k}\). This prevents spurious noise peaks at the finest scale from being mistaken for real signal.</p>
+
+                            <h3>Denoiser2D1D — two algorithms</h3>
+                            <p>The <code>Denoiser2D1D</code> class exposes both algorithms through a unified interface. Algorithm selection is made at construction time via <code>threshold_type</code>.</p>
+
+                            <h4>Iterative Hard Thresholding (IHT) — <code>threshold_type='hard'</code></h4>
+                            <p>
+                                Hard thresholding keeps a coefficient if \(|c| > \lambda\,\hat{\sigma}\) and zeros it otherwise — no shrinkage, no bias from the threshold operation itself. The algorithm runs in two phases:
+                            </p>
+                            <ul>
+                                <li><strong>Phase 1 — single threshold pass</strong>: decompose the data once, apply hard thresholds per band (with the finest-scale increment), reconstruct the initial model \(\hat{x}_0\). This establishes the signal <em>support</em> \(S\) — the set of coefficient positions where signal was detected.</li>
+                                <li><strong>Phase 2 — iterative L0 debias</strong>: the Eddington bias from thresholding means the model slightly overestimates flux (noise that happens to push a coefficient above threshold is kept). The debias corrects this: at each iteration, decompose the residual \(r = y - \hat{x}\), apply the hard threshold <em>restricted to support \(S\)</em>, reconstruct the delta, and add it to the model. This peels off the overcomplete frame correction \((I - AA^*)^n\) iteratively.</li>
+                            </ul>
+
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">from pycs.sparsity.sparse3d import Denoiser2D1D
+denoiser = Denoiser2D1D(threshold_type='hard', verbose=True)
+
+result = denoiser.denoise(
+    x=cube,                              # noisy data cube (nz, ny, nx)
+    y=cube,                              # reference cube (pass x for real data)
+    method='iterative',
+    threshold_level=5,                   # λ: detection threshold in σ
+    threshold_increment_high_freq=2,     # Δ: extra threshold at finest 2D scale
+    num_scales_2d=5,
+    num_scales_1d=5,
+    noise_cube=None,                     # use MAD if no noise cube available
+    positivity=False,                     # clip to ≥ 0 after each iteration
+    num_iter=20,
+    patience=3,
+)
+model, deltas, residual_stds, best_iter, noise_levels = result</code></pre>
+                            </div>
+
+                            <h4>Iterative Soft Thresholding (IST) — <code>threshold_type='soft'</code></h4>
+                            <p>
+                                Soft thresholding shrinks each coefficient toward zero by the threshold amount: \(\mathrm{sign}(c)\,\max(|c| - \lambda\hat{\sigma},\,0)\). This introduces a systematic flux bias (every detected coefficient is shrunk), which the reweighting and debias phases correct.
+                            </p>
+                            <ul>
+                                <li><strong>Phase 1 — reweighted IST (IRLS)</strong>: at each iteration, decompose the current model to compute adaptive per-coefficient weights \(w_{j} = \lambda\hat{\sigma}_{\mathrm{model}} / (|c_{\mathrm{model}}| + \varepsilon)\). For bright, well-detected coefficients \(|c| \gg \lambda\hat{\sigma}\), the weight approaches zero — effectively removing the shrinkage bias for signal. For noise-level coefficients the weight stays near 1, maintaining suppression. The effective soft threshold becomes \(w_j \cdot \lambda\hat{\sigma}\), which drives toward a hard-threshold result asymptotically.</li>
+                                <li><strong>Phase 2 — L1 debias</strong>: after reweighting converges, residual flux lost to soft-shrinkage is recovered by a weighted soft-threshold applied to the residual \(r = y - \hat{x}\) within the detected support, iterating to convergence.</li>
+                            </ul>
+
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">denoiser = Denoiser2D1D(threshold_type='soft', verbose=True)
+
+result = denoiser.denoise(
+    x=cube,
+    y=cube,
+    method='iterative',
+    threshold_level=5,
+    threshold_increment_high_freq=2,
+    num_scales_2d=5,
+    num_scales_1d=5,
+    positivity=False,
+    num_iter_reweight=20,                # Phase 1: reweighting iterations
+    num_iter_debias=20,                  # Phase 2: debias iterations
+    patience=3,
+)
+model, model_1step, model_no_rw, deltas, stds_rw, stds_db, best_iter, dists, noise_levels = result</code></pre>
+                            </div>
+
+                            <h3>Convergence</h3>
+                            <p>Both algorithms use a plateau-based convergence test with a decreasing-patience outer loop. At each debias/reweight iteration, convergence is declared if the relative change in residual standard deviation satisfies \(|\sigma_t - \sigma_{t-1}|/\sigma_{t-1} \leq \varepsilon\) for <code>patience</code> consecutive iterations. If convergence is not reached, patience is decremented and the loop retries from scratch. The final model is always taken from the iteration with the lowest residual STD across all trials.</p>
+
+                            <h3>Positivity constraint</h3>
+                            <p>For pure-emission sources (no absorption features, no mean subtraction), negative flux is unphysical. Setting <code>positivity=True</code> clips the reconstructed model to non-negative values after each iteration. This is applied in real space, not in the wavelet domain — highly negative wavelet coefficients can legitimately correspond to signal structure (e.g. the negative sidelobe of a starlet basis function around a compact source), so wavelet-domain clipping would remove real signal.</p>
+
+                            <h3>Simple (single-pass) denoising</h3>
+                            <p>For high-SNR data or quick inspection, <code>method='simple'</code> runs only Phase 1 of IHT — a single hard threshold pass with no iteration:</p>
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">denoiser = Denoiser2D1D(threshold_type='hard', verbose=False)
+model, noise_levels = denoiser.denoise(
+    x=cube, y=cube,
+    method='simple',
+    threshold_level=4,
+    threshold_increment_high_freq=2,
+    num_scales_2d=5, num_scales_1d=5,
+)</code></pre>
+                            </div>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> — <code>pycs/sparsity/sparse3d/</code> (sparse3d submodule, Denoiser2D1D, Wavelet2D1DTransform wrapper)</li>
+                                <li>CosmoStat / LCS group, CEA Paris-Saclay — core library</li>
                             </ul>
                         </div>
                     </article>

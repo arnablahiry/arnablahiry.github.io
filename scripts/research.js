@@ -137,6 +137,11 @@
   }
 
   document.body.appendChild(clone);
+  // dispatch custom event to indicate card is expanded
+  try {
+    var event = new CustomEvent('project-card:expanded', { detail: { clone: clone, originalCard: card } });
+    document.dispatchEvent(event);
+  } catch(e) {}
   // If the clone contains a play launcher, forward its clicks to the original
   // card's launcher (which has the real click handler that opens the modal).
   try{
@@ -298,6 +303,10 @@
       var _cleanupDone = false;
       function doCleanup(){
         if(_cleanupDone) return; _cleanupDone = true;
+        try {
+          var event = new CustomEvent('project-card:closed', { detail: { clone: clone, originalCard: card } });
+          document.dispatchEvent(event);
+        } catch(e) {}
         try{ if(overlay && overlay.parentNode) overlay.remove(); }catch(_){ }
         try{ if(clone && clone.parentNode) clone.remove(); }catch(_){ }
         try{
@@ -349,8 +358,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    // open when clicking the button
-    document.querySelectorAll('.project-toggle').forEach(function(btn){
+    // open when clicking the button (on talks page, this includes talks-view-btn)
+    document.querySelectorAll('.project-toggle, .talks-view-btn').forEach(function(btn){
       btn.addEventListener('click', function(e){
         e.stopPropagation();
         var card = btn.closest('.project-card');
@@ -365,8 +374,9 @@
       card.setAttribute('tabindex','0');
       card.addEventListener('click', function(e){
         var target = e.target;
-        // ignore clicks on buttons/links inside the card
-        if(target.closest('button') || target.closest('a')) return;
+        // ignore clicks on buttons/links inside the card, but allow talks-view-btn to trigger expansion
+        if(target.closest('button') && !target.closest('.talks-view-btn')) return;
+        if(target.closest('a')) return;
         openFullscreenFromCard(card);
       });
       card.addEventListener('keydown', function(e){
