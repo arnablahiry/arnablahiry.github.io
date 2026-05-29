@@ -131,6 +131,73 @@
 
                 <div class="projects-grid" id="projects-grid">
                     <article class="project-card" data-tags="end-to-end, science">
+                        <img class="project-image" src="images/softwares/nemo_logo.png" alt="N.E.M.O. logo" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <h3 class="project-title">N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h3>
+                            <p class="project-subtitle">Python package for high-resolution motion estimation and non-stationary signal extraction from time-series and spectral cubes using multiscale optical-flow.</p>
+                            <div class="project-tags">
+                                <span class="tag-chip">End-to-end</span>
+                                <span class="tag-chip">Science</span>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="https://github.com/arnablahiry/NEMO-Source-Tracker" aria-label="N.E.M.O. GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
+                                <a class="project-icon-link" href="software/nemo" aria-label="N.E.M.O. documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
+                            </div>
+                        </div>
+                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-nemo-desc">Learn more</button>
+                        <div class="project-full" id="proj-nemo-desc" hidden>
+                            <h1>N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h1>
+                            <p>
+                                <strong>N.E.M.O.</strong> is a high-performance Python software package specifically designed for motion estimation, tracking, and signal extraction in non-stationary physical and astronomical datasets. By combining multiscale wavelet decompositions with robust optical-flow algorithms, N.E.M.O. is capable of recovering velocity fields and extracting subtle non-stationary features from high-resolution time-series observations, solar imaging data, and interstellar spectral cubes.
+                            </p>
+
+                            <h3>Key Capabilities</h3>
+                            <ul>
+                                <li><strong>Multiscale Wavelet Decomposition</strong> — Separates the input images/cubes into different spatial scale channels using isotropic starlets, allowing optical-flow estimation to be performed scale-by-scale to capture both large-scale bulk motions and fine-scale turbulent eddies.</li>
+                                <li><strong>Non-Stationary Signal Extraction</strong> — Extracts transient, non-stationary signals and structural flows from background noise and stationary signals using adaptive thresholding and iterative reconstruction.</li>
+                                <li><strong>Robust Optical-Flow Solver</strong> — Implements advanced Horn-Schunck and Lucas-Kanade variational formulations optimized for fluid-like motions and physical conservation laws (e.g., continuity equation).</li>
+                                <li><strong>Multi-Dimensional Support</strong> — Operates seamlessly on 2D image time-series, 3D spectral data cubes (RA/Dec/Velocity), and temporal stacks of spatial maps.</li>
+                            </ul>
+
+                            <h3>API Example</h3>
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">import nemo
+from nemo.optical_flow import MultiscaleSolver
+
+# Load your spectral cube or time-series images
+data_cube = nemo.load_fits("solar_active_region.fits")
+
+# Initialize the multiscale optical-flow solver
+solver = MultiscaleSolver(
+    num_scales=4,
+    smoothness_weight=1.5,
+    max_iterations=100
+)
+
+# Estimate the velocity fields across scales
+velocities = solver.solve(data_cube)
+
+# Extract non-stationary velocity features
+flows = solver.extract_non_stationary(threshold=3.5)
+print("Velocity field shape:", velocities.shape)</code></pre>
+                            </div>
+
+                            <h3>Design & Architecture</h3>
+                            <ul>
+                                <li><strong>Core Solvers (<code>nemo/solvers/</code>)</strong> — Modular and highly optimized variational optical-flow backends implemented using NumPy/SciPy, with optional GPU acceleration support via CuPy.</li>
+                                <li><strong>Wavelet Engine (<code>nemo/wavelets/</code>)</strong> — Fast 2D starlet and 3D wavelet transforms designed for scale-space representation of astronomical data.</li>
+                                <li><strong>Visualization Module (<code>nemo/viz/</code>)</strong> — Streamlined plotting functions for rendering velocity vector fields, streamlines, and multiscale energy spectra.</li>
+                            </ul>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="project-card" data-tags="end-to-end, science">
                         <img class="project-image" src="images/softwares/cubecraft.png" alt="Project image" loading="lazy" decoding="async">
                         <div class="project-meta">
                             <h3 class="project-title">GalCubeCraft - Sythetic Galaxy Spectral Cubes</h3>
@@ -151,7 +218,7 @@
                             </div>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>                                
-                        <div class="project-full" hidden>
+                        <div class="project-full" id="proj-1-desc" hidden>
                                 <p>
                                     <strong>GalCubeCraft</strong> is a high-fidelity, easy-to-read pipeline for synthesising IFU-style spectral cubes (velocity × y × x). It is designed for method development: fast generation of controllable, reproducible cubes for denoising, deconvolution, kinematic tests, and ML pretraining. The code emphasises clarity (well-named small functions), sensible defaults, and modularity so you can replace morphology, kinematics or instrument modules with minimal changes.
                                 </p>
@@ -275,73 +342,6 @@ python gui.py</code></pre>
                                     <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
                                 </ul>
                             </div>
-                    </article>
-
-                    <article class="project-card" data-tags="end-to-end, science">
-                        <img class="project-image" src="images/softwares/nemo_logo.png" alt="N.E.M.O. logo" loading="lazy" decoding="async">
-                        <div class="project-meta">
-                            <h3 class="project-title">N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h3>
-                            <p class="project-subtitle">Python package for high-resolution motion estimation and non-stationary signal extraction from time-series and spectral cubes using multiscale optical-flow.</p>
-                            <div class="project-tags">
-                                <span class="tag-chip">End-to-end</span>
-                                <span class="tag-chip">Science</span>
-                            </div>
-                            <div class="project-icons">
-                                <a class="project-icon-link" href="https://github.com/arnablahiry/nemo" aria-label="N.E.M.O. GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
-                                <a class="project-icon-link" href="software/nemo" aria-label="N.E.M.O. documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
-                            </div>
-                        </div>
-                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-nemo-desc">Learn more</button>
-                        <div class="project-full" id="proj-nemo-desc" hidden>
-                            <h1>N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h1>
-                            <p>
-                                <strong>N.E.M.O.</strong> is a high-performance Python software package specifically designed for motion estimation, tracking, and signal extraction in non-stationary physical and astronomical datasets. By combining multiscale wavelet decompositions with robust optical-flow algorithms, N.E.M.O. is capable of recovering velocity fields and extracting subtle non-stationary features from high-resolution time-series observations, solar imaging data, and interstellar spectral cubes.
-                            </p>
-
-                            <h3>Key Capabilities</h3>
-                            <ul>
-                                <li><strong>Multiscale Wavelet Decomposition</strong> — Separates the input images/cubes into different spatial scale channels using isotropic starlets, allowing optical-flow estimation to be performed scale-by-scale to capture both large-scale bulk motions and fine-scale turbulent eddies.</li>
-                                <li><strong>Non-Stationary Signal Extraction</strong> — Extracts transient, non-stationary signals and structural flows from background noise and stationary signals using adaptive thresholding and iterative reconstruction.</li>
-                                <li><strong>Robust Optical-Flow Solver</strong> — Implements advanced Horn-Schunck and Lucas-Kanade variational formulations optimized for fluid-like motions and physical conservation laws (e.g., continuity equation).</li>
-                                <li><strong>Multi-Dimensional Support</strong> — Operates seamlessly on 2D image time-series, 3D spectral data cubes (RA/Dec/Velocity), and temporal stacks of spatial maps.</li>
-                            </ul>
-
-                            <h3>API Example</h3>
-                            <div class="code-snippet">
-                                <div class="lang-label">PYTHON</div>
-                                <pre><code class="language-python">import nemo
-from nemo.optical_flow import MultiscaleSolver
-
-# Load your spectral cube or time-series images
-data_cube = nemo.load_fits("solar_active_region.fits")
-
-# Initialize the multiscale optical-flow solver
-solver = MultiscaleSolver(
-    num_scales=4,
-    smoothness_weight=1.5,
-    max_iterations=100
-)
-
-# Estimate the velocity fields across scales
-velocities = solver.solve(data_cube)
-
-# Extract non-stationary velocity features
-flows = solver.extract_non_stationary(threshold=3.5)
-print("Velocity field shape:", velocities.shape)</code></pre>
-                            </div>
-
-                            <h3>Design & Architecture</h3>
-                            <ul>
-                                <li><strong>Core Solvers (<code>nemo/solvers/</code>)</strong> — Modular and highly optimized variational optical-flow backends implemented using NumPy/SciPy, with optional GPU acceleration support via CuPy.</li>
-                                <li><strong>Wavelet Engine (<code>nemo/wavelets/</code>)</strong> — Fast 2D starlet and 3D wavelet transforms designed for scale-space representation of astronomical data.</li>
-                                <li><strong>Visualization Module (<code>nemo/viz/</code>)</strong> — Streamlined plotting functions for rendering velocity vector fields, streamlines, and multiscale energy spectra.</li>
-                            </ul>
-
-                            <h3>Authors</h3>
-                            <ul>
-                                <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
-                            </ul>
-                        </div>
                     </article>
 
 <article class="project-card" data-tags="collaboration, fun">
