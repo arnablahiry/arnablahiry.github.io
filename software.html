@@ -138,13 +138,17 @@
                             <div class="project-tags">
                                 <span class="tag-chip">End-to-end</span>
                                 <span class="tag-chip">Science</span>
+                                <div class="project-badges" aria-hidden="true">
+                                    <a href="https://github.com/arnablahiry/NEMO-Source-Tracker" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/python-≥3.9-blue.svg" alt="Python Version" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/NEMO-Source-Tracker/blob/main/LICENSE" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/NEMO-Source-Tracker" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/version-0.1.0-orange.svg" alt="Version" loading="lazy" decoding="async"></a>
+                                </div>
                             </div>
                             <div class="project-icons">
                                 <a class="project-icon-link" href="https://github.com/arnablahiry/NEMO-Source-Tracker" aria-label="N.E.M.O. GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
                                 <a class="project-icon-link" href="software/nemo" aria-label="N.E.M.O. documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
                             </div>
                         </div>
-                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-nemo-desc">Learn more</button>
                         <div class="project-full" id="proj-nemo-desc" hidden>
                             <h1>N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h1>
                             <p>
@@ -198,9 +202,9 @@ print("Velocity field shape:", velocities.shape)</code></pre>
                     </article>
 
                     <article class="project-card" data-tags="end-to-end, science">
-                        <img class="project-image" src="images/softwares/cubecraft.png" alt="Project image" loading="lazy" decoding="async">
+                        <img class="project-image" src="images/softwares/songs_banner.png" alt="S.O.N.G.S. project banner" loading="lazy" decoding="async">
                         <div class="project-meta">
-                            <h3 class="project-title">GalCubeCraft - Sythetic Galaxy Spectral Cubes</h3>
+                            <h3 class="project-title">S.O.N.G.S : Synthetic Spatio-Spectral Observations of Non-stationary Galactic Structures</h3>
                             <p class="project-subtitle">Theoretically and physically motivated generator of unique synthetic galaxy spectral cubes for astrophysical research.</p>
                             <div class="project-tags">
                                 <span class="tag-chip">End-to-end</span>
@@ -213,11 +217,10 @@ print("Velocity field shape:", velocities.shape)</code></pre>
                             </div>
                             <div class="project-icons">
                                 <a class="project-icon-link" href="https://github.com/arnablahiry/GalCubeCraft"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
-                                <a class="project-icon-link" href="https://arnablahiry.github.io/software/GalCubeCraft/" aria-label="GalCubeCraft documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
+                                <a class="project-icon-link" href="software/songs" aria-label="S.O.N.G.S. documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
                                 <a class="project-icon-link" href="https://pypi.org/project/GalCubeCraft/"><img class="project-icon" src="images/icons/pypi_software.png" alt="PyPI" loading="lazy" decoding="async"></a>
                             </div>
                         </div>
-                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>                                
                         <div class="project-full" id="proj-1-desc" hidden>
                                 <p>
                                     <strong>GalCubeCraft</strong> is a high-fidelity, easy-to-read pipeline for synthesising IFU-style spectral cubes (velocity × y × x). It is designed for method development: fast generation of controllable, reproducible cubes for denoising, deconvolution, kinematic tests, and ML pretraining. The code emphasises clarity (well-named small functions), sensible defaults, and modularity so you can replace morphology, kinematics or instrument modules with minimal changes.
@@ -365,8 +368,6 @@ python gui.py</code></pre>
                                 <a class="project-icon-link" href="#"><img class="project-icon" src="images/icons/pypi_software.png" alt="PyPI" loading="lazy" decoding="async"></a>
                             </div>
                         </div>
-                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-2-desc">Learn more</button>
-        
                         <div class="project-full" hidden>
 
                             <p>
@@ -495,8 +496,6 @@ gui.main_gui().start_gui()</code></pre>
                                 <a class="project-icon-link" href="https://www.cosmostat.org/" aria-label="CosmoStat website" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/cosmostat.png" alt="CosmoStat" loading="lazy" decoding="async"></a>
                             </div>
                         </div>
-                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-cosmostat-desc">Learn more</button>
-
                         <div class="project-full" id="proj-cosmostat-desc" hidden>
                             <p>
                                 <strong>CosmoStat</strong> is a software package for cosmo-statistics developed by the LCS group at CEA Paris-Saclay. My contribution is <code>pycs/sparsity/sparse3d/</code> — a self-contained module for wavelet-based denoising of 3D IFU spectral cubes (velocity × y × x). It implements two iterative sparse-recovery algorithms on top of a hybrid 2D-1D undecimated wavelet transform, targeting low-SNR submillimetre and radio interferometric data such as ALMA [CII] cubes.
@@ -648,7 +647,6 @@ model, noise_levels = denoiser.denoise(
                             <p class="project-subtitle">Simple JavaScript-based web-game to catch something that may bear resemblance to a famous winged ball from a famous fantasy series.</p>
                             <div class="project-tags"><span class="tag-chip">End-to-end</span><span class="tag-chip">Fun</span></div>
                         </div>
-                        <button class="project-toggle" aria-expanded="false" aria-controls="proj-1-desc">Learn more</button>
                         <div class="project-full" hidden>
                             <p>
                                 This is a small, self-contained JavaScript game also availabled as an easter egg depending on the decisions made in the home page....re-used here so visitors can play it directly. It demonstrates compact animation, adaptive input handling, and a tiny game loop that balances predictable motion with occasional randomized darts to keep the target lively.
