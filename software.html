@@ -133,7 +133,7 @@
                     <article class="project-card" data-tags="end-to-end, science">
                         <img class="project-image" src="images/softwares/nemo_logo.png" alt="N.E.M.O. logo" loading="lazy" decoding="async">
                         <div class="project-meta">
-                            <h3 class="project-title">N.E.M.O. [<b>N</b>on-stationary <b>E</b>xtraction via <b>M</b>ultiscale <b>O</b>ptical-flow]</h3>
+                            <h3 class="project-title">N.E.M.O. [<b>N</b>on-stationary source <b>E</b>xtraction via <b>M</b>ulti-scale <b>O</b>ptical-flow]</h3>
                             <p class="project-subtitle">Python package for high-resolution motion estimation and non-stationary signal extraction from time-series and spectral cubes using multiscale optical-flow.</p>
                             <div class="project-tags">
                                 <span class="tag-chip">End-to-end</span>
@@ -204,7 +204,7 @@ print("Velocity field shape:", velocities.shape)</code></pre>
                     <article class="project-card" data-tags="end-to-end, science">
                         <img class="project-image" src="images/softwares/songs_banner.png" alt="S.O.N.G.S. project banner" loading="lazy" decoding="async">
                         <div class="project-meta">
-                            <h3 class="project-title">S.O.N.G.S : Synthetic Spatio-Spectral Observations of Non-stationary Galactic Structures</h3>
+                            <h3 class="project-title">S.O.N.G.S [Synthetic Spatio-Spectral Observations of Non-stationary Galactic Structures]</h3>
                             <p class="project-subtitle">Theoretically and physically motivated generator of unique synthetic galaxy spectral cubes for astrophysical research.</p>
                             <div class="project-tags">
                                 <span class="tag-chip">End-to-end</span>
@@ -222,124 +222,83 @@ print("Velocity field shape:", velocities.shape)</code></pre>
                             </div>
                         </div>
                         <div class="project-full" id="proj-1-desc" hidden>
+                                <h1>SONGS — Spectral Observations of Non-stationary Galactic Structures</h1>
                                 <p>
-                                    <strong>GalCubeCraft</strong> is a high-fidelity, easy-to-read pipeline for synthesising IFU-style spectral cubes (velocity × y × x). It is designed for method development: fast generation of controllable, reproducible cubes for denoising, deconvolution, kinematic tests, and ML pretraining. The code emphasises clarity (well-named small functions), sensible defaults, and modularity so you can replace morphology, kinematics or instrument modules with minimal changes.
+                                    <strong>SONGS</strong> is a high-fidelity simulator for synthetic IFU spectral cubes of disk galaxies, interacting systems, and diffuse low-surface-brightness structures such as halos, bridges, and tidal tails. It combines analytic galaxy profiles, viewing-angle projection, empirical rotation curves, beam convolution, and diffuse emission models to create 3D spectral datacubes for algorithm development, denoising benchmarks, and transfer-learning pre-training.
                                 </p>
 
-                                <h3>What it does</h3>
-                                <ul>
-                                    <li>Constructs a 3D flux field per galaxy component using a radial Sérsic-like surface profile (disk plane) combined with an exponential vertical profile.</li>
-                                    <li>Builds a compact analytic rotation-curve model to assign tangential velocities to voxels; supports multiple components (primary + satellites) and simple velocity dispersion models.</li>
-                                    <li>Rotates the 3D flux & velocity fields to an arbitrary viewing geometry (inclination + position angle) and projects emission into line-of-sight velocity bins to form a spectral cube.</li>
-                                    <li>Applies optional instrument effects: per-channel 2D beam convolution (elliptical Gaussian), channel binning / spectral smoothing, and additive noise models. Cubes are saved with accompanying metadata for reproducibility.</li>
-                                </ul>
+                                <div class="image-wrapper songs-theme-sensitive">
+                                    <img src="images/softwares/songs_panel_dark.png" alt="SONGS dark control panel screenshot" loading="lazy" decoding="async">
+                                </div>
+                                <br>
+                                <div class="image-wrapper songs-theme-sensitive">
+                                    <img src="images/softwares/songs_gui_windows.png" alt="SONGS Windows GUI screenshot" loading="lazy" decoding="async">
+                                </div>
 
-                                <h3>Design & architecture</h3>
-                                <ul>
-                                    <li><strong>Core pipeline</strong>: small, single-responsibility functions in <code>src/GalCubeCraft/core.py</code> orchestrate grid creation, component stacking, kinematics and I/O.</li>
-                                    <li><strong>Helpers</strong>: <code>utils.py</code> contains beam kernels, convolution helpers and spatial transforms; <code>io.py</code> wraps saving/loading with consistent folder layouts.</li>
-                                    <li><strong>Visualisation</strong>: <code>visualise.py</code> exposes moment map and spectrum helpers used by both scripts and the GUI.</li>
-                                    <li><strong>GUI</strong>: a compact Tkinter-based GUI (see below) designed for interactive exploration without blocking the UI thread.</li>
-                                </ul>
-
-
+                                <h3>Project description</h3>
+                                <p>
+                                    <strong>SONGS</strong> was built to make controlled, physically interpretable IFU-style galaxy datacubes easy to generate. Instead of treating a mock cube as just an arbitrary tensor, it starts from a compact astrophysical picture: disk galaxies with analytic Sérsic light profiles, vertical structure, empirical rotation curves, satellite companions, viewing-angle projection, and telescope-like beam convolution. The result is a synthetic spectral cube whose spatial and velocity structure can be inspected, tuned, and reproduced.
+                                </p>
+                                <p>
+                                    A central motivation of the project is non-stationary galactic structure. SONGS can add low-surface-brightness diffuse components around and between galaxies, including extended halos, bridges, and curved tidal tails or streamers. These features are useful test cases for source separation, denoising, kinematic recovery, and machine-learning pipelines because the generated cube contains both realistic observational complexity and known underlying parameters.
+                                </p>
+                                <p>
+                                    The package is designed for both scripted experiments and interactive exploration. From Python, <code>songs.SONGS</code> can generate reproducible batches of cubes with saved metadata such as beam information, pixel scale, velocities, and model parameters. Through the GUI, the same generator becomes a visual laboratory: parameters for the central galaxy, satellites, instrument beam, and diffuse structures can be adjusted directly, then inspected through moment maps, spectra, and a channel-by-channel SliceViewer.
+                                </p>
 
                                 <h3>Quick install & API example</h3>
                                 <div class="code-snippet">
                                     <div class="lang-label">TERMINAL</div>
-                                    <pre><code class="language-bash">pip install GalCubeCraft</code></pre>
+                                    <pre><code class="language-bash">pip install songs</code></pre>
                                 </div>
 
                                 <div class="code-snippet">
                                     <div class="lang-label">PYTHON</div>
-                                    <pre><code class="language-python">import GalCubeCraft
-# create and run quickly from script
-g = GalCubeCraft(n_cubes=1, grid_size=125, n_spectral_slices=40, seed=42)
+                                    <pre><code class="language-python">import songs
+
+# Initialise the generator: one cube, 125x125 spatial grid, 40 spectral channels
+g = songs.SONGS(n_gals=None, n_cubes=1, grid_size=125, n_spectral_slices=40, seed=42)
+
 results = g.generate_cubes()
 cube, params = results[0]
-print('cube shape =', cube.shape)
+
+print("cube shape (n_vel, ny, nx):", cube.shape)
+print("parameter keys:", list(params.keys()))
+
 g.visualise(results, idx=0, save=False)</code></pre>
                                 </div>
 
-                                <h3>Files & integration (expanded)</h3>
-                                <ul>
-                                    <li><code>src/GalCubeCraft/core.py</code> — orchestrates grid creation, stacking components and kinematics.</li>
-                                    <li><code>src/GalCubeCraft/utils.py</code> — beam kernels, convolution helpers and small numeric utilities.</li>
-                                    <li><code>src/GalCubeCraft/visualise.py</code> — moment maps and spectrum plotting helpers used by the GUI and scripts.</li>
-                                    <li><code>src/GalCubeCraft/gui.py</code> — the compact Tkinter GUI; see the pseudocode excerpt above for its threading pattern.</li>
-                                </ul>
-
-
                                 <h3>GUI - Interactive Usage</h3>
                                 <ul>
-                                    <li>Generates one spectral cube at a time from the parameters you set. This is sufficient for interactive experimentation and previewing the effects of different choices.</li>
-                                    <li>Runs the heavy generation step in a background thread and displays logs in a small Log window so you can follow progress and any printed diagnostics.</li>
-                                    <li>Provides convenience buttons to visualise results using the plotting helpers: Moment-0 (integrated intensity), Moment-1 (intensity-weighted velocity), and the integrated line-of-sight spectrum. These open interactive Matplotlib figures so you can pan/zoom as needed.</li>
-                                    <li>Allows saving the generated spectral cube along with a parameters/metadata dictionary to disk. Both NumPy <code>.npz</code> archives and Python <code>.pkl</code> pickles are supported by the GUI save dialog.</li>
+                                    <li>Provides a Tkinter front end for generating and inspecting synthetic spectral cubes without writing a script.</li>
+                                    <li>Uses a four-column dark card layout covering initialisation, central galaxy properties, satellite properties, and diffuse-feature controls.</li>
+                                    <li>Runs cube generation in a background thread and streams progress to a built-in Log window so the interface stays responsive.</li>
+                                    <li>Activates Moment-0, Moment-1, Spectrum, and SliceViewer tools after generation for interactive inspection of the simulated IFU cube.</li>
                                 </ul>
 
                                 <h3>Controls and parameters</h3>
-                                <p>The GUI exposes the following user-adjustable parameters (each control is directly reflected in the generator instance shown in <code>gui.py</code>):</p>
                                 <ul>
-                                    <li>Number of galaxies (primary + satellites)</li>
-                                    <li>Satellite offset (distance from primary centre, pixels)</li>
-                                    <li>Beam information: minor axis (bmin, px), major axis (bmaj, px), position angle (BPA, degrees)</li>
-                                    <li>Resolution parameter r (controls Re relative to beam size)</li>
-                                    <li>Sérsic index n (profile concentration)</li>
-                                    <li>Scale height h_z (vertical exponential scale, px)</li>
-                                    <li>Central effective flux density S_e (intrinsic scaling)</li>
-                                    <li>Line-of-sight velocity dispersion <code>σ_v,z</code> (km/s)</li>
-                                    <li>Grid size (nx = ny, pixels)</li>
-                                    <li>Number of spectral channels (n_s)</li>
-                                    <li>Inclination angle (rotation about X, degrees)</li>
-                                    <li>Azimuthal / position angle (rotation about Y, degrees)</li>
+                                    <li><strong>Initialisation:</strong> grid size, spectral channels, number of galaxies, random seed, and output directory.</li>
+                                    <li><strong>Central galaxy:</strong> Sérsic index, effective radius, scale height, central flux density, inclination, and position angle.</li>
+                                    <li><strong>Satellites and beam:</strong> satellite offsets, systemic velocity offsets, beam minor/major axes, and beam position angle.</li>
+                                    <li><strong>Diffuse features:</strong> halo amplitude, bridge amplitude, tail amplitude, tail velocity gradient, tail decay scale, and a master enabled toggle.</li>
                                 </ul>
+
                                 <h4>Launch</h4>
                                 <div class="code-snippet">
                                     <div class="lang-label">TERMINAL</div>
-                                    <pre><code class="language-bash"># from package (recommended)
-python -m GalCubeCraft.gui
-
-# or from the source tree
-cd src/GalCubeCraft
-python gui.py</code></pre>
+                                    <pre><code class="language-bash">python -m songs.gui</code></pre>
                                 </div>
-                                <h3>Behaviour and UX notes</h3>
+
+                                <h3>Visualisation & saving</h3>
                                 <ul>
-                                    <li>Generation is started with the "Generate" button. While a cube is being produced the GUI disables the interactive sliders (to indicate a running state) and the Log window is shown so you can follow output.</li>
-                                    <li>When generation finishes the visualisation buttons (Moment0, Moment1, Spectra) and the Save button become enabled. The "New" button clears the current generator state and re-enables controls so you can start a fresh instance.</li>
-                                    <li>The GUI attempts to render LaTeX-style labels for parameter names (using Matplotlib mathtext). If rendering fails for a label it falls back to a readable plain-text label so controls remain understandable.</li>
+                                    <li><strong>Moment-0:</strong> integrated intensity map summed over the spectral axis.</li>
+                                    <li><strong>Moment-1:</strong> intensity-weighted velocity map with beam marker overlay.</li>
+                                    <li><strong>Spectrum:</strong> integrated line-of-sight flux as a function of velocity.</li>
+                                    <li><strong>SliceViewer:</strong> channel-by-channel inspection with source selection, contours, bounding boxes, and intensity threshold masking.</li>
+                                    <li><strong>Save:</strong> writes the current cube and parameter dictionary without re-running generation, using compressed NumPy archives or Python pickles.</li>
                                 </ul>
 
-                                <h3>Visualisation</h3>
-                                <ul>
-                                    <li><strong>Moment-0</strong>: integrated intensity map produced by summing the cube along the spectral axis and optionally saving the figure.</li>
-                                    <li><strong>Moment-1</strong>: intensity-weighted velocity map computed from the spectral channels and visualised with an overlaid beam marker.</li>
-                                    <li><strong>Spectrum</strong>: integrated flux vs velocity (line-of-sight spectrum).</li>
-                                </ul>
-                                <p>All visualisation helpers are implemented as small functions in <code>src/GalCubeCraft/visualise.py</code> and are called by the GUI to produce Matplotlib figures. These figures are interactive; you can pan/zoom and save them using Matplotlib's GUI controls.</p>
-
-                                <h3>Saving</h3>
-                                <p>The GUI Save flow prefers to save already-generated results (so it does not re-run the expensive generation step). You can save as a compressed NumPy archive (<code>.npz</code>) or as a pickled Python object (<code>.pkl</code>). Saved contents include the spectral cube array and a parameter dictionary with metadata (beam info, pixel scale, average velocities, etc.).</p>
-
-                                <h3>Future features</h3>
-                                <p>Planned enhancements for future releases include:</p>
-                                <ul>
-                                    <li>Artificial noise injection and configurable S/N controls</li>
-                                    <li>Batch generation of multiple cubes and export of training-ready datasets</li>
-                                    <li>More advanced kinematic models and multi-component morphologies</li>
-                                    <li>Small GUI refinements (progress bar for generation, better layout on HiDPI displays)</li>
-                                </ul>
-
-                                
-                                <div class="image-wrapper no-invert">
-                                    <img src="images/softwares/cubecraft_gui1.png" alt="Astrolore GUI screenshot 1" style="width:50%;" loading="lazy" decoding="async">
-                                </div>
-                                <br>
-                                <div class="image-wrapper no-invert">
-                                    <img src="images/softwares/cubecraft_gui2.png" alt="Astrolore GUI screenshot 2" style="width:80%;"   loading="lazy" decoding="async">
-                                </div>
-            
                                 <h3>Authors</h3>
                                 <ul>
                                     <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
@@ -347,7 +306,29 @@ python gui.py</code></pre>
                             </div>
                     </article>
 
-<article class="project-card" data-tags="collaboration, fun">
+                    <article class="project-card" data-tags="end-to-end, science, fun">
+                        <img class="project-image" src="images/softwares/galaxy_textures.png" alt="Galaxy Morphological Textures banner" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <h3 class="project-title">Galaxy Morphological Textures</h3>
+                            <p class="project-subtitle">Data generator of toy morphological structures of elliptical, spiral, barred spiral and irregular galaxies and mergers.</p>
+                            <div class="project-tags">
+                                <span class="tag-chip">End-to-end</span>
+                                <span class="tag-chip">Science</span>
+                                <span class="tag-chip">Fun</span>
+                                <div class="project-badges" aria-hidden="true">
+                                    <a href="https://github.com/arnablahiry/Galaxy-Morphological-Textures/actions/workflows/test.yaml" target="_blank" rel="noopener"><img src="https://github.com/arnablahiry/Galaxy-Morphological-Textures/actions/workflows/test.yaml/badge.svg" alt="Tests status" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/Galaxy-Morphological-Textures" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/python-≥3.9-blue.svg" alt="Python Version" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/Galaxy-Morphological-Textures/blob/main/LICENSE" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License" loading="lazy" decoding="async"></a>
+                                </div>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="https://github.com/arnablahiry/Galaxy-Morphological-Textures" aria-label="Galaxy Morphological Textures GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
+                            </div>
+                        </div>
+                        <div class="project-full" id="proj-galaxy-textures-desc" hidden></div>
+                    </article>
+
+                    <article class="project-card" data-tags="collaboration, fun">
                         <img class="project-image" src="images/softwares/astrolore.png" alt="Project image" loading="lazy" decoding="async">
                         <div class="project-meta">
                             <h3 class="project-title">AstroLore</h3>

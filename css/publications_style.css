@@ -102,6 +102,10 @@ main,
     padding-left: 16px;
 }
 
+.project-card[hidden] {
+    display: none !important;
+}
+
 /* Dark mode: ensure card opacity stays low (0.25) */
 body:not(.light-mode) .project-card {
     background: rgba(15, 15, 16, 0.776) !important;

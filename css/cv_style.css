@@ -650,14 +650,16 @@ body.page-cv #publications .cv-list li{ font-size: 1.7vh; }
   margin-bottom: 18px; /* space between list and following content */
 }
 
-/* Add extra spacing for nested lists so the nested block and the next sibling
-   list item/section are visually separated */
-#conferences .cv-list li > ul {
-  /* Reduce top gap specifically for nested lists in Conferences so
-     'Contributed Poster Presentation' appears closer to its parent item */
-  margin-top: 4px;
-  margin-bottom: 20px;
-  padding-left: 1.15rem; /* slightly more inset for nested lists */
+/* Indent and separate conference participation details from the main event line. */
+#conferences .conf-detail-list {
+  margin-top: 7px;
+  margin-bottom: 0;
+  padding-left: 1.75rem;
+}
+
+#conferences .conf-detail-list li {
+  margin-bottom: 0;
+  font-size: 1.48vh;
 }
 
 #publications .cv-list li > ul {
@@ -669,7 +671,7 @@ body.page-cv #publications .cv-list li{ font-size: 1.7vh; }
 
 /* Slightly increase bottom spacing for each main list item in conferences
    so items following nested blocks have clearer separation. */
-#conferences .cv-list li { margin-bottom: 10px; }
+#conferences .cv-list > li { margin-bottom: 18px; }
 
 /* Ensure the small paragraph that contains the 'View on ...' link sits further
    away from the lists above it */

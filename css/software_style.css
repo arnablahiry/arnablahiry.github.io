@@ -71,6 +71,25 @@ body.page-software:not(.light-mode) .project-card img{
   isolation: isolate !important;
 }
 
+/* SONGS screenshots should respond to the site theme while other software
+   screenshots keep their authored colors. The source screenshots are dark-mode
+   captures, so light mode flips their hues for contrast. */
+.page-software .image-wrapper.songs-theme-sensitive,
+.page-software .image-wrapper.songs-theme-sensitive img{
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+}
+
+body.page-software:not(.light-mode) .image-wrapper.songs-theme-sensitive img{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+body.page-software.light-mode .image-wrapper.songs-theme-sensitive img{
+  filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+  -webkit-filter: invert(1) hue-rotate(180deg) contrast(0.95) !important;
+}
+
 /* Projects grid full width with internal padding */
 body.page-software .projects-grid {
   width: 100vw;
