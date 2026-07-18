@@ -10,7 +10,8 @@
     "mywildindia:manifest": "node scripts/generate-mywildindia-photo-manifest.js",
     "mywildindia:captions": "node scripts/sync-mywildindia-caption-spreadsheet.js",
     "mywildindia:captions:watch": "node scripts/watch-mywildindia-caption-spreadsheet.js",
-    "mywildindia:sync": "npm run mywildindia:manifest"
+    "mywildindia:sync": "npm run mywildindia:manifest",
+    "news:sync": "node scripts/sync-news-spreadsheet.js"
   },
   "dependencies": {
     "xlsx": "^0.18.5"

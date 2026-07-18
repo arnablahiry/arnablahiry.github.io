@@ -40,6 +40,7 @@
 
   function startCycle() {
     if (cycleTimer) clearInterval(cycleTimer);
+    if (articles.length < 2) return;
     cycleTimer = setInterval(function () {
       showArticle(currentIndex + 1, true);
     }, 8000);
@@ -55,7 +56,7 @@
   }
 
   function renderNews(data) {
-    articles = data.slice(0, 15);
+    articles = data.slice(0, 5);
     if (!articles.length) return;
     showArticle(0, false);
     startCycle();
@@ -68,46 +69,15 @@
     }
   });
 
-  // Good News Network animals category — official RSS feed, legal to consume
-  var RSS_URL = 'https://www.goodnewsnetwork.org/category/news/animals/feed/';
-  var SOURCE_URL = 'https://www.goodnewsnetwork.org/category/news/animals/';
-
-  var FALLBACK = [
-    '18 Rescue Workers Toil for 6 Hours to Save Dog Trapped Underground',
-    'EU Passes Animal Protection Law for Keeping, Breeding, and Selling',
-    'Butterfly That Went Extinct in Britain a Century Ago Set for Return to Rewilded Estate',
-    'Asiatic Wild Ass Returns to Eastern Mongolia After 65-year Isolation',
-    'Mexican Monarch Butterfly Population Surges 64% in a Single Year',
-    'Giant Tortoises Return to Galápagos Island After 175 Years',
-    'Japan\'s Red-Crowned Crane Removed From Threatened List After Population Recovery',
-    'White Rhinos Return to Uganda\'s Kidepo Valley After 43 Years',
-    'New Zealand\'s Kākāpō Hatches a Record 100+ Chicks in Best Ever Breeding Season',
-    'Rare North Atlantic Right Whale Population Growing Again After Years of Decline',
-    'Green Turtles Bounce Back From Near-Extinction to Least Concern Status',
-    'Scottish Wildcats Thriving in the Highlands as Kittens Born in the Wild',
-    'Record Seahorse Numbers Signal Conservation Success in Dorset',
-    'India\'s Cheetah Reintroduction Programme Boosted by Three New Cubs',
-    'China\'s Yangtze River Shows Dramatic Recovery After Four-Year Fishing Ban'
-  ].map(function(t) { return { title: t, link: SOURCE_URL }; });
-
-  function fetchNews() {
-    var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL) + '&count=15';
-    fetch(apiUrl)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.items || !data.items.length) throw new Error('no items');
-        var items = data.items.map(function(item) {
-          return { title: item.title, link: item.link || SOURCE_URL };
-        });
-        renderNews(items);
-      })
-      .catch(function() {
-        renderNews(FALLBACK);
-      });
+  function loadNews() {
+    var items = (window.NEWS_ITEMS || []).map(function(item) {
+      return { title: item.title, link: item.link || '#' };
+    });
+    renderNews(items);
   }
 
   function revealBox() {
-    fetchNews();
+    loadNews();
     requestAnimationFrame(function () {
       box.classList.add('gn-ready');
     });
