@@ -11,7 +11,8 @@
     "mywildindia:captions": "node scripts/sync-mywildindia-caption-spreadsheet.js",
     "mywildindia:captions:watch": "node scripts/watch-mywildindia-caption-spreadsheet.js",
     "mywildindia:sync": "npm run mywildindia:manifest",
-    "news:sync": "node scripts/sync-news-spreadsheet.js"
+    "news:sync": "node scripts/sync-news-spreadsheet.js",
+    "news:watch": "node scripts/watch-news-spreadsheet.js"
   },
   "dependencies": {
     "xlsx": "^0.18.5"

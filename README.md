@@ -62,3 +62,13 @@ For live watching while you edit files, use:
 ```sh
 node scripts/watch-mywildindia-caption-spreadsheet.js
 ```
+
+## News
+
+Edit home page news in `data/news.xlsx`. To auto-refresh the browser data after each spreadsheet save, start the watcher once:
+
+```sh
+npm run news:watch
+```
+
+The watcher keeps running until you stop it with Ctrl+C.
