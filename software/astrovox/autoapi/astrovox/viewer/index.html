@@ -1,0 +1,1005 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>astrovox.viewer &#8212; AstroVOX</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=423d4ce3"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/astrovox/viewer/index';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://arnablahiry.github.io/software/astrovox/autoapi/astrovox/viewer/index.html" />
+    <link rel="icon" href="../../../_static/volumetric_ico.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="astrovox.gui" href="../gui/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/volumetric_ico.png" class="logo__image only-light" alt="AstroVOX - Home"/>
+    <img src="../../../_static/volumetric_ico.png" class="logo__image only-dark pst-js-only" alt="AstroVOX - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    AstroVOX
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gui.html">Graphical Interface</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html">astrovox</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../cli/index.html">astrovox.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gui/index.html">astrovox.gui</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">astrovox.viewer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/arnablahiry/AstroVOX" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/arnablahiry/AstroVOX/issues/new?title=Issue%20on%20page%20%2Fautoapi/astrovox/viewer/index.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>astrovox.viewer</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.opacity"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.opacity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cmap"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cmap</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_moment0"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_moment0</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.embed_controls"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.embed_controls</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_labels"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_labels</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.spatial_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.spatial_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.colorbar_title"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.colorbar_title</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_ranges"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_ranges</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_label_formats"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_label_formats</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_tick_formatters"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_tick_formatters</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_tick_units"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_tick_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.colorbar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.colorbar_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.scalebar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.scalebar_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.mini_axes_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.mini_axes_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_main_axes_labels"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_main_axes_labels</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_axis_ticks"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_axis_ticks</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_grid_lines"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_grid_lines</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_axes_actor"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_axes_actor</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.vel_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.vel_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.grid"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.grid</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.d_min"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.d_min</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.d_max"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.d_max</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.value_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.value_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.current_clim"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.current_clim</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.is_dark_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.is_dark_theme</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.plotter"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.plotter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_outline_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_thickness"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_outline_thickness</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_style"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_outline_style</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.bbox_actor"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.bbox_actor</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.toggle_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.toggle_theme()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_theme()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_clim"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_clim()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_opacity"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_opacity()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_value_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_value_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cmap"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cmap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.apply_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.apply_theme()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_mini_axes_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_mini_axes_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_main_axes_labels_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_main_axes_labels_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_axis_ticks_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_axis_ticks_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_grid_lines_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_grid_lines_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_colorbar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_colorbar_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_scalebar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_scalebar_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_spatial_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_spatial_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_manual_axis_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_manual_axis_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.clear_manual_axis_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.clear_manual_axis_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_colorbar_title"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_colorbar_title()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cube_outline_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_thickness"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cube_outline_thickness()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_style"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cube_outline_style()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.redraw_volume"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.redraw_volume()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.redraw_moment0"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.redraw_moment0()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.redraw_sliders"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.redraw_sliders()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.load_fits_cube"><code class="docutils literal notranslate"><span class="pre">load_fits_cube()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.load_cube_with_metadata"><code class="docutils literal notranslate"><span class="pre">load_cube_with_metadata()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.numpy_cube_count"><code class="docutils literal notranslate"><span class="pre">numpy_cube_count()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-astrovox.viewer">
+<span id="astrovox-viewer"></span><h1>astrovox.viewer<a class="headerlink" href="#module-astrovox.viewer" title="Link to this heading">#</a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#astrovox.viewer.KinematicVolumeViewer" title="astrovox.viewer.KinematicVolumeViewer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KinematicVolumeViewer</span></code></a></p></td>
+<td><p>Standalone 3D viewer for kinematic spectral cubes with a light/dark theme toggle.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#astrovox.viewer.load_fits_cube" title="astrovox.viewer.load_fits_cube"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_fits_cube</span></code></a>(cube_path)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#astrovox.viewer.load_cube_with_metadata" title="astrovox.viewer.load_cube_with_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_cube_with_metadata</span></code></a>(cube_path[, cube_index])</p></td>
+<td><p>Load a cube (FITS, HDF5, or a bare numpy array) plus whatever</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#astrovox.viewer.numpy_cube_count" title="astrovox.viewer.numpy_cube_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy_cube_count</span></code></a>(→ int)</p></td>
+<td><p>How many separate volumetric cubes this .npy/.npz file holds —</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">astrovox.viewer.</span></span><span class="sig-name descname"><span class="pre">KinematicVolumeViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sigmoid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plasma'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyvista.Plotter</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_moment0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_controls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spatial_scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Intensity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_ranges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_label_formats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_tick_formatters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_tick_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer" title="Link to this definition">#</a></dt>
+<dd><p>Standalone 3D viewer for kinematic spectral cubes with a light/dark theme toggle.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.opacity">
+<span class="sig-name descname"><span class="pre">opacity</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sigmoid'</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.opacity" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.cmap">
+<span class="sig-name descname"><span class="pre">cmap</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'plasma'</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.cmap" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.show_moment0">
+<span class="sig-name descname"><span class="pre">show_moment0</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.show_moment0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.embed_controls">
+<span class="sig-name descname"><span class="pre">embed_controls</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.embed_controls" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.axis_labels">
+<span class="sig-name descname"><span class="pre">axis_labels</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('X',</span> <span class="pre">'Y',</span> <span class="pre">'Z')</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.axis_labels" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.spatial_scale">
+<span class="sig-name descname"><span class="pre">spatial_scale</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.spatial_scale" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.colorbar_title">
+<span class="sig-name descname"><span class="pre">colorbar_title</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Intensity'</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.colorbar_title" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.axis_ranges">
+<span class="sig-name descname"><span class="pre">axis_ranges</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.axis_ranges" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.axis_label_formats">
+<span class="sig-name descname"><span class="pre">axis_label_formats</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('%.2f',</span> <span class="pre">'%.2f',</span> <span class="pre">'%.1f')</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.axis_label_formats" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.axis_tick_formatters">
+<span class="sig-name descname"><span class="pre">axis_tick_formatters</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.axis_tick_formatters" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.axis_tick_units">
+<span class="sig-name descname"><span class="pre">axis_tick_units</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.axis_tick_units" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.colorbar_visible">
+<span class="sig-name descname"><span class="pre">colorbar_visible</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.colorbar_visible" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.scalebar_visible">
+<span class="sig-name descname"><span class="pre">scalebar_visible</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.scalebar_visible" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.mini_axes_visible">
+<span class="sig-name descname"><span class="pre">mini_axes_visible</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.mini_axes_visible" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.show_main_axes_labels">
+<span class="sig-name descname"><span class="pre">show_main_axes_labels</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.show_main_axes_labels" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.show_axis_ticks">
+<span class="sig-name descname"><span class="pre">show_axis_ticks</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.show_axis_ticks" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.show_grid_lines">
+<span class="sig-name descname"><span class="pre">show_grid_lines</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.show_grid_lines" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.cube_axes_actor">
+<span class="sig-name descname"><span class="pre">cube_axes_actor</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.cube_axes_actor" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.cube">
+<span class="sig-name descname"><span class="pre">cube</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.cube" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.vel_scale">
+<span class="sig-name descname"><span class="pre">vel_scale</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.vel_scale" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.grid">
+<span class="sig-name descname"><span class="pre">grid</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.grid" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.d_min">
+<span class="sig-name descname"><span class="pre">d_min</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.d_min" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.d_max">
+<span class="sig-name descname"><span class="pre">d_max</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.d_max" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.value_scale">
+<span class="sig-name descname"><span class="pre">value_scale</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'linear'</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.value_scale" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.current_clim">
+<span class="sig-name descname"><span class="pre">current_clim</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.current_clim" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.is_dark_theme">
+<span class="sig-name descname"><span class="pre">is_dark_theme</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.is_dark_theme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.plotter">
+<span class="sig-name descname"><span class="pre">plotter</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.plotter" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.cube_outline_visible">
+<span class="sig-name descname"><span class="pre">cube_outline_visible</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_visible" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.cube_outline_thickness">
+<span class="sig-name descname"><span class="pre">cube_outline_thickness</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_thickness" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.cube_outline_style">
+<span class="sig-name descname"><span class="pre">cube_outline_style</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'solid'</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_style" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.bbox_actor">
+<span class="sig-name descname"><span class="pre">bbox_actor</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.bbox_actor" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.toggle_theme">
+<span class="sig-name descname"><span class="pre">toggle_theme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.toggle_theme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.toggle_theme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_theme">
+<span class="sig-name descname"><span class="pre">set_theme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_dark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_theme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_theme" title="Link to this definition">#</a></dt>
+<dd><p>Externally driven theme switch (e.g. from a host GUI’s own toggle button).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_clim">
+<span class="sig-name descname"><span class="pre">set_clim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_clim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_clim" title="Link to this definition">#</a></dt>
+<dd><p>Externally driven clim update (e.g. from a host GUI’s own
+sliders). Rebuilds just the volume’s small (256-entry) colour/
+opacity lookup table in place rather than the whole volume actor
+— a full rebuild re-uploads the entire 3D scalar texture to the
+GPU, expensive enough that dragging vmin/vmax while a rotation
+animation is running visibly stutters the rotation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_opacity">
+<span class="sig-name descname"><span class="pre">set_opacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opacity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_opacity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_opacity" title="Link to this definition">#</a></dt>
+<dd><p>Externally driven opacity-transfer-function update (e.g. from a
+host GUI’s own Linear/Log/Power selector). Accepts anything
+PyVista’s <code class="docutils literal notranslate"><span class="pre">add_volume(opacity=...)</span></code> accepts: a preset name or an
+array of per-scalar opacity values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_value_scale">
+<span class="sig-name descname"><span class="pre">set_value_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_value_scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_value_scale" title="Link to this definition">#</a></dt>
+<dd><p>Switch the volume’s data-to-colour mapping (and, in turn, the
+colorbar) between “linear” and “log10” — distinct from the
+Linear/Log/Power <em>opacity</em> transfer function (set_opacity),
+which only reshapes alpha falloff and leaves colour mapping
+linear regardless. vmin/vmax (current_clim) stay in real,
+linear units always; only the mapping is log.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_cmap">
+<span class="sig-name descname"><span class="pre">set_cmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_cmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_cmap" title="Link to this definition">#</a></dt>
+<dd><p>Externally driven colormap update (e.g. from a host GUI’s own
+colormap dropdown).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.apply_theme">
+<span class="sig-name descname"><span class="pre">apply_theme</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.apply_theme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.apply_theme" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_mini_axes_visible">
+<span class="sig-name descname"><span class="pre">set_mini_axes_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_mini_axes_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_mini_axes_visible" title="Link to this definition">#</a></dt>
+<dd><p>Show/hide the small bottom-left orientation-widget triad.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_main_axes_labels_visible">
+<span class="sig-name descname"><span class="pre">set_main_axes_labels_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_main_axes_labels_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_main_axes_labels_visible" title="Link to this definition">#</a></dt>
+<dd><p>Toggle the axis <em>name</em> labels (e.g. “RA”/”Dec”/”km/s”) on the
+main cube’s own 3 dynamically-chosen edges — independent of the
+numeric tick marks/values (see set_axis_ticks_visible).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_axis_ticks_visible">
+<span class="sig-name descname"><span class="pre">set_axis_ticks_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_axis_ticks_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_axis_ticks_visible" title="Link to this definition">#</a></dt>
+<dd><p>Toggle tick marks + numeric tick-value labels on the main
+cube’s 3 dynamically-chosen edges.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_grid_lines_visible">
+<span class="sig-name descname"><span class="pre">set_grid_lines_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_grid_lines_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_grid_lines_visible" title="Link to this definition">#</a></dt>
+<dd><p>Toggle faint (low-opacity) grid lines spanning the volume.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_colorbar_visible">
+<span class="sig-name descname"><span class="pre">set_colorbar_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_colorbar_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_colorbar_visible" title="Link to this definition">#</a></dt>
+<dd><p>Toggle the top-right colorbar (swatch + border/ticks + title).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_scalebar_visible">
+<span class="sig-name descname"><span class="pre">set_scalebar_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_scalebar_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_scalebar_visible" title="Link to this definition">#</a></dt>
+<dd><p>Toggle the top-left scale bar (bracket + length label).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_spatial_scale">
+<span class="sig-name descname"><span class="pre">set_spatial_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_per_voxel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_spatial_scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_spatial_scale" title="Link to this definition">#</a></dt>
+<dd><p>Supply (or replace) the physical length a voxel spans, e.g.
+after the user fills in “Field of view” for a numpy cube that
+was loaded with no spatial scale at all — the scale bar actors
+are only ever built once a scale exists in the first place.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_manual_axis_scale">
+<span class="sig-name descname"><span class="pre">set_manual_axis_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_per_voxel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">centered</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_manual_axis_scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_manual_axis_scale" title="Link to this definition">#</a></dt>
+<dd><p>Give a numpy-array cube’s otherwise-unitless axis (raw voxel-
+index ticks) real physical units, once the user has supplied
+Field of view (for the spatial axes) or Spectral Resolution (for
+the velocity axis) plus a unit — the same custom tick/title
+machinery already used for FITS/HDF5 cubes’ RA/Dec/velocity
+axes, just populated interactively rather than at load time.
+<code class="docutils literal notranslate"><span class="pre">unit_text</span></code> is shown, LaTeX-rendered (matplotlib mathtext), in
+parentheses after that axis’s title, e.g. “X ($M_odot/h$)”.
+<code class="docutils literal notranslate"><span class="pre">centered</span></code>: a spatial (Field of view) axis’s ticks run 0 -&gt; N
+from one vertex of the cube; the velocity (Spectral Resolution)
+axis instead centres on systemic velocity, -N/2 -&gt; N/2 — pass
+True for that one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.clear_manual_axis_scale">
+<span class="sig-name descname"><span class="pre">clear_manual_axis_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.clear_manual_axis_scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.clear_manual_axis_scale" title="Link to this definition">#</a></dt>
+<dd><p>Revert one axis back to raw voxel-index ticks — used when the
+user clears its Field of view/unit or Spectral Resolution/unit
+fields, or switches Type of cube to PPP (no velocity axis).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_colorbar_title">
+<span class="sig-name descname"><span class="pre">set_colorbar_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_colorbar_title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_colorbar_title" title="Link to this definition">#</a></dt>
+<dd><p>Change the colorbar’s title text, e.g. once the user fills in
+“Quantity Units” for a numpy cube that started with a blank
+title.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_cube_outline_visible">
+<span class="sig-name descname"><span class="pre">set_cube_outline_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_cube_outline_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_visible" title="Link to this definition">#</a></dt>
+<dd><p>Toggle the wireframe box outlining the volume’s bounds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_cube_outline_thickness">
+<span class="sig-name descname"><span class="pre">set_cube_outline_thickness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_cube_outline_thickness"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_thickness" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.set_cube_outline_style">
+<span class="sig-name descname"><span class="pre">set_cube_outline_style</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.set_cube_outline_style"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_style" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.redraw_volume">
+<span class="sig-name descname"><span class="pre">redraw_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.redraw_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.redraw_volume" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.redraw_moment0">
+<span class="sig-name descname"><span class="pre">redraw_moment0</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.redraw_moment0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.redraw_moment0" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.redraw_sliders">
+<span class="sig-name descname"><span class="pre">redraw_sliders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_color</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.redraw_sliders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.redraw_sliders" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="astrovox.viewer.KinematicVolumeViewer.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#KinematicVolumeViewer.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.KinematicVolumeViewer.show" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="astrovox.viewer.load_fits_cube">
+<span class="sig-prename descclassname"><span class="pre">astrovox.viewer.</span></span><span class="sig-name descname"><span class="pre">load_fits_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#load_fits_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.load_fits_cube" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="astrovox.viewer.load_cube_with_metadata">
+<span class="sig-prename descclassname"><span class="pre">astrovox.viewer.</span></span><span class="sig-name descname"><span class="pre">load_cube_with_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cube_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#load_cube_with_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.load_cube_with_metadata" title="Link to this definition">#</a></dt>
+<dd><p>Load a cube (FITS, HDF5, or a bare numpy array) plus whatever
+observational metadata its header/attrs expose. Returns <code class="docutils literal notranslate"><span class="pre">(cube,</span>
+<span class="pre">info,</span> <span class="pre">extra)</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">info</span></code>: an ordered dict of only the display fields that were
+actually present — callers should skip any key that’s missing
+rather than assume a fixed set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">extra</span></code>: <code class="docutils literal notranslate"><span class="pre">{&quot;axis_labels&quot;:</span> <span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z),</span> <span class="pre">&quot;spatial_scale&quot;:</span>
+<span class="pre">(value_per_voxel,</span> <span class="pre">unit)</span> <span class="pre">|</span> <span class="pre">None}</span></code> for the viewer’s axes/scale bar.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">cube_index</span></code> only applies to a .npy/.npz file holding more than
+one volumetric cube (see numpy_cube_count) — ignored otherwise.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="astrovox.viewer.numpy_cube_count">
+<span class="sig-prename descclassname"><span class="pre">astrovox.viewer.</span></span><span class="sig-name descname"><span class="pre">numpy_cube_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../../_modules/astrovox/viewer.html#numpy_cube_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#astrovox.viewer.numpy_cube_count" title="Link to this definition">#</a></dt>
+<dd><p>How many separate volumetric cubes this .npy/.npz file holds —
+either multiple arrays in an .npz, or a single 4D array stacking
+several cubes along axis 0. 1 if it’s just one plain cube.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../gui/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">astrovox.gui</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.opacity"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.opacity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cmap"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cmap</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_moment0"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_moment0</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.embed_controls"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.embed_controls</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_labels"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_labels</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.spatial_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.spatial_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.colorbar_title"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.colorbar_title</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_ranges"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_ranges</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_label_formats"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_label_formats</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_tick_formatters"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_tick_formatters</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.axis_tick_units"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.axis_tick_units</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.colorbar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.colorbar_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.scalebar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.scalebar_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.mini_axes_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.mini_axes_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_main_axes_labels"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_main_axes_labels</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_axis_ticks"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_axis_ticks</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show_grid_lines"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show_grid_lines</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_axes_actor"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_axes_actor</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.vel_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.vel_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.grid"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.grid</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.d_min"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.d_min</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.d_max"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.d_max</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.value_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.value_scale</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.current_clim"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.current_clim</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.is_dark_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.is_dark_theme</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.plotter"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.plotter</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_outline_visible</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_thickness"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_outline_thickness</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.cube_outline_style"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.cube_outline_style</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.bbox_actor"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.bbox_actor</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.toggle_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.toggle_theme()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_theme()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_clim"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_clim()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_opacity"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_opacity()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_value_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_value_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cmap"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cmap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.apply_theme"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.apply_theme()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_mini_axes_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_mini_axes_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_main_axes_labels_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_main_axes_labels_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_axis_ticks_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_axis_ticks_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_grid_lines_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_grid_lines_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_colorbar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_colorbar_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_scalebar_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_scalebar_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_spatial_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_spatial_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_manual_axis_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_manual_axis_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.clear_manual_axis_scale"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.clear_manual_axis_scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_colorbar_title"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_colorbar_title()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_visible"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cube_outline_visible()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_thickness"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cube_outline_thickness()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.set_cube_outline_style"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.set_cube_outline_style()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.redraw_volume"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.redraw_volume()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.redraw_moment0"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.redraw_moment0()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.redraw_sliders"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.redraw_sliders()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.KinematicVolumeViewer.show"><code class="docutils literal notranslate"><span class="pre">KinematicVolumeViewer.show()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.load_fits_cube"><code class="docutils literal notranslate"><span class="pre">load_fits_cube()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.load_cube_with_metadata"><code class="docutils literal notranslate"><span class="pre">load_cube_with_metadata()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#astrovox.viewer.numpy_cube_count"><code class="docutils literal notranslate"><span class="pre">numpy_cube_count()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Arnab Lahiry
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Arnab Lahiry.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
