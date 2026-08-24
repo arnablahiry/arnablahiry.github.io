@@ -306,6 +306,89 @@ g.visualise(results, idx=0, save=False)</code></pre>
                             </div>
                     </article>
 
+                    <article class="project-card" data-tags="end-to-end, science">
+                        <img class="project-image" src="images/softwares/astrovox_banner.png" alt="AstroVOX project banner" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <h3 class="project-title">AstroVOX</h3>
+                            <p class="project-subtitle">A GUI for visualizing astrophysical and cosmological 3D data cubes.</p>
+                            <div class="project-tags">
+                                <span class="tag-chip">End-to-end</span>
+                                <span class="tag-chip">Science</span>
+                                <div class="project-badges" aria-hidden="true">
+                                    <a href="https://github.com/arnablahiry/AstroVOX/actions/workflows/tests.yml" target="_blank" rel="noopener"><img src="https://github.com/arnablahiry/AstroVOX/actions/workflows/tests.yml/badge.svg" alt="Tests status" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/AstroVOX" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/python-3.9%2B-blue" alt="Python 3.9+" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/AstroVOX/blob/main/LICENSE" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License" loading="lazy" decoding="async"></a>
+                                </div>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="https://github.com/arnablahiry/AstroVOX" aria-label="AstroVOX GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
+                                <a class="project-icon-link" href="https://arnablahiry.github.io/software/astrovox/" aria-label="AstroVOX documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
+                            </div>
+                        </div>
+                        <div class="project-full" id="proj-astrovox-desc" hidden>
+                            <h1>AstroVOX</h1>
+                            <p>
+                                <strong>AstroVOX</strong> is a desktop visualization application for volumetric data cubes commonly encountered in astronomy and astrophysics: interferometric and single-dish spectral-line cubes (e.g. HI, CO), integral-field spectroscopy data, and simulated cosmological/hydrodynamical volumes (e.g. CAMELS, IllustrisTNG). It renders the cube as an interactive, GPU-accelerated 3D volume built on PyVista and VTK, wrapped in a control panel purpose-built for cube inspection rather than general-purpose plotting.
+                            </p>
+                            <p>
+                                Any cube axis ordering is supported and labelled accordingly: <strong>PPP</strong> (position&ndash;position&ndash;position, e.g. a spatial density field from a simulation snapshot), and <strong>PPV / PVP / VPP</strong> (position&ndash;position&ndash;velocity cubes and axis permutations thereof, the standard layout for spectral-line radio/mm-wave and IFU data).
+                            </p>
+
+                            <div class="image-pair">
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/astrovox_astro_dark.png" alt="AstroVOX rendering an ALMA-observed PPV spectral-line cube, dark theme" loading="lazy" decoding="async">
+                                </div>
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/astrovox_astro_light.png" alt="AstroVOX rendering an ALMA-observed PPV spectral-line cube, light theme" loading="lazy" decoding="async">
+                                </div>
+                            </div>
+                            <p style="text-align:center;"><em>A PPV spectral-line cube of the ALMA-observed IC5179 galaxy FITS file, in dark and light theme.</em></p>
+
+                            <div class="image-pair">
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/astrovox_cosmo_dark.png" alt="AstroVOX rendering a PPP cosmological simulation volume, dark theme" loading="lazy" decoding="async">
+                                </div>
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/astrovox_cosmo_light.png" alt="AstroVOX rendering a PPP cosmological simulation volume, light theme" loading="lazy" decoding="async">
+                                </div>
+                            </div>
+                            <p style="text-align:center;"><em>A PPP cosmological simulation volume NumPy array (CAMELS Multifield Dataset, IllustrisTNG suite, total matter density grid), in dark and light theme.</em></p>
+
+                            <h3>Supported formats</h3>
+                            <ul>
+                                <li><strong>FITS</strong> (<code>.fits</code>, <code>.fit</code>, <code>.fts</code>) and <strong>HDF5</strong> (<code>.h5</code>, <code>.hdf5</code>) &ndash; metadata (header/attrs, WCS, intensity units) is read directly from the file and used to pre-fill the cube info fields.</li>
+                                <li><strong>NumPy arrays</strong> (<code>.npy</code>, <code>.npz</code>) &ndash; carry no physical metadata, so units, field of view, spectral resolution, and quantity/intensity units are filled in manually for a physically meaningful render.</li>
+                            </ul>
+
+                            <h3>Key Capabilities</h3>
+                            <ul>
+                                <li><strong>Cube metadata</strong> &ndash; name, telescope/simulation origin, cube type (PPP/PPV/PVP/VPP), field of view with physical unit, spectral resolution with unit, and quantity/intensity units, all shown alongside the render.</li>
+                                <li><strong>Transfer function controls</strong> &ndash; independent V<sub>min</sub>/V<sub>max</sub> range sliders, and Linear, Log, or Power (with adjustable gamma) scaling of the volume's color and opacity mapping, plus a colormap selector.</li>
+                                <li><strong>Camera &amp; orientation</strong> &ndash; free rotation, or snap the view to a fixed X-Y, Y-Z, or X-Z plane.</li>
+                                <li><strong>Visual aesthetics toggles</strong> &ndash; mini orientation axes, main axes labels, tick marks and tick labels, grid lines, colorbar, scale bar, and cube outline (with selectable line style and thickness).</li>
+                                <li><strong>2D Projection / Moment 0</strong> &ndash; a line-of-sight projection at the volume's current camera orientation for a PPP cube, or a real moment-0 map for a PPV/PVP/VPP cube, opened in its own window with independent scale, colormap, and export controls; a FITS cube with a valid WCS renders true sky-coordinate (RA/Dec) axes.</li>
+                                <li><strong>Animation</strong> &ndash; independent azimuth (horizontal) and elevation (vertical) auto-rotation, each with its own play/stop control and adjustable angular velocity.</li>
+                                <li><strong>Export</strong> &ndash; record a rotating fly-around to video at a chosen frame rate, or save the current view as a static frame in a chosen image format.</li>
+                                <li><strong>Light/dark theme</strong> toggle, and a one-click reset back to defaults.</li>
+                            </ul>
+
+                            <h3>Quick install &amp; launch</h3>
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">pip install astrovox
+astrovox</code></pre>
+                            </div>
+                            <p>
+                                To launch straight into a cube instead of starting on the drop-zone landing page, pass its path: <code>astrovox &lt;path_to_cube&gt;</code>.
+                            </p>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
+                            </ul>
+                        </div>
+                    </article>
+
                     <article class="project-card" data-tags="end-to-end, science, fun">
                         <img class="project-image" src="images/softwares/galaxy_textures.png" alt="Galaxy Morphological Textures banner" loading="lazy" decoding="async">
                         <div class="project-meta">
@@ -317,15 +400,108 @@ g.visualise(results, idx=0, save=False)</code></pre>
                                 <span class="tag-chip">Fun</span>
                                 <div class="project-badges" aria-hidden="true">
                                     <a href="https://github.com/arnablahiry/Galaxy-Morphological-Textures/actions/workflows/test.yaml" target="_blank" rel="noopener"><img src="https://github.com/arnablahiry/Galaxy-Morphological-Textures/actions/workflows/test.yaml/badge.svg" alt="Tests status" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/Galaxy-Morphological-Textures/actions/workflows/docs.yml" target="_blank" rel="noopener"><img src="https://github.com/arnablahiry/Galaxy-Morphological-Textures/actions/workflows/docs.yml/badge.svg" alt="Docs status" loading="lazy" decoding="async"></a>
                                     <a href="https://github.com/arnablahiry/Galaxy-Morphological-Textures" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/python-≥3.9-blue.svg" alt="Python Version" loading="lazy" decoding="async"></a>
                                     <a href="https://github.com/arnablahiry/Galaxy-Morphological-Textures/blob/main/LICENSE" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License" loading="lazy" decoding="async"></a>
                                 </div>
                             </div>
                             <div class="project-icons">
                                 <a class="project-icon-link" href="https://github.com/arnablahiry/Galaxy-Morphological-Textures" aria-label="Galaxy Morphological Textures GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
+                                <a class="project-icon-link" href="https://arnablahiry.github.io/software/toy-galaxy-morphological-textures/" aria-label="Galaxy Morphological Textures documentation (Sphinx)" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/sphinx_software.png" alt="Sphinx" loading="lazy" decoding="async"></a>
                             </div>
                         </div>
-                        <div class="project-full" id="proj-galaxy-textures-desc" hidden></div>
+                        <div class="project-full" id="proj-galaxy-textures-desc" hidden>
+
+                            <p>
+                                <strong>Galaxy Morphological Textures</strong> is a small procedural image generator for synthetic galaxy morphology experiments, built with PyTorch and explicit analytic shapes so the signals are easy to control and the output stays readable for interpretability work. It is not a physical simulation and it is not calibrated to real survey data.
+                            </p>
+
+                            <p>
+                                The main idea is simple: each galaxy type is rendered by its own module, the shared dispatcher lives in one place, and the example script shows the whole set in one grid. That keeps the code easy to skim when you want to see what a given class actually does.
+                            </p>
+
+                            <div class="image-wrapper no-invert">
+                                <img src="images/softwares/galaxy_textures.png" alt="Texture grid of all six morphology classes" loading="lazy" decoding="async">
+                            </div>
+                            <p style="text-align:center; font-size: 0.9em; opacity: 0.75;">Each row shows a different class, with 5 realizations per class.</p>
+
+                            <h3>Morphology Classes</h3>
+                            <p>
+                                The public entry point, <code>make_galaxy(kind, size=128, ...)</code>, dispatches on an integer <code>kind</code> across six classes:
+                            </p>
+                            <ul>
+                                <li><strong>0 — elliptical:</strong> smooth bulge with a warped halo.</li>
+                                <li><strong>1 — spiral:</strong> 2-3 arms, occasional bifurcation, bright knots.</li>
+                                <li><strong>2 — barred spiral:</strong> compact bar with arms rooted at the bar ends.</li>
+                                <li><strong>3 — merger:</strong> two interacting disks with bridge and tidal tails.</li>
+                                <li><strong>4 — edge-on:</strong> thin disk, bulge, dust lane.</li>
+                                <li><strong>5 — irregular:</strong> clumpy body with noisy, disturbed structure.</li>
+                            </ul>
+
+                            <h3>What Lives Where</h3>
+                            <ul>
+                                <li><strong>galaxy_textures/generator.py</strong> — public <code>make_galaxy</code> entry point and class dispatch.</li>
+                                <li><strong>galaxy_textures/elliptical.py</strong> — smooth elliptical renderer with a warped outer halo.</li>
+                                <li><strong>galaxy_textures/spiral.py</strong> — spiral renderer with bifurcating arms and HII knots.</li>
+                                <li><strong>galaxy_textures/barred_spiral.py</strong> — barred spiral renderer with arms anchored at the bar tips.</li>
+                                <li><strong>galaxy_textures/merger.py</strong> — interacting pair renderer with bridge and tidal tails.</li>
+                                <li><strong>galaxy_textures/edge_on.py</strong> — edge-on disk renderer with dust lane and flare.</li>
+                                <li><strong>galaxy_textures/irregular.py</strong> — clumpy irregular renderer with optional tidal debris.</li>
+                                <li><strong>galaxy_textures/shared.py</strong> — shared satellites, background, and noise helpers.</li>
+                                <li><strong>examples/render_grid.py</strong> — quick visual check that samples all six classes.</li>
+                            </ul>
+
+                            <h3>Installation & Usage</h3>
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">pip install -r requirements.txt
+# or, as an editable package:
+pip install -e .</code></pre>
+                            </div>
+
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">
+import torch
+from galaxy_textures import CLASSES, make_galaxy
+
+torch.manual_seed(0)
+img = make_galaxy(kind=1, size=128)
+# img is a torch.Tensor with shape (1, 128, 128)
+
+# Merger-only overrides:
+img = make_galaxy(kind=3, size=128, stage=0.8, merger_barred=True)</code></pre>
+                            </div>
+
+                            <p>
+                                To preview the whole set as a grid:
+                            </p>
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">python examples/render_grid.py --out galaxy_textures_grid.png</code></pre>
+                            </div>
+
+                            <h3>Notes</h3>
+                            <p>
+                                This is intentionally stylized. A few important simplifications:
+                            </p>
+                            <ul>
+                                <li>Single-band grayscale only, so you do not get real color cues.</li>
+                                <li>Gaussian noise is added, but there is no PSF/seeing model.</li>
+                                <li>Merger structure is a controlled cartoon of tidal interaction, not an N-body simulation.</li>
+                                <li>The classes are cleaner than real survey data on purpose, which makes the set better for demos than for benchmarking survey-grade classification.</li>
+                            </ul>
+
+                            <h3>Documentation</h3>
+                            <p>
+                                Full docs, including installation, quickstart, and API reference, are published at <a href="https://arnablahiry.github.io/software/toy-galaxy-morphological-textures/" target="_blank" rel="noopener">arnablahiry.github.io/software/toy-galaxy-morphological-textures</a>.
+                            </p>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
+                            </ul>
+                        </div>
                     </article>
 
                     <article class="project-card" data-tags="collaboration, fun">
