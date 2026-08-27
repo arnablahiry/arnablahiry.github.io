@@ -26,43 +26,50 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../../_static/documentation_options.js?v=423d4ce3"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/songs/utils';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="../../_static/songs_icon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -88,7 +95,47 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
     </header>
   
 
@@ -216,11 +263,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -253,13 +307,13 @@
                   
   <h1>Source code for songs.utils</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="sd">&quot;&quot;&quot;Utility functions for IFU spectral cube processing.</span>
+<span class="sd">"""Utility functions for IFU spectral cube processing.</span>
 
 <span class="sd">This module provides essential helpers for working with synthetic and observed</span>
 <span class="sd">IFU data: beam annotation for figures, circular aperture masks for simple</span>
 <span class="sd">photometry, beam convolution, and noise application (with or without beam</span>
 <span class="sd">correlation). Functions are kept small and focused to aid reuse.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">astropy.convolution</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gaussian2DKernel</span><span class="p">,</span> <span class="n">convolve_fft</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -268,8 +322,8 @@
 
 <div class="viewcode-block" id="add_beam">
 <a class="viewcode-back" href="../../utilities.html#songs.utils.add_beam">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">add_beam</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">bmin_pix</span><span class="p">,</span> <span class="n">bmaj_pix</span><span class="p">,</span> <span class="n">bpa_deg</span><span class="p">,</span> <span class="n">xy_offset</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">crosshair</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_beam</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">bmin_pix</span><span class="p">,</span> <span class="n">bmaj_pix</span><span class="p">,</span> <span class="n">bpa_deg</span><span class="p">,</span> <span class="n">xy_offset</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">'white'</span><span class="p">,</span> <span class="n">crosshair</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Add a synthesized beam ellipse visualization to a matplotlib plot.</span>
 <span class="sd">    </span>
 <span class="sd">    This function draws the instrumental beam pattern for radio interferometric observations,</span>
@@ -302,9 +356,9 @@
 <span class="sd">        Controls beam ellipse placement for optimal visibility.</span>
 <span class="sd">        Adjust if beam overlaps with important image features.</span>
 <span class="sd">    color : str, optional</span>
-<span class="sd">        Color of the beam ellipse and crosshair lines, by default &#39;white&#39;.</span>
+<span class="sd">        Color of the beam ellipse and crosshair lines, by default 'white'.</span>
 <span class="sd">        Choose color for good contrast against the background image.</span>
-<span class="sd">        Common choices: &#39;white&#39;, &#39;black&#39;, &#39;red&#39;, &#39;cyan&#39;.</span>
+<span class="sd">        Common choices: 'white', 'black', 'red', 'cyan'.</span>
 <span class="sd">    crosshair : bool, optional</span>
 <span class="sd">        Whether to draw crosshairs along major/minor axes, by default True.</span>
 <span class="sd">        Crosshairs help visualize beam orientation and principal axes.</span>
@@ -330,12 +384,12 @@
 <span class="sd">    &gt;&gt;&gt; ax.imshow(radio_image)</span>
 <span class="sd">    &gt;&gt;&gt; # Add beam for ALMA observation</span>
 <span class="sd">    &gt;&gt;&gt; add_beam(ax, bmin_pix=2.5, bmaj_pix=3.2, bpa_deg=45.0, </span>
-<span class="sd">    ...          xy_offset=(15, 15), color=&#39;white&#39;)</span>
+<span class="sd">    ...          xy_offset=(15, 15), color='white')</span>
 <span class="sd">    </span>
 <span class="sd">    &gt;&gt;&gt; # Simple circular beam without crosshairs</span>
 <span class="sd">    &gt;&gt;&gt; add_beam(ax, bmin_pix=4.0, bmaj_pix=4.0, bpa_deg=0.0,</span>
-<span class="sd">    ...          crosshair=False, color=&#39;red&#39;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    ...          crosshair=False, color='red')</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Get current plot limits to determine beam placement</span>
     <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
@@ -351,7 +405,7 @@
                    <span class="n">height</span><span class="o">=</span><span class="n">bmin_pix</span><span class="p">,</span>     <span class="c1"># Minor axis defines ellipse height  </span>
                    <span class="n">angle</span><span class="o">=</span><span class="n">bpa_deg</span><span class="p">,</span>       <span class="c1"># Rotation angle in degrees</span>
                    <span class="n">edgecolor</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>     <span class="c1"># Outline color</span>
-                   <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>    <span class="c1"># Transparent interior</span>
+                   <span class="n">facecolor</span><span class="o">=</span><span class="s1">'none'</span><span class="p">,</span>    <span class="c1"># Transparent interior</span>
                    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># Line thickness</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">beam</span><span class="p">)</span>
 
@@ -388,7 +442,7 @@
 <div class="viewcode-block" id="create_circular_aperture_mask">
 <a class="viewcode-back" href="../../utilities.html#songs.utils.create_circular_aperture_mask">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_circular_aperture_mask</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">R_e</span><span class="p">,</span> <span class="n">beam_width_px</span><span class="p">,</span> <span class="n">x_center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_center</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a circular aperture mask for photometric analysis of spectral cubes.</span>
 <span class="sd">    </span>
 <span class="sd">    This function generates a 3D boolean mask for extracting flux from a circular region,</span>
@@ -466,7 +520,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    astropy.photutils.aperture_photometry : More sophisticated aperture analysis</span>
 <span class="sd">    photutils.CircularAperture : Alternative aperture implementation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Calculate source diameter from effective radius</span>
     <span class="n">D_e</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">R_e</span>
@@ -478,11 +532,11 @@
     <span class="k">if</span> <span class="n">D_e</span> <span class="o">&gt;=</span> <span class="n">beam_px</span><span class="p">:</span>
         <span class="c1"># Extended source case: source is larger than beam resolution</span>
         <span class="n">D_aper</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">D_e</span>  <span class="c1"># Aperture = 4×R_e to capture extended emission</span>
-        <span class="c1">#print(f&#39;D_e {D_e} is larger than beam size {beam_px}&#39;)</span>
+        <span class="c1">#print(f'D_e {D_e} is larger than beam size {beam_px}')</span>
     <span class="k">elif</span> <span class="n">beam_px</span> <span class="o">&gt;</span> <span class="n">D_e</span><span class="p">:</span>
         <span class="c1"># Beam-limited source case: beam is larger than intrinsic source size  </span>
         <span class="n">D_aper</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">beam_px</span>  <span class="c1"># Aperture = 2×beam to capture beam-convolved emission</span>
-        <span class="c1">#print(f&#39;Beam_px {beam_px} is larger than D_e {D_e}&#39;)</span>
+        <span class="c1">#print(f'Beam_px {beam_px} is larger than D_e {D_e}')</span>
 
     <span class="c1"># Extract cube dimensions</span>
     <span class="n">n_channels</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">shape</span>
@@ -498,8 +552,8 @@
     <span class="n">dist_from_center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="n">x_center</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="n">y_center</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Legacy code for more complex aperture sizing (kept as documentation)</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;# Base aperture radius</span>
-<span class="sd">    aperture_radius = offset + k * R_e&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''# Base aperture radius</span>
+<span class="sd">    aperture_radius = offset + k * R_e'''</span>
 
     <span class="c1"># Create 2D circular mask: True for pixels within aperture radius</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">dist_from_center</span> <span class="o">&lt;=</span> <span class="n">D_aper</span><span class="o">/</span><span class="mi">2</span>
@@ -514,7 +568,7 @@
 <div class="viewcode-block" id="convolve_beam">
 <a class="viewcode-back" href="../../utilities.html#songs.utils.convolve_beam">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">convolve_beam</span><span class="p">(</span><span class="n">spectral_cube</span><span class="p">,</span> <span class="n">beam_list</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convolve a 3D spectral cube with an elliptical 2D Gaussian beam to simulate instrumental effects.</span>
 <span class="sd">    </span>
 <span class="sd">    This function applies beam convolution to each spectral channel independently, simulating</span>
@@ -594,7 +648,7 @@
 <span class="sd">    astropy.convolution.convolve_fft : Underlying convolution implementation</span>
 <span class="sd">    astropy.convolution.Gaussian2DKernel : 2D Gaussian kernel creation</span>
 <span class="sd">    radio_beam : Package for more sophisticated beam handling</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Initialize output array with same dimensions as input</span>
     <span class="n">convolved_spectral_cube_px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">spectral_cube</span><span class="p">)</span>
     
@@ -649,7 +703,7 @@
 <div class="viewcode-block" id="apply_and_convolve_noise">
 <a class="viewcode-back" href="../../utilities.html#songs.utils.apply_and_convolve_noise">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">apply_and_convolve_noise</span><span class="p">(</span><span class="n">spectral_cube</span><span class="p">,</span> <span class="n">beam_list</span><span class="p">,</span> <span class="n">peak_snr</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Apply realistic interferometric noise with beam convolution to a spectral cube.</span>
 <span class="sd">    </span>
 <span class="sd">    This function simulates realistic interferometer observations by adding correlated</span>
@@ -699,7 +753,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    apply_noise : Add noise without beam convolution</span>
 <span class="sd">    convolve_beam : Beam convolution without noise addition</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Step 1: Estimate peak flux for noise scaling</span>
     <span class="n">peak_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">spectral_cube</span><span class="p">)</span>
     <span class="n">target_noise_rms</span> <span class="o">=</span> <span class="n">peak_flux</span> <span class="o">/</span> <span class="n">peak_snr</span>  <span class="c1"># Calculate target noise level</span>
@@ -736,7 +790,7 @@
 <div class="viewcode-block" id="apply_noise">
 <a class="viewcode-back" href="../../utilities.html#songs.utils.apply_noise">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">apply_noise</span><span class="p">(</span><span class="n">spectral_cube</span><span class="p">,</span> <span class="n">peak_snr</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Add uncorrelated Gaussian thermal noise to a spectral cube.</span>
 <span class="sd">    </span>
 <span class="sd">    This function simulates basic noise that would be present in</span>
@@ -774,7 +828,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    apply_and_convolve_noise : Add noise with beam convolution effects</span>
 <span class="sd">    convolve_beam : Spatial convolution without noise addition</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Calculate peak signal amplitude for noise scaling</span>
     <span class="n">signal_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">spectral_cube</span><span class="p">)</span>
     
@@ -856,8 +910,8 @@ By Arnab Lahiry
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -27,17 +27,17 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="_static/documentation_options.js?v=423d4ce3"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
@@ -46,6 +46,7 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'gui';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="icon" href="_static/songs_icon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -54,20 +55,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -93,7 +100,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -267,11 +318,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -299,7 +357,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-notes">Design notes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.LogWindow"><code class="docutils literal notranslate"><span class="pre">LogWindow</span></code></a><ul class="nav section-nav flex-column">
@@ -309,12 +367,17 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI"><code class="docutils literal notranslate"><span class="pre">SONGSGUI</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.create_generator"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.create_generator()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.generate"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.generate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.generate_dataset"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.generate_dataset()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.load_cube"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.load_cube()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.make_dual_slider"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.make_dual_slider()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.make_range_slider"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.make_range_slider()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.make_slider"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.make_slider()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.reset_instance"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.reset_instance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.save_sim"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.save_sim()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.show_analysis"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.show_analysis()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.show_logs"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.show_logs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.show_slice"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.show_slice()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.stop_generation"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.stop_generation()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.TextRedirector"><code class="docutils literal notranslate"><span class="pre">TextRedirector</span></code></a><ul class="nav section-nav flex-column">
@@ -422,7 +485,7 @@ window restores the original streams when closed.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="songs.gui.SONGSGUI">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">songs.gui.</span></span><span class="sig-name descname"><span class="pre">SONGSGUI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'dark'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">songs.gui.</span></span><span class="sig-name descname"><span class="pre">SONGSGUI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'light'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Tk</span></code></p>
 <p>Main GUI application for interactively configuring and running
 SONGS simulations.</p>
@@ -504,6 +567,52 @@ from the collected parameters so the generator is ready to run.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="songs.gui.SONGSGUI.generate_dataset">
+<span class="sig-name descname"><span class="pre">generate_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.generate_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.generate_dataset" title="Link to this definition">#</a></dt>
+<dd><p>Kick off batch generation for Large-Dataset Mode: samples fresh
+parameters per cube, generates it, optionally adds correlated
+beam-convolved noise, and writes clean/noisy HDF5 files (with the
+full per-cube parameter manifest as a JSON header attribute) plus
+one dataset-level pickle summarising every cube. Runs in a
+background thread; the GUI only reads/writes Tk state before the
+thread starts and via <code class="docutils literal notranslate"><span class="pre">self.after(0,</span> <span class="pre">...)</span></code> afterwards.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="songs.gui.SONGSGUI.load_cube">
+<span class="sig-name descname"><span class="pre">load_cube</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.load_cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.load_cube" title="Link to this definition">#</a></dt>
+<dd><p>Open a SONGS HDF5 cube for viewing only (Slice/Analysis), without
+running the generator. Populates every slider from the file’s
+<code class="docutils literal notranslate"><span class="pre">parameters_json</span></code> header and locks the UI read-only until Reset is
+pressed. If the file has both a clean and a noisy version of the
+cube (see _save_cube_hdf5), both are loaded and the Slice/Analysis
+viewers get the same Clean/Noisy toggle used for live generation —
+no more up-front “which one?” prompt.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="songs.gui.SONGSGUI.make_dual_slider">
+<span class="sig-name descname"><span class="pre">make_dual_slider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:.2f}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.make_dual_slider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.make_dual_slider" title="Link to this definition">#</a></dt>
+<dd><p>A single card row that shows a classic make_slider() (single
+value, <code class="docutils literal notranslate"><span class="pre">var</span></code>) in single-cube mode, or a make_range_slider()
+(<code class="docutils literal notranslate"><span class="pre">var_min</span></code>/<code class="docutils literal notranslate"><span class="pre">var_max</span></code>) in Large-Dataset Mode — swapped in place
+whenever the mode toggles (see self._dual_sliders, refreshed by
+_apply_large_dataset_mode). Every parameter in Central Galaxy /
+Satellite / Diffuse Features uses this so the same card works in
+both modes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="songs.gui.SONGSGUI.make_range_slider">
+<span class="sig-name descname"><span class="pre">make_range_slider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:.2f}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.make_range_slider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.make_range_slider" title="Link to this definition">#</a></dt>
+<dd><p>Single-row dual-handle range slider: an editable entry for each
+bound flanking a draggable two-handle track — replaces the old
+pattern of two stacked make_slider() rows (one for min, one for
+max) with one compact widget. lo &lt;= hi is enforced by construction
+(dragging/typing one handle past the other clamps it there).</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="songs.gui.SONGSGUI.make_slider">
 <span class="sig-name descname"><span class="pre">make_slider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{:.2f}'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.make_slider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.make_slider" title="Link to this definition">#</a></dt>
 <dd><p>Create a labelled slider widget with snapping and a value label.</p>
@@ -515,7 +624,14 @@ from the collected parameters so the generator is ready to run.</p>
 <dd><p>Reset the GUI to a fresh state and disable visualisation/save.</p>
 <p>This clears the in-memory <code class="docutils literal notranslate"><span class="pre">self.generator</span></code> reference so that the
 next generate action will create a new instance from current UI
-values. Buttons that depend on generated results are disabled.</p>
+values. Buttons that depend on generated results are disabled. If
+we were viewing a cube loaded via <code class="docutils literal notranslate"><span class="pre">load_cube()</span></code>, this also
+re-enables every parameter card that load dimmed, restores every
+slider/toggle to the app’s hardcoded defaults (undoing
+<code class="docutils literal notranslate"><span class="pre">_apply_loaded_manifest</span></code>), and restores Generate to its normal
+clickable state. If a Large-Dataset Mode batch run is currently in
+progress, this also requests it stop (same as clicking Stop) — the
+background worker unwinds cooperatively at its next safe point.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -531,7 +647,9 @@ to store the result. We support .npz (numpy savez) and .pkl
 <dl class="py method">
 <dt class="sig sig-object py" id="songs.gui.SONGSGUI.show_analysis">
 <span class="sig-name descname"><span class="pre">show_analysis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.show_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.show_analysis" title="Link to this definition">#</a></dt>
-<dd><p>Open the combined Analysis viewer (moments + spectrum + source checkboxes).</p>
+<dd><p>Open the combined Analysis viewer (moments + spectrum + source
+checkboxes) — or, if one is already open and still current, bring
+it to front instead of stacking a second window.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -542,7 +660,20 @@ to store the result. We support .npz (numpy savez) and .pkl
 <dl class="py method">
 <dt class="sig sig-object py" id="songs.gui.SONGSGUI.show_slice">
 <span class="sig-name descname"><span class="pre">show_slice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.show_slice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.show_slice" title="Link to this definition">#</a></dt>
-<dd><p>Open the SONGS SliceViewer for the first generated cube.</p>
+<dd><p>Open the SONGS SliceViewer for the first generated cube — or, if
+one is already open and still current, bring it to front instead of stacking a
+second window.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="songs.gui.SONGSGUI.stop_generation">
+<span class="sig-name descname"><span class="pre">stop_generation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/gui.html#SONGSGUI.stop_generation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.gui.SONGSGUI.stop_generation" title="Link to this definition">#</a></dt>
+<dd><p>Request cancellation of whatever generation is currently
+running (single-cube or Large-Dataset Mode batch). Cooperative —
+the background worker checks <code class="docutils literal notranslate"><span class="pre">self._stop_requested</span></code> at its next
+safe point and unwinds itself; this just raises the flag and gives
+immediate feedback (disabling the Stop button so a second click
+can’t double-fire).</p>
 </dd></dl>
 
 </section>
@@ -584,7 +715,7 @@ threads should be marshalled to the Tk mainloop (e.g. via
 <p>Redirect stdout into a Text widget:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">txt</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 <span class="n">txt</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">TextRedirector</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">TextRedirector</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s1">'log'</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -755,7 +886,7 @@ array, beam information, pixel spatial scale, and average velocity values.</p>
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-notes">Design notes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.LogWindow"><code class="docutils literal notranslate"><span class="pre">LogWindow</span></code></a><ul class="nav section-nav flex-column">
@@ -765,12 +896,17 @@ array, beam information, pixel spatial scale, and average velocity values.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI"><code class="docutils literal notranslate"><span class="pre">SONGSGUI</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.create_generator"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.create_generator()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.generate"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.generate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.generate_dataset"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.generate_dataset()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.load_cube"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.load_cube()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.make_dual_slider"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.make_dual_slider()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.make_range_slider"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.make_range_slider()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.make_slider"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.make_slider()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.reset_instance"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.reset_instance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.save_sim"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.save_sim()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.show_analysis"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.show_analysis()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.show_logs"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.show_logs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.show_slice"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.show_slice()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.SONGSGUI.stop_generation"><code class="docutils literal notranslate"><span class="pre">SONGSGUI.stop_generation()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#songs.gui.TextRedirector"><code class="docutils literal notranslate"><span class="pre">TextRedirector</span></code></a><ul class="nav section-nav flex-column">
@@ -835,8 +971,8 @@ By Arnab Lahiry
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
   </footer>
