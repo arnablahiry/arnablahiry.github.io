@@ -190,13 +190,23 @@
 </button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../gui.html">GUI User Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Physics &amp; Model Reference</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../physics.html">Physics &amp; Mathematics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../generator.html">Generator Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gui.html">GUI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_gui.html">GUI Module (songs.gui)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualise.html">Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utilities.html">Utilities</a></li>
 </ul>
@@ -561,6 +571,47 @@
 <span class="sd">    with per-voxel Gaussian noise added inside each component before blending.</span>
 <span class="sd">    All three components are binned into the final spectral cube using the</span>
 <span class="sd">    same velocity-channel masks as the per-galaxy disk components.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid_size : int</span>
+<span class="sd">        Full output cube spatial dimension (voxels per side); the diffuse</span>
+<span class="sd">        cubes are built directly on this grid.</span>
+<span class="sd">    galaxy_centers : list of ndarray</span>
+<span class="sd">        ``(x, y, z)`` integer centre of each galaxy in cube pixels, central</span>
+<span class="sd">        galaxy first (as returned by :func:`place_galaxies`).</span>
+<span class="sd">    gal_params_list : list of dict</span>
+<span class="sd">        Per-galaxy parameter dicts with keys ``'Re'``, ``'Se'``, ``'hz'``</span>
+<span class="sd">        (pixel units), aligned with ``galaxy_centers``.</span>
+<span class="sd">    gal_systemic_vels : list of float</span>
+<span class="sd">        Flux-weighted systemic LOS velocity of each galaxy (km/s), aligned</span>
+<span class="sd">        with ``galaxy_centers``. Bridge and tail velocities are interpolated</span>
+<span class="sd">        relative to these values.</span>
+<span class="sd">    diffuse_params : dict</span>
+<span class="sd">        Diffuse-emission knobs; see :data:`DEFAULT_DIFFUSE_PARAMS` for the</span>
+<span class="sd">        full set of keys and units.</span>
+<span class="sd">    pix_spatial_scale : float, default 1.0</span>
+<span class="sd">        Physical scale (kpc/pixel) used to convert the analytic flux targets</span>
+<span class="sd">        (halo, bridges, tails) from physical to per-voxel units so that</span>
+<span class="sd">        total flux is conserved regardless of grid resolution.</span>
+<span class="sd">    rng : numpy.random.Generator or None</span>
+<span class="sd">        Random generator used for all stochastic draws (noise, tail</span>
+<span class="sd">        geometry). A fresh default generator is created when ``None``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    diffuse_flux : ndarray, shape (grid_size, grid_size, grid_size)</span>
+<span class="sd">        Combined flux density of all diffuse components at each voxel.</span>
+<span class="sd">    diffuse_vel : ndarray, shape (grid_size, grid_size, grid_size)</span>
+<span class="sd">        Flux-weighted LOS velocity (km/s) of the combined diffuse emission.</span>
+<span class="sd">    streamer_per_galaxy : list of (ndarray, ndarray) or None</span>
+<span class="sd">        Per-galaxy tidal-tail ``(flux, velocity)`` cubes (each shaped like</span>
+<span class="sd">        ``diffuse_flux``), aligned with ``galaxy_centers``; used so a</span>
+<span class="sd">        satellite's streamer can be routed into its own ground-truth cube.</span>
+<span class="sd">    halo_flux_3d, halo_vel_3d : ndarray, shape (grid_size, grid_size, grid_size)</span>
+<span class="sd">        Flux and LOS velocity of the halo component alone.</span>
+<span class="sd">    bridge_flux_3d, bridge_vel_3d : ndarray, shape (grid_size, grid_size, grid_size)</span>
+<span class="sd">        Flux and LOS velocity of the combined bridge components alone.</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">rng</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
@@ -691,14 +742,11 @@
         <span class="n">K</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="s1">'tail_n_control_points'</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># End direction: mostly aligned with away_dir (the central-to-</span>
-        <span class="c1"># satellite axis passed in by the caller) with a small perpendicular</span>
-        <span class="c1"># jitter for natural-looking variety between tails. Previously this</span>
-        <span class="c1"># was a fully random unit vector only sign-flipped into away_dir's</span>
-        <span class="c1"># hemisphere, which let it land up to 90 degrees off that axis -</span>
-        <span class="c1"># visually the tail looked unrelated to the satellite it's meant to</span>
-        <span class="c1"># be pointing toward. perp/perp2 (already an orthonormal basis</span>
-        <span class="c1"># perpendicular to away_dir, computed above) keep the jitter</span>
-        <span class="c1"># confined to a narrow cone around away_dir instead.</span>
+        <span class="c1"># satellite axis passed in by the caller), with a small perpendicular</span>
+        <span class="c1"># jitter for natural-looking variety between tails. perp/perp2 (the</span>
+        <span class="c1"># orthonormal basis perpendicular to away_dir computed above) keep</span>
+        <span class="c1"># the jitter confined to a narrow cone around away_dir, so the tail</span>
+        <span class="c1"># always points recognisably toward the satellite it belongs to.</span>
         <span class="n">end_spread</span> <span class="o">=</span> <span class="mf">0.12</span>
         <span class="n">end_dir</span> <span class="o">=</span> <span class="n">away_dir</span> <span class="o">+</span> <span class="n">end_spread</span> <span class="o">*</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">()</span> <span class="o">*</span> <span class="n">perp</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">()</span> <span class="o">*</span> <span class="n">perp2</span><span class="p">)</span>
         <span class="n">end_dir</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">end_dir</span><span class="p">)</span>
@@ -1204,9 +1252,6 @@
 <span class="sd">        2</span>
 <span class="sd">        """</span>
 
-        <span class="c1"># Initialize random seeds for reproducible results</span>
-        <span class="c1">#self.central_Re_kpc = 5 #kpc</span>
-
         <span class="c1"># Store configuration parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fname</span> <span class="o">=</span> <span class="n">fname</span>
@@ -1224,8 +1269,10 @@
         <span class="c1"># overlap the central galaxy or each other.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">allow_overlap</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">allow_overlap</span><span class="p">)</span>
 
-        <span class="c1"># Satellite brightness fraction relative to central Se.</span>
-        <span class="c1"># None → legacy random range [Se/2, Se/1.6].</span>
+        <span class="c1"># Satellite peak-brightness fraction relative to the central galaxy.</span>
+        <span class="c1"># None → sampled per-satellite from a uniform [0.15, 0.35] range</span>
+        <span class="c1"># (see __init__ below, where satellite Se is derived from this</span>
+        <span class="c1"># fraction so that peak_sat = frac * peak_central).</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sat_brightness_frac</span> <span class="o">=</span> <span class="n">sat_brightness_frac</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sat_vel_dispersion</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sat_vel_dispersion</span><span class="p">)</span>
 
@@ -1242,7 +1289,7 @@
 
         <span class="c1"># Determine number of galaxies per cube</span>
         <span class="k">if</span> <span class="n">n_gals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># Default: 1–2 galaxies per cube (legacy behaviour).</span>
+            <span class="c1"># Default: sample 1-2 galaxies per cube.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_gals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n_cubes</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_gals</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_gals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="c1"># Random inclusive range per cube: n_gals=(lo, hi) → uniform in [lo, hi].</span>
@@ -1682,13 +1729,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">'Calculating and assigning velocity vectors...'</span><span class="p">)</span>
 
-        <span class="c1"># Vectorised equivalent of the original per-voxel triple loop. The</span>
-        <span class="c1"># per-voxel values below depend only on (i, j) — never on k — so the</span>
-        <span class="c1"># loop recomputed the same (vx, vy, vmag) grid_size times over for</span>
-        <span class="c1"># nothing; only vel_z (independent dispersion noise) genuinely</span>
-        <span class="c1"># varies with k. This matters more now that the local box can grow</span>
-        <span class="c1"># well beyond init_grid_size for large-Re galaxies (see above),</span>
-        <span class="c1"># where an O(grid_size^3) Python loop becomes prohibitively slow.</span>
+        <span class="c1"># Per-voxel velocity values depend only on (i, j), never on k, so</span>
+        <span class="c1"># they are computed once on a 2D grid and broadcast along the third</span>
+        <span class="c1"># axis; only vel_z (independent dispersion noise) genuinely varies</span>
+        <span class="c1"># with k. This keeps the cost O(grid_size^2) rather than</span>
+        <span class="c1"># O(grid_size^3), which matters since the local box can grow well</span>
+        <span class="c1"># beyond init_grid_size for large-Re galaxies (see above).</span>
         <span class="n">ii</span><span class="p">,</span> <span class="n">jj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">grid_size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">grid_size</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">'ij'</span><span class="p">)</span>
         <span class="n">pos_x</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pos_y</span> <span class="o">=</span> <span class="n">jj</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1896,8 +1942,8 @@
         <span class="c1"># Creating lower and upper limits for the velocity observation bins</span>
         <span class="c1"># Create velocity bin edges across all galaxies</span>
 
-        <span class="n">min_vel</span> <span class="o">=</span> <span class="o">-</span><span class="mi">600</span> <span class="c1">#np.min([np.min(v) for v in all_velocities])</span>
-        <span class="n">max_vel</span> <span class="o">=</span> <span class="mi">600</span> <span class="c1">#np.max([np.max(v) for v in all_velocities])</span>
+        <span class="n">min_vel</span> <span class="o">=</span> <span class="o">-</span><span class="mi">600</span>  <span class="c1"># symmetric velocity range spanning the full cube (km/s)</span>
+        <span class="n">max_vel</span> <span class="o">=</span> <span class="mi">600</span>
 
         <span class="n">limit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="n">min_vel</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">max_vel</span><span class="p">)])</span>  <span class="c1"># Use the maximum absolute value for limits</span>
 
@@ -1991,7 +2037,7 @@
 
             <span class="c1"># Projecting along the LoS (Z-axis)</span>
             <span class="n">spectral_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">combined_cube</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">spectral_cube_S_px</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spectral_slice</span><span class="p">)</span>  <span class="c1"># Transpose if needed</span>
+            <span class="n">spectral_cube_S_px</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spectral_slice</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_galaxies</span><span class="p">):</span>
                 <span class="n">per_gal_slices</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">per_gal_slab</span><span class="p">[</span><span class="n">g</span><span class="p">])</span>
 
@@ -2022,7 +2068,6 @@
         <span class="n">halo_cube</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">halo_slices</span><span class="p">[:</span><span class="n">n_ch_trim</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_ch_trim</span> <span class="o">//</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">bridge_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bridge_slices</span><span class="p">[:</span><span class="n">n_ch_trim</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_ch_trim</span> <span class="o">//</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># You can update the params_gals dictionary as needed</span>
         <span class="n">params_gen</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">'galaxy_centers'</span><span class="p">:</span> <span class="n">galaxy_centers</span><span class="p">,</span>
             <span class="s1">'average_vels'</span><span class="p">:</span> <span class="n">average_vels</span><span class="p">,</span>
@@ -2158,8 +2203,6 @@
             <span class="p">)</span>
 
 
-            <span class="c1">#self.system_params.append(params)</span>
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Spectral cube created!'</span><span class="p">)</span>
 
@@ -2199,8 +2242,6 @@
                             <span class="n">convolve_beam</span><span class="p">(</span><span class="n">_raw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_info</span><span class="p">),</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">params</span><span class="p">[</span><span class="n">_comp_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_filter1d</span><span class="p">(</span><span class="n">_raw</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-            <span class="c1">#self.spectral_cubes.append(spectral_cube_final)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">spectral_cube_final_convolved</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span>
 
@@ -2335,9 +2376,6 @@
 <span class="sd">        controlled, reproducible systems.</span>
 <span class="sd">        """</span>
 
-        <span class="c1"># Initialize random seeds for reproducible results</span>
-        <span class="c1">#self.central_Re_kpc = 5 #kpc</span>
-
         <span class="c1"># Store configuration parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fname</span> <span class="o">=</span> <span class="n">fname</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
@@ -2375,7 +2413,7 @@
 
         <span class="c1"># Determine number of galaxies per cube</span>
         <span class="k">if</span> <span class="n">n_gals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># Default: 1–2 galaxies per cube (legacy behaviour).</span>
+            <span class="c1"># Default: sample 1-2 galaxies per cube.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_gals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n_cubes</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_gals</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_gals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="c1"># Random inclusive range per cube: n_gals=(lo, hi) → uniform in [lo, hi].</span>
@@ -2397,7 +2435,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">init_grid_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">init_grid_size</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_size</span> <span class="o">=</span> <span class="n">grid_size</span>      <span class="c1"># Size for combined output cube</span>
-        <span class="c1">#self.n_spectral_slices = 5*n_spectral_slices + 1  # 5x oversampling + 1 for binning</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spectral_resolution</span> <span class="o">=</span> <span class="n">spectral_resolution</span><span class="o">/</span><span class="mi">5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spatial_resolution</span> <span class="o">=</span> <span class="n">spatial_resolution</span>
         <span class="c1"># Convert beam from physical units (kpc, deg) → pixel units (px, deg)</span>
@@ -2821,13 +2858,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">'Calculating and assigning velocity vectors...'</span><span class="p">)</span>
 
-        <span class="c1"># Vectorised equivalent of the original per-voxel triple loop. The</span>
-        <span class="c1"># per-voxel values below depend only on (i, j) — never on k — so the</span>
-        <span class="c1"># loop recomputed the same (vx, vy, vmag) grid_size times over for</span>
-        <span class="c1"># nothing; only vel_z (independent dispersion noise) genuinely</span>
-        <span class="c1"># varies with k. This matters more now that the local box can grow</span>
-        <span class="c1"># well beyond init_grid_size for large-Re galaxies (see above),</span>
-        <span class="c1"># where an O(grid_size^3) Python loop becomes prohibitively slow.</span>
+        <span class="c1"># Per-voxel velocity values depend only on (i, j), never on k, so</span>
+        <span class="c1"># they are computed once on a 2D grid and broadcast along the third</span>
+        <span class="c1"># axis; only vel_z (independent dispersion noise) genuinely varies</span>
+        <span class="c1"># with k. This keeps the cost O(grid_size^2) rather than</span>
+        <span class="c1"># O(grid_size^3), which matters since the local box can grow well</span>
+        <span class="c1"># beyond init_grid_size for large-Re galaxies (see above).</span>
         <span class="n">ii</span><span class="p">,</span> <span class="n">jj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">grid_size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">grid_size</span><span class="p">),</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">'ij'</span><span class="p">)</span>
         <span class="n">pos_x</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pos_y</span> <span class="o">=</span> <span class="n">jj</span> <span class="o">-</span> <span class="n">centre</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -3031,8 +3067,8 @@
         <span class="c1"># Creating lower and upper limits for the velocity observation bins</span>
         <span class="c1"># Create velocity bin edges across all galaxies</span>
 
-        <span class="n">min_vel</span> <span class="o">=</span> <span class="o">-</span><span class="mi">600</span> <span class="c1">#np.min([np.min(v) for v in all_velocities])</span>
-        <span class="n">max_vel</span> <span class="o">=</span> <span class="mi">600</span> <span class="c1">#np.max([np.max(v) for v in all_velocities])</span>
+        <span class="n">min_vel</span> <span class="o">=</span> <span class="o">-</span><span class="mi">600</span>  <span class="c1"># symmetric velocity range spanning the full cube (km/s)</span>
+        <span class="n">max_vel</span> <span class="o">=</span> <span class="mi">600</span>
 
         <span class="n">limit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="n">min_vel</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">max_vel</span><span class="p">)])</span>  <span class="c1"># Use the maximum absolute value for limits</span>
 
@@ -3126,7 +3162,7 @@
 
             <span class="c1"># Projecting along the LoS (Z-axis)</span>
             <span class="n">spectral_slice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">combined_cube</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="n">spectral_cube_S_px</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spectral_slice</span><span class="p">)</span>  <span class="c1"># Transpose if needed</span>
+            <span class="n">spectral_cube_S_px</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spectral_slice</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_galaxies</span><span class="p">):</span>
                 <span class="n">per_gal_slices</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">per_gal_slab</span><span class="p">[</span><span class="n">g</span><span class="p">])</span>
 
@@ -3157,7 +3193,6 @@
         <span class="n">halo_cube</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">halo_slices</span><span class="p">[:</span><span class="n">n_ch_trim</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_ch_trim</span> <span class="o">//</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">bridge_cube</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bridge_slices</span><span class="p">[:</span><span class="n">n_ch_trim</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_ch_trim</span> <span class="o">//</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># You can update the params_gals dictionary as needed</span>
         <span class="n">params_gen</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">'galaxy_centers'</span><span class="p">:</span> <span class="n">galaxy_centers</span><span class="p">,</span>
             <span class="s1">'average_vels'</span><span class="p">:</span> <span class="n">average_vels</span><span class="p">,</span>
@@ -3295,8 +3330,6 @@
             <span class="p">)</span>
 
 
-            <span class="c1">#self.system_params.append(params)</span>
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Spectral cube created!'</span><span class="p">)</span>
 
@@ -3336,8 +3369,6 @@
                             <span class="n">convolve_beam</span><span class="p">(</span><span class="n">_raw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_info</span><span class="p">),</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">params</span><span class="p">[</span><span class="n">_comp_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">gaussian_filter1d</span><span class="p">(</span><span class="n">_raw</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-            <span class="c1">#self.spectral_cubes.append(spectral_cube_final)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">spectral_cube_final_convolved</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span>
 

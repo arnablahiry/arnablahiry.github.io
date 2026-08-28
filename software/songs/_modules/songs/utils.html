@@ -190,13 +190,23 @@
 </button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../gui.html">GUI User Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Physics &amp; Model Reference</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../physics.html">Physics &amp; Mathematics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../generator.html">Generator Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gui.html">GUI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_gui.html">GUI Module (songs.gui)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualise.html">Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utilities.html">Utilities</a></li>
 </ul>
@@ -550,10 +560,6 @@
     <span class="n">Y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ogrid</span><span class="p">[:</span><span class="n">nx</span><span class="p">,</span> <span class="p">:</span><span class="n">ny</span><span class="p">]</span>
     <span class="c1"># Calculate Euclidean distance from each pixel to aperture center</span>
     <span class="n">dist_from_center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="n">x_center</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="n">y_center</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="c1"># Legacy code for more complex aperture sizing (kept as documentation)</span>
-<span class="w">    </span><span class="sd">'''# Base aperture radius</span>
-<span class="sd">    aperture_radius = offset + k * R_e'''</span>
 
     <span class="c1"># Create 2D circular mask: True for pixels within aperture radius</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">dist_from_center</span> <span class="o">&lt;=</span> <span class="n">D_aper</span><span class="o">/</span><span class="mi">2</span>

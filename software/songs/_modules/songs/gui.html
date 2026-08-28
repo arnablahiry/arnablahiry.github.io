@@ -190,13 +190,23 @@
 </button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../gui.html">GUI User Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Physics &amp; Model Reference</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../physics.html">Physics &amp; Mathematics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../generator.html">Generator Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gui.html">GUI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_gui.html">GUI Module (songs.gui)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../visualise.html">Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utilities.html">Utilities</a></li>
 </ul>
@@ -309,10 +319,11 @@
 <span></span><span class="sd">"""SONGS GUI</span>
 
 <span class="sd">Compact Tkinter-based GUI to interactively configure and run the</span>
-<span class="sd">``SONGS`` generator. Provides a three-column layout of parameter</span>
-<span class="sd">frames, crisp LaTeX-rendered labels, convenience sliders, and utility</span>
-<span class="sd">buttons (Generate, Slice, Moments, Spectrum, Save, New). Plotting and file</span>
-<span class="sd">I/O are intentionally kept out of the generator core; the GUI imports</span>
+<span class="sd">``SONGS`` generator. Provides a 4-column card layout of parameter</span>
+<span class="sd">frames (Initialisation, Central Galaxy, Satellite, Diffuse Features),</span>
+<span class="sd">crisp LaTeX-rendered labels, convenience sliders, and utility buttons</span>
+<span class="sd">(Generate, Slice, Moments, Spectrum, Save, New). Plotting and file I/O</span>
+<span class="sd">are intentionally kept out of the generator core; the GUI imports</span>
 <span class="sd">top-level visualisation helpers (``moment0``, ``moment1``, ``spectrum``,</span>
 <span class="sd">``slice_view``) to display results.</span>
 
@@ -449,7 +460,7 @@
 <span class="c1"># Tweakable parameter frames </span>
 <span class="c1"># ---------------------------</span>
 <div class="viewcode-block" id="param_frame">
-<a class="viewcode-back" href="../../gui.html#songs.gui.param_frame">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.param_frame">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">param_frame</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">border_color</span><span class="o">=</span><span class="s2">"#797979"</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s2">"#303030"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">do_pack</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Create a framed parameter panel used throughout the GUI."""</span>
     <span class="n">outer</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">border_color</span><span class="p">)</span>
@@ -467,7 +478,7 @@
 
 
 <div class="viewcode-block" id="rich_label">
-<a class="viewcode-back" href="../../gui.html#songs.gui.rich_label">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.rich_label">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rich_label</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">segments</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fg</span><span class="o">=</span><span class="s2">"white"</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Render a symbol with superscript/subscript on a tk.Canvas.</span>
 
@@ -572,7 +583,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ttk</span>
 
 <div class="viewcode-block" id="TextRedirector">
-<a class="viewcode-back" href="../../gui.html#songs.gui.TextRedirector">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.TextRedirector">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TextRedirector</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Redirect writes into a Tk ``Text`` widget behaving like a stream.</span>
 
@@ -611,7 +622,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="n">tag</span>
 
 <div class="viewcode-block" id="TextRedirector.write">
-<a class="viewcode-back" href="../../gui.html#songs.gui.TextRedirector.write">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.TextRedirector.write">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">widget</span><span class="o">.</span><span class="n">winfo_exists</span><span class="p">():</span>
@@ -629,14 +640,14 @@
 
 
 <div class="viewcode-block" id="TextRedirector.flush">
-<a class="viewcode-back" href="../../gui.html#songs.gui.TextRedirector.flush">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.TextRedirector.flush">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>  <span class="c1"># Needed for compatibility with sys.stdout</span></div>
 </div>
 
 
 <div class="viewcode-block" id="LogWindow">
-<a class="viewcode-back" href="../../gui.html#songs.gui.LogWindow">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.LogWindow">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LogWindow</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Toplevel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Top-level log window that captures and displays stdout/stderr.</span>
 
@@ -690,9 +701,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">protocol</span><span class="p">(</span><span class="s2">"WM_DELETE_WINDOW"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_close</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LogWindow.on_close">
-<a class="viewcode-back" href="../../gui.html#songs.gui.LogWindow.on_close">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.LogWindow.on_close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">on_close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Optionally restore stdout/stderr</span>
+<span class="w">        </span><span class="sd">"""Restore the original ``sys.stdout``/``sys.stderr`` and destroy the window."""</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">__stdout__</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">__stderr__</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span></div>
@@ -721,17 +732,31 @@
 
 
 <div class="viewcode-block" id="SONGSGUI">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SONGSGUI</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Main GUI application for interactively configuring and running</span>
 <span class="sd">    SONGS simulations.</span>
 
-<span class="sd">    This class implements a compact, self-contained Tk application that</span>
-<span class="sd">    exposes the most commonly-used parameters of the generator via a</span>
-<span class="sd">    three-column layout of parameter panels. Controls include numeric</span>
-<span class="sd">    sliders, textual inputs and convenience buttons that invoke high-level</span>
-<span class="sd">    visualisation helpers (``moment0``, ``moment1``, ``spectrum``) or</span>
-<span class="sd">    persist generated results to disk.</span>
+<span class="sd">    This class implements a compact, self-contained Tk application, launched</span>
+<span class="sd">    with ``python -m songs.gui``, that exposes the most commonly-used</span>
+<span class="sd">    parameters of the generator through a 4-column dark-themed (or light-themed)</span>
+<span class="sd">    card layout, with the SONGS banner running down the left side:</span>
+
+<span class="sd">    1. **Initialisation** — grid size, number of spectral channels, number</span>
+<span class="sd">       of galaxies, random seed, output directory.</span>
+<span class="sd">    2. **Central Galaxy** — Sérsic index, effective radius, scale height,</span>
+<span class="sd">       central flux density, inclination, position angle.</span>
+<span class="sd">    3. **Satellite** — satellite offset, systemic velocity offset, beam</span>
+<span class="sd">       parameters (bmin, bmaj, BPA).</span>
+<span class="sd">    4. **Diffuse Features** — sliders/entries mapping onto</span>
+<span class="sd">       ``DEFAULT_DIFFUSE_PARAMS`` (halo, bridge and tail amplitudes, tail</span>
+<span class="sd">       velocity gradient and decay scale, master enabled toggle).</span>
+
+<span class="sd">    Controls include numeric sliders, textual inputs and convenience buttons</span>
+<span class="sd">    that invoke high-level visualisation helpers (``moment0``, ``moment1``,</span>
+<span class="sd">    ``spectrum``) or persist generated results to disk. See</span>
+<span class="sd">    ``docs/source/gui.rst`` for a full description of the layout and</span>
+<span class="sd">    workflow.</span>
 
 <span class="sd">    Key behaviour</span>
 <span class="sd">    --------------</span>
@@ -772,6 +797,15 @@
 <span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theme</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'light'</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Build the main window: logo strip, parameter cards, and button bar.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        theme : {'light', 'dark'}, optional</span>
+<span class="sd">            Initial colour theme (default ``'light'``). Falls back to</span>
+<span class="sd">            ``'light'`` if an unrecognised value is passed. Can be changed at</span>
+<span class="sd">            runtime via the theme toggle button (see :meth:`_toggle_theme`).</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'SONGS GUI'</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">WINDOW_HEIGHT</span> <span class="o">=</span> <span class="mi">840</span>
@@ -893,6 +927,12 @@
             <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_load_logo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Load and display the theme-appropriate SONGS logo in the left strip.</span>
+
+<span class="sd">        Scales the logo image to the full window height and creates (or</span>
+<span class="sd">        updates, on theme change) the ``self._logo_lbl`` widget. Falls back</span>
+<span class="sd">        to a plain text label if the logo asset cannot be found/loaded.</span>
+<span class="sd">        """</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">_THEMES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_theme</span><span class="p">]</span>
         <span class="n">bg</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s1">'BG'</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1202,6 +1242,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">after</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_native_logo_overlay</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_large_dataset_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle a click on the banner's Large-Dataset Mode toggle.</span>
+
+<span class="sd">        Flips ``self._large_dataset_mode``, redraws the toggle button, and</span>
+<span class="sd">        calls :meth:`_apply_large_dataset_mode` to swap the affected cards,</span>
+<span class="sd">        sliders and Generate button between their single-cube and batch</span>
+<span class="sd">        forms.</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_large_dataset_mode</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_large_dataset_mode</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'_large_dataset_redraw'</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_large_dataset_redraw</span><span class="p">()</span>
@@ -1540,10 +1587,17 @@
                 <span class="n">sync</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_redraw_banner_btns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Redraw all banner buttons (theme, GitHub, API Docs, Large-Dataset</span>
+<span class="sd">        toggle) in place, e.g. after a theme change."""</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">fn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_banner_btns</span><span class="p">:</span>
             <span class="n">fn</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_disable_theme_btn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Grey out and unbind the theme-toggle banner button.</span>
+
+<span class="sd">        Used while a theme switch is already in progress so a second click</span>
+<span class="sd">        can't be queued mid-rebuild.</span>
+<span class="sd">        """</span>
         <span class="n">cv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'_theme_btn'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
@@ -1560,6 +1614,8 @@
         <span class="n">cv</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">cursor</span><span class="o">=</span><span class="s1">'arrow'</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_enable_theme_btn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Re-enable the theme-toggle banner button after a theme switch</span>
+<span class="sd">        completes, by rebuilding the whole banner button row."""</span>
         <span class="n">cv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'_theme_btn'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
@@ -1603,11 +1659,20 @@
     <span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_save_var_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Snapshot the current value of every tk.Var listed in ``_VAR_NAMES``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Mapping of variable name to its current value, for restoring</span>
+<span class="sd">            after a widget rebuild (see :meth:`_toggle_theme`).</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VAR_NAMES</span>
                 <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_restore_var_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Apply a snapshot previously produced by :meth:`_save_var_state`."""</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">var</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">var</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1617,6 +1682,13 @@
                     <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_theme</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle a click on the theme-toggle banner button.</span>
+
+<span class="sd">        Switches between the light and dark palettes: saves all parameter</span>
+<span class="sd">        values, reloads the logo and banner, rebuilds every widget under the</span>
+<span class="sd">        new theme's colours (via :meth:`_rebuild_widgets`), then restores the</span>
+<span class="sd">        saved values so the switch is visually seamless.</span>
+<span class="sd">        """</span>
         <span class="n">saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_var_state</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_theme</span> <span class="o">=</span> <span class="s1">'light'</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_theme</span> <span class="o">==</span> <span class="s1">'dark'</span> <span class="k">else</span> <span class="s1">'dark'</span>
         <span class="c1"># drop the stale native overlay immediately so the old theme's logo</span>
@@ -1643,6 +1715,12 @@
         <span class="n">_vis</span><span class="o">.</span><span class="n">_VIEWER_THEME</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_theme</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_rebuild_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Destroy and recreate every card/button widget, then reapply the</span>
+<span class="sd">        current Large-Dataset Mode state and resize the window to fit.</span>
+
+<span class="sd">        Used by :meth:`_toggle_theme` to re-render all widgets in the new</span>
+<span class="sd">        theme's colours.</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">container</span><span class="o">.</span><span class="n">winfo_children</span><span class="p">()):</span>
             <span class="n">w</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_btn_area</span><span class="o">.</span><span class="n">winfo_children</span><span class="p">()):</span>
@@ -1660,7 +1738,7 @@
     <span class="c1"># Slider helper</span>
     <span class="c1"># ---------------------------</span>
 <div class="viewcode-block" id="SONGSGUI.make_slider">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.make_slider">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.make_slider">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">make_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span>
                     <span class="n">resolution</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">{:.2f}</span><span class="s2">"</span><span class="p">,</span> <span class="n">integer</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Create a labelled slider widget with snapping and a value label."""</span>
@@ -1767,14 +1845,14 @@
 
 
 <div class="viewcode-block" id="SONGSGUI.make_range_slider">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.make_range_slider">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.make_range_slider">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">make_range_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">var_lo</span><span class="p">,</span> <span class="n">var_hi</span><span class="p">,</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span>
                           <span class="n">resolution</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">{:.2f}</span><span class="s2">"</span><span class="p">,</span> <span class="n">integer</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Single-row dual-handle range slider: an editable entry for each</span>
-<span class="sd">        bound flanking a draggable two-handle track — replaces the old</span>
-<span class="sd">        pattern of two stacked make_slider() rows (one for min, one for</span>
-<span class="sd">        max) with one compact widget. lo &lt;= hi is enforced by construction</span>
-<span class="sd">        (dragging/typing one handle past the other clamps it there)."""</span>
+<span class="sd">        bound flanking a draggable two-handle track, used for min/max</span>
+<span class="sd">        parameter ranges in Large-Dataset Mode. ``lo &lt;= hi`` is enforced by</span>
+<span class="sd">        construction (dragging/typing one handle past the other clamps it</span>
+<span class="sd">        there)."""</span>
         <span class="n">bg</span>      <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'_slider_bg'</span><span class="p">,</span>     <span class="s2">"#111111"</span><span class="p">)</span>
         <span class="n">fg</span>      <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'_slider_fg'</span><span class="p">,</span>     <span class="s2">"#999999"</span><span class="p">)</span>
         <span class="n">acc</span>     <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'_slider_accent'</span><span class="p">,</span>  <span class="s2">"#b8960a"</span><span class="p">)</span>
@@ -1980,7 +2058,7 @@
 
 
 <div class="viewcode-block" id="SONGSGUI.make_dual_slider">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.make_dual_slider">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.make_dual_slider">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">make_dual_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">segs</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">var_min</span><span class="p">,</span> <span class="n">var_max</span><span class="p">,</span> <span class="n">from_</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span>
                          <span class="n">resolution</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"</span><span class="si">{:.2f}</span><span class="s2">"</span><span class="p">,</span> <span class="n">integer</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""A single card row that shows a classic make_slider() (single</span>
@@ -2022,11 +2100,14 @@
     <span class="c1"># Button callback methods</span>
     <span class="c1"># ---------------------------</span>
 <div class="viewcode-block" id="SONGSGUI.show_logs">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.show_logs">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.show_logs">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">show_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Shares _show_log_window with generate() — which also deiconifies,</span>
-        <span class="c1"># needed because the log window is withdraw()n at startup, so a bare</span>
-        <span class="c1"># lift() left it invisible.</span>
+<span class="w">        </span><span class="sd">"""Handle a click on the Logs button: raise the stdout/stderr log window.</span>
+
+<span class="sd">        Delegates to :meth:`_show_log_window`, which deiconifies the window</span>
+<span class="sd">        (it starts withdrawn at startup, so a bare ``lift()`` would leave it</span>
+<span class="sd">        invisible) and applies the themed title bar.</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_show_log_window</span><span class="p">()</span></div>
 
 
@@ -2044,8 +2125,9 @@
         <span class="n">canvas</span><span class="o">.</span><span class="n">get_tk_widget</span><span class="p">()</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s1">'both'</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_view_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""(clean_results, noisy_results) to display in Slice/Analysis.</span>
-<span class="sd">        ``clean_results`` is always self.generator.results (never mutated,</span>
+<span class="w">        </span><span class="sd">"""Return ``(clean_results, noisy_results)`` to display in Slice/Analysis.</span>
+
+<span class="sd">        ``clean_results`` is always ``self.generator.results`` (never mutated,</span>
 <span class="sd">        so Save can still build a correct clean/noisy pair from it);</span>
 <span class="sd">        ``noisy_results`` is the preview computed in _run_generate when</span>
 <span class="sd">        "Use Noise?" is Yes, or None otherwise. Both are handed to the</span>
@@ -2077,7 +2159,7 @@
         <span class="k">return</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="SONGSGUI.show_analysis">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.show_analysis">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.show_analysis">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">show_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Open the combined Analysis viewer (moments + spectrum + source</span>
 <span class="sd">        checkboxes) — or, if one is already open and still current, bring</span>
@@ -2096,7 +2178,7 @@
 
 
 <div class="viewcode-block" id="SONGSGUI.show_slice">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.show_slice">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.show_slice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">show_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Open the SONGS SliceViewer for the first generated cube — or, if</span>
 <span class="sd">        one is already open and still current, bring it to front instead of stacking a</span>
@@ -2113,7 +2195,7 @@
 
 
 <div class="viewcode-block" id="SONGSGUI.reset_instance">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.reset_instance">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.reset_instance">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">reset_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Reset the GUI to a fresh state and disable visualisation/save.</span>
 
@@ -2343,7 +2425,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tail_Se_factor_max_var</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mf">0.31</span><span class="p">)</span>
 
 
-        <span class="c1"># New: satellite size fraction (max satellite-to-central ratio for Re,</span>
+        <span class="c1"># Satellite size fraction (max satellite-to-central ratio for Re,</span>
         <span class="c1"># hz, Se). Greyed out when only one galaxy is requested.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sat_brightness_frac_var</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">DoubleVar</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.36</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sat_brightness_frac_min_var</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">DoubleVar</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.37</span><span class="p">)</span>   <span class="c1"># Large-Dataset Mode</span>
@@ -2390,6 +2472,7 @@
         <span class="c1"># Helper used multiple times below to find the underlying ttk.Scale</span>
         <span class="c1"># inside a slider frame (so we can grey it out when n_gals == 1).</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">find_scale</span><span class="p">(</span><span class="n">widget</span><span class="p">):</span>
+            <span class="c1"># Recursively locate the first tk.Scale/ttk.Scale under `widget`.</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Scale</span><span class="p">,</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Scale</span><span class="p">)):</span>
                 <span class="k">return</span> <span class="n">widget</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">widget</span><span class="o">.</span><span class="n">winfo_children</span><span class="p">():</span>
@@ -2421,6 +2504,8 @@
             <span class="k">return</span> <span class="n">inner</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">small_card</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">"""Bordered sub-panel (thin low-opacity outline, optional title)</span>
+<span class="sd">            used to group a handful of related controls inside a big_card."""</span>
             <span class="n">outer</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">_SM_BORDER</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">outer</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">inner</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">outer</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="n">_CARD_BG</span><span class="p">,</span> <span class="n">padx</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -2856,6 +2941,11 @@
         <span class="n">_prev_last_w</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_draw_fov_preview</span><span class="p">(</span><span class="o">*</span><span class="n">_</span><span class="p">):</span>
+            <span class="c1"># Redraw the field-of-view preview canvas: field boundary,</span>
+            <span class="c1"># central galaxy and (if any) satellite positions, scaled to</span>
+            <span class="c1"># the current fov/spatial_resolution. Bound as a trace callback</span>
+            <span class="c1"># on the relevant Tk vars so it refreshes live as the user drags</span>
+            <span class="c1"># sliders.</span>
             <span class="n">S</span> <span class="o">=</span> <span class="n">_prev_cv</span><span class="o">.</span><span class="n">winfo_width</span><span class="p">()</span>
             <span class="n">H</span> <span class="o">=</span> <span class="n">_prev_cv</span><span class="o">.</span><span class="n">winfo_height</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">S</span> <span class="o">&lt;</span> <span class="mi">20</span> <span class="ow">or</span> <span class="n">H</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
@@ -3335,10 +3425,11 @@
             <span class="c1"># every colour proportionally toward the card background (the same</span>
             <span class="c1"># low-opacity look as the Beam/Noise cards) instead of slamming</span>
             <span class="c1"># text to a flat disabled grey on the window background, and it</span>
-            <span class="c1"># also dims canvas-drawn items — which is what fades the rich-text</span>
-            <span class="c1"># maths symbols and the pill buttons that the old code left at</span>
-            <span class="c1"># full brightness. It disables and unbinds interaction too, so the</span>
-            <span class="c1"># card is genuinely unclickable while faded.</span>
+            <span class="c1"># also dims canvas-drawn items, including the rich-text maths</span>
+            <span class="c1"># symbols and pill buttons that a plain widget-option greyout</span>
+            <span class="c1"># would leave at full brightness. It disables and unbinds</span>
+            <span class="c1"># interaction too, so the card is genuinely unclickable while</span>
+            <span class="c1"># faded.</span>
             <span class="n">active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_gals_var</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dim_walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bc3</span><span class="p">,</span> <span class="ow">not</span> <span class="n">active</span><span class="p">)</span>
 
@@ -3735,7 +3826,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_draw_fov_preview_ref</span><span class="p">()</span>
 
 <div class="viewcode-block" id="SONGSGUI.create_generator">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.create_generator">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.create_generator">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">create_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Instantiate a :class:`SONGS` object from current UI values.</span>
 
@@ -3787,6 +3878,29 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_run_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_noise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sn_peak</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Background-thread worker that runs ``self.generator.generate_cubes()``.</span>
+
+<span class="sd">        Invoked by :meth:`generate` on a daemon thread so cube generation</span>
+<span class="sd">        does not block the UI. Must not touch any Tk API — including</span>
+<span class="sd">        ``self.after()`` — since Tk calls from a non-main thread can raise</span>
+<span class="sd">        "main thread is not in main loop"; the log window is raised/created</span>
+<span class="sd">        on the main thread by :meth:`generate` before this worker starts.</span>
+<span class="sd">        Results are handed back as plain Python attributes</span>
+<span class="sd">        (``self._gen_preview_results``, ``self._gen_error``,</span>
+<span class="sd">        ``self._gen_done``) which :meth:`_poll_generation_done`, scheduled on</span>
+<span class="sd">        the main thread, picks up and applies to the UI.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        use_noise : bool, optional</span>
+<span class="sd">            If True, also compute a noisy preview of the first generated cube</span>
+<span class="sd">            (via :func:`apply_and_convolve_noise`) for display in the</span>
+<span class="sd">            Slice/Analysis viewers, without altering ``self.generator.results``</span>
+<span class="sd">            (which Save relies on staying the clean cube).</span>
+<span class="sd">        sn_peak : float or None, optional</span>
+<span class="sd">            Target peak signal-to-noise ratio passed through to the noise</span>
+<span class="sd">            model when ``use_noise`` is True.</span>
+<span class="sd">        """</span>
         <span class="c1"># Disable garbage collection in this thread to prevent cleanup</span>
         <span class="c1"># of Tkinter objects from the wrong thread</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
@@ -3798,16 +3912,6 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_closing</span><span class="p">:</span>
                 <span class="k">return</span>
 
-            <span class="c1"># NOTE: the log window is raised/created on the MAIN thread by</span>
-            <span class="c1"># generate() before this worker starts — doing it here touched Tk</span>
-            <span class="c1"># from a background thread ("main thread is not in main loop"),</span>
-            <span class="c1"># and because that call sat in this outer try (which has only a</span>
-            <span class="c1"># finally, no except) the exception escaped the thread silently:</span>
-            <span class="c1"># no popup, generation never ran, and the Slice/Analysis/Save</span>
-            <span class="c1"># buttons disabled at the start of generate() were never</span>
-            <span class="c1"># re-enabled. Only bit on the SECOND generate onward, when</span>
-            <span class="c1"># log_window already existed and the deiconify/lift path ran.</span>
-
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">generate_cubes</span><span class="p">()</span>
                 <span class="c1"># Check again before publishing results</span>
@@ -3817,11 +3921,11 @@
                 <span class="c1"># Slice/Analysis view self.generator.results directly, which</span>
                 <span class="c1"># generate_cubes() always leaves as the CLEAN cube (Save</span>
                 <span class="c1"># relies on that staying clean so it can write a proper</span>
-                <span class="c1"># clean/noisy pair) — so "Use Noise? Yes" had no visible</span>
-                <span class="c1"># effect until you saved. Precompute a separate noisy</span>
-                <span class="c1"># preview here (background thread — apply_and_convolve_noise</span>
-                <span class="c1"># is pure numpy, no Tk calls) and show it in Slice/Analysis</span>
-                <span class="c1"># instead, without touching self.generator.results.</span>
+                <span class="c1"># clean/noisy pair). When "Use Noise?" is enabled, compute a</span>
+                <span class="c1"># separate noisy preview here (background thread —</span>
+                <span class="c1"># apply_and_convolve_noise is pure numpy, no Tk calls) and</span>
+                <span class="c1"># show that in Slice/Analysis instead, without touching</span>
+                <span class="c1"># self.generator.results.</span>
                 <span class="n">preview_results</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">if</span> <span class="n">use_noise</span> <span class="ow">and</span> <span class="n">results</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
@@ -3835,14 +3939,10 @@
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[SONGS] Noisy preview failed, showing clean cube instead: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
                 <span class="c1"># Hand the outcome back to the MAIN thread as plain Python</span>
-                <span class="c1"># attributes. This worker must not touch Tk at all — not even</span>
-                <span class="c1"># self.after(), which is itself a Tk call (it does</span>
-                <span class="c1"># tk.createcommand under the hood) and can raise</span>
-                <span class="c1"># "main thread is not in main loop". When that happened the</span>
-                <span class="c1"># exception escaped the thread with no dialog and the buttons</span>
-                <span class="c1"># disabled at the start of generate() were never re-enabled —</span>
-                <span class="c1"># the window looked permanently dead. _poll_generation_done(),</span>
-                <span class="c1"># scheduled on the main thread by generate(), picks these up.</span>
+                <span class="c1"># attributes; this worker must not touch Tk at all, not even</span>
+                <span class="c1"># self.after() (itself a Tk call under the hood).</span>
+                <span class="c1"># _poll_generation_done(), scheduled on the main thread by</span>
+                <span class="c1"># generate(), picks these up.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_gen_preview_results</span> <span class="o">=</span> <span class="n">preview_results</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_gen_error</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_gen_done</span> <span class="o">=</span> <span class="kc">True</span>
@@ -3906,8 +4006,17 @@
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span> <span class="k">pass</span>
 
 <div class="viewcode-block" id="SONGSGUI.generate">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.generate">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.generate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle a click on the Generate button (single-cube mode).</span>
+
+<span class="sd">        Builds a fresh ``SONGS`` generator from the current UI values (via</span>
+<span class="sd">        :meth:`create_generator`), disables the theme and result buttons for</span>
+<span class="sd">        the duration of the run, and launches :meth:`_run_generate` on a</span>
+<span class="sd">        background daemon thread so the UI stays responsive.</span>
+<span class="sd">        :meth:`_poll_generation_done` is scheduled on the main thread to</span>
+<span class="sd">        detect completion, publish the results, and re-enable the buttons.</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_random</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pending_seed</span> <span class="o">=</span> <span class="n">_random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="mi">31</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[SONGS] Instance seed: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_pending_seed</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
@@ -3923,10 +4032,9 @@
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span> <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_preview_results</span> <span class="o">=</span> <span class="kc">None</span>   <span class="c1"># drop any stale noisy preview from a previous run</span>
 
-        <span class="c1"># Raise/create the log window HERE, on the main thread — it used to</span>
-        <span class="c1"># be done inside _run_generate, i.e. from the worker thread, which is</span>
-        <span class="c1"># not safe for Tk and blew up (silently, killing the worker) from the</span>
-        <span class="c1"># second generate onward. See the note in _run_generate.</span>
+        <span class="c1"># Raise/create the log window HERE, on the main thread: _run_generate</span>
+        <span class="c1"># runs in a background thread and must never touch Tk (see its</span>
+        <span class="c1"># docstring).</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_show_log_window</span><span class="p">()</span>
 
         <span class="c1"># Stamp the pre-sampled positions onto the generator right before launch,</span>
@@ -3978,7 +4086,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[SONGS] Could not open log window: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SONGSGUI.stop_generation">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.stop_generation">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.stop_generation">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">stop_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Request cancellation of whatever generation is currently</span>
 <span class="sd">        running (single-cube or Large-Dataset Mode batch). Cooperative —</span>
@@ -4292,7 +4400,7 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="SONGSGUI.generate_dataset">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.generate_dataset">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.generate_dataset">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Kick off batch generation for Large-Dataset Mode: samples fresh</span>
 <span class="sd">        parameters per cube, generates it, optionally adds correlated</span>
@@ -4328,6 +4436,28 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_run_generate_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Background-thread worker that generates a batch of cubes for</span>
+<span class="sd">        Large-Dataset Mode.</span>
+
+<span class="sd">        For each of ``base['n_samples']`` cubes: samples a fresh set of</span>
+<span class="sd">        physical parameters (:meth:`_sample_cube_params`), builds a one-off</span>
+<span class="sd">        ``SONGSPhy`` generator, runs it, and writes the resulting cube plus a</span>
+<span class="sd">        manifest entry to ``base['save_folder']/raw``. Checks</span>
+<span class="sd">        ``self._is_closing``/``self._stop_requested`` between cubes so the</span>
+<span class="sd">        run can be aborted early; a failed individual cube is logged and</span>
+<span class="sd">        skipped rather than aborting the whole batch. Like</span>
+<span class="sd">        :meth:`_run_generate`, this runs on a daemon thread and must not</span>
+<span class="sd">        touch Tk; progress is polled by :meth:`_ld_progress_ticker` on the</span>
+<span class="sd">        main thread via ``self._ld_done``/``self._ld_total``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        base : dict</span>
+<span class="sd">            Batch-level configuration collected by</span>
+<span class="sd">            :meth:`_collect_large_dataset_base` (sample count, save folder,</span>
+<span class="sd">            beam handling, overlap policy, and the per-parameter</span>
+<span class="sd">            min/max/enabled ranges to sample from).</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
         <span class="n">gc_was_enabled</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">isenabled</span><span class="p">()</span>
         <span class="n">gc</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
@@ -4450,7 +4580,7 @@
     <span class="c1"># Load a pre-made SONGS cube (single-cube mode only) — read-only viewing</span>
     <span class="c1"># ---------------------------</span>
 <div class="viewcode-block" id="SONGSGUI.load_cube">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.load_cube">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.load_cube">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Open a SONGS HDF5 cube for viewing only (Slice/Analysis), without</span>
 <span class="sd">        running the generator. Populates every slider from the file's</span>
@@ -4598,7 +4728,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_enable_btn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_instance_btn</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SONGSGUI.save_sim">
-<a class="viewcode-back" href="../../gui.html#songs.gui.SONGSGUI.save_sim">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.SONGSGUI.save_sim">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">save_sim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Generate (if needed) and save the sim tuple (cube, params).</span>
 
@@ -4810,8 +4940,14 @@
 
 
 <div class="viewcode-block" id="main">
-<a class="viewcode-back" href="../../gui.html#songs.gui.main">[docs]</a>
+<a class="viewcode-back" href="../../api_gui.html#songs.gui.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Entry point for ``python -m songs.gui``.</span>
+
+<span class="sd">    Parses ``--dark``/``--light`` command-line flags, applies the macOS HiDPI</span>
+<span class="sd">    fix (must run before the Tk root window is created), then instantiates</span>
+<span class="sd">    and runs :class:`SONGSGUI`.</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">'songs.gui'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'SONGS spectral cube simulator GUI'</span><span class="p">)</span>
     <span class="n">group</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>

@@ -51,7 +51,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Utilities" href="utilities.html" />
-    <link rel="prev" title="GUI Reference" href="gui.html" />
+    <link rel="prev" title="GUI Module (songs.gui)" href="api_gui.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -197,13 +197,23 @@
 </button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents</span></p>
-<ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="gui.html">GUI User Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Physics &amp; Model Reference</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="physics.html">Physics &amp; Mathematics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="generator.html">Generator Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gui.html">GUI Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_gui.html">GUI Module (songs.gui)</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Visualisation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
 </ul>
@@ -385,25 +395,36 @@
                   
   <section id="module-songs.visualise">
 <span id="visualisation"></span><h1>Visualisation<a class="headerlink" href="#module-songs.visualise" title="Link to this heading">#</a></h1>
-<p>Plotting helpers for SONGS results.</p>
+<p>Plotting and visualisation support for SONGS-generated spectral cubes.</p>
 <p>This module provides small, focused plotting utilities that operate on the
 <code class="docutils literal notranslate"><span class="pre">results</span></code> list produced by <code class="xref py py-meth docutils literal notranslate"><span class="pre">generate_cubes()</span></code>.
 Each public helper accepts the <code class="docutils literal notranslate"><span class="pre">results</span></code> container and an index selecting
 which generated cube to visualise. The functions are intentionally lightweight
 and return a Matplotlib <code class="docutils literal notranslate"><span class="pre">(fig,</span> <span class="pre">ax)</span></code> pair so callers (GUIs, scripts, tests)
-can further customise or save figures.</p>
+can further customise or save figures. It also provides the interactive
+Tkinter viewer windows (<a class="reference internal" href="#songs.visualise.SliceViewer" title="songs.visualise.SliceViewer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SliceViewer</span></code></a>, <a class="reference internal" href="#songs.visualise.AnalysisViewer" title="songs.visualise.AnalysisViewer"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnalysisViewer</span></code></a>) used
+by the SONGS GUI to inspect generated cubes channel-by-channel and to browse
+per-source moment maps and spectra.</p>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>matplotlib (this module sets the <code class="docutils literal notranslate"><span class="pre">TkAgg</span></code> backend by default)</p></li>
-<li><p>astrodendro (used to compute a crude mask for visual guides)</p></li>
+<li><dl class="simple">
+<dt>matplotlib (this module sets the <code class="docutils literal notranslate"><span class="pre">TkAgg</span></code> backend by default, unless an</dt><dd><p>inline backend is already active).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>astrodendro, used to compute a coarse dendrogram-based mask that highlights</dt><dd><p>contiguous emission for the moment-map helpers.</p>
+</dd>
+</dl>
+</li>
 </ul>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><dl class="simple">
-<dt>These helpers call <code class="xref py py-func docutils literal notranslate"><span class="pre">_prepare_cube()</span></code> to extract cube / metadata and to</dt><dd><p>compute a simple dendrogram-based mask used for moment maps. The dendrogram
-parameters are deliberately conservative and may be tuned for different
-signal-to-noise regimes.</p>
+<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">_prepare_cube()</span></code> extracts the cube and its metadata and computes the</dt><dd><p>dendrogram-based mask shared by the moment-map helpers. The dendrogram
+parameters are deliberately conservative and may need tuning for
+different signal-to-noise regimes.</p>
 </dd>
 </dl>
 </li>
@@ -420,10 +441,31 @@ UI flows robust.</p>
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">songs.visualise.</span></span><span class="sig-name descname"><span class="pre">AnalysisViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">master</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noisy_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/songs/visualise.html#AnalysisViewer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#songs.visualise.AnalysisViewer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Toplevel</span></code></p>
 <p>Combined analysis viewer: Moment 0, Moment 1, and integrated spectrum.</p>
-<p>Source checkboxes (one per galaxy) and a Diffuse checkbox let the user
-select which components contribute to all three panels. The layout mirrors
-the nemo analysis viewer: two moment maps side-by-side on top, spectrum
-spanning the full width below.</p>
+<p>Source checkboxes (one per galaxy) and diffuse-component checkboxes let
+the user select which components contribute to all three panels. The
+layout mirrors the nemo analysis viewer: two moment maps side-by-side on
+top, spectrum spanning the full width below.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter widget</em>) – Parent window this viewer is opened as a <code class="docutils literal notranslate"><span class="pre">Toplevel</span></code> of.</p></li>
+<li><p><strong>data</strong> (<em>sequence</em>) – The <code class="docutils literal notranslate"><span class="pre">results</span></code> container produced by <code class="docutils literal notranslate"><span class="pre">SONGS.generate_cubes</span></code>.
+<code class="docutils literal notranslate"><span class="pre">data[idx]</span></code> must be a <code class="docutils literal notranslate"><span class="pre">(cube,</span> <span class="pre">meta)</span></code> tuple where <code class="docutils literal notranslate"><span class="pre">cube</span></code> is a
+NumPy array of shape <code class="docutils literal notranslate"><span class="pre">(n_vel,</span> <span class="pre">ny,</span> <span class="pre">nx)</span></code> in Jy/beam and <code class="docutils literal notranslate"><span class="pre">meta</span></code> is a
+dict with keys including <code class="docutils literal notranslate"><span class="pre">'average_vels'</span></code> (km/s), <code class="docutils literal notranslate"><span class="pre">'beam_info'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'pix_spatial_scale'</span></code> (kpc/pixel), and optionally
+<code class="docutils literal notranslate"><span class="pre">'per_galaxy_cubes'</span></code>, <code class="docutils literal notranslate"><span class="pre">'halo_cube'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'bridges_cube'</span></code>.</p></li>
+<li><p><strong>idx</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of the cube to display (default 0).</p></li>
+<li><p><strong>noisy_data</strong> (<em>sequence</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – A <code class="docutils literal notranslate"><span class="pre">results</span></code>-like container in the same shape/idx convention as
+<code class="docutils literal notranslate"><span class="pre">data</span></code>, holding the noisy version of the same cube (present only
+when noise was simulated at generation time). When given, the
+viewer defaults to displaying the noisy cube and exposes a
+Clean/Noisy toggle; per-source and diffuse component arrays remain
+the clean ground truth either way, since noise is an instrument
+effect on the observed total rather than a per-source quantity.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -435,6 +477,27 @@ spanning the full width below.</p>
 vmin/vmax sliders, and (when per-galaxy cubes are available) a sources
 sidebar with per-source contours, bounding boxes, and intensity-threshold
 masks whose threshold percentage is tunable via a dedicated slider.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>master</strong> (<em>tkinter widget</em>) – Parent window this viewer is opened as a <code class="docutils literal notranslate"><span class="pre">Toplevel</span></code> of.</p></li>
+<li><p><strong>data</strong> (<em>sequence</em>) – The <code class="docutils literal notranslate"><span class="pre">results</span></code> container produced by <code class="docutils literal notranslate"><span class="pre">SONGS.generate_cubes</span></code>.
+<code class="docutils literal notranslate"><span class="pre">data[idx]</span></code> must be a <code class="docutils literal notranslate"><span class="pre">(cube,</span> <span class="pre">meta)</span></code> tuple where <code class="docutils literal notranslate"><span class="pre">cube</span></code> is a
+NumPy array of shape <code class="docutils literal notranslate"><span class="pre">(n_vel,</span> <span class="pre">ny,</span> <span class="pre">nx)</span></code> in Jy/beam and <code class="docutils literal notranslate"><span class="pre">meta</span></code> is a
+dict with keys including <code class="docutils literal notranslate"><span class="pre">'average_vels'</span></code> (km/s), <code class="docutils literal notranslate"><span class="pre">'beam_info'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'pix_spatial_scale'</span></code> (kpc/pixel), and optionally
+<code class="docutils literal notranslate"><span class="pre">'per_galaxy_cubes'</span></code> (shape <code class="docutils literal notranslate"><span class="pre">(n_gal,</span> <span class="pre">n_vel,</span> <span class="pre">ny,</span> <span class="pre">nx)</span></code>).</p></li>
+<li><p><strong>idx</strong> (<em>int</em><em>, </em><em>optional</em>) – Index of the cube to display (default 0).</p></li>
+<li><p><strong>noisy_data</strong> (<em>sequence</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – A <code class="docutils literal notranslate"><span class="pre">results</span></code>-like container in the same shape/idx convention as
+<code class="docutils literal notranslate"><span class="pre">data</span></code>, holding the noisy version of the same cube (present only
+when noise was simulated at generation time). When given, the
+viewer defaults to displaying the noisy cube and exposes a
+Clean/Noisy toggle; per-source component arrays remain the clean
+ground truth either way, since noise is an instrument effect on the
+observed total rather than a per-source quantity.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -604,12 +667,12 @@ and threshold masks are computed independently for each source component.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="gui.html"
+       href="api_gui.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">GUI Reference</p>
+        <p class="prev-next-title">GUI Module (songs.gui)</p>
       </div>
     </a>
     <a class="right-next"
