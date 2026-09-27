@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const childProcess = require('child_process');
 
 const repoRoot = path.resolve(__dirname, '..');
@@ -24,13 +25,35 @@ function thumbnailPathFor(filePath) {
   return path.join(parsed.dir, thumbnailFolderName, `${parsed.name}.jpg`);
 }
 
-function ensureThumbnail(sourcePath) {
-  const thumbPath = thumbnailPathFor(sourcePath);
-  const sourceStat = fs.statSync(sourcePath);
+function hashFile(filePath) {
+  return crypto.createHash('sha1').update(fs.readFileSync(filePath)).digest('hex');
+}
 
-  if (fs.existsSync(thumbPath)) {
-    const thumbStat = fs.statSync(thumbPath);
-    if (thumbStat.mtimeMs >= sourceStat.mtimeMs) return thumbPath;
+function cachePathFor(thumbDir) {
+  return path.join(thumbDir, '.source-hashes.json');
+}
+
+function readCache(thumbDir) {
+  const cachePath = cachePathFor(thumbDir);
+  if (!fs.existsSync(cachePath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+  } catch (_) {
+    return {};
+  }
+}
+
+function writeCache(thumbDir, cache) {
+  fs.writeFileSync(cachePathFor(thumbDir), JSON.stringify(cache, null, 2), 'utf8');
+}
+
+function ensureThumbnail(sourcePath, cache) {
+  const thumbPath = thumbnailPathFor(sourcePath);
+  const thumbName = path.basename(thumbPath);
+  const sourceHash = hashFile(sourcePath);
+
+  if (fs.existsSync(thumbPath) && cache[thumbName] === sourceHash) {
+    return thumbPath;
   }
 
   fs.mkdirSync(path.dirname(thumbPath), { recursive: true });
@@ -42,6 +65,7 @@ function ensureThumbnail(sourcePath) {
     '--out', thumbPath
   ], { stdio: 'ignore' });
 
+  cache[thumbName] = sourceHash;
   return thumbPath;
 }
 
@@ -58,6 +82,8 @@ function readManifest() {
 
   folders.forEach((folder) => {
     const folderPath = path.join(travelRoot, folder);
+    const thumbDir = path.join(folderPath, thumbnailFolderName);
+    const cache = readCache(thumbDir);
     const files = fs.readdirSync(folderPath, { withFileTypes: true })
       .filter((entry) => entry.isFile() && !entry.name.startsWith('.'))
       .filter((entry) => imageExtensions.has(path.extname(entry.name).toLowerCase()))
@@ -65,8 +91,12 @@ function readManifest() {
       .sort(naturalCompare)
       .map((sourcePath) => ({
         src: toWebPath(sourcePath),
-        thumbSrc: toWebPath(ensureThumbnail(sourcePath))
+        thumbSrc: toWebPath(ensureThumbnail(sourcePath, cache))
       }));
+    if (files.length > 0) {
+      fs.mkdirSync(thumbDir, { recursive: true });
+      writeCache(thumbDir, cache);
+    }
 
     manifest[folder] = files;
   });

@@ -22,6 +22,10 @@
       block.style.padding = '12px 16px 20px 16px';
     });
 
+    clone.querySelectorAll('.project-image, .project-full figure, .project-full figcaption, .project-full img').forEach(function(el){
+      el.style.display = 'none';
+    });
+
     // Leave interactive launchers in the clone so the expanded view can show
     // the play button anchored to the image (the original card is hidden).
 

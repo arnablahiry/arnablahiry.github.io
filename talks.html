@@ -50,7 +50,8 @@
             <button class="nav-dropdown-toggle" type="button" aria-expanded="false">About</button>
             <div class="nav-dropdown-menu">
                 <a href="about.html">Me</a>
-                <a href="travels.html">Travels</a>
+                <a href="travels.html">My Travels</a>
+                <a href="tripblogs.html">My Trip Blogs</a>
                 <a href="mywildindia.html">My Wild India</a>
                 <a href="memoirs.html">Memoirs of a Vagabond</a>
             </div>
@@ -95,7 +96,7 @@
                 <div class="projects-grid" id="projects-grid">   
                     
                     <article class="project-card" data-pdf="docs/talks/Lahiry-Bayer-Villaescusa-Navarro-2025-journal-club.pdf">
-                        <canvas class="project-image"></canvas>
+                        <img class="project-image" src="images/talks/Lahiry-Bayer-Villaescusa-Navarro-2025-journal-club.jpg" alt="Title slide: Interpreting Cosmological Information from Neural Networks in the Hydrodynamic Universe" width="1000" height="563" loading="lazy" decoding="async">
                         <div class="project-meta">
                             <div class="talk-date">May 2026</div>
                             <p class="project-subtitle">Journal Club presentation on &quot;Interpreting Cosmological Information from Neural Networks in the Hydrodynamic Universe&quot;. This talk details how neural networks extract cosmological information from hydrodynamic density fields, exploring how CNNs marginalize over complex baryonic effects to constrain cosmological parameters.</p>
@@ -117,7 +118,7 @@
                     
                     <!-- ── DAOISM Workshop ── -->
                     <article class="project-card" data-pdf="docs/talks/DAOISM_arnab.pdf">
-                        <canvas class="project-image"></canvas>
+                        <img class="project-image" src="images/talks/DAOISM_arnab.jpg" alt="Title slide: Deep Learning the SFR with Spectral Kinematics of High-z Galaxies?" width="1000" height="563" loading="lazy" decoding="async">
                         <div class="project-meta">
                             <div class="talk-date">April 2026</div>
                             <p class="project-subtitle">Contributed talk at the DAOISM workshop on ISM studies with data science and PPV spectral cubes, held at the Institut d'Astrophysique de Paris (IAP), France. Presenting high-z interferometric denoising benchmarks and physical property inference using deep learning and sparsity.</p>
@@ -137,8 +138,28 @@
                         </div>
                     </article>
 
-
-                    
+                    <!-- ── Neural Network Explainability notebook ──
+                         Plain outbound link, not an expandable card — the
+                         notebook is hosted (and rendered) by AstroStat
+                         Academy's own Jupyter Book site. The whole card is
+                         one <a>, so it never triggers research.js's
+                         card-expand behavior (see .talks-link-card in
+                         talks_style.css). ── -->
+                    <a class="talks-link-card" href="https://astrostat-academy.github.io/astrostat-school-7/NN_Explainability/NN_explainability.html" target="_blank" rel="noopener noreferrer">
+                        <img class="project-image" src="images/talks/NN_explainability.jpg" alt="Diagram tracing which neurons drive a galaxy-morphology classifier's prediction, layer by layer" width="1000" height="562" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <div class="talk-date">Teaching notebook</div>
+                            <p class="project-subtitle">A hands-on walkthrough of neural network explainability — saliency maps, integrated gradients, and mechanistic circuit-tracing — built up from a toy classifier to MNIST, ImageNet, and a galaxy morphology model.</p>
+                            <span class="talks-external-link">
+                                Open AstroStat Academy Jupyter Book
+                                <svg class="talks-external-link-icon" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <polyline points="15 3 21 3 21 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </a>
 
                 </div>
             </div>

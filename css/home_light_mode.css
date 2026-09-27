@@ -1,4 +1,31 @@
 
+/* The site-wide `body.light-mode button` rule in light_mode.css puts a
+   border and faint fill on every <button>, for buttons that show visible
+   text/chrome. The snitch launch button is a bare, transparent PNG icon
+   with no chrome of its own in dark mode, so that rule was drawing an
+   unwanted grey box around it. Restore the borderless, transparent look. */
+body.light-mode #snitch-launch-btn {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Same problem, same fix: the Start button is just the start.png artwork —
+   its own inline style already sets border:0/background:transparent, but
+   the generic rule's !important beats a non-important inline style, so it
+   was still getting the grey box. */
+body.light-mode .start-button {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Same again for the sidebar Stop button — desktop (#stop-button) and its
+   mobile counterpart (#mobile-stop-button), both bare stop.png icons. */
+body.light-mode #stop-button,
+body.light-mode #mobile-stop-button {
+  background: transparent !important;
+  border: none !important;
+}
+
 /* Light-mode only: style audio buttons on the homepage with a very light
    translucent yellow background and a subtle background-image for depth.
    This applies only on the homepage because this file is loaded only on

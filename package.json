@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "travel:manifest": "node scripts/generate-travel-photo-manifest.js",
+    "travel:watch": "node scripts/watch-travel-photos.js",
     "travel:captions": "node scripts/sync-travel-caption-spreadsheet.js",
     "travel:captions:watch": "node scripts/watch-travel-caption-spreadsheet.js",
     "travel:sync": "npm run travel:manifest && npm run travel:captions",
@@ -11,6 +12,9 @@
     "mywildindia:captions": "node scripts/sync-mywildindia-caption-spreadsheet.js",
     "mywildindia:captions:watch": "node scripts/watch-mywildindia-caption-spreadsheet.js",
     "mywildindia:sync": "npm run mywildindia:manifest",
+    "talks:optimize": "node scripts/optimize-talk-pdfs.js",
+    "talks:thumbs": "node scripts/generate-talk-thumbnails.js",
+    "talks:sync": "npm run talks:optimize && npm run talks:thumbs",
     "news:sync": "node scripts/sync-news-spreadsheet.js",
     "news:watch": "node scripts/watch-news-spreadsheet.js"
   },

@@ -51,8 +51,81 @@ body.page-travels #image-overlay{
     z-index: -1;
 }
 
+/* Light-mode background stack, built on the Trip Blogs page's layering
+   (which gets its values from css/research_light_mode.css):
+     - the same travel_bg.jpeg, unfiltered
+     - a white scrim over it (a touch stronger here than the 0.88 the Trip
+       Blogs page uses, so this page reads lighter)
+     - every wrapper above it kept transparent, because css/light_mode.css
+       forces .page-wrapper/.container to solid white and those sit at
+       z-index 0, above #bg-image (-2) and #image-overlay (-1) — so without
+       this they paint over the photo completely. */
+body.light-mode.page-travels{
+    background-color: transparent !important;
+}
+
+body.light-mode.page-travels #bg-image{
+    filter: none !important;
+}
+
 body.light-mode.page-travels #image-overlay{
-    background: rgba(255,255,255,0.804);
+    background: rgba(255,255,255,0.93) !important;
+}
+
+body.light-mode.page-travels .page-wrapper,
+body.light-mode.page-travels .container,
+body.light-mode.page-travels .travels-section,
+body.light-mode.page-travels .section-travels-heading{
+    background: transparent !important;
+}
+
+/* css/light_mode.css gives content pages a solid white header via
+   `body.light-mode:not(.no-theme-transition) header` — a selector meant to
+   exclude only the homepage. This page also carries .no-theme-transition
+   (it keeps theme switches instant for the globe canvas), so it was falling
+   back to the translucent blurred header instead. Apply the opaque version
+   directly. */
+body.light-mode.page-travels header,
+body.light-mode.page-travels nav#site-nav{
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: #111111 !important;
+}
+
+body.light-mode.page-travels header::before{
+    background: transparent !important;
+}
+
+/* White fade running down from the bottom edge of the nav bar.
+   It lives on body (not header::after) and sits at z-index -1, which puts it
+   above #image-overlay (-1, but earlier in the DOM) and below .page-wrapper
+   (0) — so it tints the background only, and the heading, subtitle and globe
+   all render on top of it instead of being washed out by its tail.
+   --travels-header-offset is set by travels-inline-03.js to the header height
+   + 10px, so subtracting that 10px lands the fade flush against the nav bar
+   at every breakpoint. */
+body.light-mode.page-travels::after{
+    content: "";
+    position: fixed;
+    top: calc(var(--travels-header-offset, 136px) - 10px);
+    left: 0;
+    right: 0;
+    height: 90px;
+    background: linear-gradient(to bottom,
+        #ffffff 0%,
+        rgba(255,255,255,0.86) 30%,
+        rgba(255,255,255,0.55) 60%,
+        rgba(255,255,255,0.22) 82%,
+        rgba(255,255,255,0) 100%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+@media (max-width: 768px) {
+    body.light-mode.page-travels::after{
+        height: 60px;
+    }
 }
 
 .section-travels-heading { background-color: transparent; }
@@ -112,6 +185,42 @@ body.page-travels nav#site-nav .theme-toggle{
     font-weight: 300 !important;
 }
 
+/* Every other page loads css/style.css, which is what actually spaces out
+   the three circular nav icon buttons (theme/scifi/music toggle): on desktop
+   it makes .nav-icon-controls `display:contents` so the buttons become
+   direct children of nav and inherit its `gap`, and on mobile it turns the
+   wrapper into its own centered row. This page never loaded style.css, so
+   the wrapper stayed a plain block box and the buttons only had the ~4px
+   of incidental whitespace between them instead of a real gap. Copied
+   verbatim from style.css for an exact match. */
+@media (max-width: 768px) {
+    .nav-icon-controls {
+        display: flex;
+        flex-direction: row;
+        order: -1;
+        justify-content: center;
+        align-items: center;
+        gap: 1.2rem;
+        width: 100%;
+        padding-bottom: 0.6rem;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+        margin-bottom: 0.2rem;
+    }
+    .nav-icon-controls .theme-toggle,
+    header.nav-open .nav-icon-controls .theme-toggle {
+        order: 0 !important;
+        margin: 0 !important;
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+}
+@media (min-width: 769px) {
+    .nav-icon-controls {
+        display: contents;
+    }
+}
+
 .margin-bottom-medium {
     margin-top: 0;
     margin-bottom: 0.2vh;
@@ -128,6 +237,18 @@ body.page-travels nav#site-nav .theme-toggle{
     overflow-wrap: normal;
     display: inline-block;
     margin: 0;
+}
+
+/* The bright gold→pink pairing reads fine on the dark photo backdrop but
+   loses contrast on the white light-mode background, so light mode gets a
+   darker, more saturated gradient — the same one used by the Talks and Trip
+   Blogs page headings. */
+body.light-mode.page-travels .section-travels-heading h2.intro-heading {
+    background: linear-gradient(to right, rgb(169, 143, 0), #80003e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }
 
 .travels-subtitle {

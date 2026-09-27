@@ -8,6 +8,74 @@
         "thumbSrc": "images/travels/belgium/thumbs/belgium_1.jpg"
       }
     ],
+    "czechia": [
+      {
+        "src": "images/travels/czechia/czechia1.jpg",
+        "thumbSrc": "images/travels/czechia/thumbs/czechia1.jpg"
+      },
+      {
+        "src": "images/travels/czechia/czechia2.jpg",
+        "thumbSrc": "images/travels/czechia/thumbs/czechia2.jpg"
+      },
+      {
+        "src": "images/travels/czechia/czechia3.jpg",
+        "thumbSrc": "images/travels/czechia/thumbs/czechia3.jpg"
+      },
+      {
+        "src": "images/travels/czechia/czechia4.jpg",
+        "thumbSrc": "images/travels/czechia/thumbs/czechia4.jpg"
+      }
+    ],
+    "france": [
+      {
+        "src": "images/travels/france/france_1.png",
+        "thumbSrc": "images/travels/france/thumbs/france_1.jpg"
+      },
+      {
+        "src": "images/travels/france/france_2.png",
+        "thumbSrc": "images/travels/france/thumbs/france_2.jpg"
+      },
+      {
+        "src": "images/travels/france/france_3.png",
+        "thumbSrc": "images/travels/france/thumbs/france_3.jpg"
+      },
+      {
+        "src": "images/travels/france/france_4.png",
+        "thumbSrc": "images/travels/france/thumbs/france_4.jpg"
+      },
+      {
+        "src": "images/travels/france/france_5.png",
+        "thumbSrc": "images/travels/france/thumbs/france_5.jpg"
+      },
+      {
+        "src": "images/travels/france/france_6.png",
+        "thumbSrc": "images/travels/france/thumbs/france_6.jpg"
+      },
+      {
+        "src": "images/travels/france/france_7.png",
+        "thumbSrc": "images/travels/france/thumbs/france_7.jpg"
+      },
+      {
+        "src": "images/travels/france/france_8.png",
+        "thumbSrc": "images/travels/france/thumbs/france_8.jpg"
+      },
+      {
+        "src": "images/travels/france/france_9.png",
+        "thumbSrc": "images/travels/france/thumbs/france_9.jpg"
+      },
+      {
+        "src": "images/travels/france/france_10.png",
+        "thumbSrc": "images/travels/france/thumbs/france_10.jpg"
+      },
+      {
+        "src": "images/travels/france/france_11.png",
+        "thumbSrc": "images/travels/france/thumbs/france_11.jpg"
+      },
+      {
+        "src": "images/travels/france/france_12.png",
+        "thumbSrc": "images/travels/france/thumbs/france_12.jpg"
+      }
+    ],
     "greece": [
       {
         "src": "images/travels/greece/greece_1.png",
@@ -100,6 +168,18 @@
       {
         "src": "images/travels/italy/italy_9.png",
         "thumbSrc": "images/travels/italy/thumbs/italy_9.jpg"
+      },
+      {
+        "src": "images/travels/italy/italy_10.png",
+        "thumbSrc": "images/travels/italy/thumbs/italy_10.jpg"
+      },
+      {
+        "src": "images/travels/italy/italy_11.png",
+        "thumbSrc": "images/travels/italy/thumbs/italy_11.jpg"
+      },
+      {
+        "src": "images/travels/italy/italy_12.png",
+        "thumbSrc": "images/travels/italy/thumbs/italy_12.jpg"
       }
     ],
     "romania": [
@@ -122,6 +202,34 @@
       {
         "src": "images/travels/romania/romania_5.png",
         "thumbSrc": "images/travels/romania/thumbs/romania_5.jpg"
+      },
+      {
+        "src": "images/travels/romania/romania_6.png",
+        "thumbSrc": "images/travels/romania/thumbs/romania_6.jpg"
+      },
+      {
+        "src": "images/travels/romania/romania_7.png",
+        "thumbSrc": "images/travels/romania/thumbs/romania_7.jpg"
+      },
+      {
+        "src": "images/travels/romania/romania_8.png",
+        "thumbSrc": "images/travels/romania/thumbs/romania_8.jpg"
+      },
+      {
+        "src": "images/travels/romania/romania_9.png",
+        "thumbSrc": "images/travels/romania/thumbs/romania_9.jpg"
+      },
+      {
+        "src": "images/travels/romania/romania_10.png",
+        "thumbSrc": "images/travels/romania/thumbs/romania_10.jpg"
+      },
+      {
+        "src": "images/travels/romania/romania_11.png",
+        "thumbSrc": "images/travels/romania/thumbs/romania_11.jpg"
+      },
+      {
+        "src": "images/travels/romania/romania_12.png",
+        "thumbSrc": "images/travels/romania/thumbs/romania_12.jpg"
       }
     ],
     "united_states": [
@@ -186,6 +294,18 @@
       {
         "src": "images/travels/vietnam/vietnam_9.png",
         "thumbSrc": "images/travels/vietnam/thumbs/vietnam_9.jpg"
+      },
+      {
+        "src": "images/travels/vietnam/vietnam_10.jpg",
+        "thumbSrc": "images/travels/vietnam/thumbs/vietnam_10.jpg"
+      },
+      {
+        "src": "images/travels/vietnam/vietnam11.png",
+        "thumbSrc": "images/travels/vietnam/thumbs/vietnam11.jpg"
+      },
+      {
+        "src": "images/travels/vietnam/vietnam12.jpg",
+        "thumbSrc": "images/travels/vietnam/thumbs/vietnam12.jpg"
       }
     ]
   };

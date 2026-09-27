@@ -15,22 +15,35 @@ body.page-memoirs h4 {
 
 .memoirs-heading {
   padding-top: calc(var(--memoirs-header-offset) + env(safe-area-inset-top, 0px));
-  padding-bottom: 28px;
+  padding-bottom: 56px;
   text-align: center;
 }
 
 .memoirs-heading h1 {
   margin: 0;
-  font-size: clamp(2rem, 4.5vw, 3.2rem);
-  background: linear-gradient(to right, gold, #ee0979);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+}
+
+/* The title graphic (images/memoirs/title.webp) is used as a mask over a
+   warm gold gradient rather than drawn directly, so its color can be tuned
+   here without re-exporting the source image. */
+.memoirs-title-image {
+  display: block;
+  margin: 0 auto;
+  width: clamp(340px, 54vw, 680px);
+  aspect-ratio: 735 / 151;
+  background: linear-gradient(120deg, #ffe38a 0%, #ffb23e 55%, #ff9a24 100%);
+  -webkit-mask-image: url('../images/memoirs/title.webp');
+  mask-image: url('../images/memoirs/title.webp');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .memoirs-subtitle {
-  margin: 10px 0 0;
+  margin: 22px 0 0;
   color: #9a9a9a;
   font-size: 13px;
   text-transform: uppercase;
@@ -1244,6 +1257,13 @@ body.light-mode.page-memoirs {
   color: #181818;
 }
 
+/* The pale gold gradient used on the dark background all but disappears on
+   white, so light mode gets a darker, more saturated amber — still warm and
+   yellowish, just with enough value to stay legible. */
+body.light-mode .memoirs-title-image {
+  background: linear-gradient(120deg, #c98a00 0%, #a65f00 55%, #8a4500 100%);
+}
+
 body.reader-open {
   overflow: hidden !important;
   height: 100vh;
@@ -1574,8 +1594,8 @@ body.light-mode .reader-toc-item:focus {
 }
 
 @media (max-width: 640px) {
-  .memoirs-heading h1 {
-    font-size: clamp(1.72rem, 9vw, 2.35rem);
+  .memoirs-title-image {
+    width: clamp(260px, 70vw, 420px);
   }
 
   body.page-memoirs {
@@ -1884,8 +1904,7 @@ body.light-mode .reader-toc-item:focus {
 
 /* Galaxy S23 class phones (≈390px CSS width) */
 @media (max-width: 430px) {
-  .memoirs-heading h1 {
-    font-size: clamp(1.42rem, 7.1vw, 1.88rem);
-    letter-spacing: 0.01em;
+  .memoirs-title-image {
+    width: clamp(220px, 76vw, 340px);
   }
 }

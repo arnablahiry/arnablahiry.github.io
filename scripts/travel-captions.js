@@ -5,6 +5,26 @@
     "belgium": [
       "Not exactly the birthplace of TinTin, but my first foray into the birth country of the famous reporter I grew up loving! Very charming city with wafting smells of waffles, and the riverside walk views looked straight out of a fairy tale."
     ],
+    "czechia": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "france": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
     "greece": [
       "A random plan to find a `secret beach' on the route between Heraklion and Rethymno led us to what is probably the best view I have seen in Crete (was a bit hard to photograph given that I was semi-hanging from a boulder)",
       "The beautiful city of Chania, about 3 hours or so from Heraklion - Absolutely lovely in the summer, kinda dead in the winter hahaha. One of the places I was really excited to travel to when I reached here.",
@@ -23,9 +43,12 @@
       ""
     ],
     "italy": [
-      "",
-      "",
-      "",
+      "The Greek myth nerd inside me (and outside) was losing his shit at finally seeing this in person.",
+      "\"It is a good life we lead brother\"; \"Ah, the best\"; \"May it never change\"",
+      "\"And may it never change us\"",
+      "Hiking on a volcano was not on my bucket list, but it was surreal. Bummer couldn't see the eruption (happened 2 days after we left, smh)",
+      "2026 was the year of having my Assassin's Creed Italy tour.",
+      "Beautiful beautiful Venice...",
       "",
       "",
       "",
@@ -34,6 +57,13 @@
       ""
     ],
     "romania": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
       "",
       "",
       "",
@@ -49,6 +79,9 @@
       ""
     ],
     "vietnam": [
+      "",
+      "",
+      "",
       "",
       "",
       "",

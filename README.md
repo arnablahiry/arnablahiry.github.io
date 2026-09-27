@@ -63,6 +63,29 @@ For live watching while you edit files, use:
 node scripts/watch-mywildindia-caption-spreadsheet.js
 ```
 
+## Talks
+
+Drop a presentation PDF into `docs/talks/`, add its card to `talks.html` (`data-pdf` on the `<article>` and on the View Presentation button), then run:
+
+```sh
+npm run talks:sync
+```
+
+That does two things:
+
+- `npm run talks:optimize` re-compresses the PDFs in place with ghostscript (images downsampled to 150 dpi, file linearized). Keynote/PowerPoint exports routinely shrink 5-10x with no visible difference on screen; files under 2 MB, and any result that barely saves anything, are left untouched.
+- `npm run talks:thumbs` renders page 1 of each PDF to a ~100 KB poster in `images/talks/`. The cards show those posters, so opening the talks page no longer downloads any PDF.
+
+Both need ghostscript (`brew install ghostscript`).
+
+A deck is fetched only when its card is opened, behind a "Loading… %" cover. Once it is up, the remaining slides are rendered into memory in the background, so flipping through the deck does not flicker.
+
+### Notebook cards
+
+A `.ipynb` that's hosted (and rendered) elsewhere — e.g. an AstroStat Academy Jupyter Book page — gets a plain outbound-link card instead of a PDF-style viewer: a cover image, a teaser, and an "Open ... ↗" line that opens the hosted page in a new tab. See the NN Explainability card in `talks.html` for the pattern, and `.talks-link-card` in `css/talks_style.css` for its styling.
+
+That card is deliberately a bare `<a>`, not a `.project-card` — research.js attaches expand-to-fullscreen behavior to every `.project-card` on the page, which this kind of card has nothing to expand into. Pick a cover image the same way as the notebook cards above: there's no single obvious "page 1", so crop/save a representative plot into `images/talks/<name>.jpg` yourself.
+
 ## News
 
 Edit home page news in `data/news.xlsx`. To auto-refresh the browser data after each spreadsheet save, start the watcher once:
