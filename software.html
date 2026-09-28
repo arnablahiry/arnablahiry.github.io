@@ -128,6 +128,10 @@
                         <img src="images/icons/pypi_software.png" alt="PyPI" loading="lazy" decoding="async">
                         <span>PyPI Package</span>
                     </div>
+                    <div class="legend-item">
+                        <img src="images/icons/website_software.svg" alt="Website" loading="lazy" decoding="async">
+                        <span>Website / Web App</span>
+                    </div>
                 </div>
 
                 <div class="projects-grid" id="projects-grid">
@@ -503,6 +507,105 @@ img = make_galaxy(kind=3, size=128, stage=0.8, merger_barred=True)</code></pre>
                             <h3>Authors</h3>
                             <ul>
                                 <li><strong>Arnab Lahiry</strong> (alahiry@ics.forth.gr)</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="project-card" data-tags="end-to-end, fun">
+                        <img class="project-image" src="images/softwares/albedo_banner.png" alt="Albedo project banner" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <h3 class="project-title">Albedo</h3>
+                            <p class="project-subtitle">Flip plots between dark and light backgrounds while keeping their hues, as a Python package, a command-line tool and a web app.</p>
+                            <div class="project-tags">
+                                <span class="tag-chip">End-to-end</span>
+                                <span class="tag-chip">Fun</span>
+                                <div class="project-badges" aria-hidden="true">
+                                    <a href="https://github.com/arnablahiry/albedo/actions/workflows/tests.yml" target="_blank" rel="noopener"><img src="https://github.com/arnablahiry/albedo/actions/workflows/tests.yml/badge.svg" alt="Tests status" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/albedo" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/python-3.9%2B-blue" alt="Python 3.9+" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/albedo/blob/main/LICENSE" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License" loading="lazy" decoding="async"></a>
+                                </div>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="https://github.com/arnablahiry/albedo" aria-label="Albedo GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
+                                <a class="project-icon-link" href="https://arnablahiry.github.io/albedo/" aria-label="Albedo web app" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/website_software.svg" alt="Website" loading="lazy" decoding="async"></a>
+                            </div>
+                        </div>
+                        <div class="project-full" id="proj-albedo-desc" hidden>
+                            <h1>Albedo</h1>
+                            <p>
+                                <strong>Albedo</strong> flips plots between dark and light backgrounds while <strong>keeping their hues</strong>: blue stays blue, orange stays orange. It moves a figure from a dark talk slide into a light paper, or the other way round, without re-plotting.
+                            </p>
+                            <p>
+                                A plain colour invert turns blue into orange and yellow into blue. Albedo inverts and then rotates every hue back by 180&deg;, so only light and dark swap. The default mode is the same maths as the CSS filter <code>invert(1) hue-rotate(180deg)</code>, so flipped figures match web pages and slides that use that filter (this website's light mode included).
+                            </p>
+
+                            <div class="image-wrapper no-invert">
+                                <img src="images/softwares/albedo_example.png" alt="A dark matplotlib figure and its Albedo-flipped light version, side by side" loading="lazy" decoding="async">
+                            </div>
+                            <p style="text-align:center;"><em>A dark matplotlib figure and its Albedo-flipped light version, side by side.</em></p>
+
+                            <h3>Three ways to use it</h3>
+                            <ul>
+                                <li><strong>Python package</strong> &ndash; recolours matplotlib figures directly, so flipped PDFs and SVGs stay vector.</li>
+                                <li><strong>Command-line tool</strong> &ndash; flips image and PDF files in bulk.</li>
+                                <li><strong>Web app</strong> &ndash; flips one-off files in the browser, at <a href="https://arnablahiry.github.io/albedo/" target="_blank" rel="noopener">arnablahiry.github.io/albedo</a>.</li>
+                            </ul>
+
+                            <div class="image-pair">
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/albedo_webapp.png" alt="Screenshot of the Albedo web app, dark theme" loading="lazy" decoding="async">
+                                </div>
+                                <div class="image-wrapper no-invert">
+                                    <img src="images/softwares/albedo_webapp_light.png" alt="Screenshot of the Albedo web app, light theme" loading="lazy" decoding="async">
+                                </div>
+                            </div>
+                            <p style="text-align:center;"><em>The Albedo web app, in dark and light theme.</em></p>
+
+                            <h3>Two flip modes</h3>
+                            <ul>
+                                <li><strong><code>css</code></strong> (default) &ndash; inverts each colour and applies the Filter Effects <code>hue-rotate(180&deg;)</code> matrix, which keeps brightness fixed and cancels the hue flip caused by inverting. Matches the browser filter exactly.</li>
+                                <li><strong><code>oklab</code></strong> &ndash; converts to the perceptual OKLab colour space and replaces lightness <code>L</code> with <code>1 &minus; L</code>. Hue and saturation are untouched, and greys flip by how bright they <em>look</em> rather than by their pixel value.</li>
+                            </ul>
+                            <p>
+                                Every function also takes <code>black</code> and <code>white</code> to set the output range, so a flipped figure can blend into a slide background exactly, and <code>hue</code> for an extra rotation.
+                            </p>
+
+                            <h3>What gets recoloured</h3>
+                            <p>
+                                <code>flip_figure</code> handles lines and markers; text, titles, tick labels and legends; patches such as bars, histograms, fills, spines and backgrounds; scatter, error bars and contours; colour-mapped artists (<code>imshow</code>, <code>pcolormesh</code>, <code>contourf</code>) along with their colorbars; and RGB images. The flipped copy is an ordinary matplotlib figure, so you can keep editing it.
+                            </p>
+
+                            <h3>Quick install &amp; usage</h3>
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">git clone https://github.com/arnablahiry/albedo.git
+pip install -e "albedo[all]"</code></pre>
+                            </div>
+                            <div class="code-snippet">
+                                <div class="lang-label">PYTHON</div>
+                                <pre><code class="language-python">import matplotlib.pyplot as plt
+import albedo
+
+plt.style.use("dark_background")
+fig, ax = plt.subplots()
+ax.plot(x, y)
+
+light = albedo.flip_figure(fig)            # flipped copy; fig is untouched
+light.savefig("plot_paper.pdf")            # still a vector PDF
+
+albedo.compare(fig)                        # original and flipped side by side
+albedo.savefig_pair(fig, "plot.pdf")       # writes plot.pdf and plot_inverted.pdf</code></pre>
+                            </div>
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">albedo plot.png                            # -> plot_inverted.png
+albedo figure.pdf --dpi 300                # -> figure_inverted.pdf
+albedo figs/*.png --mode oklab --black '#0c0d12' -o figs/dark/</code></pre>
+                            </div>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> (alahiry@physics.uoc.gr)</li>
                             </ul>
                         </div>
                     </article>

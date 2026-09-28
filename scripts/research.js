@@ -22,7 +22,11 @@
       block.style.padding = '12px 16px 20px 16px';
     });
 
-    clone.querySelectorAll('.project-image, .project-full figure, .project-full figcaption, .project-full img').forEach(function(el){
+    // Software cards keep their in-story figures; only the cover is hidden.
+    var hideSel = document.body.classList.contains('page-software')
+      ? '.project-image'
+      : '.project-image, .project-full figure, .project-full figcaption, .project-full img';
+    clone.querySelectorAll(hideSel).forEach(function(el){
       el.style.display = 'none';
     });
 

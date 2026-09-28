@@ -1313,3 +1313,14 @@ body.page-software .project-clone .project-clone .project-condense {
     margin-left: -16px;
     margin-right: -16px;
 }
+
+/* Inline links inside expanded card text follow the text colour */
+.page-software .project-full a{ color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.page-software .project-full a:hover{ opacity: 0.75; }
+
+/* Keep `no-invert` figures untouched inside the expanded card too; the
+   generic clone rule in research_style.css inverts images in dark mode. */
+body.page-software .project-clone .project-full .image-wrapper.no-invert img{
+  filter: none !important;
+  -webkit-filter: none !important;
+}
