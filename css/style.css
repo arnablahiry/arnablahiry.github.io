@@ -241,7 +241,7 @@ header {
     opacity: 1;
     transition: max-height 220ms ease;
   }
-  header nav .nav-dropdown.open .nav-dropdown-menu{ max-height: 140px; }
+  header nav .nav-dropdown.open .nav-dropdown-menu{ max-height: 320px; }
   header nav .nav-dropdown-menu a{
     border-bottom: 0;
     color: rgba(255,255,255,0.86);
@@ -353,7 +353,7 @@ header {
     opacity: 1;
     transition: max-height 220ms ease;
   }
-  header nav .nav-dropdown.open .nav-dropdown-menu{ max-height: 220px; }
+  header nav .nav-dropdown.open .nav-dropdown-menu{ max-height: 320px; }
   header nav .nav-dropdown-menu a{
     border-bottom: 0;
     color: rgba(255,255,255,0.86);

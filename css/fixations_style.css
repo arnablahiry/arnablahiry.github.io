@@ -1,0 +1,250 @@
+/* ==========================================================================
+   MY CURRENT FIXATIONS
+   Builds on talks_style.css (the page also carries body.page-talks) and adds
+   the kind pills, poster-shaped cards and the empty state.
+   ========================================================================== */
+
+/* Kind pills (same look as the Software page filters) */
+.page-fixations .project-filters-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 8px 5vw;
+  box-sizing: border-box;
+  margin-top: -22px;
+  margin-bottom: 28px;
+}
+
+.page-fixations .project-filters {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.page-fixations .project-filters .filter-btn {
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  border: 0;
+  padding: 10px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Abaddon Bold', 'Abaddon Light', sans-serif !important;
+  font-weight: 700;
+  font-size: 16px;
+  min-width: 92px;
+  white-space: nowrap;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 160ms ease, box-shadow 160ms ease;
+}
+
+.page-fixations .project-filters .filter-icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex: none;
+  filter: none !important; /* keep the icons' own colors in light mode */
+}
+
+.page-fixations .project-filters .filter-btn:hover {
+  background: rgba(255,255,255,0.09);
+}
+
+.page-fixations .project-filters .filter-btn.active {
+  background: linear-gradient(90deg, rgba(254,218,74,0.14), rgba(160,138,65,0.12));
+  box-shadow: 0 8px 26px rgba(0,0,0,0.12);
+}
+
+.page-fixations .project-filters .filter-btn:focus-visible {
+  outline: 2px solid #feda4a;
+  outline-offset: 2px;
+}
+
+body.light-mode.page-fixations .project-filters .filter-btn {
+  background: rgba(0,0,0,0.02) !important;
+  color: #111 !important;
+  box-shadow: none !important;
+}
+
+body.light-mode.page-fixations .project-filters .filter-btn:hover {
+  background: rgba(0,0,0,0.08) !important;
+}
+
+body.light-mode.page-fixations .project-filters .filter-btn.active {
+  background: linear-gradient(90deg, rgba(250,228,150,0.22), rgba(200,170,80,0.14)) !important;
+  box-shadow: 0 8px 22px rgba(140,102,12,0.09) !important;
+}
+
+/* Fixation cards: cover on the left, text on the right. Cards size to their
+   content, so they differ in width and height; the grid packs them in rows
+   with the same gap horizontally and vertically. */
+.page-fixations .fixations-grid {
+  --fixations-gap: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--fixations-gap);
+  max-width: 1360px;
+  margin: 0 auto 56px;
+  padding: 0 5vw;
+  box-sizing: border-box;
+}
+
+.page-fixations .fixation-card {
+  display: flex;
+  align-items: flex-start;
+  background: rgba(15, 15, 16, 0.84);
+  border: 1px solid rgba(255, 215, 0, 0.22);
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+
+.page-fixations .fixation-card.card-hidden {
+  display: none;
+}
+
+/* scripts/fixations.js packs the cards and positions them absolutely */
+.page-fixations .fixations-grid.is-packed {
+  display: block;
+  position: relative;
+}
+
+.page-fixations .fixations-grid.is-packed .fixation-card {
+  position: absolute;
+}
+
+body.light-mode.page-fixations .fixation-card {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(140, 118, 28, 0.38);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+/* scripts/fixations.js sets the cover's height to the text column's height;
+   the width then follows the image's own aspect ratio. Until then (or
+   without JS) it shows as a fixed-width strip. */
+.page-fixations .fixation-cover {
+  display: block;
+  flex: none;
+  width: 120px;
+  height: auto;
+  object-fit: cover;
+  filter: none !important;
+}
+
+/* The heading is the widest thing in the column (it never wraps), and the
+   column is only as wide as its widest child, so everything below wraps to it */
+.page-fixations .fixation-body {
+  width: min-content;
+  min-width: 200px;
+  padding: 16px 20px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.page-fixations .fixation-title {
+  margin: 0;
+  white-space: nowrap;
+  font-family: 'Abaddon Bold', sans-serif !important;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.25;
+  letter-spacing: normal;
+  color: #fff;
+}
+
+body.light-mode.page-fixations .fixation-title {
+  color: #111;
+}
+
+.page-fixations .fixation-rating {
+  display: flex;
+  gap: 5px;
+}
+
+.page-fixations .fixation-rating .footer-heart {
+  height: 15px;
+  fill: rgba(255, 123, 128, 0.22);
+}
+
+.page-fixations .fixation-rating .footer-heart.is-on,
+.page-fixations .fixation-rating .heart-half {
+  fill: #ff7b80;
+}
+
+.page-fixations .fixation-desc {
+  margin: 0;
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-weight: 300;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.85);
+}
+
+body.light-mode.page-fixations .fixation-desc {
+  color: #222;
+}
+
+.page-fixations .fixation-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 2px;
+  padding: 5px 12px 5px 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  font-family: 'Abaddon Bold', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.page-fixations .fixation-pill img {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: none !important;
+}
+
+body.light-mode.page-fixations .fixation-pill {
+  background: rgba(0,0,0,0.05);
+  color: #111;
+}
+
+/* Phones: let long headings wrap and cards take the full width */
+@media (max-width: 520px) {
+  .page-fixations .fixations-grid { --fixations-gap: 18px; padding: 0 16px; }
+  .page-fixations .fixation-card { width: 100%; align-items: stretch; }
+  .page-fixations .fixation-cover { width: 32%; align-self: stretch; }
+  .page-fixations .fixation-body { width: auto; min-width: 0; flex: 1; }
+  .page-fixations .fixation-title { white-space: normal; }
+}
+
+.page-fixations .fixations-empty {
+  text-align: center;
+  margin: 12px 0 48px;
+  font-family: 'Abaddon Light', sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+}
+
+body.light-mode.page-fixations .fixations-empty {
+  color: rgba(0,0,0,0.55);
+}
+
+@media (max-width: 520px) {
+  .page-fixations .project-filters { gap: 10px; }
+  .page-fixations .project-filters .filter-btn { min-width: 76px; padding: 8px 14px; font-size: 14px; gap: 8px; }
+  .page-fixations .project-filters .filter-icon { width: 22px; height: 22px; }
+}

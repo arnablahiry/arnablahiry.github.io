@@ -16,7 +16,9 @@
     "talks:thumbs": "node scripts/generate-talk-thumbnails.js",
     "talks:sync": "npm run talks:optimize && npm run talks:thumbs",
     "news:sync": "node scripts/sync-news-spreadsheet.js",
-    "news:watch": "node scripts/watch-news-spreadsheet.js"
+    "news:watch": "node scripts/watch-news-spreadsheet.js",
+    "fixations:sync": "node scripts/sync-fixations-spreadsheet.js",
+    "fixations:watch": "node scripts/watch-fixations-spreadsheet.js"
   },
   "dependencies": {
     "xlsx": "^0.18.5"

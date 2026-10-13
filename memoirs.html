@@ -21,38 +21,14 @@
   <link rel="stylesheet" href="css/light_mode.css">
 </head>
 <body class="page-memoirs">
-  <header>
-    <div class="logo-container">
-      <a href="index.html" aria-label="Home">
-        <img src="images/logo.png" alt="Logo" class="logo" loading="lazy" decoding="async">
-      </a>
-    </div>
-    <button class="hamburger" aria-label="Open menu" aria-controls="site-nav" aria-expanded="false">
-      <span class="bar bar1"></span>
-      <span class="bar bar2"></span>
-      <span class="bar bar3"></span>
-    </button>
-    <nav id="site-nav">
-      <a href="index.html">Home</a>
-      <div class="nav-dropdown">
-        <button class="nav-dropdown-toggle" type="button" aria-expanded="false">About</button>
-        <div class="nav-dropdown-menu">
-          <a href="about.html">Me</a>
-          <a href="travels.html">My Travels</a>
-          <a href="tripblogs.html">My Trip Blogs</a>
-          <a href="mywildindia.html">My Wild India</a>
-          <a href="memoirs.html">Memoirs of a Vagabond</a>
-        </div>
-      </div>
-      <a href="timeline.html">Timeline</a>
-      <a href="research.html">Research</a>
-      <a href="software.html">Software</a>
-      <a href="talks.html">Talks</a>
-      <a href="publications.html">Publications</a>
-      <a href="cv.html">CV</a>
-      <a href="contact.html">Contact</a>
+  <header class="memoirs-header">
+    <a href="index.html" class="memoirs-back-sign">
+      <img src="images/memoirs/header.png" alt="Back to Arnab's Website" decoding="async">
+    </a>
+    <div class="memoirs-header-controls">
       <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark mode">☀</button>
-    </nav>
+      <button id="nav-music-toggle" class="nav-music-toggle" aria-pressed="false" aria-label="Toggle music">&#x266B;</button>
+    </div>
   </header>
 
   <main>
@@ -181,15 +157,17 @@
         <img src="images/icons/instagram.png" alt="Instagram" loading="lazy" decoding="async">
       </a>
     </div>
-    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
+    <p>&copy; <span id="year"></span> Made with <svg class="footer-heart" viewBox="0 0 7 6" role="img" aria-label="love"><path d="M1 0h1v1h-1zM2 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM0 1h1v1h-1zM1 1h1v1h-1zM2 1h1v1h-1zM3 1h1v1h-1zM4 1h1v1h-1zM5 1h1v1h-1zM6 1h1v1h-1zM0 2h1v1h-1zM1 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM1 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM3 5h1v1h-1z"/></svg> by Arnab Lahiry</p>
   </footer>
 
   <script src="scripts/inline/memoirs-inline-02.js"></script>
   <script src="scripts/nav-toggle.js"></script>
   <script src="scripts/theme-toggle.js"></script>
+  <script src="scripts/nav-music.js"></script>
   <script src="scripts/viewport-lazy.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
   <script src="scripts/inline/memoirs-inline-03.js"></script>
+  <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
 </body>
 </html>

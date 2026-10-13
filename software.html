@@ -54,6 +54,7 @@
                 <a href="about.html">Me</a>
                 <a href="travels.html">My Travels</a>
                 <a href="tripblogs.html">My Trip Blogs</a>
+                <a href="fixations.html">My Current Fixations</a>
                 <a href="mywildindia.html">My Wild India</a>
                 <a href="memoirs.html">Memoirs of a Vagabond</a>
             </div>
@@ -610,6 +611,77 @@ albedo figs/*.png --mode oklab --black '#0c0d12' -o figs/dark/</code></pre>
                         </div>
                     </article>
 
+                    <article class="project-card" data-tags="end-to-end, fun">
+                        <img class="project-image" src="images/softwares/clockgit_banner.png" alt="clockgit project banner" loading="lazy" decoding="async">
+                        <div class="project-meta">
+                            <h3 class="project-title">clockgit</h3>
+                            <p class="project-subtitle">Commit + push, and pull, your git repositories at fixed times of day, each schedule in its own time zone.</p>
+                            <div class="project-tags">
+                                <span class="tag-chip">End-to-end</span>
+                                <span class="tag-chip">Fun</span>
+                                <div class="project-badges" aria-hidden="true">
+                                    <a href="https://github.com/arnablahiry/clockgit" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/python-3.9%2B-blue" alt="Python 3.9+" loading="lazy" decoding="async"></a>
+                                    <a href="https://github.com/arnablahiry/clockgit" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/dependencies-none-brightgreen" alt="No dependencies" loading="lazy" decoding="async"></a>
+                                </div>
+                            </div>
+                            <div class="project-icons">
+                                <a class="project-icon-link" href="https://github.com/arnablahiry/clockgit" aria-label="clockgit GitHub repository" target="_blank" rel="noopener"><img class="project-icon" src="images/icons/github_software.svg" alt="GitHub" loading="lazy" decoding="async"></a>
+                            </div>
+                        </div>
+                        <div class="project-full" id="proj-clockgit-desc" hidden>
+                            <h1>clockgit</h1>
+                            <p>
+                                <strong>clockgit</strong> commits and pushes, and pulls, your git repositories at <strong>fixed times of day</strong>, each schedule in <strong>its own time zone</strong>. Push the laptop at 18:30 local time, pull on the cluster at 09:00 New York time, and never think about it again. It is pure Python, standard library only, for macOS and Linux.
+                            </p>
+
+                            <h3>How it works</h3>
+                            <p>
+                                A once-a-minute background job (launchd on macOS, a systemd user timer or a crontab line on Linux) runs <code>clockgit tick</code>. For every configured repository it asks whether the most recent scheduled time, computed in that schedule's own zone, is later than the last run. If so, the job runs and the time is recorded. Because everything is computed from IANA zone rules:
+                            </p>
+                            <ul>
+                                <li><strong>Daylight saving is handled</strong> &ndash; a pull at 09:00 New York moves from 16:00 to 15:00 Athens time on its own when the US clocks change.</li>
+                                <li><strong>Local follows you</strong> &ndash; with <code>--push-tz local</code> (the default), travel to Tokyo and the 18:30 push happens at 18:30 Tokyo time.</li>
+                                <li><strong>Missed slots catch up</strong> &ndash; a computer that was asleep or off runs the missed slot once when it wakes, if it is at most <code>grace_hours</code> (default 12) late.</li>
+                                <li><strong>No double runs</strong> &ndash; the same slot never runs twice, and adding a repository does not fire a slot that already passed today.</li>
+                            </ul>
+
+                            <h3>Your commits stay yours</h3>
+                            <p>
+                                Commits use the repository's own <code>user.name</code> / <code>user.email</code>, with no <code>--author</code>, no <code>Co-authored-by</code> trailer and no tool signature. The message is a template (<code>Auto-commit {date} {time} {tz}</code> by default), and <code>--no-commit</code> makes the push job only push commits you made yourself.
+                            </p>
+
+                            <h3>wip mode: keep your history clean</h3>
+                            <p>
+                                With <code>--wip</code>, the push job snapshots your working copy onto a <strong>per-machine branch</strong> (default <code>wip/&lt;hostname&gt;</code>) instead of committing on your branch. Your checked-out branch, staging area and files are never touched, and the wip branch is only ever fast-forwarded. At pull time every machine's wip branch is fetched, so the laptop's latest snapshot is already waiting in <code>wip/laptop</code> on the cluster. Snapshots reach <code>main</code> only when you merge them, e.g. with <code>git merge --squash wip/laptop</code>.
+                            </p>
+
+                            <h3>Safety</h3>
+                            <p>
+                                clockgit never force-pushes, never creates merge commits and never resolves conflicts. It skips and logs why when a merge or rebase is in progress, the remote has diverged, a file is larger than <code>--max-file-mb</code>, or a file looks like a secret (<code>.env</code>, <code>*.pem</code>, SSH keys, API tokens, ...). Git and SSH run with prompts disabled, so a missing credential fails at once instead of hanging a background job, and failures raise a desktop notification.
+                            </p>
+
+                            <h3>Quick install &amp; usage</h3>
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">git clone https://github.com/arnablahiry/clockgit.git
+pip install -e clockgit        # Python &gt;= 3.9, no dependencies</code></pre>
+                            </div>
+                            <div class="code-snippet">
+                                <div class="lang-label">TERMINAL</div>
+                                <pre><code class="language-bash">clockgit add ~/repos/myproject --push 18:30 --pull 09:00 --pull-tz America/New_York
+clockgit add ~/repos/notes --push 18:30 --wip   # snapshots on wip/&lt;hostname&gt;
+clockgit doctor                                 # identity, upstream, remote reachable without prompts
+clockgit install                                # once: starts the background job
+clockgit list                                   # schedules and next run times</code></pre>
+                            </div>
+
+                            <h3>Authors</h3>
+                            <ul>
+                                <li><strong>Arnab Lahiry</strong> (alahiry@physics.uoc.gr)</li>
+                            </ul>
+                        </div>
+                    </article>
+
                     <article class="project-card" data-tags="collaboration, fun">
                         <img class="project-image" src="images/softwares/astrolore.png" alt="Project image" loading="lazy" decoding="async">
                         <div class="project-meta">
@@ -1069,7 +1141,7 @@ function smoothMoveTo(node, x, y, opts){
         <img src="images/icons/instagram.png" alt="Instagram" loading="lazy" decoding="async">
       </a>
     </div>
-    <p>&copy; <span id="year"></span> Made with ♡ by Arnab Lahiry</p>
+    <p>&copy; <span id="year"></span> Made with <svg class="footer-heart" viewBox="0 0 7 6" role="img" aria-label="love"><path d="M1 0h1v1h-1zM2 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM0 1h1v1h-1zM1 1h1v1h-1zM2 1h1v1h-1zM3 1h1v1h-1zM4 1h1v1h-1zM5 1h1v1h-1zM6 1h1v1h-1zM0 2h1v1h-1zM1 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM1 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM3 5h1v1h-1z"/></svg> by Arnab Lahiry</p>
     </footer>
 
     <script src="scripts/inline/software-inline-03.js"></script>

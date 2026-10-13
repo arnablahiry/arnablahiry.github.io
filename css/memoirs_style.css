@@ -13,6 +13,110 @@ body.page-memoirs h4 {
   letter-spacing: normal !important;
 }
 
+/* Memoirs has no navbar: the "Back to Arnab's Website" sign top left and the
+   theme and music toggles top right. It scrolls away with the page. */
+body.page-memoirs header.memoirs-header,
+body.light-mode.page-memoirs header.memoirs-header {
+  justify-content: space-between;
+  gap: 14px;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  pointer-events: none;
+  position: absolute !important;
+  /* Above the globe controls and hovered story cards (z-index 12-30), below
+     the book reader overlay (10000). */
+  z-index: 50;
+}
+
+.memoirs-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+/* The sign starts dimmed and comes to full opacity on hover or keyboard focus */
+.memoirs-back-sign {
+  opacity: 0.55;
+}
+
+.memoirs-back-sign:hover,
+.memoirs-back-sign:focus-visible {
+  opacity: 1;
+}
+
+/* The shared theme-toggle styles are scoped to `nav`; match the music toggle */
+.memoirs-header-controls .theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  cursor: pointer;
+  transition: background 160ms ease, box-shadow 160ms ease;
+}
+
+.memoirs-header-controls .theme-toggle:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.memoirs-header-controls .theme-toggle svg {
+  display: block;
+}
+
+body.light-mode .memoirs-header-controls .theme-toggle,
+body.light-mode .memoirs-header-controls #nav-music-toggle {
+  background: rgba(0,0,0,0.06) !important;
+  color: #111111 !important;
+  border-color: rgba(0,0,0,0.06) !important;
+}
+
+body.light-mode .memoirs-header-controls .theme-toggle:hover,
+body.light-mode .memoirs-header-controls #nav-music-toggle:hover {
+  background: rgba(160,138,65,0.12) !important;
+  box-shadow: 0 0 0.2rem rgba(160,138,65,0.28) !important;
+}
+
+body.light-mode .memoirs-header-controls #nav-music-toggle.active {
+  color: #7a6000 !important;
+  border-color: rgba(120,96,0,0.25) !important;
+}
+
+/* Light mode flips the sign's lightness but keeps its hues */
+body.light-mode .memoirs-back-sign img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.memoirs-back-sign {
+  display: block;
+  pointer-events: auto;
+  transition: transform 160ms ease, filter 160ms ease, opacity 220ms ease;
+}
+
+.memoirs-back-sign img {
+  display: block;
+  height: clamp(70px, 4.5vh, 40px);
+  width: auto;
+}
+
+.memoirs-back-sign:hover,
+.memoirs-back-sign:focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.memoirs-back-sign:focus-visible {
+  outline: 2px solid #feda4a;
+  outline-offset: 2px;
+}
+
 .memoirs-heading {
   padding-top: calc(var(--memoirs-header-offset) + env(safe-area-inset-top, 0px));
   padding-bottom: 56px;

@@ -95,3 +95,23 @@ npm run news:watch
 ```
 
 The watcher keeps running until you stop it with Ctrl+C.
+
+## My Current Fixations
+
+The cards on `fixations.html` come from `data/fixations.xlsx`, one row per card, in page order:
+
+| Column | Value |
+|---|---|
+| Kind | `Books`, `Movies`, `Shows` or `Games` |
+| Image | path inside `images/fixations/`, e.g. `games/totk.png` |
+| Title | card heading (rows without a title are not shown) |
+| Rating | 1-5 hearts |
+| Description | short blurb |
+
+Start the watcher once and leave it running:
+
+```sh
+npm run fixations:watch
+```
+
+Every workbook save regenerates `scripts/fixations-data.js`. Dropping a new cover into `images/fixations/<books|movies|shows|games>/` appends a row with Kind and Image already filled in; give it a Title (plus Rating and Description) and it appears on the page. Covers can be any aspect ratio. `npm run fixations:sync` does a one-off sync without watching.

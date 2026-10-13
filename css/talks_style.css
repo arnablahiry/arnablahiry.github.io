@@ -706,7 +706,9 @@ body.page-talks .pdf-badge {
   min-width: 30px;
   height: 18px;
   box-sizing: border-box;
-  padding: 0 5px;
+  /* Abaddon's ascent/descent (768/384) put capitals ~0.125em above centre at
+     line-height 1, so the extra top padding nudges the text down to centre it. */
+  padding: 2px 5px 0;
   border: 1px solid #feda4a;
   border-radius: 3px;
   background: #feda4a;
@@ -715,7 +717,6 @@ body.page-talks .pdf-badge {
   font-size: 10px;
   line-height: 1;
   letter-spacing: 0.02em;
-  transform: translateY(3px);
 }
 
 body.light-mode.page-talks .pdf-badge {

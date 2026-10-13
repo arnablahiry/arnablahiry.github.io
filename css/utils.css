@@ -238,7 +238,7 @@ header{
         transition: max-height 220ms ease !important;
     }
     nav .nav-dropdown.open .nav-dropdown-menu{
-        max-height: 220px !important;
+        max-height: 320px !important;
     }
     nav .nav-dropdown-menu a{
         padding: 0.45rem 0;
@@ -625,7 +625,7 @@ body.light-mode .intro-section .intro-text h2{
         transition: max-height 220ms ease;
     }
     nav .nav-dropdown.open .nav-dropdown-menu{
-        max-height: 140px;
+        max-height: 320px;
     }
     nav .nav-dropdown-menu a{
         padding: 0.45rem 0;
@@ -812,4 +812,39 @@ body:not(.light-mode) .project-subtitle{ color: #cfcfcf !important; }
     display: block !important;
     width: 18px !important;
     height: 18px !important;
+}
+
+/* Pixel heart in the footer's "Made with ♡ by" line (same art as the Albedo site) */
+.footer-heart{
+    display: inline-block;
+    height: 0.8em;
+    width: auto;
+    vertical-align: -0.02em;
+    fill: #ff7b80;
+    shape-rendering: crispEdges;
+    filter: none !important;
+}
+
+/* About menu: a faint line separates My Wild India and Memoirs of a Vagabond
+   from the other About pages. It is drawn at the top of the My Wild India
+   link, inset from both sides, and sits midway between the baseline of the
+   link above and the cap height of My Wild India. */
+nav .nav-dropdown-menu a[href="mywildindia.html"]{
+    padding-top: 0 !important;
+}
+nav .nav-dropdown-menu a[href="mywildindia.html"]::before{
+    content: "";
+    display: block;
+    height: 1px;
+    margin: 0.05rem 0 0.95rem;
+    background: rgba(255,255,255,0.14);
+}
+body.light-mode nav .nav-dropdown-menu a[href="mywildindia.html"]::before{
+    background: rgba(17,17,17,0.14);
+}
+/* In the slide-in panel the links have no side padding and are centred */
+@media screen and (max-width: 1100px){
+    nav .nav-dropdown-menu a[href="mywildindia.html"]::before{
+        margin: 0.1rem 25% 0.95rem;
+    }
 }
