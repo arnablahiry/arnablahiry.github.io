@@ -33,6 +33,11 @@
     grid-auto-columns: 1fr;
     padding-top: 80px;
     padding-bottom: 80px;
+    /* the marker is sticky at mid-screen (where the progress bar ends) but
+       can only travel within its own entry, so even a short entry (a line of
+       text, no images) must be tall enough for it to get there */
+    min-height: 50vh;
+    box-sizing: border-box;
     display: grid;
     position: relative;
 }
@@ -404,18 +409,50 @@ body.light-mode .timeline-breakout-line{
     margin-top: 20px;
 }
 
-/* Full-viewport-width black box behind the timeline title */
+/* Soft black-to-transparent fade behind the top of the page, the same as the
+   Talks / Software pages (their .overlay-fade-top) */
 body.page-timeline .section-timeline-heading::before{
     content: '';
     position: absolute;
     left: 50%;
-    top: 0;
+    top: -20px;
     transform: translateX(-50%);
     width: 100vw;
-    height: 100%;
-    background: black;
-    z-index: -1;
+    height: 660px;
+    background-image: linear-gradient(black, #0a0a0a00);
+    /* below .section-timeline (z-index: -3), which holds the cards */
+    z-index: -4;
     pointer-events: none;
+}
+
+/* The progress bar and its track fade in from transparent instead of starting
+   with a hard edge. The bar is fixed to the viewport, so its fade follows the
+   bottom of the "My Timeline" heading (or of the site header once the heading
+   has scrolled away); scripts/inline/timeline-inline-03.js keeps
+   --timeline-bar-fade-start up to date. */
+.timeline-progress-bar,
+.timeline-progress{
+    /* where the fade begins (transparent above it) and how long it takes to
+       reach full colour; eased so the first stretch stays very faint */
+    --timeline-bar-fade-start: 0px;
+    --timeline-bar-fade-length: 240px;
+    --timeline-bar-fade: linear-gradient(to bottom,
+        transparent var(--timeline-bar-fade-start),
+        rgba(0,0,0,0.06) calc(var(--timeline-bar-fade-start) + var(--timeline-bar-fade-length) * 0.3),
+        rgba(0,0,0,0.3) calc(var(--timeline-bar-fade-start) + var(--timeline-bar-fade-length) * 0.6),
+        rgba(0,0,0,0.75) calc(var(--timeline-bar-fade-start) + var(--timeline-bar-fade-length) * 0.85),
+        #000 calc(var(--timeline-bar-fade-start) + var(--timeline-bar-fade-length)));
+    -webkit-mask-image: var(--timeline-bar-fade);
+    mask-image: var(--timeline-bar-fade);
+}
+/* The track's top sits right under the heading (the timeline is pulled up
+   into it), so leave a clear gap before it starts fading in */
+.timeline-progress{
+    --timeline-bar-fade-start: 30px;
+}
+/* The timeline's own top fade band is replaced by the page fade above */
+body.page-timeline .timeline-component > .overlay-fade-top{
+    display: none !important;
 }
 
 .section-timeline-heading .padding-vertical-xlarge{
@@ -498,12 +535,6 @@ body.light-mode .timeline-right .timeline-image-wrapper img{
     .section-timeline-heading .padding-vertical-xlarge{
         padding-top: 68px;
         padding-bottom: 50px;
-    }
-    /* The timeline component has margin-top: -56px which pulls it up into the
-       heading section. Shrink the heading's black backdrop so it doesn't cover
-       the first item's date text in the overlapping zone. */
-    body.page-timeline .section-timeline-heading::before {
-        height: calc(100% - 64px);
     }
     /* Single-column: content is full width. Bar and progress bar keep their
        existing absolute/fixed positioning. Circle is pulled out of flow via
@@ -782,3 +813,146 @@ body.light-mode .timeline-right .timeline-image-wrapper img{
         height: 18vh !important;
     }
 }
+
+/* ==========================================================================
+   Edit mode (scripts/timeline-edit.js, local editor only)
+   ========================================================================== */
+.tl-new-entry-bar,
+.tl-edit-list { width: 100%; }
+.tl-new-entry-bar { display: flex; justify-content: center; padding: 24px 0 8px; position: relative; z-index: 3; }
+
+.tl-add-btn {
+    padding: 7px 14px;
+    border: 1px dashed rgba(254, 218, 74, 0.55);
+    border-radius: 999px;
+    background: rgba(15, 15, 16, 0.75);
+    color: #feda4a;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 140ms ease, border-color 140ms ease;
+}
+.tl-add-btn:hover { background: rgba(254, 218, 74, 0.12); border-style: solid; }
+.tl-add-btn.tl-new-entry { padding: 10px 22px; font-size: 16px; }
+.tl-add-bar { display: flex; gap: 10px; margin-top: 14px; }
+
+/* date: month + year boxes */
+.tl-date { display: flex; flex-wrap: wrap; gap: 8px; justify-content: inherit; }
+.timeline-left .tl-date { justify-content: flex-end; }
+.timeline-item-even .timeline-left .tl-date { justify-content: flex-start; }
+.tl-month,
+.tl-year,
+.tl-alt,
+.tl-text {
+    box-sizing: border-box;
+    border: 1px dashed rgba(255, 255, 255, 0.28);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: inherit;
+    outline: none;
+}
+.tl-month:focus, .tl-year:focus, .tl-alt:focus, .tl-text:focus { border-style: solid; border-color: rgba(254, 218, 74, 0.7); }
+.tl-month,
+.tl-year {
+    padding: 4px 10px;
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2.6vh;
+}
+.tl-month { width: 12ch; }
+.tl-year { width: 7ch; }
+.tl-remove-entry {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 5px 12px;
+    border: 1px solid rgba(238, 9, 121, 0.5);
+    border-radius: 999px;
+    background: transparent;
+    color: #ff7bb3;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+}
+.tl-remove-entry svg { width: 11px; height: 11px; }
+.tl-remove-entry:hover { background: #ee0979; border-color: #ee0979; color: #fff; }
+
+/* blocks: text boxes and images, each with move / remove tools */
+.tl-block { position: relative; margin-bottom: 14px; padding-top: 30px; }
+.tl-block-tools { position: absolute; top: 0; right: 0; display: flex; gap: 6px; }
+.tl-tool {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: rgba(20, 20, 22, 0.85);
+    color: #fff;
+    cursor: pointer;
+}
+.tl-tool svg { width: 12px; height: 12px; display: block; }
+.tl-tool:hover { background: rgba(254, 218, 74, 0.2); border-color: #feda4a; }
+.tl-tool.tl-tool-remove:hover { background: #ee0979; border-color: #ee0979; }
+.tl-block:first-child .tl-block-tools .tl-tool:first-child,
+.tl-block:last-child .tl-block-tools .tl-tool:nth-child(2) { opacity: 0.3; pointer-events: none; }
+
+.tl-block .margin-bottom-medium,
+.tl-block .margin-bottom-xlarge { margin-bottom: 0; }
+textarea.tl-text {
+    display: block;
+    width: 100%;
+    min-height: 4em;
+    padding: 12px 14px;
+    resize: none;
+    overflow: hidden;
+    font: inherit;
+}
+
+.tl-image { position: relative; cursor: pointer; outline: none; }
+.tl-image img { transition: opacity 160ms ease; }
+.tl-image-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 160px;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: 'Abaddon Light', sans-serif;
+}
+.tl-image-empty svg { width: 36px; height: 36px; }
+.tl-image-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    color: #fff;
+    pointer-events: none;
+    transition: opacity 160ms ease;
+}
+.tl-image-overlay svg { width: 34px; height: 34px; padding: 10px; border-radius: 50%; background: rgba(0, 0, 0, 0.55); }
+.tl-image:hover img, .tl-image:focus-visible img { opacity: 0.4; }
+.tl-image:hover .tl-image-overlay, .tl-image:focus-visible .tl-image-overlay { opacity: 1; }
+.tl-alt { display: block; width: 100%; margin-top: 6px; padding: 5px 10px; font-family: 'Abaddon Light', sans-serif; font-size: 13px; }
+.tl-raw {
+    padding: 8px 12px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Abaddon Light', sans-serif;
+    font-size: 13px;
+}
+
+body.light-mode .tl-month, body.light-mode .tl-year { color: #111; }
+body.light-mode .tl-month, body.light-mode .tl-year, body.light-mode .tl-alt, body.light-mode .tl-text { border-color: rgba(0, 0, 0, 0.25); background: rgba(0, 0, 0, 0.03); }
+body.light-mode .tl-add-btn { background: rgba(255, 255, 255, 0.85); color: #8c761c; border-color: rgba(140, 118, 28, 0.55); }
+body.light-mode .tl-tool { background: #fff; color: #111; border-color: rgba(0, 0, 0, 0.2); }
+body.light-mode .tl-raw, body.light-mode .tl-image-empty { color: rgba(0, 0, 0, 0.5); border-color: rgba(0, 0, 0, 0.2); }

@@ -136,6 +136,10 @@
                 </div>
 
                 <div class="projects-grid" id="projects-grid">
+                    <!-- software-cards:start
+                         Everything between these two markers is rewritten by the
+                         card editor (npm run edit, scripts/cards-edit.js); cards
+                         that were not edited are kept exactly as written. -->
                     <article class="project-card" data-tags="end-to-end, science">
                         <img class="project-image" src="images/softwares/nemo_logo.png" alt="N.E.M.O. logo" loading="lazy" decoding="async">
                         <div class="project-meta">
@@ -428,10 +432,6 @@ astrovox</code></pre>
                                 The main idea is simple: each galaxy type is rendered by its own module, the shared dispatcher lives in one place, and the example script shows the whole set in one grid. That keeps the code easy to skim when you want to see what a given class actually does.
                             </p>
 
-                            <div class="image-wrapper no-invert">
-                                <img src="images/softwares/galaxy_textures.png" alt="Texture grid of all six morphology classes" loading="lazy" decoding="async">
-                            </div>
-                            <p style="text-align:center; font-size: 0.9em; opacity: 0.75;">Each row shows a different class, with 5 realizations per class.</p>
 
                             <h3>Morphology Classes</h3>
                             <p>
@@ -726,60 +726,53 @@ clockgit list                                   # schedules and next run times</
                                         <li><strong>Object Name:</strong> Query by common astronomical names (e.g., "Betelgeuse", "M31"). The tool automatically resolves these names to coordinates using SIMBAD.</li>
                                         <li><strong>Celestial Coordinates:</strong> Input specific Right Ascension (RA) and Declination (Dec) values for precise targeting of arbitrary points in the sky.</li>
                                     </ul>
-                                </li>
-
-                                <!-- Image pair: two images side-by-side on desktop, stacked on phones -->
-                                <div class="image-pair">
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_name.png" alt="Astrolore GUI screenshot 1" loading="lazy" decoding="async">
-                                    </div>
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_radec.png" alt="Astrolore GUI screenshot 2" loading="lazy" decoding="async">
-                                    </div>
-                                </div>
                                 
-                                <br>
-                                <br>
+                                    <div class="image-pair">
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_name.png" alt="AstroLore searching by object name" loading="lazy" decoding="async">
+                                        </div>
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_radec.png" alt="AstroLore searching by RA and Dec coordinates" loading="lazy" decoding="async">
+                                        </div>
+                                    </div>
+                                </li>
                                 <li>
                                     <strong>Nearest Source Identification:</strong> The algorithm computes the great-circle distance between the user's input and every entry in the custom "Lore" dataset to identify the closest sci-fi reference. It returns the name of the fictional location and the work of fiction it originates from.
+                                
+                                    <div class="image-pair">
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_m31.png" alt="Nearest sci-fi source found for M31" loading="lazy" decoding="async">
+                                        </div>
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_coords.png" alt="Nearest sci-fi source found for a coordinate search" loading="lazy" decoding="async">
+                                        </div>
+                                    </div>
                                 </li>
-
-                                <div class="image-pair">
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_m31.png" alt="Astrolore GUI screenshot 1" loading="lazy" decoding="async">
-                                    </div>
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_coords.png" alt="Astrolore GUI screenshot 2" loading="lazy" decoding="async">
-                                    </div>
-                                </div>
-
-                                <br>
                                 <li>
                                     <strong>Aladin Sky Atlas Integration:</strong> Users can launch an interactive view of the identified nearest sci-fi source directly within the application. This utilizes the Aladin Lite API to render a high-quality optical view of the region surrounding the target.
+                                
+                                    <div class="image-pair">
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_m31_aladin.png" alt="Aladin Sky Atlas view of the source nearest M31" loading="lazy" decoding="async">
+                                        </div>
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_coords_aladin.png" alt="Aladin Sky Atlas view for a coordinate search" loading="lazy" decoding="async">
+                                        </div>
+                                    </div>
                                 </li>
-                                <div class="image-pair">
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_m31_aladin.png" alt="Astrolore GUI screenshot 1" loading="lazy" decoding="async">
-                                    </div>
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_coords_aladin.png" alt="Astrolore GUI screenshot 2" loading="lazy" decoding="async">
-                                    </div>
-                                </div>
-
-                                <br>
                                 <li>
                                     <strong>Sky Separation Plotting:</strong> The tool generates a static Matplotlib sky plot that visually represents the angular separation and relative positions of the user's input object versus the matched sci-fi source, providing spatial context to the result.
+                                
+                                    <div class="image-pair">
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_m31_map.png" alt="Sky separation plot for M31" loading="lazy" decoding="async">
+                                        </div>
+                                        <div class="image-wrapper no-invert">
+                                            <img src="images/softwares/astrolore_coords_map.png" alt="Sky separation plot for a coordinate search" loading="lazy" decoding="async">
+                                        </div>
+                                    </div>
                                 </li>
-                                <div class="image-pair">
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_m31_map.png" alt="Astrolore GUI screenshot 1" loading="lazy" decoding="async">
-                                    </div>
-                                    <div class="image-wrapper no-invert">
-                                        <img src="images/softwares/astrolore_coords_map.png" alt="Astrolore GUI screenshot 2" loading="lazy" decoding="async">
-                                    </div>
-                                </div>
-                                <br>
-                            </ul>
+                                </ul>
 
                             <h3>Installation & Usage</h3>
 
@@ -1107,6 +1100,8 @@ function smoothMoveTo(node, x, y, opts){
                         </div>
                     </article>
 
+                    <!-- software-cards:end -->
+
            
                     
 
@@ -1163,5 +1158,7 @@ function smoothMoveTo(node, x, y, opts){
     <script src="scripts/inline/software-inline-07.js"></script>
     <script src="scripts/inline/software-inline-08.js"></script>
     <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
+<script src="scripts/cards-edit.js"></script>
+<script src="scripts/edit-mode.js"></script>
 </body>
 </html>

@@ -95,6 +95,10 @@
             <div class="overlay-fade-top"></div>
             <div class="container">
                 <div class="projects-grid" id="projects-grid">   
+                    <!-- talks-cards:start
+                         Everything between these two markers is rewritten by the
+                         talks editor (npm run edit, scripts/talks-edit.js); cards
+                         that were not edited are kept exactly as written. -->
                     
                     <article class="project-card" data-pdf="docs/talks/Lahiry-Bayer-Villaescusa-Navarro-2025-journal-club.pdf">
                         <img class="project-image" src="images/talks/Lahiry-Bayer-Villaescusa-Navarro-2025-journal-club.jpg" alt="Title slide: Interpreting Cosmological Information from Neural Networks in the Hydrodynamic Universe" width="1000" height="563" loading="lazy" decoding="async">
@@ -165,6 +169,8 @@
                         </span>
                     </a>
 
+                    <!-- talks-cards:end -->
+
                 </div>
             </div>
         </div>
@@ -222,5 +228,7 @@
         })();
     </script>
     <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
+<script src="scripts/talks-edit.js"></script>
+<script src="scripts/edit-mode.js"></script>
 </body>
 </html>

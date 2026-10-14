@@ -2,95 +2,55 @@
    Edit data/travel-captions.xlsx and rerun the script. */
 (function () {
   window.TRAVEL_CAPTIONS = {
-    "belgium": [
-      "Not exactly the birthplace of TinTin, but my first foray into the birth country of the famous reporter I grew up loving! Very charming city with wafting smells of waffles, and the riverside walk views looked straight out of a fairy tale."
-    ],
-    "czechia": [
-      "",
-      "",
-      "",
-      ""
-    ],
-    "france": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "greece": [
-      "A random plan to find a `secret beach' on the route between Heraklion and Rethymno led us to what is probably the best view I have seen in Crete (was a bit hard to photograph given that I was semi-hanging from a boulder)",
-      "The beautiful city of Chania, about 3 hours or so from Heraklion - Absolutely lovely in the summer, kinda dead in the winter hahaha. One of the places I was really excited to travel to when I reached here.",
-      "Short day trip to the Richtis Gorge - the most vivid blue and white I have seen in my life. Lovely hike and waterfall on the way as well. Could not swim though haha (out of fear of death).",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "india": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "italy": [
-      "The Greek myth nerd inside me (and outside) was losing his shit at finally seeing this in person.",
-      "\"It is a good life we lead brother\"; \"Ah, the best\"; \"May it never change\"",
-      "\"And may it never change us\"",
-      "Hiking on a volcano was not on my bucket list, but it was surreal. Bummer couldn't see the eruption (happened 2 days after we left, smh)",
-      "2026 was the year of having my Assassin's Creed Italy tour.",
-      "Beautiful beautiful Venice...",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "romania": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "united_states": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "vietnam": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "belgium": {
+      "belgium_1.png": {
+        "caption": "Not exactly the birthplace of TinTin, but my first foray into the birth country of the famous reporter I grew up loving! Very charming city with wafting smells of waffles, and the riverside walk views looked straight out of a fairy tale."
+      }
+    },
+    "czechia": {},
+    "france": {},
+    "greece": {
+      "greece_1.png": {
+        "caption": "A random plan to find a `secret beach' on the route between Heraklion and Rethymno led us to what is probably the best view I have seen in Crete (was a bit hard to photograph given that I was semi-hanging from a boulder)"
+      },
+      "greece_2.png": {
+        "caption": "The beautiful city of Chania, about 3 hours or so from Heraklion - Absolutely lovely in the summer, kinda dead in the winter hahaha. One of the places I was really excited to travel to when I reached here."
+      },
+      "greece_3.png": {
+        "caption": "Short day trip to the Richtis Gorge - the most vivid blue and white I have seen in my life. Lovely hike and waterfall on the way as well. Could not swim though haha (out of fear of death)."
+      }
+    },
+    "india": {},
+    "italy": {
+      "italy_1.png": {
+        "caption": "The Greek myth nerd inside me (and outside) was losing his shit at finally seeing this in person."
+      },
+      "italy_2.png": {
+        "caption": "\"It is a good life we lead brother\"; \"Ah, the best\"; \"May it never change\""
+      },
+      "italy_3.png": {
+        "caption": "\"And may it never change us\""
+      },
+      "italy_4.png": {
+        "caption": "Hiking on a volcano was not on my bucket list, but it was surreal. Bummer couldn't see the eruption (happened 2 days after we left, smh)"
+      },
+      "italy_5.png": {
+        "caption": "2026 was the year of having my Assassin's Creed Italy tour."
+      },
+      "italy_6.png": {
+        "caption": "Beautiful beautiful Venice..."
+      }
+    },
+    "romania": {
+      "romania_1.png": {
+        "caption": "In the city of Alba Iulia, goofing off (probably about Pokémon) with my friends Diego and Alberto from the Astrophysics department in Crete. We booked this trip randomly because it seemed like a cool (and cheap) idea, and we were indeed vindicated!"
+      }
+    },
+    "united_states": {},
+    "vietnam": {
+      "vietnam_1.png": {
+        "caption": "Literally one of the most surreal things I have seen in my life. In the moment (on a small boat in Trang An), watching the sun light up this ancient temple, words nor pictures can capture the true majesty!"
+      }
+    }
   };
 })();

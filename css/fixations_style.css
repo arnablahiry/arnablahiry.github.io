@@ -85,6 +85,12 @@ body.light-mode.page-fixations .project-filters .filter-btn.active {
    with the same gap horizontally and vertically. */
 .page-fixations .fixations-grid {
   --fixations-gap: 28px;
+  /* card size limits (scripts/fixations.js): longer text first widens a
+     card, up to the max width; the max width is lowered to half the grid
+     while that stays above the min, so two cards fit side by side */
+  --fixation-max-height: 390px;
+  --fixation-max-card-width: 580px;
+  --fixation-min-card-width: 440px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -143,7 +149,7 @@ body.light-mode.page-fixations .fixation-card {
 .page-fixations .fixation-body {
   width: min-content;
   min-width: 200px;
-  padding: 16px 20px 18px;
+  padding: 16px 14px 18px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -156,8 +162,10 @@ body.light-mode.page-fixations .fixation-card {
   white-space: nowrap;
   font-family: 'Abaddon Bold', sans-serif !important;
   font-weight: 700;
-  font-size: 19px;
-  line-height: 1.25;
+  /* the site-wide heading size (utils.css), also used by the edit-mode
+     title box so it matches the heading exactly */
+  font-size: calc(var(--page-title-size) * var(--heading-scale)) !important;
+  line-height: 1.06 !important;
   letter-spacing: normal;
   color: #fff;
 }
@@ -165,6 +173,11 @@ body.light-mode.page-fixations .fixation-card {
 body.light-mode.page-fixations .fixation-title {
   color: #111;
 }
+
+/* heading too long for the max card width: it wraps (edit mode: the title
+   box takes the column width and scrolls) */
+.page-fixations .fixation-title-wrap .fixation-title { white-space: normal; }
+.page-fixations .fixation-title-wrap textarea.fixation-title { width: 100% !important; }
 
 .page-fixations .fixation-rating {
   display: flex;
@@ -221,6 +234,161 @@ body.light-mode.page-fixations .fixation-pill {
   background: rgba(0,0,0,0.05);
   color: #111;
 }
+
+/* ==========================================================================
+   Edit mode (scripts/fixations-edit.js, local editor only; the toolbar
+   itself is styled in utils.css)
+   ========================================================================== */
+
+.page-fixations .fixation-card { position: relative; }
+
+/* Cover: dims on hover and shows a pencil */
+.page-fixations .fixation-cover-edit {
+  position: relative;
+  flex: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.page-fixations .fixation-cover-edit .fixation-cover {
+  transition: opacity 160ms ease;
+}
+
+.page-fixations .fixation-cover-empty {
+  width: 140px;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.45);
+}
+
+.page-fixations .fixation-cover-empty svg { width: 40px; height: 40px; }
+
+.page-fixations .fixation-cover-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  color: #fff;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.page-fixations .fixation-cover-overlay svg {
+  width: 34px;
+  height: 34px;
+  padding: 10px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+}
+
+.page-fixations .fixation-cover-edit:hover .fixation-cover,
+.page-fixations .fixation-cover-edit:focus-visible .fixation-cover { opacity: 0.4; }
+.page-fixations .fixation-cover-edit:hover .fixation-cover-overlay,
+.page-fixations .fixation-cover-edit:focus-visible .fixation-cover-overlay { opacity: 1; }
+
+body.light-mode.page-fixations .fixation-cover-empty { background: rgba(0,0,0,0.05); color: rgba(0,0,0,0.4); }
+
+/* Remove button (.site-edit-remove in utils.css) sits over the cover's
+   top-left corner, clear of the title box */
+.page-fixations .fixation-card > .site-edit-remove { left: 6px; right: auto; }
+
+/* Over a size limit (edit mode): a note pinned to the bottom of the card,
+   outside the text column so it doesn't change the card's size */
+.page-fixations .fixation-warning {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 3;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(238, 9, 121, 0.92);
+  color: #fff;
+  font-family: 'Abaddon Bold', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  pointer-events: none;
+}
+.page-fixations .fixation-warning[hidden] { display: none; }
+.page-fixations .fixation-card.is-over-limit { border-color: rgba(238, 9, 121, 0.7); }
+
+/* Text boxes take the card's own typography */
+.page-fixations .fixation-input {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 3px 6px;
+  border: 1px dashed rgba(255,255,255,0.22);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.04);
+  outline: none;
+}
+
+.page-fixations .fixation-input:focus {
+  border-style: solid;
+  border-color: rgba(254,218,74,0.6);
+  background: rgba(255,255,255,0.07);
+}
+
+.page-fixations .fixation-input::placeholder { color: rgba(255,255,255,0.35); }
+
+.page-fixations textarea.fixation-title {
+  min-width: 120px;
+  resize: none;
+  overflow: hidden;
+}
+
+.page-fixations textarea.fixation-desc {
+  width: 100%;
+  min-height: 3em;
+  resize: none;
+  overflow: hidden;
+}
+
+body.light-mode.page-fixations .fixation-input { border-color: rgba(0,0,0,0.2); background: rgba(0,0,0,0.03); }
+body.light-mode.page-fixations .fixation-input:focus { border-color: rgba(140,118,28,0.7); }
+body.light-mode.page-fixations .fixation-input::placeholder { color: rgba(0,0,0,0.35); }
+
+.page-fixations .fixation-rating.is-editable { cursor: pointer; outline: none; border-radius: 4px; }
+.page-fixations .fixation-rating.is-editable:focus-visible { box-shadow: 0 0 0 2px rgba(254,218,74,0.6); }
+
+/* Kind pill becomes a picker */
+.page-fixations .fixation-pill.is-editable { cursor: pointer; padding-right: 8px; }
+.page-fixations .fixation-pill.is-editable select {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+}
+.page-fixations .fixation-pill.is-editable select option { color: #111; }
+
+/* The "+" card */
+.page-fixations .fixation-add {
+  width: 200px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px dashed rgba(255, 215, 0, 0.35);
+  background: rgba(15, 15, 16, 0.5);
+  color: rgba(255, 215, 0, 0.7);
+  font-family: 'Abaddon Bold', sans-serif;
+  font-size: 64px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.page-fixations .fixation-add:hover { background: rgba(254,218,74,0.08); color: #feda4a; border-color: rgba(254,218,74,0.7); }
+body.light-mode.page-fixations .fixation-add { background: rgba(255,255,255,0.6); border-color: rgba(140,118,28,0.45); color: #8c761c; }
 
 /* Phones: let long headings wrap and cards take the full width */
 @media (max-width: 520px) {

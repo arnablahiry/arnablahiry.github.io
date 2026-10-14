@@ -29,8 +29,9 @@ npm run travel:sync
 ```
 
 The caption spreadsheet lives at `data/travel-captions.xlsx` with one sheet per country.
-Each row maps `photo 1`, `photo 2`, etc. to a caption. Captions entered there are used by the travel lightbox.
-When new country folders or photos are added, rerunning the sync command auto-adds new sheets/rows while preserving existing captions.
+Each row is one photo, keyed by its file name (`Photo`), with a `Caption` and an `Author` (who took it; empty means Arnab). Both show in the travel lightbox.
+When new country folders or photos are added, rerunning the sync command auto-adds new sheets/rows while preserving existing captions. (Older workbooks keyed `photo 1`, `photo 2`, ... are converted automatically.)
+Captions and authors can also be edited in the browser, see [Editing the site in the browser](#editing-the-site-in-the-browser).
 
 The travel page reads `scripts/travel-photo-manifest.js`, so all photos in each country folder are picked up automatically.
 The same command also creates lightweight JPEG thumbnails in each country folder's `thumbs/` directory. Travel cards load those thumbnails, while the fullscreen lightbox keeps using the original photo.
@@ -115,3 +116,30 @@ npm run fixations:watch
 ```
 
 Every workbook save regenerates `scripts/fixations-data.js`. Dropping a new cover into `images/fixations/<books|movies|shows|games>/` appends a row with Kind and Image already filled in; give it a Title (plus Rating and Description) and it appears on the page. Covers can be any aspect ratio. `npm run fixations:sync` does a one-off sync without watching.
+
+### Editing in the browser
+
+With `npm run edit` running (see [Editing the site in the browser](#editing-the-site-in-the-browser)), open <http://localhost:8790/fixations.html>. Edit mode turns each card into a form: type into the title and description, hover the hearts and click to rate (left half of a heart = half), pick the kind from the pill, hover the cover and click to replace it, × removes a card and the dashed **+** card adds one. **Save** copies new covers into `images/fixations/<kind>/`, rewrites `data/fixations.xlsx` in page order and regenerates `scripts/fixations-data.js`; **Cancel** throws the changes away. Close the workbook in Excel first, or reopen it afterwards, since the editor rewrites the file.
+
+## Editing the site in the browser
+
+```sh
+npm run edit
+```
+
+then open <http://localhost:8790/> and browse to a page (`npm run edit:open`, `npm run edit --open` or `npm run edit -- --open timeline.html` opens the browser for you). Tap the pixel heart in the footer 5 times (pages with an editor also show an **Edit** button at the bottom right) to switch to edit mode. **Save** writes the changes into the spreadsheets and regenerates the page data; **Cancel** throws them away. All of this only works through this local server: on the published site the heart does nothing.
+
+Pages with an editor so far:
+
+- **My Current Fixations**: see [Editing in the browser](#editing-in-the-browser) above.
+- **My Travels**: open a country; its photo grid ends with a **+** tile to add photos. Click a photo to give it a caption and pick its author (or add a new one). × on a photo marks it for removal (click again to keep it). Save copies new photos into `images/travels/<folder>/`, moves removed ones to `.edit-trash/travels/<folder>/` (git-ignored, so you can still restore them), writes `data/travel-captions.xlsx` and rebuilds the photo list and thumbnails.
+
+- **Timeline**: **+ New month entry** at the top adds an entry; type the month (e.g. `March` or `January, February`) and year, and it moves to its place (newest first). In each entry, **+ Text** / **+ Image** add a block under the last one; the arrows move a block up or down, × removes it; hover an image and click to replace it, and the box below it is its description (alt text). Save copies new images into `images/timeline/` and rewrites the entries in `timeline.html` (only the part between the `timeline-entries` markers), adding the year separators and spacing itself; the previous version of the page is kept in `.edit-trash/timeline/`.
+
+- **Publications**: each publication becomes a form: cover (hover and click to replace), title, authors (`**A. Lahiry**` for bold), journal line, one link per button (arXiv, NASA ADS, journal, project page: pick a Research card or type a URL; empty = no button), the BibTeX entry itself (saved as `bibtex/<name>.html`, which the BibTeX button opens), and the abstract (blank line = new paragraph). "Shown on the site" off keeps a publication in the page but hidden; arrows reorder, × removes, **+ New publication** adds one at the top. Save rewrites the cards between the `publications` markers in `publications.html` (previous version in `.edit-trash/publications/`).
+
+- **Research** and **Software**: each card becomes a form. The card front has proper fields: cover (hover and click to replace), title and subtitle (inline HTML such as `<b>N</b>` allowed); on Software also category (Personal / Collaboration) and type (Science, Fun), which drive the filters and tag chips, badges (image URL + link), and icon links (GitHub, Docs, PyPI, Website, Zenodo, CosmoStat; empty = no icon). The expanded text is edited as HTML source, with **+ Figure** (pick an image; it is inserted at the cursor and uploaded on save) and **Preview** (renders it, equations and code included). Arrows reorder, × removes, **+ New card** adds one at the top. Save rewrites only the cards you changed; the others are written back exactly as they were (previous version of the page in `.edit-trash/research/` or `.edit-trash/software/`).
+
+- **Talks & Teaching**: two kinds of card. A **presentation** has a date, description, image description and a PDF (Choose / Replace PDF; it is uploaded to `docs/talks/` on save); its cover is the poster rendered from page 1 of the PDF unless you click the cover and pick your own image, and **Preview** opens it in the page's PDF viewer, even before the PDF is saved. A **link card** (e.g. a notebook hosted elsewhere) has a label, description, link, link text, badge (e.g. IPYNB) and its own cover. Arrows reorder, × removes (the files stay in the repo), **+ Presentation** / **+ Link card** add one at the top. Save rewrites only the cards that changed, then compresses new PDFs and renders their posters (the same as `npm run talks:sync`); the previous version of the page is kept in `.edit-trash/talks/`.
+
+Other pages say "No editor for this page yet". An editor is a script that registers itself with `scripts/edit-mode.js` (see the comment at its top) and saves through `scripts/edit-server.js`.

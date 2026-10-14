@@ -79,3 +79,38 @@
         window.addEventListener('resize', requestUpdate);
         updateBreakouts();
       })();
+
+      (function fadeProgressBarBelowHeading(){
+        // The progress bar is fixed to the viewport. Keep it transparent above
+        // the bottom of the "My Timeline" heading (or of the site header once
+        // the heading has scrolled away) and let the CSS mask fade it in below.
+        const bar = document.querySelector('.timeline-progress-bar');
+        const heading = document.querySelector('.section-timeline-heading .intro-heading');
+        const header = document.querySelector('header');
+        if (!bar) return;
+
+        let rafId = 0;
+        function update() {
+          rafId = 0;
+          const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+          const headingBottom = heading ? heading.getBoundingClientRect().bottom : 0;
+          // While the heading is on screen: a 30px clear gap under it and a long,
+          // soft fade. As it scrolls under the header the fade shrinks away, so
+          // the bar is fully coloured right up to the header.
+          const headingShown = Math.max(0, Math.min(1, (headingBottom - headerBottom) / 120));
+          const start = Math.max(headerBottom, headingBottom + 30) - bar.getBoundingClientRect().top;
+          const length = Math.max(1, 240 * headingShown);
+          bar.style.setProperty('--timeline-bar-fade-start', Math.max(0, start).toFixed(1) + 'px');
+          bar.style.setProperty('--timeline-bar-fade-length', length.toFixed(1) + 'px');
+        }
+        function requestUpdate() {
+          if (rafId) return;
+          rafId = window.requestAnimationFrame(update);
+        }
+
+        // The page scrolls inside an element rather than the window, so listen
+        // for scroll events from anywhere (they don't bubble, hence capture).
+        document.addEventListener('scroll', requestUpdate, { passive: true, capture: true });
+        window.addEventListener('resize', requestUpdate);
+        update();
+      })();

@@ -724,3 +724,18 @@ body.light-mode.page-talks .pdf-badge {
   background: #8c761c;
   color: #ffffff;
 }
+
+/* ==========================================================================
+   Talks editor (scripts/talks-edit.js, local editor only; builds on the
+   card editor styles in research_style.css)
+   ========================================================================== */
+body.talks-editing #projects-grid{ width: 100% !important; max-width: 1100px !important; margin: 0 auto !important; padding: 0 16px !important; }
+.tk-cover-col{ display: flex; flex-direction: column; gap: 8px; flex: none; width: 300px; }
+.tk-cover-col .ce-cover{ width: 100%; }
+.tk-top{ justify-content: space-between !important; align-items: center; }
+.tk-kind{ font-family: 'Abaddon Bold', sans-serif; font-size: 13px; color: #feda4a; }
+.tk-top .ce-tools{ align-items: center; }
+.tk-file{ font-family: ui-monospace, Menlo, monospace; font-size: 13px; opacity: 0.85; }
+.tk-link-row{ display: grid; grid-template-columns: 1fr 140px; gap: 8px; }
+body.light-mode .tk-kind{ color: #8c761c; }
+@media (max-width: 800px){ .tk-cover-col{ width: 100%; } }

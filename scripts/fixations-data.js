@@ -5,16 +5,16 @@
     {
       "kind": "games",
       "image": "images/fixations/games/totk.png",
-      "title": "The Legend of Zelda: Tears of the Kingdom",
+      "title": "The Legend of Zelda: TOTK",
       "rating": 5,
-      "description": "Glue a fan to a plank, strap on a steering stick, and suddenly you have a hoverbike. Hyrule now has sky islands above and a pitch-black Depths below, and I keep ignoring the main quest to build worse contraptions."
+      "description": "My first thought was \"what the f*** am I supposed to do?\" because this game just drops you in the world with minimal hand-holding (BOTW purists may disagree). I think this is one of the only games I have played that screams 'videogame' and not a graphically intensive narrative. There are probably infinite ways to complete activities. It's been 8 months, and I am just beginning to see the end. What a journey!"
     },
     {
       "kind": "books",
       "image": "images/fixations/books/tress.jpeg",
       "title": "Tress of the Emerald Sea",
-      "rating": 4,
-      "description": "A girl who collects cups sails across an ocean of deadly spores to rescue the boy she loves. Funny, warm, and narrated by someone who clearly enjoys the sound of his own voice."
+      "rating": 5,
+      "description": "2 minutes into this book I was like \"Is this mothe******r Hoid narrating a story?\". I mean indeed, yes, but the story turned out to be incredibly cute, cosy, whimsical, heartwarming and other choice adjectives of the kind. Did not expect to get so invested with the characters while also experiencing some Cosmere goodness. Goes to show that sometimes all that is needed in life is some whimsy!"
     },
     {
       "kind": "games",
@@ -32,31 +32,38 @@
     },
     {
       "kind": "books",
-      "image": "images/fixations/books/stormlight.jpg",
-      "title": "The Stormlight Archive: Books 1 through 5",
+      "image": "images/fixations/books/528f786dc06447a52a8402f8b785aa02.jpg",
+      "title": "The Stormlight Archive: Books 1 - 5",
       "rating": 4.5,
-      "description": "Humanity hides behind three walls from giants that eat people, until the walls stop being enough. Each season flips who you think the villain is."
+      "description": "I admit, even with my 'mastodonic' reading experience (cough LOTR, ASOIAF, cough), I was not prepared for the sheer volume and depth in this saga. Add to that the fact that each book is thick as hell and intimidating hahaha. This epic high fantasy series of intricate magic systems, fantastic world-building, fleshed-out characters, and beautifully choreographed fights has kept me hooked for most of this past year."
     },
     {
       "kind": "shows",
       "image": "images/fixations/shows/lanterns.webp",
       "title": "Lanterns",
       "rating": 4,
-      "description": "Two Green Lanterns, a rookie and a veteran, land in small-town Nebraska to solve a murder. Less space opera, more prestige detective show with power rings."
+      "description": "The new DCU movies and shows renewed my faith in DC live-action media somewhat, and I decided to give this a shot, and my oh my. Loved that John Stewart is the main GL of this Universe (JL/JLU core), but I would have liked a bit more Hal Jordan love, though ZERO complaints about the character-driven execution for both iconic lanterns. One star is missing solely because, although I loved the grounded take, I would have liked more cosmic elements!"
     },
     {
       "kind": "games",
       "image": "images/fixations/games/expedition_33.jpeg",
       "title": "Clair Obscur: Expedition 33",
-      "rating": 5,
-      "description": "Once a year the Paintress paints a number on a monolith, and everyone of that age turns to smoke. Expedition 33 sets out to stop her, with turn-based fights you parry in real time and a soundtrack I keep humming."
+      "rating": 4.5,
+      "description": "I am so new to turn-based combat for large-scale AAA games (Pokémon Emerald 10 years ago does not count, I suppose) that I approached this with a decent amount of apprehension, but damn, did this game blow me away. Parrying and dodging are still nightmares for me haha, but the incredible music, art direction, and storytelling got me HOOKED. This is still a playthrough in progress, but I can't wait to unravel the mysteries of this world!"
     },
     {
       "kind": "games",
       "image": "images/fixations/games/spider-man2.avif",
       "title": "Marvel’s Spider-Man 2",
-      "rating": 5,
-      "description": "Peter and Miles share one New York, swap mid-mission, and take on Kraven and then Venom. Web wings make crossing the city faster than any fast travel, so I never use fast travel."
+      "rating": 4,
+      "description": "I mean, yes I have been a huge Spider-Man fan since childhood, and I LOVED the first game, so  I wondered how they could ever improve upon that. Well, they did (at least in gameplay), it is ridiculously intuitive! However (as much fun as it was to see Venom), the passion in the story in the first game is still unbeatable! Nevertheless, Super excited for the next instalment!"
+    },
+    {
+      "kind": "games",
+      "image": "images/fixations/books/mv5byjvimdu3mmitmzm0zc00ownmlweyzwytmweynjaynjg1ywu4xkeyxkfqcgc-._v1_.jpg",
+      "title": "Pokémon: FireRed",
+      "rating": 3.5,
+      "description": "Got into this back in high school in my retro game (phone) enthusiast era. I suppose this can sum up my experience of this as well as Pokémon Emerald. Truly charming throwbacks to probably simpler times (?) that I never experienced. Was very fun to play one of the greatest classic games of all time! I admit I did end up using some cheats hahaha (cough cough Mewtwo cough). I wish Pokémon kept this 2D pixel art aesthetic than the (IMO downgraded) 3D games :/"
     }
   ];
 })();

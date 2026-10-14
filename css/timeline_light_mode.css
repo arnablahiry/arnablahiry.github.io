@@ -48,7 +48,7 @@ body.light-mode .section-timeline-heading{
 }
 
 body.light-mode.page-timeline .section-timeline-heading::before{
-  background: white !important;
+  background-image: linear-gradient(white, rgba(255,255,255,0)) !important;
 }
 
 body.light-mode .timeline-heading-viewer.open .timeline-heading-backdrop{

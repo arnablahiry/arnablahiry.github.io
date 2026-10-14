@@ -1,13 +1,33 @@
 (function () {
-  const photo = (entry, desc) => {
-    if (entry && typeof entry === 'object') {
-      return {
-        src: entry.src,
-        thumbSrc: entry.thumbSrc || entry.src,
-        desc: desc || entry.desc || entry.caption || ''
-      };
-    }
-    return { src: entry, thumbSrc: entry, desc: desc };
+  // Photo credits: who took each photo (Author column of
+  // data/travel-captions.xlsx). Anyone without a picture here gets a
+  // round initial instead.
+  const DEFAULT_AUTHOR = 'Arnab';
+  const AUTHOR_IMAGES = {
+    Arnab: 'images/pfp_no_pixel.jpeg'
+  };
+  function initialAvatar(name) {
+    const letter = String(name || '?').trim().charAt(0).toUpperCase() || '?';
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
+      + '<circle cx="32" cy="32" r="32" fill="#3a3320"/>'
+      + '<text x="32" y="42" text-anchor="middle" font-family="sans-serif" font-size="30" font-weight="700" fill="#feda4a">'
+      + letter.replace(/[<&"]/g, '') + '</text></svg>';
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+  function authorImage(name) {
+    return AUTHOR_IMAGES[name] || initialAvatar(name);
+  }
+
+  const photo = (entry, desc, author) => {
+    const src = (entry && typeof entry === 'object') ? entry.src : entry;
+    const credit = author || DEFAULT_AUTHOR;
+    return {
+      src: src,
+      thumbSrc: (entry && typeof entry === 'object' && entry.thumbSrc) || src,
+      desc: desc || (entry && typeof entry === 'object' ? (entry.desc || entry.caption) : '') || '',
+      credit: credit,
+      creditImage: authorImage(credit)
+    };
   };
   const manifest = (window.TRAVEL_PHOTO_MANIFEST && typeof window.TRAVEL_PHOTO_MANIFEST === 'object')
     ? window.TRAVEL_PHOTO_MANIFEST
@@ -24,60 +44,51 @@
       .replace(/\b\w/g, (letter) => letter.toUpperCase());
   }
 
+  // Captions are keyed by file name: { folder: { "file.jpg": {caption, author} } }
+  // (older generated files used an array in photo order; still understood)
   function photosFromFolder(folder, countryName) {
     const files = Array.isArray(manifest[folder]) ? manifest[folder] : [];
-    const captions = Array.isArray(captionManifest[folder]) ? captionManifest[folder] : [];
+    const captions = captionManifest[folder] || {};
     return files.map((entry, index) => {
-      const captionValue = typeof captions[index] === 'string' ? captions[index].trim() : '';
-      const hasCaption = captionValue.length > 0;
+      const file = String(entry && entry.src ? entry.src : entry).split('/').pop();
+      const meta = Array.isArray(captions)
+        ? { caption: captions[index] }
+        : (captions[file] || {});
+      const captionValue = typeof meta.caption === 'string' ? meta.caption.trim() : '';
       const fallback = `${countryName || titleFromSlug(folder)} photo ${index + 1}`;
-      return photo(entry, hasCaption ? captionValue : fallback);
+      return photo(entry, captionValue || fallback, meta.author);
     });
   }
 
-  const countries = {
-    356: {
-      name: 'India',
-      continent: 'Asia',
-      places: ['Too many to list here hahaha'],
-      photos: photosFromFolder('india', 'India')
-    },
-    250: { name: 'France', continent: 'Europe', places: ['Paris', 'Strasbourg'], photos: photosFromFolder('france', 'France') },
-    276: { name: 'Germany', continent: 'Europe', places: ['Heidelberg', 'Jena', 'Frankfurt'], photos: photosFromFolder('germany', 'Germany') },
-    616: { name: 'Poland', continent: 'Europe', places: ['Krakow'], photos: photosFromFolder('poland', 'Poland') },
-    703: { name: 'Slovakia', continent: 'Europe', places: ['Jasna', 'Bratislava'], photos: photosFromFolder('slovakia', 'Slovakia') },
-    203: { name: 'Czechia', continent: 'Europe', places: ['Prague'], photos: photosFromFolder('czechia', 'Czechia') },
-    380: {
-      name: 'Italy',
-      continent: 'Europe',
-      places: ['Venice', 'Florence', 'Catania', 'Bologna'],
-      photos: photosFromFolder('italy', 'Italy')
-    },
-    300: {
-      name: 'Greece',
-      continent: 'Europe',
-      places: ['Heraklion', 'Chania', 'Rethymno', 'Agios Nikolaos', 'Athens', 'Thessaloniki', 'Meteora', 'Delphi', 'Plastiras'],
-      photos: photosFromFolder('greece', 'Greece')
-    },
-    528: { name: 'Netherlands', continent: 'Europe', places: ['Amsterdam', 'Middelburg'], photos: photosFromFolder('netherlands', 'Netherlands') },
-    56: { name: 'Belgium', continent: 'Europe', places: ['Brussels', 'Ghent'], photos: photosFromFolder('belgium', 'Belgium') },
-    40: { name: 'Austria', continent: 'Europe', places: ['Vienna'], photos: photosFromFolder('austria', 'Austria') },
-    642: { name: 'Romania', continent: 'Europe', places: ['Turda', 'Sibiu', 'Alba Iulia', 'Sighisoara', 'Bucharest'],
-      photos: photosFromFolder('romania', 'Romania')
-    },
-    704: {
-      name: 'Vietnam',
-      continent: 'Asia',
-      places: ['Hanoi', 'Hoi An', 'Da Nang', 'Ba Na Hills', 'Ninh Binh', 'Trang An'],
-      photos: photosFromFolder('vietnam', 'Vietnam')
-    },
-    840: {
-      name: 'United States',
-      continent: 'North America',
-      places: ['Chicago', 'Indiana Dunes'],
-      photos: photosFromFolder('united_states', 'United States')
-    }
-  };
+  // Visited countries and their places: scripts/travel-places.js (written by
+  // the travel editor). Each place: { name, region, lat, lng }; `places`
+  // keeps just the names, `pins` the places that have coordinates.
+  const placeData = (window.TRAVEL_PLACES && typeof window.TRAVEL_PLACES === 'object')
+    ? window.TRAVEL_PLACES
+    : {};
+
+  const coord = (v) => (v === null || v === undefined || v === '' ? NaN : Number(v));
+
+  function buildCountry(entry) {
+    const name = String((entry && entry.name) || '').trim() || 'Unknown';
+    const list = (entry && Array.isArray(entry.places) ? entry.places : [])
+      .filter((p) => p && String(p.name || '').trim())
+      .map((p) => ({ name: String(p.name).trim(), region: p.region || '', type: p.type || '', lat: coord(p.lat), lng: coord(p.lng) }));
+    const folder = (entry && entry.folder) || '';
+    return {
+      name: name,
+      continent: (entry && entry.continent) || '',
+      places: list.map((p) => p.name),
+      pins: list.filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng)),
+      folder: folder,
+      photos: folder ? photosFromFolder(folder, name) : []
+    };
+  }
+
+  const countries = {};
+  Object.keys(placeData).forEach((id) => {
+    countries[Number(id)] = buildCountry(placeData[id]);
+  });
 
   const placePhotos = {};
   const rows = [];
@@ -124,6 +135,9 @@
   });
 
   window.TRAVEL_DATABASE_COUNTRIES = countries;
+  window.TRAVEL_BUILD_COUNTRY = buildCountry;
+  window.TRAVEL_AUTHOR_IMAGE = authorImage;
+  window.TRAVEL_DEFAULT_AUTHOR = DEFAULT_AUTHOR;
   window.TRAVEL_PLACE_PHOTOS = placePhotos;
   window.TRAVEL_DATABASE_ROWS = rows;
 })();

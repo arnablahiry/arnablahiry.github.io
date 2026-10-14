@@ -848,3 +848,212 @@ body.light-mode nav .nav-dropdown-menu a[href="mywildindia.html"]::before{
         margin: 0.1rem 25% 0.95rem;
     }
 }
+
+/* -----------------------------------------------------------------------
+   Local edit mode (scripts/edit-mode.js; only appears with npm run edit)
+   ----------------------------------------------------------------------- */
+.site-edit-toolbar{
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 10050;
+    display: flex;
+    gap: 10px;
+}
+.site-edit-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    background: rgba(20,20,22,0.92);
+    color: #fff;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.45);
+    transition: background 160ms ease;
+}
+.site-edit-btn svg{ width: 16px; height: 16px; display: block; }
+.site-edit-btn:hover{ background: rgba(40,40,44,0.95); }
+.site-edit-btn:disabled{ opacity: 0.6; cursor: default; }
+.site-edit-btn.is-primary{ background: #feda4a; border-color: #feda4a; color: #111; }
+.site-edit-btn.is-primary:hover{ background: #ffe57a; }
+body.light-mode .site-edit-btn{ background: rgba(255,255,255,0.95); color: #111; border-color: rgba(0,0,0,0.14); box-shadow: 0 6px 22px rgba(0,0,0,0.15); }
+body.light-mode .site-edit-btn.is-primary{ background: #8c761c; border-color: #8c761c; color: #fff; }
+
+.site-edit-toast{
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    z-index: 10060;
+    transform: translate(-50%, 12px);
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(20,20,22,0.94);
+    color: #fff;
+    font-family: 'Abaddon Light', sans-serif;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease, transform 200ms ease;
+}
+.site-edit-toast.is-shown{ opacity: 1; transform: translate(-50%, 0); }
+body.light-mode .site-edit-toast{ background: rgba(255,255,255,0.97); color: #111; box-shadow: 0 6px 22px rgba(0,0,0,0.15); }
+
+/* Remove (x) button on editable items */
+.site-edit-remove{
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 50%;
+    background: rgba(20,20,22,0.85);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    transition: background 140ms ease, border-color 140ms ease, transform 120ms ease;
+}
+.site-edit-remove svg{ width: 14px; height: 14px; display: block; }
+.site-edit-remove:hover,
+.site-edit-remove:focus-visible{ background: #ee0979; border-color: #ee0979; transform: scale(1.08); outline: none; }
+body.light-mode .site-edit-remove{ background: rgba(255,255,255,0.95); color: #111; border-color: rgba(0,0,0,0.2); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+body.light-mode .site-edit-remove:hover{ background: #ee0979; border-color: #ee0979; color: #fff; }
+
+/* Git button next to the logo, and its dialog (scripts/edit-mode.js; only
+   with npm run edit) */
+.site-git-pill{
+    position: absolute;
+    top: 50%;
+    left: 80px;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    max-width: 46vw;
+    padding: 6px 12px 6px 10px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    background: rgba(20,20,22,0.82);
+    color: rgba(255,255,255,0.75);
+    font-family: 'Abaddon Light', sans-serif;
+    font-size: 13px;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+.site-git-pill svg{ width: 15px; height: 15px; flex: 0 0 auto; }
+.site-git-pill span{ overflow: hidden; text-overflow: ellipsis; }
+.site-git-pill.has-changes,
+.site-git-pill.has-ahead{ border-color: rgba(254,218,74,0.6); color: #feda4a; }
+.site-git-pill.has-changes::before{
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #feda4a;
+    box-shadow: 0 0 8px rgba(254,218,74,0.8);
+    order: -1;
+}
+.site-git-pill:hover{ background: rgba(40,40,44,0.92); border-color: #feda4a; color: #feda4a; }
+header.nav-open .site-git-pill{ opacity: 0; pointer-events: none; }
+body.light-mode .site-git-pill{ background: rgba(255,255,255,0.92) !important; border: 1px solid rgba(0,0,0,0.14) !important; color: rgba(0,0,0,0.6) !important; }
+body.light-mode .site-git-pill.has-changes,
+body.light-mode .site-git-pill.has-ahead,
+body.light-mode .site-git-pill:hover{ border-color: #8c761c !important; color: #6e5b10 !important; }
+body.light-mode .site-git-pill.has-changes::before{ background: #8c761c; box-shadow: none; }
+
+.site-git-dialog{
+    --sg-gold: #feda4a;
+    --sg-text: #ececec;
+    --sg-muted: rgba(255,255,255,0.55);
+    --sg-line: rgba(255,255,255,0.1);
+    --sg-field: rgba(255,255,255,0.045);
+    /* centred: style.css's `* { margin: 0 }` removes the dialog's own auto margins */
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(620px, calc(100vw - 32px));
+    height: fit-content;
+    max-height: calc(100vh - 40px);
+    box-sizing: border-box;
+    padding: 0;
+    border: 1px solid rgba(254,218,74,0.28);
+    border-radius: 16px;
+    background: #111113;
+    color: var(--sg-text);
+    box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+    font-family: 'Abaddon Light', sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    overflow: hidden;
+}
+.site-git-dialog[open]{ display: flex; flex-direction: column; animation: sg-in 200ms ease-out; }
+.site-git-dialog::backdrop{ background: rgba(0,0,0,0.55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+@keyframes sg-in{ from{ opacity: 0; transform: translateY(10px) scale(0.985); } to{ opacity: 1; transform: none; } }
+.sg-head{ display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 16px 12px 20px; border-bottom: 1px solid var(--sg-line); }
+.sg-title{ font-family: 'Abaddon Bold', sans-serif; font-size: 18px; color: var(--sg-gold); }
+.sg-branch{ margin-top: 2px; font-size: 12px; color: var(--sg-muted); }
+.sg-x{ display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--sg-muted); cursor: pointer; }
+.sg-x svg{ width: 12px; height: 12px; }
+.sg-x:hover{ background: var(--sg-field); color: var(--sg-text); }
+.sg-body{ display: flex; flex-direction: column; gap: 10px; padding: 14px 20px; overflow-y: auto; min-height: 0; }
+.sg-notes:empty{ display: none; }
+.sg-note{ margin: 0 0 6px; font-size: 13px; color: var(--sg-muted); }
+.sg-note.is-warn{ padding: 8px 11px; border-radius: 9px; background: rgba(255,170,80,0.1); color: #ffb36b; }
+.sg-files-head{ display: flex; align-items: center; gap: 9px; font-size: 12px; color: var(--sg-muted); cursor: pointer; }
+.sg-files{ list-style: none; margin: 0; padding: 4px; max-height: 34vh; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--sg-line); border-radius: 10px; background: var(--sg-field); }
+.sg-files label{ display: flex; align-items: center; gap: 9px; padding: 5px 7px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.sg-files label:hover{ background: rgba(255,255,255,0.05); }
+.site-git-dialog input[type="checkbox"]{ width: 15px; height: 15px; margin: 0; flex: 0 0 auto; accent-color: var(--sg-gold); }
+.sg-code{ flex: 0 0 auto; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; border-radius: 5px; font-family: 'Abaddon Bold', sans-serif; font-size: 11px; background: rgba(255,255,255,0.08); }
+.sg-code.is-modified{ color: #ffd36b; background: rgba(255,211,107,0.12); }
+.sg-code.is-added, .sg-code.is-new{ color: #74ec92; background: rgba(116,236,146,0.12); }
+.sg-code.is-deleted{ color: #ff8a8a; background: rgba(255,138,138,0.12); }
+.sg-code.is-renamed, .sg-code.is-copied{ color: #8ac8ff; background: rgba(138,200,255,0.12); }
+.sg-path{ min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: ltr; }
+.sg-dir{ color: var(--sg-muted); }
+.sg-label{ font-size: 12px; color: var(--sg-muted); }
+.sg-message{ width: 100%; box-sizing: border-box; padding: 9px 11px; border: 1px solid var(--sg-line); border-radius: 9px; background: var(--sg-field); color: var(--sg-text); font: inherit; resize: vertical; outline: none; }
+.sg-message:focus{ border-color: var(--sg-gold); box-shadow: 0 0 0 3px rgba(254,218,74,0.16); }
+.sg-output{ margin: 0; padding: 10px 12px; border-radius: 9px; background: rgba(255,255,255,0.05); font-family: ui-monospace, Menlo, monospace; font-size: 12px; white-space: pre-wrap; word-break: break-word; max-height: 24vh; overflow: auto; }
+.sg-output.is-error{ background: rgba(255,138,138,0.1); color: #ffb3b3; }
+.sg-foot{ display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px 16px; border-top: 1px solid var(--sg-line); flex-wrap: wrap; }
+.sg-push-note{ margin: 0; flex: 1 1 200px; font-size: 12px; color: var(--sg-muted); }
+.sg-buttons{ display: flex; gap: 8px; margin-left: auto; }
+.sg-btn{ padding: 9px 18px; border: 1px solid var(--sg-line); border-radius: 999px; background: transparent; color: var(--sg-text); font-family: 'Abaddon Bold', sans-serif; font-size: 14px; cursor: pointer; white-space: nowrap; }
+.sg-btn:hover{ background: var(--sg-field); }
+.sg-btn:disabled{ opacity: 0.55; cursor: default; }
+.sg-btn.is-primary{ background: var(--sg-gold); border-color: var(--sg-gold); color: #111; }
+.sg-btn.is-primary:hover{ background: #ffe57a; }
+@media (max-width: 520px){
+    .site-git-pill{ font-size: 12px; padding: 5px 10px 5px 8px; max-width: calc(100vw - 150px); }
+    .sg-buttons{ width: 100%; }
+    .sg-btn{ flex: 1 1 auto; padding: 10px 12px; }
+}
+/* light mode (the site's light-mode button rule restyles every button) */
+body.light-mode .site-git-dialog{
+    --sg-gold: #8a6600;
+    --sg-text: #1b1b1d;
+    --sg-muted: rgba(0,0,0,0.52);
+    --sg-line: rgba(0,0,0,0.12);
+    --sg-field: rgba(0,0,0,0.035);
+    background: #fdfcf8;
+    border-color: rgba(138,102,0,0.3);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+}
+body.light-mode .site-git-dialog .sg-x{ background: transparent !important; border: 0 !important; color: var(--sg-muted) !important; }
+body.light-mode .site-git-dialog .sg-btn{ background: transparent !important; border: 1px solid var(--sg-line) !important; color: var(--sg-text) !important; }
+body.light-mode .site-git-dialog .sg-btn.is-primary{ background: var(--sg-gold) !important; border-color: var(--sg-gold) !important; color: #fff !important; }
+body.light-mode .site-git-dialog .sg-message{ background: #fff; border: 1px solid var(--sg-line); color: var(--sg-text); }
+body.light-mode .sg-note.is-warn{ background: rgba(200,110,20,0.1); color: #a25410; }
+body.light-mode .sg-output.is-error{ background: rgba(180,30,30,0.08); color: #9b1c1c; }

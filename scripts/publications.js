@@ -1,60 +1,74 @@
+// Show / hide a publication's abstract with a smooth slide and fade both ways.
+// The collapsed look (no padding, zero font size) comes from
+// .project-full[aria-expanded="false"] in publications_style.css, so on hide
+// the abstract keeps aria-expanded="true" until it has slid shut; switching
+// earlier would snap it closed.
 document.addEventListener('DOMContentLoaded', () => {
-    const projectToggles = document.querySelectorAll('.project-toggle');
+    const DURATION = 420;
 
-    projectToggles.forEach(toggle => {
+    function bind(toggle) {
+        if (toggle._abstractBound) return;
+        toggle._abstractBound = true;
         toggle.addEventListener('click', () => {
             const card = toggle.closest('.project-card');
-            if (!card) return;
-            const projectFull = card.querySelector('.project-full');
-            if (!projectFull) return;
+            const full = card && card.querySelector('.project-full');
+            if (!full) return;
+            const token = (full._abstractToken || 0) + 1;
+            full._abstractToken = token;   // a newer click cancels an older one
+            const done = (fn) => {
+                const finish = () => { if (full._abstractToken === token) fn(); };
+                const onEnd = (e) => {
+                    if (e.target !== full || e.propertyName !== 'max-height') return;
+                    full.removeEventListener('transitionend', onEnd);
+                    finish();
+                };
+                full.addEventListener('transitionend', onEnd);
+                setTimeout(() => { full.removeEventListener('transitionend', onEnd); finish(); }, DURATION + 120);
+            };
 
-            const expanded = projectFull.getAttribute('aria-expanded') === 'true';
-
-            if (expanded) {
-                // Collapse: if maxHeight is 'none', set it to scrollHeight first
-                if (projectFull.style.maxHeight === 'none') {
-                    projectFull.style.maxHeight = projectFull.scrollHeight + 'px';
-                }
-                projectFull.style.opacity = '0';
-                // Force reflow then set to 0 for transition
-                requestAnimationFrame(() => {
-                    projectFull.style.maxHeight = '0px';
-                });
+            if (full.getAttribute('aria-expanded') === 'true' && toggle.getAttribute('aria-expanded') === 'true') {
+                // hide: from the current height down to 0, then switch state
+                full.style.maxHeight = full.scrollHeight + 'px';
+                void full.offsetHeight;
+                full.style.maxHeight = '0px';
+                full.style.paddingTop = '0px';      // padding would hold it open
+                full.style.paddingBottom = '0px';
+                full.style.opacity = '0';
                 toggle.setAttribute('aria-expanded', 'false');
                 toggle.textContent = 'Show Abstract';
-
-                const onCollapseEnd = (e) => {
-                    if (e.propertyName === 'max-height' && projectFull.getAttribute('aria-expanded') === 'false') {
-                        projectFull.removeEventListener('transitionend', onCollapseEnd);
-                    }
-                };
-
-                projectFull.addEventListener('transitionend', onCollapseEnd);
-                projectFull.setAttribute('aria-expanded', 'false');
-            } else {
-                // Expand: set aria and animate to scrollHeight
-                projectFull.setAttribute('aria-expanded', 'true');
-                toggle.setAttribute('aria-expanded', 'true');
-                // ensure element can transition from 0 to measured height
-                const target = projectFull.scrollHeight;
-                requestAnimationFrame(() => {
-                    projectFull.style.opacity = '1';
+                done(() => {
+                    full.setAttribute('aria-expanded', 'false');
+                    full.style.maxHeight = '';
+                    full.style.paddingTop = '';
+                    full.style.paddingBottom = '';
+                    full.style.opacity = '';
                 });
-                projectFull.style.maxHeight = target + 'px';
+            } else {
+                // show: switch state first (restores padding and text), measure
+                // the full height, then grow from 0 to it
+                full.setAttribute('aria-expanded', 'true');
+                toggle.setAttribute('aria-expanded', 'true');
                 toggle.textContent = 'Hide Abstract';
-
-                // After transition, clear inline maxHeight so content can grow naturally
-                const onTransitionEnd = (e) => {
-                    if (e.propertyName === 'max-height') {
-                        // Only clear when expanded
-                        if (projectFull.getAttribute('aria-expanded') === 'true') {
-                            projectFull.style.maxHeight = 'none';
-                        }
-                        projectFull.removeEventListener('transitionend', onTransitionEnd);
-                    }
-                };
-                projectFull.addEventListener('transitionend', onTransitionEnd);
+                full.style.transition = 'none';
+                full.style.maxHeight = 'none';
+                full.style.paddingTop = '';
+                full.style.paddingBottom = '';
+                const target = full.scrollHeight;
+                full.style.maxHeight = '0px';
+                full.style.paddingTop = '0px';
+                full.style.paddingBottom = '0px';
+                full.style.opacity = '0';
+                void full.offsetHeight;
+                full.style.transition = '';
+                full.style.paddingTop = '';
+                full.style.paddingBottom = '';
+                full.style.maxHeight = target + 'px';
+                full.style.opacity = '1';
+                done(() => { full.style.maxHeight = 'none'; });
             }
         });
-    });
+    }
+
+    document.querySelectorAll('.project-toggle').forEach(bind);
+    window.PublicationsPage = { bindToggles: () => document.querySelectorAll('.project-toggle').forEach(bind) };
 });

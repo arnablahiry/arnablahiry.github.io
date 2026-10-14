@@ -197,7 +197,7 @@ footer{
     max-height: 0;
     opacity: 0;
     visibility: hidden;
-    transition: max-height 320ms ease, opacity 220ms ease;
+    transition: max-height 420ms cubic-bezier(0.4, 0, 0.2, 1), padding 420ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
     will-change: max-height;
 }
 
@@ -398,3 +398,89 @@ body.light-mode .legend-item img {
 }
 
 /* ── End button legend ──────────────────────────────────────────────────── */
+
+/* ==========================================================================
+   Edit mode (scripts/publications-edit.js, local editor only)
+   ========================================================================== */
+.pub-new-bar { display: flex; justify-content: center; margin-bottom: 8px; }
+.pub-add-btn {
+    padding: 10px 22px;
+    border: 1px dashed rgba(254, 218, 74, 0.55);
+    border-radius: 999px;
+    background: rgba(15, 15, 16, 0.75);
+    color: #feda4a;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+.pub-add-btn:hover { background: rgba(254, 218, 74, 0.12); border-style: solid; }
+.pub-edit-list { display: flex; flex-direction: column; gap: 24px; }
+
+.pub-edit-card { cursor: default; }
+.pub-edit-card.is-hidden { opacity: 0.55; border-style: dashed !important; }
+
+.pub-cover { position: relative; flex: none; cursor: pointer; outline: none; align-self: stretch; }
+.pub-cover .project-image { transition: opacity 160ms ease; }
+.pub-cover.is-empty { min-width: 220px; min-height: 160px; border: 1px dashed rgba(255, 255, 255, 0.25); border-radius: 8px; }
+.pub-cover-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; color: #fff; pointer-events: none;
+    transition: opacity 160ms ease;
+}
+.pub-cover.is-empty .pub-cover-overlay { opacity: 0.7; }
+.pub-cover-overlay svg { width: 34px; height: 34px; padding: 10px; border-radius: 50%; background: rgba(0, 0, 0, 0.55); }
+.pub-cover:hover .project-image, .pub-cover:focus-visible .project-image { opacity: 0.4; }
+.pub-cover:hover .pub-cover-overlay, .pub-cover:focus-visible .pub-cover-overlay { opacity: 1; }
+
+.pub-edit-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.pub-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pub-shown { display: inline-flex; align-items: center; gap: 6px; font-family: 'Abaddon Bold', sans-serif; font-size: 13px; color: #feda4a; cursor: pointer; }
+.pub-tools { display: flex; gap: 6px; }
+.pub-tool {
+    display: flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%;
+    background: rgba(20, 20, 22, 0.85); color: #fff; cursor: pointer;
+}
+.pub-tool svg { width: 12px; height: 12px; display: block; }
+.pub-tool:hover { background: rgba(254, 218, 74, 0.2); border-color: #feda4a; }
+.pub-tool.pub-tool-remove:hover { background: #ee0979; border-color: #ee0979; }
+.pub-edit-card:first-child .pub-tool:first-child,
+.pub-edit-card:last-child .pub-tool:nth-child(2) { opacity: 0.3; pointer-events: none; }
+
+.pub-field { display: flex; flex-direction: column; gap: 5px; }
+.pub-label { font-family: 'Abaddon Bold', sans-serif; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55); }
+.pub-hint { font-family: 'Abaddon Light', sans-serif; font-size: 12px; color: rgba(255, 255, 255, 0.45); }
+.pub-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #eee;
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+}
+textarea.pub-input { resize: none; overflow: hidden; line-height: 1.5; }
+.pub-input:focus { border-style: solid; border-color: rgba(254, 218, 74, 0.7); }
+textarea.pub-title { font-family: 'Abaddon Bold', sans-serif !important; font-size: 18px; color: #fff; }
+.pub-bibtex { font-family: ui-monospace, Menlo, monospace !important; font-size: 12.5px !important; min-height: 3.2em; }
+
+.pub-links { display: flex; flex-direction: column; gap: 8px; }
+.pub-link-row { display: grid; grid-template-columns: 26px 110px 1fr; align-items: center; gap: 10px; }
+/* BibTeX: page name on the first line, the entry below it */
+.pub-link-row[data-key="bibtex"] .pub-bibname { max-width: 220px; justify-self: start; }
+.pub-link-row[data-key="bibtex"] .pub-bibtex { grid-row: 2; grid-column: 3; }
+.pub-link-icon { width: 26px; height: 26px; border-radius: 6px; object-fit: contain; }
+.pub-link-name { font-family: 'Abaddon Bold', sans-serif; font-size: 13px; color: #ddd; }
+
+body.light-mode .pub-input { background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.25); color: #111; }
+body.light-mode textarea.pub-title { color: #111; }
+body.light-mode .pub-label, body.light-mode .pub-hint { color: rgba(0, 0, 0, 0.55); }
+body.light-mode .pub-link-name { color: #222; }
+body.light-mode .pub-shown { color: #8c761c; }
+body.light-mode .pub-tool { background: #fff; color: #111; border-color: rgba(0, 0, 0, 0.2); }
+body.light-mode .pub-add-btn { background: rgba(255, 255, 255, 0.85); color: #8c761c; border-color: rgba(140, 118, 28, 0.55); }

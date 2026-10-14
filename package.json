@@ -8,6 +8,7 @@
     "travel:captions": "node scripts/sync-travel-caption-spreadsheet.js",
     "travel:captions:watch": "node scripts/watch-travel-caption-spreadsheet.js",
     "travel:sync": "npm run travel:manifest && npm run travel:captions",
+    "travel:map": "node scripts/generate-world-map.js",
     "mywildindia:manifest": "node scripts/generate-mywildindia-photo-manifest.js",
     "mywildindia:captions": "node scripts/sync-mywildindia-caption-spreadsheet.js",
     "mywildindia:captions:watch": "node scripts/watch-mywildindia-caption-spreadsheet.js",
@@ -18,9 +19,18 @@
     "news:sync": "node scripts/sync-news-spreadsheet.js",
     "news:watch": "node scripts/watch-news-spreadsheet.js",
     "fixations:sync": "node scripts/sync-fixations-spreadsheet.js",
-    "fixations:watch": "node scripts/watch-fixations-spreadsheet.js"
+    "fixations:watch": "node scripts/watch-fixations-spreadsheet.js",
+    "fixations:edit": "node scripts/edit-server.js",
+    "edit": "node scripts/edit-server.js",
+    "edit:open": "node scripts/edit-server.js --open"
   },
   "dependencies": {
+    "country-state-city": "^3.2.1",
+    "topojson-client": "^3.1.0",
+    "topojson-server": "^3.0.1",
+    "topojson-simplify": "^3.0.3",
+    "world-atlas": "^2.0.2",
+    "world-countries": "^5.1.0",
     "xlsx": "^0.18.5"
   }
 }

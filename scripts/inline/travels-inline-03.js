@@ -7,9 +7,25 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     : {};
 
     /* ====================================================== STATS */
-    const visitedIds   = new Set(Object.keys(VISITS).map(Number));
-    const continentSet = new Set(Object.values(VISITS).map(v => v.continent));
-    const totalPlaces  = Object.values(VISITS).reduce((s, v) => s + v.places.length, 0);
+    // Recomputed by refreshVisits() when the travel editor changes VISITS
+    const visitedIds = new Set();
+    let continentSet = new Set();
+    let totalPlaces = 0;
+    function computeVisits() {
+        visitedIds.clear();
+        Object.keys(VISITS).forEach(id => visitedIds.add(Number(id)));
+        continentSet = new Set(Object.values(VISITS).map(v => v.continent).filter(Boolean));
+        totalPlaces = Object.values(VISITS).reduce((s, v) => s + v.places.length, 0);
+    }
+    computeVisits();
+
+    function statValues() {
+        return {
+            'stat-countries': visitedIds.size,
+            'stat-places': totalPlaces + 20,
+            'stat-continents': continentSet.size
+        };
+    }
 
     function animateCount(el, target) {
         let n = 0;
@@ -21,9 +37,8 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     const statsObserver = new IntersectionObserver(entries => {
         if (statsAnimated || !entries[0].isIntersecting) return;
         statsAnimated = true;
-        animateCount(document.getElementById('stat-countries'),  visitedIds.size);
-        animateCount(document.getElementById('stat-places'),     totalPlaces + 20);
-        animateCount(document.getElementById('stat-continents'), continentSet.size);
+        const values = statValues();
+        Object.keys(values).forEach(id => animateCount(document.getElementById(id), values[id]));
         statsObserver.disconnect();
     }, { threshold: 0.3 });
     statsObserver.observe(statsEl);
@@ -52,9 +67,17 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     const lightboxNextEl = document.getElementById('lightbox-next');
     if (detail && detail.parentElement !== document.body) document.body.appendChild(detail);
 
-    let worldGeo = null, borders = null;
+    let worldGeo = null;
+    // Map layers, each item with a bounding circle ({ c: [lon, lat], r: radians })
+    // so whatever is on the far side of the globe is skipped while drawing
+    let countryShapes = [], landShapes = [], lakeShapes = [], borderLines = [];
+    let visibleCountries = [];   // drawn in the last frame (for hit testing)
     let hoveredId = null, isDragging = false;
+    let hoveredPin = null;   // { x, y, r, id, pin } under the pointer
+    let pinScreen = [];      // pins drawn in the last frame, for hit testing
     let autoRotate = true, autoTimer = null;
+    let userPaused = false;   // the pause/play button; autoRotate covers drags, focus, etc.
+    let spinShown = null;     // whether the button currently shows the globe turning
     let W, H, R;
     let currentScale = 1;
     let isPinching = false;
@@ -86,7 +109,22 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     const INTRO_MS = 1200;
     const INTRO_FAST_SPIN = 2.8;
     const INTRO_NORMAL_SPIN = 0.10;
+    // The intro spin lands on India; the slow rotation carries on from there
+    const START_VIEW = { lng: 78.9, lat: 21.3 };
+
+    // Degrees the intro has turned after a fraction t of INTRO_MS: the spin
+    // (in degrees per 60 fps frame) eases from INTRO_FAST_SPIN down to
+    // INTRO_NORMAL_SPIN, integrated over time so every frame rate lands in
+    // the same place
+    function introTurn(t) {
+        const framesPerMs = 60 / 1000;
+        const easedArea = t - (1 - Math.pow(1 - t, 4)) / 4;   // ∫ 1-(1-s)³ ds from 0 to t
+        return framesPerMs * INTRO_MS * (INTRO_FAST_SPIN * t + (INTRO_NORMAL_SPIN - INTRO_FAST_SPIN) * easedArea);
+    }
+    const INTRO_START_LON = -START_VIEW.lng - introTurn(1);
     const DEFAULT_GLOBE_SCALE = 1;
+    // the atmosphere's band between the globe and the (round) canvas edge
+    const ATMOSPHERE_PX = 14;
     const MIN_GLOBE_SCALE = 0.45;
     const MAX_GLOBE_SCALE = 3.5;
     const TRAVEL_DEFAULT_CREDIT = 'Arnab';
@@ -103,10 +141,16 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             ocean:         l ? '#c6dff3' : '#0c1118',
             land:          l ? '#e9f2fb' : '#1c1f27',
             landStroke:    l ? '#6f90ad' : '#282c36',
-            visited:       l ? '#d7b43b' : '#d8b537',
-            visitedHover:  l ? '#c89f27' : '#c79f1d',
-            visitedFocused:l ? '#8f6400' : '#ffe89a',
-            visitedStroke: l ? '#7a5b1a' : '#5f4b18',
+            // visited countries: faint tint + gold border; places: glowing pins
+            visitedFill:        l ? 'rgba(201, 152, 18, 0.12)' : 'rgba(254, 218, 74, 0.06)',
+            visitedFillHover:   l ? 'rgba(201, 152, 18, 0.22)' : 'rgba(254, 218, 74, 0.13)',
+            visitedFillFocused: l ? 'rgba(201, 152, 18, 0.30)' : 'rgba(254, 218, 74, 0.20)',
+            visitedStroke:      l ? 'rgba(143, 100, 0, 0.70)'  : 'rgba(254, 218, 74, 0.55)',
+            visitedStrokeHover: l ? 'rgba(143, 100, 0, 1)'     : 'rgba(255, 232, 154, 0.95)',
+            visitedGlow:        l ? 'rgba(150, 100, 0, 0.45)'  : 'rgba(254, 218, 74, 0.55)',
+            pinCore:            l ? '#a87400' : '#fff4c8',
+            pinRing:            l ? 'rgba(255, 255, 255, 0.95)' : 'rgba(254, 218, 74, 0.95)',
+            pinGlow:            l ? '196, 136, 0' : '254, 218, 74',
             graticule:     l ? 'rgba(43, 72, 102, 0.14)' : 'rgba(255,255,255,0.035)',
             borderStroke:  l ? 'rgba(74, 104, 132, 0.34)' : 'rgba(255,255,255,0.12)',
             atmoCore:      l ? 'rgba(186, 220, 246, 0.24)' : 'rgba(98,164,255,0.16)',
@@ -137,7 +181,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         canvas.style.width  = sz + 'px';
         canvas.style.height = sz + 'px';
         ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-        R = sz / 2 - 14;
+        R = sz / 2 - ATMOSPHERE_PX;
         proj.scale(R).translate([sz / 2, sz / 2]);
         if (globeWrap) globeWrap.style.setProperty('--globe-size-px', `${sz}px`);
     }
@@ -191,46 +235,127 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
 
         if (!worldGeo) return;
 
-        // countries
-        worldGeo.features.forEach(f => {
-            const id = +f.id;
-            const vis = visitedIds.has(id);
-            const hov = hoveredId === id;
-            const foc = focusedCountryId === id;
-            ctx.beginPath(); gpath(f);
-            if (vis) {
-                if (hov && !foc) {
-                    ctx.shadowColor = isLight() ? 'rgba(150,100,0,0.45)' : 'rgba(254,218,74,0.45)';
-                    ctx.shadowBlur  = 14;
-                }
-                if (foc) {
-                    const blend = Math.max(0, Math.min(1, focusedCountryBlend));
-                    ctx.fillStyle = d3.interpolateRgb(c.visited, c.visitedFocused)(blend);
-                } else {
-                    ctx.fillStyle = hov ? c.visitedHover : c.visited;
-                }
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = c.visitedStroke;
-                ctx.lineWidth = foc ? (isLight() ? 1.0 : 1.28) : (isLight() ? 0.9 : 1.2);
+        const r0 = proj.rotate();
+        const center = [-r0[0], -r0[1]];
+        const facing = (item) => d3.geoDistance(item.c, center) - item.r < Math.PI / 2;
+        // borders are stroked a few dozen lines at a time, for the same reason
+        const strokeLines = (list) => {
+            const shown = list.filter(facing);
+            for (let i = 0; i < shown.length; i += 40) {
+                ctx.beginPath();
+                gpath({ type: 'MultiLineString', coordinates: shown.slice(i, i + 40).map(l => l.coords) });
                 ctx.stroke();
-            } else {
-                ctx.fillStyle = c.land; ctx.fill();
-                ctx.strokeStyle = c.landStroke; ctx.lineWidth = 0.3; ctx.stroke();
             }
+        };
+
+        // land: the countries merged into landmasses, so each coast is
+        // filled and outlined in one pass and inner borders aren't filled twice
+        ctx.fillStyle = c.land;
+        ctx.strokeStyle = c.landStroke; ctx.lineWidth = 0.3;
+        landShapes.filter(facing).forEach(s => { ctx.beginPath(); gpath(s.feature); ctx.fill(); ctx.stroke(); });
+        visibleCountries = countryShapes.filter(facing).map(s => s.feature);
+
+        // a faint tint on visited countries (filled one by one: canvas paths
+        // get slow to build when they hold very many shapes)
+        const focusBlend = Math.max(0, Math.min(1, focusedCountryBlend));
+        const visitedShapes = visibleCountries.filter(f => visitedIds.has(+f.id));
+        visitedShapes.forEach(f => {
+            const id = +f.id;
+            ctx.beginPath(); gpath(f);
+            ctx.fillStyle = focusedCountryId === id
+                ? d3.interpolateRgb(c.visitedFill, c.visitedFillFocused)(focusBlend)
+                : (hoveredId === id ? c.visitedFillHover : c.visitedFill);
+            ctx.fill();
         });
 
-        // borders
-        if (borders) {
-            ctx.beginPath(); gpath(borders);
-            ctx.strokeStyle = c.borderStroke;
-            ctx.lineWidth = isLight() ? 0.55 : 0.45;
+        // lakes, in the ocean's colour
+        ctx.fillStyle = c.ocean;
+        ctx.strokeStyle = c.landStroke; ctx.lineWidth = 0.3;
+        lakeShapes.filter(facing).forEach(s => { ctx.beginPath(); gpath(s.feature); ctx.fill(); ctx.stroke(); });
+
+        // borders between countries
+        ctx.strokeStyle = c.borderStroke;
+        ctx.lineWidth = isLight() ? 0.55 : 0.45;
+        strokeLines(borderLines);
+
+        // visited borders on top, glowing when hovered/focused
+        visitedShapes.forEach(f => {
+            const id = +f.id;
+            const lit = hoveredId === id || focusedCountryId === id;
+            ctx.save();
+            ctx.beginPath(); gpath(f);
+            if (lit) {
+                ctx.shadowColor = c.visitedGlow;
+                ctx.shadowBlur = 10;
+            }
+            ctx.strokeStyle = lit ? c.visitedStrokeHover : c.visitedStroke;
+            ctx.lineWidth = lit ? 1.4 : 0.9;
             ctx.stroke();
-        }
+            ctx.restore();
+        });
+
+        drawPins(c);
 
         // outline ring
         ctx.beginPath(); gpath({ type: 'Sphere' });
         ctx.strokeStyle = c.outline; ctx.lineWidth = 0.85; ctx.stroke();
+    }
+
+    // One pin per place with coordinates: a soft glow, then a dot (city) or
+    // a ring (whole region). Pins fade out towards the globe's edge.
+    function drawPins(c) {
+        const r = proj.rotate();
+        const center = [-r[0], -r[1]];
+        const base = Math.max(2.4, Math.min(5, proj.scale() / 105));
+        const light = isLight();
+        const drawn = [];
+        Object.keys(VISITS).forEach(key => {
+            const id = Number(key);
+            const pins = VISITS[key] && VISITS[key].pins;
+            if (!pins || !pins.length) return;
+            pins.forEach(pin => {
+                const ll = [pin.lng, pin.lat];
+                const dist = d3.geoDistance(ll, center);
+                if (!(dist < Math.PI / 2)) return;
+                const p = proj(ll);
+                if (!p) return;
+                const hov = !!(hoveredPin && hoveredPin.pin === pin);
+                const grow = hov ? 1.5 : ((focusedCountryId === id || hoveredId === id) ? 1.18 : 1);
+                drawn.push({
+                    x: p[0], y: p[1], id, pin, hov,
+                    r: base * grow * (pin.type === 'region' ? 1.35 : 1),
+                    fade: Math.min(1, (Math.PI / 2 - dist) / 0.14)
+                });
+            });
+        });
+
+        // glows first, so a dot is never washed out by its neighbour's glow
+        ctx.save();
+        if (!light) ctx.globalCompositeOperation = 'screen';
+        drawn.forEach(d => {
+            const reach = d.r * (d.hov ? 5.5 : 4.2);
+            const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, reach);
+            g.addColorStop(0, `rgba(${c.pinGlow}, ${(light ? 0.42 : 0.55) * d.fade})`);
+            g.addColorStop(0.35, `rgba(${c.pinGlow}, ${(light ? 0.16 : 0.22) * d.fade})`);
+            g.addColorStop(1, `rgba(${c.pinGlow}, 0)`);
+            ctx.fillStyle = g;
+            ctx.beginPath(); ctx.arc(d.x, d.y, reach, 0, 2 * Math.PI); ctx.fill();
+        });
+        ctx.restore();
+
+        drawn.forEach(d => {
+            ctx.globalAlpha = d.fade;
+            ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 2 * Math.PI);
+            if (d.pin.type === 'region') {
+                ctx.fillStyle = `rgba(${c.pinGlow}, 0.25)`; ctx.fill();
+                ctx.strokeStyle = c.pinCore; ctx.lineWidth = 1.6; ctx.stroke();
+            } else {
+                ctx.fillStyle = c.pinCore; ctx.fill();
+                ctx.strokeStyle = c.pinRing; ctx.lineWidth = 1; ctx.stroke();
+            }
+        });
+        ctx.globalAlpha = 1;
+        pinScreen = drawn;
     }
 
     function hideCountryMapPanel() {
@@ -308,6 +433,8 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         lightboxCreditImageEl.src = frame.creditImage || TRAVEL_DEFAULT_CREDIT_IMAGE;
         lightboxCreditImageEl.alt = frame.credit || TRAVEL_DEFAULT_CREDIT;
         lightboxCreditNameEl.textContent = frame.credit || TRAVEL_DEFAULT_CREDIT;
+        // Edit mode (scripts/travel-edit.js, local editor only)
+        if (window.TravelEdit) window.TravelEdit.decorateLightbox(frame, lightboxCaptionEl, lightboxCreditNameEl, lightboxCreditImageEl);
     }
 
     function openLightboxAt(photos, index) {
@@ -491,6 +618,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
 
             if (meta && meta.src) {
                 card.classList.add('has-photo');
+                card.dataset.src = meta.src;
                 const photoIndex = lightboxMeta.push(meta) - 1;
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -516,8 +644,9 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             }
             focusPhotoGrid.appendChild(card);
         });
+        const editExtra = window.TravelEdit ? window.TravelEdit.decorateGrid(focusPhotoGrid, countryId) : 0;
 
-        if (!opts.skipHeightUpdate) updatePhotoViewportHeight(renderList.length);
+        if (!opts.skipHeightUpdate) updatePhotoViewportHeight(renderList.length + editExtra);
 
         if (countryMapTitle && v) countryMapTitle.textContent = `${v.name} Photos`;
         if (countryMapEmpty) countryMapEmpty.style.display = 'none';
@@ -556,15 +685,61 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         }, COUNTRY_FOCUS_SCROLL_MS / 2);
     }
 
+    /* pause/play button; the choice is remembered, and without one,
+       reduced-motion devices start paused */
+    const spinToggle = document.getElementById('globe-spin-toggle');
+    const SPIN_PREF_KEY = 'travels-globe-paused';
+
+    function setUserPaused(paused, remember) {
+        userPaused = paused;
+        if (spinToggle) {
+            spinToggle.classList.toggle('is-paused', paused);
+            const label = paused ? 'Play globe rotation' : 'Pause globe rotation';
+            spinToggle.setAttribute('aria-label', label);
+            spinToggle.title = paused ? 'Play rotation' : 'Pause rotation';
+        }
+        if (remember) {
+            try { localStorage.setItem(SPIN_PREF_KEY, paused ? '1' : '0'); } catch (_) {}
+        }
+    }
+
+    {
+        let stored = null;
+        try { stored = localStorage.getItem(SPIN_PREF_KEY); } catch (_) {}
+        const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        setUserPaused(stored === null ? reduced : stored === '1', false);
+    }
+
+    if (spinToggle) {
+        spinToggle.addEventListener('click', () => {
+            setUserPaused(!userPaused, true);
+            if (!userPaused && !focusedCountryId && !isDetailOpen) {
+                // play right away, not after the post-drag pause
+                clearTimeout(autoTimer);
+                autoRotate = true;
+            }
+        });
+    }
+
     /* auto-rotation */
+    // While it spins, a globe that was dragged to another tilt turns back to
+    // the usual one (START_VIEW.lat, no roll) at the spin's own speed,
+    // slowing over the last TILT_LANDING degrees so it settles rather than stops
+    const TILT_LANDING = 2;
+    function towards(value, target) {
+        const diff = target - value;
+        if (Math.abs(diff) < 0.01) return target;
+        const step = INTRO_NORMAL_SPIN * Math.min(1, Math.abs(diff) / TILT_LANDING);
+        return value + Math.sign(diff) * Math.min(Math.abs(diff), step);
+    }
+
     requestAnimationFrame(function frame() {
         if (introActive) {
             if (introStartTs === null) introStartTs = performance.now();
             const t = Math.min(1, (performance.now() - introStartTs) / INTRO_MS);
             const eased = 1 - Math.pow(1 - t, 3);
-            const spinStep = INTRO_FAST_SPIN + (INTRO_NORMAL_SPIN - INTRO_FAST_SPIN) * eased;
             const r = proj.rotate();
-            proj.rotate([r[0] + spinStep, r[1], r[2]]);
+            proj.rotate([INTRO_START_LON + introTurn(t), r[1], r[2]]);
             canvas.style.opacity = String(eased);
             draw();
             if (t >= 1) {
@@ -572,20 +747,25 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 canvas.style.opacity = '1';
             }
         }
-        if (!introActive && autoRotate && !isDetailOpen && !focusedCountryId) {
+        const spinning = !introActive && autoRotate && !userPaused && !isDetailOpen && !focusedCountryId;
+        if (spinning) {
             const r = proj.rotate();
-            proj.rotate([r[0] + INTRO_NORMAL_SPIN, r[1], r[2]]);
+            proj.rotate([r[0] + INTRO_NORMAL_SPIN, towards(r[1], -START_VIEW.lat), towards(r[2], 0)]);
             draw();
+        }
+        if (spinToggle && spinning !== spinShown) {
+            spinShown = spinning;
+            spinToggle.classList.toggle('is-spinning', spinning);
         }
         requestAnimationFrame(frame);
     });
 
-    function pauseAuto() {
+    function pauseAuto(ms = 3500) {
         autoRotate = false;
         clearTimeout(autoTimer);
         autoTimer = setTimeout(() => {
             if (!focusedCountryId && !isDetailOpen) autoRotate = true;
-        }, 3500);
+        }, ms);
     }
 
     function easeInOutCubic(t) {
@@ -906,16 +1086,49 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         return Math.hypot(dx, dy);
     }
 
-    function countryAt([x, y]) {
-        if (!worldGeo) return null;
+    // Pointer position -> canvas drawing coordinates (the container may be
+    // scaled down by CSS while a country is focused)
+    function canvasPoint([x, y]) {
         const rect = canvas.getBoundingClientRect();
         const baseW = parseFloat(canvas.style.width) || canvas.clientWidth || rect.width;
         const baseH = parseFloat(canvas.style.height) || canvas.clientHeight || rect.height;
         const scaleX = rect.width > 0 ? (baseW / rect.width) : 1;
         const scaleY = rect.height > 0 ? (baseH / rect.height) : 1;
-        const inv = proj.invert([x * scaleX, y * scaleY]);
+        return [x * scaleX, y * scaleY];
+    }
+
+    function countryAt(pt) {
+        if (!worldGeo) return null;
+        const inv = proj.invert(canvasPoint(pt));
         if (!inv) return null;
-        return worldGeo.features.find(f => { try { return d3.geoContains(f, inv); } catch (_) { return false; } });
+        return visibleCountries.find(f => { try { return d3.geoContains(f, inv); } catch (_) { return false; } });
+    }
+
+    function pinAt(pt) {
+        const [x, y] = canvasPoint(pt);
+        let best = null, bestDist = Infinity;
+        pinScreen.forEach(d => {
+            const dist = Math.hypot(d.x - x, d.y - y);
+            if (dist <= Math.max(7, d.r + 4) && dist < bestDist) { best = d; bestDist = dist; }
+        });
+        return best;
+    }
+
+    // The map shape of a country, or for one too small for this map (e.g.
+    // Singapore) the points of its pins, so it can still be focused
+    function featureFor(id) {
+        const f = worldGeo && worldGeo.features.find(x => +x.id === id);
+        if (f) return f;
+        const pins = VISITS[id] && VISITS[id].pins;
+        return pins && pins.length ? { type: 'MultiPoint', coordinates: pins.map(p => [p.lng, p.lat]) } : null;
+    }
+
+    // What a click/tap lands on: a pin first, then a country
+    function targetAt(pt) {
+        const pin = pinAt(pt);
+        if (pin) return { id: pin.id, feature: featureFor(pin.id) };
+        const f = countryAt(pt);
+        return f ? { id: +f.id, feature: f } : null;
     }
 
     /* ---- drag (mouse) ---- */
@@ -1029,9 +1242,33 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     }, { passive: true });
 
     /* ---- zoom ---- */
-    canvas.addEventListener('wheel', e => {
-        if (focusedCountryId) return;
+    // Only over the globe and its atmosphere; elsewhere (the canvas corners,
+    // which the round canvas hides) the wheel scrolls the page as usual
+    function onGlobe(pt) {
+        const [x, y] = canvasPoint(pt);
+        const [cx, cy] = proj.translate();
+        return Math.hypot(x - cx, y - cy) <= proj.scale() + ATMOSPHERE_PX;
+    }
+
+    // A wheel/trackpad gesture belongs to whatever it started on, until it
+    // stops (a short gap between events, which includes trackpad momentum):
+    // one that starts on the globe keeps zooming, without scrolling the page,
+    // even once the globe has shrunk out from under the pointer or hit its
+    // zoom limit; one that starts as a page scroll keeps scrolling when the
+    // globe slides under the pointer.
+    const WHEEL_GESTURE_GAP_MS = 250;
+    let wheelOwner = null;   // 'globe' | 'page' for the gesture in progress
+    let wheelEndTimer = null;
+
+    window.addEventListener('wheel', e => {
+        clearTimeout(wheelEndTimer);
+        wheelEndTimer = setTimeout(() => { wheelOwner = null; }, WHEEL_GESTURE_GAP_MS);
+        if (!wheelOwner) {
+            wheelOwner = (e.target === canvas && !focusedCountryId && onGlobe(ptFrom(e))) ? 'globe' : 'page';
+        }
+        if (wheelOwner !== 'globe') return;
         e.preventDefault();
+        if (focusedCountryId) return;
         pauseAuto();
         const factor = e.deltaY > 0 ? 0.90 : 1.11;
         currentScale = Math.max(MIN_GLOBE_SCALE, Math.min(MAX_GLOBE_SCALE, currentScale * factor));
@@ -1042,10 +1279,24 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     /* ---- hover ---- */
     canvas.addEventListener('mousemove', e => {
         if (isDragging) { tooltip.classList.remove('visible'); return; }
-        const p = ptFrom(e), f = countryAt(p);
-        const id = f ? +f.id : null;
-        if (id !== hoveredId) { hoveredId = id; draw(); }
-        if (f) {
+        const p = ptFrom(e);
+        const pin = pinAt(p);
+        const f = pin ? null : countryAt(p);
+        const id = pin ? pin.id : (f ? +f.id : null);
+        const pinChanged = (pin ? pin.pin : null) !== (hoveredPin ? hoveredPin.pin : null);
+        hoveredPin = pin;
+        if (id !== hoveredId || pinChanged) { hoveredId = id; draw(); }
+        if (pin) {
+            const place = pin.pin;
+            canvas.style.cursor = 'pointer';
+            tooltip.querySelector('.tooltip-country').textContent = VISITS[pin.id].name;
+            const ul = tooltip.querySelector('.tooltip-places');
+            ul.innerHTML = '';
+            const li = document.createElement('li');
+            li.textContent = place.region && place.region !== place.name ? `${place.name} · ${place.region}` : place.name;
+            ul.appendChild(li);
+            tooltip.querySelector('.tooltip-hint').textContent = 'click to focus map →';
+        } else if (f) {
             const isVisited = visitedIds.has(id);
             canvas.style.cursor = isVisited ? 'pointer' : 'grab';
             const countryName = isVisited ? VISITS[id].name : (f.properties && (f.properties.name || f.properties.NAME)) || 'Unknown';
@@ -1066,6 +1317,8 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 }
             }
             tooltip.querySelector('.tooltip-hint').textContent = isVisited ? 'click to focus map →' : 'Not visited yet!';
+        }
+        if (pin || f) {
             const cr = document.getElementById('globe-container').getBoundingClientRect();
             let tx = e.clientX - cr.left + 16, ty = e.clientY - cr.top - 10;
             const tw = tooltip.offsetWidth || 160, th = tooltip.offsetHeight || 100;
@@ -1081,23 +1334,26 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         }
     });
 
-    canvas.addEventListener('mouseleave', () => { hoveredId = null; tooltip.classList.remove('visible'); draw(); });
+    canvas.addEventListener('mouseleave', () => { hoveredId = null; hoveredPin = null; tooltip.classList.remove('visible'); draw(); });
 
     /* ---- click ---- */
-    canvas.addEventListener('click', e => {
-        if (isDragging) return;
-        const f = countryAt(ptFrom(e));
-        const nextId = f ? +f.id : null;
-        const isVisited = !!(f && visitedIds.has(nextId));
+    function openTarget(target) {
+        const nextId = target ? target.id : null;
+        const isVisited = !!(target && visitedIds.has(nextId));
         if (focusedCountryId) {
             if (isVisited && nextId !== focusedCountryId) {
-                switchFocusedCountry(nextId, f);
+                switchFocusedCountry(nextId, target.feature);
             } else if (!isVisited) {
                 backToGlobe();
             }
             return;
         }
-        if (isVisited) focusCountryAndOpen(nextId, f);
+        if (isVisited) focusCountryAndOpen(nextId, target.feature);
+    }
+
+    canvas.addEventListener('click', e => {
+        if (isDragging) return;
+        openTarget(targetAt(ptFrom(e)));
     });
 
     canvas.addEventListener('touchend', e => {
@@ -1106,18 +1362,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             return;
         }
         const t = e.changedTouches[0], r = canvas.getBoundingClientRect();
-        const f = countryAt([t.clientX - r.left, t.clientY - r.top]);
-        const nextId = f ? +f.id : null;
-        const isVisited = !!(f && visitedIds.has(nextId));
-        if (focusedCountryId) {
-            if (isVisited && nextId !== focusedCountryId) {
-                switchFocusedCountry(nextId, f);
-            } else if (!isVisited) {
-                backToGlobe();
-            }
-            return;
-        }
-        if (isVisited) focusCountryAndOpen(nextId, f);
+        openTarget(targetAt([t.clientX - r.left, t.clientY - r.top]));
     });
 
     /* dismiss hint */
@@ -1146,6 +1391,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             const meta = getTravelPhotoMeta(v, photo, i, fallbackDesc);
             if (meta && meta.src) {
                 card.classList.add('has-photo');
+                card.dataset.src = meta.src;
                 const photoIndex = lightboxMeta.push(meta) - 1;
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -1171,6 +1417,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             }
             card.style.animationDelay = (i * 55) + 'ms'; grid.appendChild(card);
         });
+        if (window.TravelEdit) window.TravelEdit.decorateGrid(grid, id);
         detail.classList.remove('closing');
         detail.setAttribute('aria-hidden', 'false');
         // reflow to restart keyframe animation on repeated opens
@@ -1221,7 +1468,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
     /* ====================================================== INIT */
     syncTravelsHeaderOffset();
     setSize(false);
-    proj.rotate([157.9, -21.3, 0]);
+    proj.rotate([INTRO_START_LON, -START_VIEW.lat, 0]);
     canvas.style.opacity = '0';
     canvas.style.cursor = 'grab';
     draw();
@@ -1252,7 +1499,53 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             if (event.target === lightboxEl) closeLightbox();
         });
     }
+    // Hooks for the travel editor (scripts/travel-edit.js)
+    // After VISITS changed: recount the stats and redraw
+    function refreshVisits() {
+        computeVisits();
+        if (statsAnimated) {
+            const values = statValues();
+            Object.keys(values).forEach(id => { document.getElementById(id).textContent = values[id]; });
+        }
+        if (hoveredPin && !(VISITS[hoveredPin.id] && VISITS[hoveredPin.id].pins.includes(hoveredPin.pin))) hoveredPin = null;
+        draw();
+    }
+
+    // Turn the globe to a place ({lat, lng}) or a country ({id}), and hold
+    // still for a while so it can be looked at
+    function lookAt(target) {
+        if (!target || focusedCountryId || isDetailOpen || introActive) return;
+        let ll = null;
+        if (Number.isFinite(target.lat) && Number.isFinite(target.lng)) ll = [target.lng, target.lat];
+        else if (target.id != null) {
+            const f = featureFor(Number(target.id));
+            if (f) ll = d3.geoCentroid(f);
+        }
+        if (!ll && target.fallback) ll = target.fallback;
+        if (!ll) return;
+        pauseAuto(9000);
+        animateRotateTo([-ll[0], Math.max(-80, Math.min(80, -ll[1])), 0], 1100);
+    }
+
+    function highlight(id) {
+        if (focusedCountryId) return;
+        hoveredId = id == null ? null : Number(id);
+        hoveredPin = null;
+        draw();
+    }
+
+    window.TravelPage = {
+        openLightbox: openLightboxAt,
+        focusGrid: focusPhotoGrid,
+        updateFocusGridHeight: updatePhotoViewportHeight,
+        refreshVisits: refreshVisits,
+        lookAt: lookAt,
+        highlight: highlight,
+        // false for countries too small for the globe's map (pins only)
+        hasShape: (id) => !worldGeo || worldGeo.features.some(f => +f.id === Number(id))
+    };
     document.addEventListener('keydown', (e) => {
+        if (e.target && e.target.closest && e.target.closest('input, textarea, select')) return;
         const lightboxOpen = !!(lightboxEl && lightboxEl.classList.contains('open'));
         if (e.key === 'Escape' && lightboxOpen) {
             closeLightbox();
@@ -1277,9 +1570,40 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         new MutationObserver(syncTravelsHeaderOffset).observe(headerEl, { attributes: true, attributeFilter: ['class', 'style'] });
     }
 
-    d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world => {
-        worldGeo = topojson.feature(world, world.objects.countries);
-        borders  = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+    // Smallest circle-ish bound around a shape: its centroid, and the
+    // furthest of its points from it
+    function boundingCircle(geometry, points) {
+        const c = d3.geoCentroid(geometry);
+        let r = 0;
+        points.forEach(p => { r = Math.max(r, d3.geoDistance(c, p)); });
+        return { c, r };
+    }
+
+    function pointsOf(geometry) {
+        const out = [];
+        const walk = (a) => { if (typeof a[0] === 'number') out.push(a); else a.forEach(walk); };
+        if (geometry && geometry.coordinates) walk(geometry.coordinates);
+        return out;
+    }
+
+    function shapesOf(collection) {
+        return collection.features.map(feature => Object.assign({ feature }, boundingCircle(feature, pointsOf(feature.geometry || feature))));
+    }
+
+    function linesOf(mesh) {
+        return mesh.coordinates.map(coords => Object.assign({ coords }, boundingCircle({ type: 'LineString', coordinates: coords }, coords)));
+    }
+
+    // Natural Earth 1:50m countries and large lakes, simplified for the globe
+    // (data/world-map.json, built by npm run travel:map)
+    d3.json('data/world-map.json').then(world => {
+        const countries = world.objects.countries;
+        worldGeo = topojson.feature(world, countries);
+        countryShapes = shapesOf(worldGeo);
+        const land = topojson.merge(world, countries.geometries);
+        landShapes = shapesOf({ features: land.coordinates.map(rings => ({ type: 'Polygon', coordinates: rings })) });
+        lakeShapes = shapesOf(topojson.feature(world, world.objects.lakes));
+        borderLines = linesOf(topojson.mesh(world, countries, (a, b) => a !== b));
         draw();
     }).catch(() => {
         document.getElementById('globe-wrap').innerHTML = '<p style="color:#888;text-align:center;padding:80px">Globe failed to load — check network settings.</p>';

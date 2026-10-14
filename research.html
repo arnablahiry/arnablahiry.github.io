@@ -103,6 +103,10 @@
             <div class="container">
                 <!-- Projects grid: each card has an image + subtitle; clicking expands details -->
                 <div class="projects-grid" id="projects-grid">
+                    <!-- research-cards:start
+                         Everything between these two markers is rewritten by the
+                         card editor (npm run edit, scripts/cards-edit.js); cards
+                         that were not edited are kept exactly as written. -->
                     <article class="project-card" id="proj-8">
                         <img class="project-image" src="images/research/sourceid.png" alt="Project image" loading="lazy" decoding="async">
                         <div class="project-meta">
@@ -433,9 +437,8 @@ for batch in loader:
                             </ul>
 
                             <figure style="text-align: center; margin: 20px 0;">
-                            <!-- using the uploaded file path as the figure source (paper PDF) -->
-                            <img src="images/research/methods.png"  style="max-width: 100%; height: auto;" loading="lazy" decoding="async">
-                            <figcaption>Fig 2. Two major methodologies - U-Net and 2D1D-IST</figcaption>
+                            <img src="images/research/methods1.png" alt="3D U-Net architecture and the steps of 2D1D-IST denoising on a toy cube" style="max-width: 100%; height: auto;" loading="lazy" decoding="async">
+                            <figcaption>Fig 2. The two main methods: the 3D U-Net architecture (left) and 2D1D-IST denoising of a toy cube, from ground truth and noisy input through wavelet thresholding and re-weighting to the de-noised result (right).</figcaption>
                             </figure>
 
                             <h3>Key Mathematical Framework</h3>
@@ -483,14 +486,6 @@ for batch in loader:
                             <li><strong>Evaluate</strong> flux conservation, RMSE, spectral-shape preservation, and SNR improvement within fixed apertures.</li>
                             </ul>
 
-                            <figure style="text-align: center; margin: 20px 0;">
-                            <!-- using the uploaded file path as the figure source (paper PDF) -->
-                            <img src="images/research/obvs.png"  style="max-width: 120%; height: auto;" loading="lazy" decoding="async">
-                            <figcaption>Fig 3. Application to observational data</figcaption>
-                            </figure>
-
-
-
                             <h3>Key Results &amp; Insights</h3>
                             <ul>
                             <li><strong>Classical methods:</strong> PCA/ICA provide limited denoising in presence of spatially correlated (beam) noise; they struggle especially at low SNRs.</li>
@@ -501,6 +496,11 @@ for batch in loader:
 
                             <li><strong>Practical takeaway:</strong> A hybrid workflow — IST as an interpretable unsupervised baseline and a U-Net trained on broad synthetic priors (with transfer/fine-tuning on small real samples) — offers a robust route for denoising ALMA / IFU surveys. </li>
                             </ul>
+
+                            <figure style="text-align: center; margin: 20px 0;">
+                            <img src="images/research/obvs.png" alt="CRISTAL-19, CRISTAL-2 and W2246 cubes denoised with 2D1D-IST and U-Net, with their spectra" style="max-width: 100%; height: auto;" loading="lazy" decoding="async">
+                            <figcaption>Fig 3. Application to observational data: ALMA CRISTAL-19, CRISTAL-2 and W2246 cubes before and after 2D1D-IST and U-Net denoising, with their spectra.</figcaption>
+                            </figure>
 
                             <h3>Representative Numerical Highlights</h3>
                             <ul>
@@ -539,6 +539,11 @@ for batch in loader:
                                 <li><strong>Information Cutting:</strong> The robustness of the model is tested by systematically removing information via Fourier scale cuts ($k_{max}$) and density threshold cuts ($\rho_{min}, \rho_{max}$). This involves retraining the networks on modified fields where certain scales or density regimes are filtered out to assess information content.</li>
                             </ul>
 
+                            <figure style="text-align: center; margin: 20px 0;">
+                                <img src="images/research/cosmo-cnn-arch.png" alt="Visualization of CNN architecture" style="max-width: 80%; height: auto;" loading="lazy" decoding="async">
+                                <figcaption>Fig 1. Visualization of CNN architecture.</figcaption>
+                            </figure>
+
                             <h3>Key Mathematical Framework</h3>
                             <p>
                                 The neural network predicts the mean ($\mu_i$) and variance ($\sigma_i^2$) of the marginal posterior for the $i$-th parameter:
@@ -546,11 +551,6 @@ for batch in loader:
 
                             $$ \mu_{i}(X)=\int_{\theta_{i}}p(\theta_{i}|X)\theta_{i}d\theta_{i} $$
                             $$ \sigma_{i}^{2}(X)=\int_{\theta_{i}}p(\theta_{i}|X)(\theta_{i}-\mu_{i})^{2}d\theta_{i} $$
-
-                            <figure style="text-align: center; margin: 20px 0;">
-                                <img src="images/research/cosmo-cnn-arch.png" alt="Visualization of CNN architecture" style="max-width: 80%; height: auto;" loading="lazy" decoding="async">
-                                <figcaption>Fig 1. Visualization of CNN architecture.</figcaption>
-                            </figure>
 
                             <p>
                                 To optimize these predictions, the model minimizes a custom loss function designed for moment matching, assuming the posterior can be approximated by a Gaussian:
@@ -706,12 +706,12 @@ for batch in loader:
                             <li><strong>Metrics:</strong> MSE; scatter plots of predicted vs true A; conditional prediction distributions at fixed A</li>
                             </ul>
 
+                            <h3>Outcomes &amp; Insights</h3>
                             <figure style="text-align: center; margin: 20px 0;">
-                                <img src="images/research/gdf_results.png" alt="Results of the CNN in comparison to the theoretical bounds estimated from the Fisher matrix formalism" style="max-width: 40%; height: auto;" loading="lazy" decoding="async">
+                                <img src="images/research/gdf_results.png" alt="Results of the CNN in comparison to the theoretical bounds estimated from the Fisher matrix formalism" style="max-width: 65%; height: auto;" loading="lazy" decoding="async">
                                 <figcaption>Fig 2. Results of the CNN in comparison to the theoretical bounds estimated from the Fisher matrix formalism.</figcaption>
                             </figure>
 
-                            <h3>Outcomes &amp; Insights</h3>
                             <ul>
                             <li>The CNN achieves parameter-estimation precision close to the Fisher-limit for the original (full-k) Gaussian maps,
                                 indicating that the network extracts nearly all available information from the fields.</li>
@@ -876,6 +876,8 @@ for batch in loader:
                         </div>
                     </article>
 
+                    <!-- research-cards:end -->
+
                     
                 </div>
             </div>
@@ -921,5 +923,7 @@ for batch in loader:
     <script src="scripts/nav-music.js"></script>
     <script src="scripts/inline/research-inline-04.js"></script>
     <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
+<script src="scripts/cards-edit.js"></script>
+<script src="scripts/edit-mode.js"></script>
 </body>
 </html>

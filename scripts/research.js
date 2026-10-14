@@ -22,11 +22,29 @@
       block.style.padding = '12px 16px 20px 16px';
     });
 
-    // Software cards keep their in-story figures; only the cover is hidden.
-    var hideSel = document.body.classList.contains('page-software')
-      ? '.project-image'
-      : '.project-image, .project-full figure, .project-full figcaption, .project-full img';
-    clone.querySelectorAll(hideSel).forEach(function(el){
+    // Research and Software: the cover becomes a banner across the top of the
+    // expanded card, fading into the card's background, with the title and
+    // subtitle laid over the fade (styled by .project-hero in research_style.css).
+    var heroPage = document.body.classList.contains('page-research') || document.body.classList.contains('page-software');
+    var heroImg = clone.querySelector('.project-image');
+    var heroMeta = clone.querySelector('.project-meta');
+    var useHero = !!(heroPage && heroImg && heroMeta);
+    if (useHero) {
+      var hero = document.createElement('div');
+      hero.className = 'project-hero';
+      heroImg.parentNode.insertBefore(hero, heroImg);
+      hero.appendChild(heroImg);
+      hero.appendChild(heroMeta);
+      clone.classList.add('has-hero');
+    }
+
+    // Cards with a banner keep everything, figures included; otherwise the
+    // cover is hidden (and, outside Software, the in-story figures too).
+    var hideSel = useHero ? ''
+      : document.body.classList.contains('page-software')
+        ? '.project-image'
+        : '.project-image, .project-full figure, .project-full figcaption, .project-full img';
+    if (hideSel) clone.querySelectorAll(hideSel).forEach(function(el){
       el.style.display = 'none';
     });
 
@@ -48,7 +66,7 @@
   var close = document.createElement('button');
   close.className = 'project-close';
   close.setAttribute('aria-label','Close project');
-  close.innerHTML = '✕';
+  close.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
   // Place the close button at the top-right corner of the cloned card
   // (absolute positioning inside the clone). This keeps it visually fixed
   // to the expanded card even while the clone scrolls or the page moves.
@@ -241,6 +259,47 @@
       });
     }
 
+    // Text fades and drifts up into place while the card is still settling,
+    // one block after another: title, subtitle, tags, then the first blocks of
+    // the text (everything further down shares the last delay, as it is out of
+    // view anyway). Styles are set with !important because some light-mode
+    // rules pin these elements to opacity: 1.
+    (function fadeInText(){
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var meta = clone.querySelector('.project-meta');
+      var full = clone.querySelector('.project-full, .project-details');
+      var items = [];
+      if (meta) Array.prototype.forEach.call(meta.children, function(el){ items.push(el); });
+      if (full) Array.prototype.forEach.call(full.children, function(el){ items.push(el); });
+      items = items.filter(function(el){ return el.offsetParent !== null || getComputedStyle(el).display !== 'none'; });
+      if (!items.length) return;
+      var START = 260, STEP = 70, MAX_STEPS = 8, DURATION = 560;
+      var EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+      // start hidden with no transition (else the hide itself would animate)
+      items.forEach(function(el){
+        el.style.setProperty('transition', 'none', 'important');
+        el.style.setProperty('opacity', '0', 'important');
+        el.style.setProperty('transform', 'translateY(12px)', 'important');
+      });
+      void clone.offsetWidth;
+      requestAnimationFrame(function(){
+        items.forEach(function(el, i){
+          var delay = START + Math.min(i, MAX_STEPS) * STEP;
+          el.style.setProperty('transition', 'opacity ' + DURATION + 'ms ease ' + delay + 'ms, transform ' + DURATION + 'ms ' + EASE + ' ' + delay + 'ms', 'important');
+          el.style.setProperty('opacity', '1', 'important');
+          el.style.setProperty('transform', 'none', 'important');
+        });
+      });
+      // hand the elements back to the stylesheet once done
+      setTimeout(function(){
+        items.forEach(function(el){
+          el.style.removeProperty('opacity');
+          el.style.removeProperty('transform');
+          el.style.removeProperty('transition');
+        });
+      }, START + MAX_STEPS * STEP + DURATION + 100);
+    })();
+
     function closeHandler(){
       // Quick UX: fade the overlay and scale the clone down while fading it out.
       // Immediately hide both the close and theme buttons so they don't linger
@@ -299,7 +358,9 @@
       // Trigger the zoom-out & fade on the next frame for smoother compositing
       requestAnimationFrame(function(){
         overlay.style.opacity = '0';
-        clone.style.opacity = '0';
+        // !important: .project-clone has opacity: 1 !important in the CSS,
+        // which would otherwise stop the fade
+        clone.style.setProperty('opacity', '0', 'important');
         // scale down slightly to suggest a zoom-out
         clone.style.transformOrigin = 'center center';
         clone.style.transform = 'scale(0.92)';
@@ -364,6 +425,9 @@
     function escHandler(e){ if(e.key === 'Escape'){ closeHandler(); }}
     document.addEventListener('keydown', escHandler);
   }
+
+  // also used by the card editor's Preview (scripts/cards-edit.js)
+  window.openProjectCard = openFullscreenFromCard;
 
   document.addEventListener('DOMContentLoaded', function(){
     // open when clicking the button (on talks page, this includes talks-view-btn)

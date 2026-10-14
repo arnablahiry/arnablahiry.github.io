@@ -90,6 +90,11 @@
                         <div class="timeline-progress-bar"></div>
                     </div>
 
+                    <!-- timeline-entries:start
+                         Everything between these two markers is rewritten by the
+                         timeline editor (npm run edit, scripts/timeline-edit.js).
+                         Hand edits are fine as long as they keep this markup style. -->
+
                     <div class="timeline-item">
                         <div class="timeline-left">
                             <div class="timeline-date-text">September 2026</div>
@@ -102,10 +107,6 @@
                                 <div class="timeline-text">
                                     Contributed a talk on sparsity-informed machine learning to process spectral datacubes at the Physics-Informed Machine Learning (PIML) workshop, held at FORTH's Institute of Computer Science in Heraklion.
                                 </div>
-                            </div>
-                            <div class="timeline-image-wrapper">
-                                <img src="images/timeline/piml_group.png" alt="Physics-Informed Machine Learning workshop group at FORTH Institute of Computer Science"
-                                loading="lazy" width="480" decoding="async" />
                             </div>
                             <div class="timeline-image-wrapper">
                                 <img src="images/timeline/piml_talk.png" alt="Sparsity-informed machine learning talk at the Physics-Informed Machine Learning workshop"
@@ -217,10 +218,10 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="timeline-item">
                         <div class="timeline-left">
-                            <div class="timeline-date-text">January,<br>February 2026</div>
+                            <div class="timeline-date-text">January, February 2026</div>
                         </div>
                         <div class="timeline-center">
                             <div class="timeline-circle"></div>
@@ -312,13 +313,11 @@
                             <div class="timeline-circle"></div>
                         </div>
                         <div class="timeline-right">
-                            <!-- First text -->
                             <div class="margin-bottom-medium">
                                 <div class="timeline-text">
                                     Volunteered as a teaching assistant for the Astrostatistics Summer School 2025 held at the Department of Physics, University of Crete, Heraklion, Greece 🇬🇷, guiding students in practical sessions on statistical methods and machine learning applications in astrophysics.
                                 </div>
                             </div>
-                            <!-- First set of images -->
                             <div class="timeline-image-wrapper">
                                 <img src="images/timeline/astrostat_grp.jpeg" alt="Astrostat Summer School group"
                                 loading="lazy" width="480" decoding="async" />
@@ -332,16 +331,13 @@
                                 loading="lazy" width="480" decoding="async" />
                             </div>
 
-                            <!-- Spacer between the two sets -->
                             <div style="height: 4%;"></div>
 
-                            <!-- Second text -->
                             <div class="margin-bottom-medium">
                                 <div class="timeline-text">
                                     Attended the UniversAI : Exploring the Universe using Artificial Intelligence - symposium held in Athens, Greece 🇬🇷, and contributed a poster on "Deep and Sparse Denoising of high-z Galaxy Spectral Datacubes - From Simulations to ALMA observations"
                                 </div>
                             </div>
-                            <!-- Second set of images -->
                             <div class="timeline-image-wrapper">
                                 <img src="images/timeline/universai-crowd.jpeg" alt="UniversAI symposium"
                                 loading="lazy" width="480" decoding="async" />
@@ -358,7 +354,6 @@
                     </div>
 
                     <div style="height: 14vh;"></div>
-
 
                     <div class="timeline-item">
                         <div class="timeline-left">
@@ -404,7 +399,7 @@
                         <div class="timeline-right">
                             <div class="margin-bottom-medium">
                                 <div class="timeline-text">
-                                    Attended the second edition of the Machine Learning for Astrophysics (ML4ASTRO) conference, held in Catania, Italy  🇮🇹, and contributed a flash talk on blind source separation and astrophysical signal extraction from IFU spectral data cubes of high-z galaxies
+                                    Attended the second edition of the Machine Learning for Astrophysics (ML4ASTRO) conference, held in Catania, Italy 🇮🇹, and contributed a flash talk on blind source separation and astrophysical signal extraction from IFU spectral data cubes of high-z galaxies
                                 </div>
                             </div>
                             <div class="timeline-image-wrapper">
@@ -498,10 +493,12 @@
                                 </div>
                             </div>
                             <div class="timeline-image-wrapper">
-                                <img src="images/timeline/flatiron_institute.png" alt="Flatiron Institute" loading="lazy" width="480"  decoding="async" />
+                                <img src="images/timeline/flatiron_institute.png" alt="Flatiron Institute"
+                                loading="lazy" width="480" decoding="async" />
                             </div>
                             <div class="timeline-image-wrapper">
-                                <img src="images/timeline/iiser_tpt.png" alt="IISER Tirupati" loading="lazy" width="480"  decoding="async" />
+                                <img src="images/timeline/iiser_tpt.png" alt="IISER Tirupati"
+                                loading="lazy" width="480" decoding="async" />
                             </div>
                             <div class="timeline-image-wrapper">
                                 <img src="images/timeline/with_degree.jpeg" alt="Me with degrees"
@@ -510,6 +507,7 @@
                         </div>
                     </div>
 
+                    <!-- timeline-entries:end -->
 
                     <div class="overlay-fade-top"></div>
                     <div class="overlay-fade-bottom"></div>
@@ -555,6 +553,8 @@
     <script src="scripts/scifi-toggle.js"></script>
     <script src="scripts/nav-music.js"></script>
     <script src="scripts/inline/timeline-inline-03.js"></script>
+    <script src="scripts/timeline-edit.js"></script>
     <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
+<script src="scripts/edit-mode.js"></script>
 </body>
 </html>

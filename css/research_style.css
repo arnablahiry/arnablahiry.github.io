@@ -1017,9 +1017,47 @@ body.light-mode .project-theme-toggle{ color: #111 !important; background: rgba(
     background: rgba(255,255,255,0.12);
 }
 
-/* If the close button is appended to body as a fallback, ensure fixed
-   placement looks reasonable by targeting the body-level placement. */
-body > .project-close{ position: fixed !important; top: 42px !important; right: 12px !important; }
+/* The close and theme buttons are appended to <body> and placed by
+   scripts/research.js at the expanded card's top-right corner (inline
+   top/left); no !important offsets here, or they would pull the close
+   button away from the theme button. Both share one look: */
+body > .project-close,
+body > .project-theme-toggle{
+    position: fixed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+    line-height: 0;
+    font-size: 0;
+}
+body > .project-close svg,
+body > .project-theme-toggle svg{ display: block; width: 16px; height: 16px; }
+/* they sit over the banner image, so give them a solid backing */
+body > .project-close,
+body > .project-theme-toggle{
+    background: rgba(18,18,20,0.78) !important;
+    color: #fff !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+}
+body > .project-close:hover,
+body > .project-theme-toggle:hover{ background: rgba(40,40,44,0.9) !important; }
+body.light-mode > .project-close,
+body.light-mode > .project-theme-toggle{
+    background: rgba(255,255,255,0.88) !important;
+    color: #111 !important;
+    border-color: rgba(0,0,0,0.14);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+body.light-mode > .project-close:hover,
+body.light-mode > .project-theme-toggle:hover{ background: #fff !important; }
 
 /* Make the whole card keyboard-focusable */
 .project-card{ cursor: pointer; }
@@ -1475,4 +1513,293 @@ body:not(.light-mode) img{
         background-image: linear-gradient(to bottom, black, transparent);
         z-index: -1;
     }
+}
+
+/* ==========================================================================
+   Expanded card with a banner (Research and Software pages; set up by
+   scripts/research.js): the cover runs across the top and fades into the
+   card's background, with the title and subtitle on the fade. The whole card
+   scrolls, and the text sits in a centred, roomy column.
+   ========================================================================== */
+/* (body .project-card... outranks the translucent card backgrounds) */
+/* dark grey rather than black: easier on the eyes for long reads */
+body .project-card.project-clone.has-hero{
+    background: #121315 !important;
+}
+.project-clone.has-hero{
+    display: block !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+.project-clone .project-hero{
+    position: relative;
+}
+.project-clone .project-hero .project-image{
+    display: block !important;
+    width: 100% !important;
+    height: clamp(220px, 46vh, 520px) !important;
+    object-fit: cover;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+.project-clone .project-hero::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 75%;
+    background: linear-gradient(to bottom, rgba(18,19,21,0) 0%, rgba(18,19,21,0.35) 30%, rgba(18,19,21,0.75) 60%, rgba(18,19,21,0.94) 85%, #121315 100%);
+    pointer-events: none;
+}
+body.light-mode .project-clone .project-hero::after{
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 30%, rgba(255,255,255,0.75) 60%, rgba(255,255,255,0.94) 85%, #fff 100%);
+}
+
+/* title block over the fade, lined up with the text column below */
+body .project-clone .project-hero .project-meta,
+body.light-mode .project-clone .project-hero .project-meta{
+    background-color: transparent !important;
+    z-index: 1 !important;
+}
+.project-clone .project-hero .project-meta{
+    position: absolute !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: auto !important;
+    z-index: 1;
+    margin: 0 !important;
+    padding: 0 clamp(24px, 5vw, 56px) 26px !important;
+    background: transparent !important;
+}
+.project-clone .project-hero .project-meta > .project-title,
+.project-clone .project-hero .project-meta > .project-subtitle{
+    display: block !important;
+}
+.project-clone .project-hero .project-meta > *{
+    max-width: 900px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+body.page-research .project-clone .project-hero .project-title,
+body.page-software .project-clone .project-hero .project-title{
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    font-family: 'Abaddon Bold', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: clamp(22px, 2.3vw, 32px) !important;
+    line-height: 1.2 !important;
+    color: #fff !important;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+}
+body.page-research .project-clone .project-hero .project-subtitle,
+body.page-software .project-clone .project-hero .project-subtitle{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    font-family: 'Abaddon Light', sans-serif !important;
+    font-weight: 300 !important;
+    font-size: clamp(14px, 1.15vw, 17px) !important;
+    line-height: 1.55 !important;
+    color: rgba(255,255,255,0.86) !important;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.5);
+}
+.project-clone .project-hero .project-tags{ margin-top: 14px !important; }
+.project-clone .project-hero .project-tags *{ font-family: 'Abaddon Bold', sans-serif !important; }
+body.light-mode.page-research .project-clone .project-hero .project-title,
+body.light-mode.page-software .project-clone .project-hero .project-title{
+    color: #111 !important;
+    text-shadow: 0 1px 12px rgba(255,255,255,0.7);
+}
+body.light-mode.page-research .project-clone .project-hero .project-subtitle,
+body.light-mode.page-software .project-clone .project-hero .project-subtitle{
+    color: rgba(17,17,17,0.82) !important;
+    text-shadow: 0 1px 10px rgba(255,255,255,0.7);
+}
+
+body.light-mode .project-card.project-clone.has-hero{ background: #fff !important; }
+
+/* the text: a centred column with room around it */
+.project-clone.has-hero .project-full{
+    background: transparent !important;
+    max-width: 900px;
+    margin: 0 auto !important;
+    padding: 18px clamp(24px, 5vw, 56px) 72px !important;
+    overflow: visible !important;
+    font-size: 16px !important;
+    line-height: 1.7;
+    box-sizing: content-box;
+}
+.project-clone.has-hero .project-full p,
+.project-clone.has-hero .project-full li{ line-height: 1.7 !important; }
+.project-clone.has-hero .project-full p{ margin-bottom: 1.15rem; }
+.project-clone.has-hero .project-full li{ margin-bottom: 0.5rem; }
+.project-clone.has-hero .project-full h3{ margin-top: 2.2rem !important; margin-bottom: 0.9rem !important; }
+.project-clone.has-hero .project-full > h3:first-child{ margin-top: 0.6rem !important; }
+/* Software: the text starts with the title again; the banner already has it */
+.project-clone.has-hero .project-full > h1:first-child{ display: none !important; }
+/* narrow screens: the title block sits just under the image (overlapping the
+   fade) so long titles never spill over the top of the banner */
+@media (max-width: 700px){
+    .project-clone .project-hero .project-image{ height: 200px !important; }
+    .project-clone .project-hero .project-meta{
+        position: relative !important;
+        margin-top: -70px !important;
+        padding-bottom: 12px !important;
+    }
+    .project-clone .project-hero::after{ height: 200px; bottom: auto; top: 0; }
+}
+
+/* Software: the banner is shown whole (its own shape, no fade) and the title
+   block sits underneath it */
+body.page-software .project-clone .project-hero .project-image{
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain;
+}
+body.page-software .project-clone .project-hero::after{ display: none; }
+body.page-software .project-clone .project-hero .project-meta{
+    position: static !important;
+    margin-top: 0 !important;
+    padding: 30px clamp(24px, 5vw, 56px) 6px !important;
+}
+body.page-software .project-clone .project-hero .project-title,
+body.page-software .project-clone .project-hero .project-subtitle{ text-shadow: none !important; }
+
+/* dim divider between the title block and the start of the text */
+.project-clone.has-hero .project-full::before{
+    content: '';
+    display: block;
+    height: 1px;
+    margin: 4px 0 26px;
+    background: rgba(255,255,255,0.14);
+}
+body.light-mode .project-clone.has-hero .project-full::before{
+    background: rgba(0,0,0,0.12);
+}
+
+/* body text a touch softer than pure white on the grey */
+body:not(.light-mode) .project-clone.has-hero .project-full p,
+body:not(.light-mode) .project-clone.has-hero .project-full li{ color: #dcdcde !important; }
+
+/* Figures in expanded Research cards: the PNGs have white backgrounds. Blend
+   them into the card instead of showing a box: in light mode white drops out
+   (multiply); in dark mode the inverted image's black drops out (lighten), so
+   only the plot itself shows on the card's grey. */
+body.page-research .project-clone.has-hero .project-full figure img{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+body.page-research.light-mode .project-clone.has-hero .project-full figure img{ mix-blend-mode: multiply; }
+body.page-research:not(.light-mode) .project-clone.has-hero .project-full figure img{ mix-blend-mode: lighten; }
+body.page-research .project-clone.has-hero .project-full figure{ background: transparent !important; }
+
+/* screenshot pairs inside a list item (e.g. AstroLore's capabilities) */
+.project-clone .project-full li > .image-pair{ margin: 14px 0 26px; }
+
+/* ==========================================================================
+   Card editor (scripts/cards-edit.js, local editor only; Research + Software)
+   ========================================================================== */
+body.cards-editing #projects-grid{ display: block !important; max-width: 1100px; margin: 0 auto; }
+.ce-new-bar{ display: flex; justify-content: center; margin-bottom: 18px; }
+.ce-add-btn, .ce-mini-btn{
+    padding: 9px 20px;
+    border: 1px dashed rgba(254,218,74,0.55);
+    border-radius: 999px;
+    background: rgba(15,15,16,0.75);
+    color: #feda4a;
+    font-family: 'Abaddon Bold', sans-serif !important;
+    font-size: 15px;
+    cursor: pointer;
+}
+.ce-mini-btn{ padding: 5px 14px; font-size: 13px; }
+.ce-add-btn:hover, .ce-mini-btn:hover{ background: rgba(254,218,74,0.12); border-style: solid; }
+.ce-list{ display: flex; flex-direction: column; gap: 26px; }
+.ce-card{
+    display: flex;
+    gap: 22px;
+    padding: 18px;
+    border: 1px solid rgba(255,215,0,0.22);
+    border-radius: 12px;
+    background: rgba(15,15,16,0.88);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+    color: #e6e6e6;
+}
+.ce-cover{ position: relative; flex: none; width: 300px; align-self: flex-start; cursor: pointer; outline: none; border-radius: 8px; overflow: hidden; }
+.ce-cover img{ display: block; width: 100%; height: auto; transition: opacity 160ms ease; }
+.ce-cover.is-empty{ height: 180px; border: 1px dashed rgba(255,255,255,0.25); }
+.ce-cover-overlay{ position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; color: #fff; pointer-events: none; transition: opacity 160ms ease; }
+.ce-cover.is-empty .ce-cover-overlay{ opacity: 0.7; }
+.ce-cover-overlay svg{ width: 34px; height: 34px; padding: 10px; border-radius: 50%; background: rgba(0,0,0,0.55); }
+.ce-cover:hover img, .ce-cover:focus-visible img{ opacity: 0.4; }
+.ce-cover:hover .ce-cover-overlay, .ce-cover:focus-visible .ce-cover-overlay{ opacity: 1; }
+
+.ce-form{ flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.ce-top{ display: flex; justify-content: flex-end; }
+.ce-tools{ display: flex; gap: 6px; }
+.ce-tool{ display: flex; align-items: center; justify-content: center; flex: none; width: 28px; height: 28px; padding: 0; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; background: rgba(20,20,22,0.85); color: #fff; cursor: pointer; }
+.ce-tool svg{ width: 12px; height: 12px; display: block; }
+.ce-tool:hover{ background: rgba(254,218,74,0.2); border-color: #feda4a; }
+.ce-tool.ce-tool-remove:hover{ background: #ee0979; border-color: #ee0979; }
+.ce-card:first-child .ce-top .ce-tool:first-child,
+.ce-card:last-child .ce-top .ce-tool:nth-child(2){ opacity: 0.3; pointer-events: none; }
+
+.ce-field{ display: flex; flex-direction: column; gap: 5px; }
+.ce-label{ font-family: 'Abaddon Bold', sans-serif !important; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.ce-hint{ font-family: 'Abaddon Light', sans-serif !important; font-size: 12px; color: rgba(255,255,255,0.45); }
+.ce-input{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 10px;
+    border: 1px dashed rgba(255,255,255,0.25);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    color: #eee;
+    font-family: 'Abaddon Light', sans-serif !important;
+    font-size: 14px;
+    outline: none;
+}
+textarea.ce-input{ resize: none; overflow: hidden; line-height: 1.5; }
+.ce-input:focus{ border-style: solid; border-color: rgba(254,218,74,0.7); }
+textarea.ce-title{ font-family: 'Abaddon Bold', sans-serif !important; font-size: 18px; color: #fff; }
+textarea.ce-body{
+    height: 360px;
+    resize: vertical;
+    overflow: auto;
+    font-family: ui-monospace, Menlo, monospace !important;
+    font-size: 12.5px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    tab-size: 4;
+}
+select.ce-input{ width: auto; }
+.ce-row{ display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.ce-types{ display: flex; gap: 14px; }
+.ce-check{ display: inline-flex; align-items: center; gap: 6px; font-family: 'Abaddon Bold', sans-serif !important; font-size: 13px; cursor: pointer; }
+.ce-badges, .ce-icons{ display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+.ce-badges > .ce-mini-btn{ align-self: flex-start; }
+.ce-badge-row{ display: grid; grid-template-columns: 110px 1fr 1fr 28px; gap: 8px; align-items: center; }
+.ce-badge-preview{ max-width: 110px; height: 20px; object-fit: contain; object-position: left; }
+.ce-icon-row{ display: grid; grid-template-columns: 26px 90px 1fr; gap: 10px; align-items: center; }
+.ce-icon-img{ width: 26px; height: 26px; object-fit: contain; border-radius: 6px; }
+.ce-icon-name{ font-family: 'Abaddon Bold', sans-serif !important; font-size: 13px; }
+.ce-body-wrap{ display: flex; flex-direction: column; gap: 8px; }
+.ce-body-tools{ display: flex; gap: 8px; }
+
+body.light-mode .ce-card{ background: rgba(255,255,255,0.92); color: #111; border-color: rgba(140,118,28,0.38); box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
+body.light-mode .ce-input{ background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.25); color: #111; }
+body.light-mode textarea.ce-title{ color: #111; }
+body.light-mode .ce-label, body.light-mode .ce-hint{ color: rgba(0,0,0,0.55); }
+body.light-mode .ce-tool{ background: #fff; color: #111; border-color: rgba(0,0,0,0.2); }
+body.light-mode .ce-add-btn, body.light-mode .ce-mini-btn{ background: rgba(255,255,255,0.85); color: #8c761c; border-color: rgba(140,118,28,0.55); }
+
+@media (max-width: 800px){
+    .ce-card{ flex-direction: column; }
+    .ce-cover{ width: 100%; }
 }

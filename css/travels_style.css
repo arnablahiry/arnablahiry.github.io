@@ -316,8 +316,10 @@ body.light-mode.page-travels .section-travels-heading h2.intro-heading {
     padding: 8px 0 24px;
     min-height: calc(100vh - var(--travels-header-offset) - 260px);
     flex: 1 1 auto;
-    /* allow the canvas to overflow if zoomed larger than viewport width */
-    overflow-x: auto;
+    /* a globe zoomed wider than the screen is trimmed at the sides. clip,
+       not auto/hidden: those would make this a scroll box that soaks up the
+       mouse wheel instead of the page scrolling */
+    overflow-x: clip;
     overflow-y: visible;
 }
 
@@ -335,6 +337,91 @@ body.light-mode.page-travels .section-travels-heading h2.intro-heading {
     border-radius: 50%;
     touch-action: none;
 }
+
+/* Pause/play for the globe's rotation: the corner of the globe's square,
+   outside the circle. The dashed ring turns while the globe does. */
+.globe-spin-toggle {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 3;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(254, 218, 74, 0.32);
+    border-radius: 50%;
+    background: rgba(8, 10, 14, 0.62);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #feda4a;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.4s ease;
+}
+.globe-spin-toggle::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 1px dashed rgba(254, 218, 74, 0.45);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: globe-spin-ring 9s linear infinite;
+    animation-play-state: paused;
+    pointer-events: none;
+}
+.globe-spin-toggle.is-spinning::before {
+    opacity: 1;
+    animation-play-state: running;
+}
+.globe-spin-toggle:hover {
+    border-color: rgba(254, 218, 74, 0.75);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 14px rgba(254, 218, 74, 0.28);
+    transform: scale(1.06);
+}
+.globe-spin-toggle:active { transform: scale(0.96); }
+.globe-spin-toggle:focus-visible {
+    outline: 2px solid #feda4a;
+    outline-offset: 4px;
+}
+.spin-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    fill: currentColor;
+    transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.spin-icon-play { opacity: 0; transform: scale(0.5) rotate(-90deg); }
+.globe-spin-toggle.is-paused .spin-icon-pause { opacity: 0; transform: scale(0.5) rotate(90deg); }
+.globe-spin-toggle.is-paused .spin-icon-play { opacity: 1; transform: none; }
+
+/* out of the way while a country's photos are open */
+#globe-wrap.country-map-active .globe-spin-toggle {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes globe-spin-ring { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .globe-spin-toggle::before { animation: none; }
+    .spin-icon { transition: opacity 0.2s ease; }
+}
+
+/* the site's light-mode rule restyles every button */
+body.light-mode .globe-spin-toggle {
+    background: rgba(255, 255, 255, 0.82) !important;
+    border: 1px solid rgba(138, 102, 0, 0.35) !important;
+    color: #8a6600 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+body.light-mode .globe-spin-toggle:hover {
+    border-color: rgba(138, 102, 0, 0.7) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 12px rgba(201, 152, 18, 0.3);
+}
+body.light-mode .globe-spin-toggle::before { border-color: rgba(138, 102, 0, 0.45); }
 
 #country-map-panel {
     width: clamp(0px, calc(var(--country-focus-progress) * 48vw), 760px);
@@ -1076,3 +1163,421 @@ body.light-mode .placeholder-text  { color: #bbb; }
 body.travel-detail-open header {
     z-index: 1 !important;
 }
+
+/* ==========================================================================
+   Edit mode (scripts/travel-edit.js, local editor only)
+   ========================================================================== */
+.photo-card.photo-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(254, 218, 74, 0.04);
+    border: 2px dashed rgba(254, 218, 74, 0.4);
+    box-sizing: border-box;
+}
+.photo-card.photo-add .photo-card-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: rgba(254, 218, 74, 0.75);
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    cursor: pointer;
+}
+.photo-card.photo-add:hover { background: rgba(254, 218, 74, 0.1); border-color: rgba(254, 218, 74, 0.75); }
+.photo-card.photo-add:hover .photo-card-button { color: #feda4a; }
+body.light-mode .photo-card.photo-add { background: rgba(140, 118, 28, 0.05); border-color: rgba(140, 118, 28, 0.45); }
+body.light-mode .photo-card.photo-add .photo-card-button { color: #8c761c; }
+
+.photo-card.is-pending { outline: 2px solid rgba(254, 218, 74, 0.7); outline-offset: -2px; }
+.photo-new-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #feda4a;
+    color: #111;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+/* Lightbox caption box and author picker */
+.lightbox-caption-input,
+.lightbox-author-select { display: none; }
+body.travel-editing .lightbox-caption-input { display: block; }
+body.travel-editing .lightbox-author-select { display: inline-block; }
+body.travel-editing #lightbox-caption,
+body.travel-editing #lightbox-credit-name { display: none; }
+
+.lightbox-caption-input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 6px 8px;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #efefef;
+    font-size: 14px;
+    line-height: 1.45;
+    font-family: 'Abaddon Light', sans-serif;
+    resize: vertical;
+    outline: none;
+}
+.lightbox-caption-input:focus { border-style: solid; border-color: rgba(254, 218, 74, 0.7); }
+.lightbox-caption-input::placeholder { color: rgba(255, 255, 255, 0.45); }
+
+.lightbox-author-select {
+    padding: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    background: rgba(8, 10, 14, 0.92);
+    color: #f4f4f4;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+}
+.lightbox-author-select option { color: #111; background: #fff; }
+
+body.light-mode .lightbox-caption-input { background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.25); color: #111; }
+body.light-mode .lightbox-caption-input::placeholder { color: rgba(0, 0, 0, 0.4); }
+body.light-mode .lightbox-author-select { background: #fff; border-color: rgba(0, 0, 0, 0.2); color: #111; }
+
+/* Marked for removal (undone with the same button) */
+.photo-card.is-removed { outline: 2px solid rgba(238, 9, 121, 0.75); outline-offset: -2px; }
+.photo-card.is-removed img { opacity: 0.25 !important; filter: grayscale(1); }
+.photo-card.is-removed::after {
+    content: 'removed';
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #ee0979;
+    color: #fff;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Countries & places card next to the globe
+   (scripts/travel-places-edit.js, local editor only)
+   ========================================================================== */
+.travel-places-card { display: none; }
+body.travel-places-editing #globe-wrap:not(.country-map-active) {
+    flex-wrap: wrap;
+    gap: 28px;
+}
+body.travel-places-editing #globe-wrap:not(.country-map-active) .travel-places-card { display: flex; }
+
+.travel-places-card {
+    --tpc-gold: #feda4a;
+    --tpc-text: #e8e8e8;
+    --tpc-muted: rgba(255, 255, 255, 0.5);
+    --tpc-line: rgba(255, 255, 255, 0.08);
+    --tpc-hover: rgba(255, 255, 255, 0.05);
+    --tpc-field: rgba(255, 255, 255, 0.04);
+    position: relative;
+    z-index: 2;
+    flex: 0 1 360px;
+    min-width: 300px;
+    max-width: 420px;
+    height: min(var(--globe-size-px), 680px);
+    min-height: 460px;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 12px 10px;
+    border: 1px solid #232325;
+    border-radius: 12px;
+    background: rgba(15, 15, 16, 0.94);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    color: var(--tpc-text);
+    font-family: 'Abaddon Light', sans-serif;
+    font-size: 13px;
+    text-align: left;
+}
+
+.tpc-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 4px;
+}
+.tpc-title {
+    margin: 0;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tpc-gold);
+}
+.tpc-count { font-size: 11px; color: var(--tpc-muted); white-space: nowrap; }
+
+/* Search boxes and their suggestions */
+.tpc-search { position: relative; }
+/* magnifier on the wrapper, so input styles elsewhere can't remove it */
+.tpc-search::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    z-index: 1;
+    width: 13px;
+    height: 32px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='7' cy='7' r='4.5' fill='none' stroke='%23999' stroke-width='1.5'/%3E%3Cpath d='M10.5 10.5L14 14' stroke='%23999' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / 13px;
+    pointer-events: none;
+}
+.tpc-search-sm::before { height: 27px; }
+.tpc-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 7px 10px 7px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background: var(--tpc-field);
+    color: inherit;
+    font: inherit;
+    outline: none;
+}
+.tpc-search-input:focus { border-color: rgba(254, 218, 74, 0.7); }
+.tpc-search-input::placeholder { color: var(--tpc-muted); }
+.tpc-search-sm .tpc-search-input { padding-top: 5px; padding-bottom: 5px; font-size: 12px; }
+
+.tpc-suggest {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    z-index: 5;
+    max-height: 260px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    border: 1px solid rgba(254, 218, 74, 0.25);
+    border-radius: 8px;
+    background: #121214;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+.tpc-option {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.tpc-option.is-active { background: rgba(254, 218, 74, 0.12); }
+.tpc-option-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tpc-option-name mark { background: none; color: var(--tpc-gold); font-family: 'Abaddon Bold', sans-serif; }
+.tpc-option-sub { flex: 0 1 auto; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--tpc-muted); }
+.tpc-option-tick { color: var(--tpc-gold); font-size: 12px; }
+.tpc-suggest-empty { padding: 6px 8px; color: var(--tpc-muted); }
+
+/* Country list */
+.tpc-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin: 0 -4px;
+    padding: 0 4px;
+}
+.tpc-divider {
+    margin: 10px 4px 4px;
+    padding-top: 8px;
+    border-top: 1px solid var(--tpc-line);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tpc-muted);
+}
+.tpc-line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 28px;
+    padding: 0 4px 0 0;
+    border-radius: 6px;
+}
+.tpc-line:hover { background: var(--tpc-hover); }
+.tpc-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 4px 0;
+    cursor: pointer;
+}
+.tpc-label input {
+    flex: 0 0 auto;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    accent-color: var(--tpc-gold);
+    cursor: pointer;
+}
+.tpc-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tpc-country.is-visited > .tpc-line .tpc-name { color: #fff; }
+.tpc-badge {
+    flex: 0 0 auto;
+    min-width: 18px;
+    font-size: 11px;
+    text-align: right;
+    color: var(--tpc-gold);
+}
+.tpc-badge:empty { display: none; }
+
+/* Open/close chevron */
+.tpc-toggle {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--tpc-muted);
+    cursor: pointer;
+    position: relative;
+}
+.tpc-toggle::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 7px;
+    width: 5px;
+    height: 5px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.15s ease;
+}
+.tpc-toggle:hover { color: var(--tpc-gold); }
+.tpc-toggle[aria-expanded="true"]::before { transform: translate(-1px, -1px) rotate(45deg); }
+.tpc-toggle:disabled { visibility: hidden; }
+
+/* An open country */
+.tpc-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 2px 0 10px 11px;
+    padding: 8px 0 4px 12px;
+    border-left: 1px solid rgba(254, 218, 74, 0.25);
+}
+.tpc-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.tpc-chips-empty, .tpc-status, .tpc-note { margin: 0; font-size: 11px; color: var(--tpc-muted); }
+.tpc-note { color: #f0a35e; }
+.tpc-chip {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    border: 1px solid rgba(254, 218, 74, 0.35);
+    border-radius: 999px;
+    background: rgba(254, 218, 74, 0.08);
+    font-size: 12px;
+}
+.tpc-chip.is-region { border-style: dashed; }
+.tpc-chip.is-unpinned { border-color: rgba(255, 255, 255, 0.2); background: none; color: var(--tpc-muted); }
+.tpc-chip-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 2px 2px 2px 9px;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+.tpc-chip.is-unpinned .tpc-chip-name { cursor: default; }
+.tpc-chip-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--tpc-muted);
+    cursor: pointer;
+}
+.tpc-chip-remove svg { width: 9px; height: 9px; }
+.tpc-chip-remove:hover { color: #ee0979; }
+
+.tpc-tree {
+    max-height: 260px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 2px;
+}
+.tpc-cities {
+    display: none;
+    margin: 0 0 4px 11px;
+    padding-left: 13px;
+    border-left: 1px solid var(--tpc-line);
+}
+.tpc-region.is-open > .tpc-cities { display: block; }
+.tpc-city { padding: 3px 4px; border-radius: 6px; font-size: 12px; }
+.tpc-city:hover { background: var(--tpc-hover); }
+
+/* Just found with a search */
+.is-flash { animation: tpc-flash 1.4s ease-out; }
+@keyframes tpc-flash {
+    0%, 30% { background: rgba(254, 218, 74, 0.25); }
+    100% { background: transparent; }
+}
+
+@media (max-width: 960px) {
+    .travel-places-card {
+        flex: 1 1 100%;
+        max-width: 560px;
+        min-width: 0;
+        height: 540px;
+    }
+}
+
+body.light-mode .travel-places-card {
+    --tpc-gold: #8a6600;
+    --tpc-text: #1d1d1f;
+    --tpc-muted: rgba(0, 0, 0, 0.5);
+    --tpc-line: rgba(0, 0, 0, 0.1);
+    --tpc-hover: rgba(0, 0, 0, 0.04);
+    --tpc-field: #fff;
+    border-color: rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+}
+body.light-mode .tpc-search-input { background: #fff; border-color: rgba(0, 0, 0, 0.18); color: #111; }
+/* the site's light-mode button rule boxes every button */
+body.light-mode .travel-places-card button {
+    background: none !important;
+    border: 0 !important;
+    color: var(--tpc-muted) !important;
+}
+body.light-mode .travel-places-card .tpc-chip-name { color: inherit !important; }
+body.light-mode .travel-places-card .tpc-toggle:hover { color: var(--tpc-gold) !important; }
+body.light-mode .travel-places-card .tpc-chip-remove:hover { color: #ee0979 !important; }
+body.light-mode .tpc-search-input:focus { border-color: rgba(138, 102, 0, 0.7); }
+body.light-mode .tpc-suggest { background: #fff; border-color: rgba(138, 102, 0, 0.3); box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14); }
+body.light-mode .tpc-option.is-active { background: rgba(201, 152, 18, 0.14); }
+body.light-mode .tpc-country.is-visited > .tpc-line .tpc-name { color: #000; }
+body.light-mode .tpc-panel { border-left-color: rgba(138, 102, 0, 0.3); }
+body.light-mode .tpc-chip { border-color: rgba(138, 102, 0, 0.4); background: rgba(201, 152, 18, 0.1); }
+body.light-mode .tpc-chip.is-unpinned { border-color: rgba(0, 0, 0, 0.2); background: none; }
+body.light-mode .tpc-note { color: #b0561a; }

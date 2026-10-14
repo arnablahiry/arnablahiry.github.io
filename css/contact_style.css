@@ -197,9 +197,20 @@ body{
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     opacity: 1;
-    pointer-events: none;
+    pointer-events: auto; /* stays up until its x is pressed */
+    cursor: default;
+    z-index: 3;
 }
+.contact-card.wrong .contact-hover{ opacity: 0; pointer-events: none; }
 .contact-card.wrong .details-text{ color: #8b0000; font-weight: 700; }
+/* "(Will be there from 14 Oct 2026 to 20 Oct 2026)" under the wrong message */
+.contact-card.wrong .wrong-dates{
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 0.82em;
+    opacity: 0.92;
+}
+.contact-card.wrong .wrong-dates strong{ font-weight: 700; white-space: nowrap; }
 
 /* In dark mode, make the 'Wrong' text a lighter red for better contrast */
 body:not(.light-mode) .contact-card.wrong .details-text{
@@ -425,8 +436,17 @@ body:not(.light-mode) .contact-card.revealed .details-text{
 
 
 .contact-card.wrong .contact-close {
-    display: none;
+    color: #ffb3b3;
 }
+.contact-card.wrong .contact-close:hover { color: #ffffff; }
+.light-mode .contact-card.wrong .contact-close {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    color: #ffb3b3 !important;
+}
+.light-mode .contact-card.wrong .contact-close:hover { color: #ffffff !important; }
 
 .light-mode .contact-card.revealed .contact-close {
     border: none !important;
@@ -438,4 +458,410 @@ body:not(.light-mode) .contact-card.revealed .details-text{
 }
 .light-mode .contact-card.revealed .contact-close:hover {
     color: #1c853a;
+}
+
+
+/* ==========================================================================
+   Edit mode (scripts/contact-edit.js, local editor only)
+   ========================================================================== */
+body.contact-editing .contact-card .contact-hover { display: none; }
+body.contact-editing .contact-card { cursor: pointer; }
+body.contact-editing .contact-card:hover .contact-btn img { filter: brightness(0.82); }
+.contact-btn img { transition: filter 160ms ease; }
+
+.contact-edit-pencil {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(12, 12, 14, 0.78);
+    border: 1px solid rgba(254, 218, 74, 0.45);
+    color: #feda4a;
+    pointer-events: none;
+    transition: transform 160ms ease, background 160ms ease;
+}
+.contact-edit-pencil svg { width: 16px; height: 16px; }
+.contact-card:hover .contact-edit-pencil { transform: scale(1.08); background: #feda4a; color: #111; }
+
+.contact-edit-badge {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: calc(100% - 66px); /* clear of the pencil */
+    padding: 6px 11px 7px;
+    border-radius: 10px;
+    background: rgba(10, 10, 12, 0.84);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e8e8e8;
+    font-family: 'Abaddon Light', sans-serif;
+    font-size: 12px;
+    line-height: 1.3;
+    text-align: left;
+    pointer-events: none;
+}
+.contact-edit-badge-state { font-family: 'Abaddon Bold', sans-serif; font-size: 12px; }
+.contact-edit-badge.is-right { border-color: rgba(116, 236, 146, 0.55); }
+.contact-edit-badge.is-right .contact-edit-badge-state { color: #74ec92; }
+.contact-edit-badge.is-wrong { border-color: rgba(255, 138, 138, 0.45); }
+.contact-edit-badge.is-wrong .contact-edit-badge-state { color: #ff8a8a; }
+.contact-edit-badge-dates { color: rgba(255, 255, 255, 0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* The dialog */
+.contact-edit-dialog {
+    --ced-gold: #feda4a;
+    --ced-gold-soft: rgba(254, 218, 74, 0.16);
+    --ced-text: #ececec;
+    --ced-muted: rgba(255, 255, 255, 0.55);
+    --ced-line: rgba(255, 255, 255, 0.1);
+    --ced-field: rgba(255, 255, 255, 0.045);
+    --ced-bg: #111113;
+    width: min(880px, calc(100vw - 32px));
+    max-height: calc(100vh - 40px);
+    box-sizing: border-box;
+    /* centred: style.css's `* { margin: 0 }` removes the dialog's own auto margins */
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    height: fit-content;
+    padding: 0;
+    border: 1px solid rgba(254, 218, 74, 0.28);
+    border-radius: 16px;
+    background: var(--ced-bg);
+    color: var(--ced-text);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+    font-family: 'Abaddon Light', sans-serif;
+    font-size: 14px;
+    overflow: hidden;
+}
+.contact-edit-dialog[open] { display: flex; flex-direction: column; animation: ced-in 200ms ease-out; }
+.contact-edit-dialog::backdrop { background: rgba(0, 0, 0, 0.55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+@keyframes ced-in { from { opacity: 0; transform: translateY(10px) scale(0.985); } to { opacity: 1; transform: none; } }
+
+.ced-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px 12px 22px;
+    border-bottom: 1px solid var(--ced-line);
+}
+.ced-title { font-family: 'Abaddon Bold', sans-serif; font-size: 18px; letter-spacing: 0.04em; color: var(--ced-gold); }
+.ced-x, .ced-cal-nav, .ced-end, .ced-clear, .ced-day, .ced-cal-today, .ced-btn { font: inherit; cursor: pointer; }
+.ced-x {
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; padding: 0;
+    border: 0; border-radius: 50%; background: transparent; color: var(--ced-muted);
+}
+.ced-x svg { width: 12px; height: 12px; }
+.ced-x:hover { background: var(--ced-field); color: var(--ced-text); }
+
+.ced-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 26px;
+    padding: 18px 22px 20px;
+    overflow-y: auto;
+}
+.ced-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.ced-label { font-family: 'Abaddon Bold', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ced-muted); }
+
+/* From -> To */
+.ced-range { display: flex; align-items: stretch; gap: 8px; }
+.ced-range-arrow { align-self: center; color: var(--ced-muted); }
+.ced-end {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 8px 12px;
+    border: 1px solid var(--ced-line);
+    border-radius: 10px;
+    background: var(--ced-field);
+    color: var(--ced-text);
+    text-align: left;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.ced-end-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ced-muted); }
+.ced-end-value { font-family: 'Abaddon Bold', sans-serif; font-size: 14px; white-space: nowrap; }
+.ced-end.is-empty .ced-end-value { font-family: 'Abaddon Light', sans-serif; color: var(--ced-muted); }
+.ced-end.is-active { border-color: var(--ced-gold); box-shadow: 0 0 0 3px var(--ced-gold-soft); }
+.ced-clear {
+    align-self: center;
+    padding: 6px 8px;
+    border: 0;
+    background: none;
+    color: var(--ced-muted);
+    font-size: 12px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.ced-clear:hover { color: #ff8a8a; }
+
+/* Calendar */
+.ced-cal {
+    padding: 12px 12px 10px;
+    border: 1px solid var(--ced-line);
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01));
+}
+.ced-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.ced-cal-month { font-family: 'Abaddon Bold', sans-serif; font-size: 15px; }
+.ced-cal-nav {
+    display: flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; padding: 0;
+    border: 0; border-radius: 50%; background: transparent; color: var(--ced-text);
+}
+.ced-cal-nav svg { width: 14px; height: 14px; }
+.ced-cal-nav.is-next svg { transform: rotate(180deg); }
+.ced-cal-nav:hover { background: var(--ced-field); color: var(--ced-gold); }
+.ced-cal-week, .ced-cal-row { display: grid; grid-template-columns: repeat(7, 1fr); }
+.ced-cal-week span { padding: 4px 0 6px; text-align: center; font-size: 10px; letter-spacing: 0.08em; color: var(--ced-muted); }
+.ced-cal-row { margin: 1px 0; }
+.ced-day {
+    position: relative;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ced-text);
+    font-size: 13px;
+    z-index: 0;
+}
+/* the round marker sits on ::after, the range band on ::before */
+.ced-day::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    z-index: -1;
+    transition: background 120ms ease;
+}
+.ced-day::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    z-index: -2;
+}
+.ced-day:hover::after { background: rgba(255, 255, 255, 0.08); }
+.ced-day.is-other { color: rgba(255, 255, 255, 0.28); }
+.ced-day.is-today::after { box-shadow: inset 0 0 0 1px rgba(254, 218, 74, 0.6); }
+.ced-day.is-between::before { background: var(--ced-gold-soft); }
+.ced-day.has-after::before { left: 50%; background: var(--ced-gold-soft); }
+.ced-day.has-before::before { right: 50%; background: var(--ced-gold-soft); }
+.ced-day.is-from, .ced-day.is-to { color: #111; font-family: 'Abaddon Bold', sans-serif; }
+.ced-day.is-from::after, .ced-day.is-to::after { background: var(--ced-gold); box-shadow: 0 0 12px rgba(254, 218, 74, 0.45); }
+.ced-day.is-preview::after { background: rgba(254, 218, 74, 0.55); box-shadow: none; }
+.ced-day:focus-visible { outline: none; }
+.ced-day:focus-visible::after { box-shadow: 0 0 0 2px var(--ced-gold); }
+.ced-cal-today {
+    display: block;
+    margin: 8px auto 0;
+    padding: 4px 12px;
+    border: 1px solid var(--ced-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ced-muted);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+}
+.ced-cal-today:hover { color: var(--ced-gold); border-color: rgba(254, 218, 74, 0.5); }
+
+.ced-hint { margin: 0; font-size: 12px; color: var(--ced-muted); }
+.ced-check { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; cursor: pointer; }
+.ced-check input { margin: 2px 0 0; width: 15px; height: 15px; accent-color: var(--ced-gold); flex: 0 0 auto; }
+.ced-check input:disabled + span { opacity: 0.75; }
+.ced-status {
+    margin: 0;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 13px;
+}
+.ced-status.is-right { background: rgba(116, 236, 146, 0.1); color: #74ec92; }
+.ced-status.is-wrong { background: rgba(255, 138, 138, 0.1); color: #ff8a8a; }
+
+/* Fields */
+.ced-field { display: flex; flex-direction: column; gap: 5px; }
+.ced-field-label { font-size: 12px; color: var(--ced-muted); }
+.ced-field-hint { font-size: 11px; color: var(--ced-muted); opacity: 0.8; }
+.ced-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 11px;
+    border: 1px solid var(--ced-line);
+    border-radius: 9px;
+    background: var(--ced-field);
+    color: var(--ced-text);
+    font: inherit;
+    font-size: 13px;
+    line-height: 1.45;
+    outline: none;
+    resize: vertical;
+}
+.ced-input:focus { border-color: var(--ced-gold); box-shadow: 0 0 0 3px var(--ced-gold-soft); }
+.ced-input[aria-invalid="true"] { border-color: #ff8a8a; box-shadow: 0 0 0 3px rgba(255, 138, 138, 0.15); }
+
+.ced-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 12px 22px 16px;
+    border-top: 1px solid var(--ced-line);
+}
+.ced-btn {
+    padding: 9px 20px;
+    border: 1px solid var(--ced-line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ced-text);
+    font-family: 'Abaddon Bold', sans-serif;
+    font-size: 14px;
+}
+.ced-btn:hover { background: var(--ced-field); }
+.ced-btn.is-primary { background: var(--ced-gold); border-color: var(--ced-gold); color: #111; }
+.ced-btn.is-primary:hover { background: #ffe57a; }
+
+@media (max-width: 760px) {
+    .ced-body { grid-template-columns: 1fr; gap: 20px; padding: 16px; }
+    .ced-head { padding: 14px 12px 10px 16px; }
+    .ced-foot { padding: 12px 16px 14px; }
+}
+
+/* Light mode (the site's light-mode button and input rules restyle every
+   button and field, hence !important) */
+body.light-mode .contact-edit-dialog {
+    --ced-gold: #8a6600;
+    --ced-gold-soft: rgba(201, 152, 18, 0.18);
+    --ced-text: #1b1b1d;
+    --ced-muted: rgba(0, 0, 0, 0.52);
+    --ced-line: rgba(0, 0, 0, 0.12);
+    --ced-field: rgba(0, 0, 0, 0.035);
+    --ced-bg: #fdfcf8;
+    border-color: rgba(138, 102, 0, 0.3);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+body.light-mode .contact-edit-dialog button {
+    background: transparent !important;
+    border-color: transparent !important;
+    color: var(--ced-text) !important;
+}
+body.light-mode .contact-edit-dialog .ced-end { background: var(--ced-field) !important; border: 1px solid var(--ced-line) !important; }
+body.light-mode .contact-edit-dialog .ced-end.is-active { border-color: var(--ced-gold) !important; }
+body.light-mode .contact-edit-dialog .ced-x,
+body.light-mode .contact-edit-dialog .ced-clear,
+body.light-mode .contact-edit-dialog .ced-cal-today { color: var(--ced-muted) !important; }
+body.light-mode .contact-edit-dialog .ced-cal-today { border: 1px solid var(--ced-line) !important; }
+body.light-mode .contact-edit-dialog .ced-day.is-other { color: rgba(0, 0, 0, 0.3) !important; }
+body.light-mode .contact-edit-dialog .ced-day:hover::after { background: rgba(0, 0, 0, 0.06); }
+body.light-mode .contact-edit-dialog .ced-day.is-from,
+body.light-mode .contact-edit-dialog .ced-day.is-to { color: #fff !important; }
+body.light-mode .contact-edit-dialog .ced-day.is-from::after,
+body.light-mode .contact-edit-dialog .ced-day.is-to::after { box-shadow: 0 0 10px rgba(138, 102, 0, 0.35); }
+body.light-mode .contact-edit-dialog .ced-day.is-preview::after { background: rgba(138, 102, 0, 0.45); }
+body.light-mode .contact-edit-dialog .ced-day.is-today::after { box-shadow: inset 0 0 0 1px rgba(138, 102, 0, 0.6); }
+body.light-mode .contact-edit-dialog .ced-btn { border: 1px solid var(--ced-line) !important; }
+body.light-mode .contact-edit-dialog .ced-btn.is-primary { background: var(--ced-gold) !important; border-color: var(--ced-gold) !important; color: #fff !important; }
+body.light-mode .contact-edit-dialog .ced-input { background: #fff; border: 1px solid var(--ced-line); color: var(--ced-text); }
+body.light-mode .contact-edit-dialog .ced-input:focus { border-color: var(--ced-gold); }
+body.light-mode .contact-edit-dialog .ced-status.is-right { background: rgba(28, 133, 58, 0.1); color: #1c853a; }
+body.light-mode .contact-edit-dialog .ced-status.is-wrong { background: rgba(180, 30, 30, 0.08); color: #b41e1e; }
+
+/* ==========================================================================
+   Phones and small tablets
+   ========================================================================== */
+/* Let the page itself scroll. style.css makes html/body exactly screen-high
+   with body as the scroller, which on phones stops the address bar from
+   collapsing and tap-the-status-bar-to-top from working. body's overflow-x
+   moves to the viewport, so sideways scrolling stays off. */
+html:has(body.page-contact) { height: auto; overflow: visible; }
+body.page-contact { height: auto; min-height: 100%; overflow-x: hidden; overflow-y: visible; }
+
+/* Nothing may widen the page: .overlay-fade-top is 300vw wide and the
+   full-bleed photo row is 100vw. iPhones ignore overflow-x on html/body and
+   would lay the whole page out that wide (shrunk to fit, header controls
+   off to the side), so clip on the page's own wrapper instead. */
+body.page-contact .page-wrapper { overflow-x: clip; }
+
+/* Touch screens have no hover: without this the dark "Are you sure?" layer
+   sticks on a card after it's tapped and closed */
+@media (hover: none) {
+    .contact-card:hover .contact-hover { background: rgba(0, 0, 0, 0); opacity: 0; }
+    .contact-card:hover .hover-text,
+    .contact-card:focus-within .hover-text { transform: none; }
+}
+
+/* Light mode: the wrong pane is pink there, so a dark x */
+body.light-mode .contact-card.wrong .contact-close { color: #8b0000 !important; }
+body.light-mode .contact-card.wrong .contact-close:hover { color: #4a0000 !important; }
+
+@media (max-width: 768px) {
+    /* the site's own typefaces, at sizes that don't depend on screen height */
+    body.page-contact .details-text,
+    body.page-contact .hover-text,
+    body.page-contact .contact-form-card,
+    body.page-contact .contact-form-card input,
+    body.page-contact .contact-form-card textarea,
+    body.page-contact .form-msg {
+        font-family: 'Abaddon Light', sans-serif;
+        letter-spacing: 0.02em;
+    }
+
+    h2.intro-heading { font-size: clamp(20px, 6.4vw, 28px); line-height: 1.25; }
+    .padding-vertical-xlarge { padding-top: 64px; padding-bottom: 20px; }
+    .contact-photos-inner { width: calc(100vw - 32px); gap: 16px; }
+
+    /* Open card panes: scroll inside if the text is taller than the card,
+       still centred when it fits (auto margins never push it off the top) */
+    .contact-details {
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 46px 18px 18px;
+        box-sizing: border-box;
+    }
+    .contact-details .details-text { margin: auto; max-width: 100%; font-size: 15px; line-height: 1.5; }
+    .details-text .correct { font-family: 'Abaddon Bold', sans-serif; font-size: 18px; margin-bottom: 10px; }
+    .details-text .addr { margin-bottom: 12px; }
+    .details-text .contact-links { font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
+    .contact-card.wrong .details-text { font-family: 'Abaddon Bold', sans-serif; font-size: 18px; }
+    .contact-card.wrong .wrong-dates { font-family: 'Abaddon Light', sans-serif; font-size: 14px; line-height: 1.5; }
+    .contact-card.wrong .wrong-dates strong { font-family: 'Abaddon Bold', sans-serif; }
+    .contact-close { top: 6px; right: 6px; width: 44px; height: 44px; padding: 0; font-size: 30px; }
+
+    /* Form */
+    .contact-form-wrap { width: calc(100vw - 32px); margin: 28px auto 20px; }
+    .contact-form-card { padding: 18px 16px; }
+    .contact-form-card:focus-within { opacity: 1; }
+    .contact-form-card .form-row { margin-bottom: 14px; }
+    .contact-form-card label { font-size: 14px; margin-bottom: 6px; }
+    /* 16px: smaller text makes iPhones zoom the page in when a field is tapped */
+    .contact-form-card input[type="text"],
+    .contact-form-card input[type="email"],
+    .contact-form-card textarea { font-size: 16px; padding: 11px 12px; }
+    .contact-form-card .form-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+    .btn-submit { width: 100%; min-height: 46px; font-family: 'Abaddon Bold', sans-serif; font-size: 16px; }
+    .form-msg { font-size: 14px; text-align: center; }
+    .form-msg:empty { display: none; }
+
+    .social-cards { width: calc(100vw - 32px); margin: 24px auto; }
 }

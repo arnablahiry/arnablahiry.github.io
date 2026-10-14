@@ -1,8 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Configuration: set the current winning location here (easy to change)
-  // Valid ids: 'kolkata', 'heraklion', 'paris', 'world'
-  const WINNER = 'heraklion';
-
   // If you have a server endpoint to receive contact form submissions, set it here.
   // Example (Formspree): 'https://formspree.io/f/yourFormId'
   // Example (custom API): 'https://example.com/api/contact'
@@ -15,98 +11,131 @@ document.addEventListener('DOMContentLoaded', () => {
     correct: 'Correct!'
   };
 
-  document.querySelectorAll('.contact-card').forEach(card => {
-    const btn = card.querySelector('.contact-btn');
-    const detailsEl = card.querySelector('.details-text');
-    const closeBtn = card.querySelector('.contact-close');
+  // Card details and dates: scripts/contact-places.js (edited with the site
+  // editor). Which card is right is worked out at each click, so it follows
+  // the calendar even if the page stays open over midnight.
+  const DATA = window.CONTACT_PLACES || { fallback: '', cards: {} };
 
-    function openCard() {
-      // close any other open cards and clear any wrong timers
-      document.querySelectorAll('.contact-card').forEach(other => {
-        if (other !== card) {
-          other.classList.remove('revealed');
-          other.classList.remove('wrong');
-          const det = other.querySelector('.contact-details');
-          if (det) det.setAttribute('aria-hidden', 'true');
-          if (other._wrongTimer) { clearTimeout(other._wrongTimer); other._wrongTimer = null; }
-        }
-      });
+  const escapeHtml = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-      // If this card is not the winner, show temporary wrong message
-      const id = card.dataset.id || '';
-      if (id !== WINNER) {
-          card.classList.add('wrong');
-          const detEl = card.querySelector('.contact-details');
-          if (detEl) {
-            const txt = detEl.querySelector('.details-text');
-            if (txt) txt.textContent = MESSAGES.wrong;
-            detEl.setAttribute('aria-hidden', 'false');
-          }
-        // hide after a short delay
-        card._wrongTimer = setTimeout(() => {
-          card.classList.remove('wrong');
-          const detEl2 = card.querySelector('.contact-details');
-          if (detEl2) detEl2.setAttribute('aria-hidden', 'true');
-          card._wrongTimer = null;
-        }, 1400);
-        return;
-      }
-
-      // build details text from data attributes for the winner
-  const addr = card.dataset.address || '';
-  const e1 = card.dataset.email1 || '';
-  const e2 = card.dataset.email2 || '';
-  const phone = card.dataset.phone || '';
-
-  // Build HTML: 'Correct!' label, address (preserve line breaks), emails as mailto links, phone as tel link
-  const addrHtml = addr ? `<div class="addr">${addr.replace(/\n/g, '<br/>')}</div>` : '';
-  const emailParts = [];
-  if (e1) emailParts.push(`<a href="mailto:${e1}">${e1}</a>`);
-  if (e2) emailParts.push(`<a href="mailto:${e2}">${e2}</a>`);
-  if (phone) emailParts.push(`<a href="tel:${phone}">${phone}</a>`);
-  const emailsHtml = emailParts.length ? `<div class="contact-links">${emailParts.join('<br/>')}</div>` : '';
-
-  detailsEl.innerHTML = `<div class="correct">${MESSAGES.correct}</div>${addrHtml}${emailsHtml}`;
-
-      card.classList.add('revealed');
-      const detEl = card.querySelector('.contact-details');
-      if (detEl) detEl.setAttribute('aria-hidden', 'false');
+  // Today's date as YYYY-MM-DD in a time zone (empty: the visitor's own)
+  function todayIn(tz) {
+    let parts;
+    try {
+      parts = new Intl.DateTimeFormat('en-US', { timeZone: tz || undefined, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+    } catch (_) {
+      parts = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
     }
+    const get = (type) => (parts.find((p) => p.type === type) || {}).value;
+    return `${get('year')}-${get('month')}-${get('day')}`;
+  }
 
-    function closeCard() {
-      card.classList.remove('revealed');
-      const det = card.querySelector('.contact-details');
-      if (det) det.setAttribute('aria-hidden', 'true');
+  // "2026-10-14" -> "14 Oct 2026"
+  function formatDate(iso) {
+    const [y, m, d] = String(iso).split('-').map(Number);
+    if (!y || !m || !d) return iso;
+    return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(y, m - 1, d)));
+  }
+
+  function hasDates(card) { return !!(card && (card.from || card.to)); }
+
+  // Does the card's date range include today (in the card's time zone)?
+  function isHereToday(card) {
+    if (!hasDates(card)) return false;
+    const today = todayIn(card.tz);
+    return (!card.from || card.from <= today) && (!card.to || today <= card.to);
+  }
+
+  // The right card(s) today: those whose dates include today, or else the fallback
+  function correctIds(data) {
+    const cards = (data || DATA).cards || {};
+    const here = Object.keys(cards).filter((id) => isHereToday(cards[id]));
+    return here.length ? here : [(data || DATA).fallback];
+  }
+
+  // "(Will be there from 14 Oct 2026 to 20 Oct 2026)", or "Was there" once it's over
+  function datesHtml(card) {
+    if (!hasDates(card)) return '';
+    const past = card.to && card.to < todayIn(card.tz);
+    const verb = past ? 'Was there' : 'Will be there';
+    const b = (iso) => `<strong>${escapeHtml(formatDate(iso))}</strong>`;
+    let range;
+    if (card.from && card.to) range = card.from === card.to ? `on ${b(card.from)}` : `from ${b(card.from)} to ${b(card.to)}`;
+    else if (card.from) range = `from ${b(card.from)}`;
+    else range = `until ${b(card.to)}`;
+    return `<div class="wrong-dates">(${verb} ${range})</div>`;
+  }
+
+  function detailsHtml(card) {
+    const note = escapeHtml(card.note);
+    const address = escapeHtml(card.address);
+    const map = /^https?:\/\//i.test(card.map || '') ? escapeHtml(card.map) : '';
+    const addressPart = address && map ? `<a href="${map}" target="_blank" rel="noopener">${address}</a>` : address;
+    const addr = [note, addressPart].filter(Boolean).join('\n\n');
+    const links = [];
+    [card.email1, card.email2].filter(Boolean).forEach((e) => links.push(`<a href="mailto:${escapeHtml(e)}">${escapeHtml(e)}</a>`));
+    if (card.phone) links.push(`<a href="tel:${escapeHtml(card.phone.replace(/[^\d+]/g, ''))}">${escapeHtml(card.phone)}</a>`);
+    return `<div class="correct">${MESSAGES.correct}</div>`
+      + (addr ? `<div class="addr">${addr}</div>` : '')
+      + (links.length ? `<div class="contact-links">${links.join('<br/>')}</div>` : '');
+  }
+
+  const cardEls = Array.from(document.querySelectorAll('.contact-card'));
+
+  function closeCard(cardEl) {
+    cardEl.classList.remove('revealed', 'wrong');
+    const det = cardEl.querySelector('.contact-details');
+    if (det) det.setAttribute('aria-hidden', 'true');
+  }
+
+  function openCard(cardEl) {
+    cardEls.forEach((other) => { if (other !== cardEl) closeCard(other); });
+    const id = cardEl.dataset.id || '';
+    const card = (DATA.cards || {})[id] || {};
+    const detEl = cardEl.querySelector('.contact-details');
+    const textEl = cardEl.querySelector('.details-text');
+
+    if (correctIds().indexOf(id) === -1) {
+      // stays up until its x is pressed
+      textEl.innerHTML = `<div class="wrong-text">${escapeHtml(MESSAGES.wrong)}</div>${datesHtml(card)}`;
+      cardEl.classList.remove('revealed');
+      cardEl.classList.remove('wrong');
+      void cardEl.offsetWidth;   // replay the shake on a repeat click
+      cardEl.classList.add('wrong');
+    } else {
+      textEl.innerHTML = detailsHtml(card);
+      cardEl.classList.add('revealed');
     }
+    if (detEl) detEl.setAttribute('aria-hidden', 'false');
+  }
 
-    btn.addEventListener('click', (e) => {
-      // toggle revealed state
-      if (card.classList.contains('revealed')) {
-        closeCard();
-      } else {
-        openCard();
-      }
-    });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !e.defaultPrevented) cardEls.forEach(closeCard);
+  });
 
+  // For the contact editor (scripts/contact-edit.js)
+  window.ContactPage = { todayIn, formatDate, isHereToday, correctIds, closeAll: () => cardEls.forEach(closeCard) };
+
+  cardEls.forEach((cardEl) => {
+    const btn = cardEl.querySelector('.contact-btn');
+    const toggle = () => {
+      if (cardEl.classList.contains('revealed') || cardEl.classList.contains('wrong')) closeCard(cardEl);
+      else openCard(cardEl);
+    };
+    btn.addEventListener('click', toggle);
     // keyboard support (Enter / Space) on the div acting as a button
     btn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        if (card.classList.contains('revealed')) closeCard(); else openCard();
-      }
+      if (e.target !== btn) return;
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
     });
-
-    // allow closing by clicking the details area when revealed
-    const detailsContainer = card.querySelector('.contact-details');
-    detailsContainer.addEventListener('click', (e) => {
-      closeCard();
-    });
-
-    // close button handling (stop propagation so it doesn't re-open)
+    // clicks inside the open pane (selecting text, links) leave it open
+    cardEl.querySelector('.contact-details').addEventListener('click', (e) => e.stopPropagation());
+    const closeBtn = cardEl.querySelector('.contact-close');
     if (closeBtn) {
       closeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        closeCard();
+        closeCard(cardEl);
+        btn.focus();
       });
     }
   });
