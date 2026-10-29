@@ -21,8 +21,11 @@ const { presimplify, simplify, quantile, sphericalTriangleArea } = require('topo
 const repoRoot = path.resolve(__dirname, '..');
 const outPath = path.join(repoRoot, 'data', 'world-map.json');
 const LAKES_URL = 'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@v5.1.2/geojson/ne_50m_lakes.geojson';
-const KEEP_POINTS = 0.3;        // share of the 1:50m points kept
-const MIN_LAKE_KM2 = 1500;      // smaller lakes are a pixel or two on the globe
+// Kept small so the map loads fast: settings can be tried with
+//   KEEP_POINTS=0.2 MIN_ISLAND_KM2=500 npm run travel:map
+const KEEP_POINTS = Number(process.env.KEEP_POINTS) || 0.1;         // share of the 1:50m points kept
+const MIN_LAKE_KM2 = Number(process.env.MIN_LAKE_KM2) || 5000;      // smaller lakes are a pixel or two on the globe
+const MIN_ISLAND_KM2 = Number(process.env.MIN_ISLAND_KM2) || 2000;  // smaller islands go, except a country's largest piece
 const EARTH_KM = 6371;
 
 function fetchJson(url) {
@@ -55,6 +58,16 @@ function polygonArea(geometry) {
   return polys.reduce((s, rings) => s + ringArea(rings[0]) - rings.slice(1).reduce((h, r) => h + ringArea(r), 0), 0);
 }
 
+// Drops a country's small islands, always keeping its largest piece (so
+// Malta or Singapore stay on the map)
+function dropSmallIslands(geometry) {
+  if (!geometry || geometry.type !== 'MultiPolygon') return geometry;
+  const sized = geometry.coordinates.map((rings) => ({ rings, area: ringArea(rings[0]) }));
+  const largest = sized.reduce((a, b) => (b.area > a.area ? b : a));
+  const kept = sized.filter((p) => p === largest || p.area >= MIN_ISLAND_KM2).map((p) => p.rings);
+  return kept.length === 1 ? { type: 'Polygon', coordinates: kept[0] } : { type: 'MultiPolygon', coordinates: kept };
+}
+
 function countPoints(topo) {
   return topo.arcs.reduce((s, arc) => s + arc.length, 0);
 }
@@ -62,7 +75,10 @@ function countPoints(topo) {
 async function main() {
   const world = require('world-atlas/countries-50m.json');
   const countries = feature(world, world.objects.countries);
-  countries.features.forEach((f) => { f.properties = { name: f.properties.name }; });
+  countries.features.forEach((f) => {
+    f.properties = { name: f.properties.name };
+    f.geometry = dropSmallIslands(f.geometry);
+  });
 
   const lakeSource = await fetchJson(LAKES_URL);
   const lakes = {
@@ -84,8 +100,9 @@ async function main() {
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(topo));
   const after = countPoints(topo);
+  const gzipped = require('zlib').gzipSync(fs.readFileSync(outPath)).length;
   console.log(`Wrote ${path.relative(repoRoot, outPath)}: ${countries.features.length} countries, ${lakes.features.length} lakes, `
-    + `${after} of ${before} points, ${Math.round(fs.statSync(outPath).size / 1024)} KB`);
+    + `${after} of ${before} points, ${Math.round(fs.statSync(outPath).size / 1024)} KB (${Math.round(gzipped / 1024)} KB gzipped)`);
 }
 
 main().catch((err) => { console.error(err); process.exitCode = 1; });
