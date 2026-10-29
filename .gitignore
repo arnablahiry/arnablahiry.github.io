@@ -1,2 +1,5 @@
 node_modules/
 .edit-trash/
+
+# local Claude / Cowork output folder: never publish (it can hold keys and private files)
+Claude outputs/
