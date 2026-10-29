@@ -214,3 +214,19 @@ dialog.zoom p { text-align: center; color: #eee; margin: 14px 0 0; font-size: 14
   footer .wrap { gap: 8px 16px; }
 }
 @media (max-width: 360px) { .does .grid { grid-template-columns: 1fr; } }
+
+/* top bar on phones: smaller name, compact Download, so nothing runs into anything (also with larger system fonts) */
+.brand { min-width: 0; flex: 0 1 auto; overflow: hidden; }
+.brand span { white-space: nowrap; }
+.top nav a.dl { white-space: nowrap; }
+@media (max-width: 480px) {
+  .top .wrap { gap: 10px; height: 58px; }
+  .brand { gap: 9px; }
+  .brand img { width: 32px; height: 32px; border-radius: 9px; }
+  .brand span { font-size: 20px; }
+  .top nav { margin-right: 0; }
+  .top nav a.dl { padding: 8px 13px; font-size: 13px; }
+  .theme { width: 36px; height: 36px; }
+  .theme svg { width: 17px; height: 17px; }
+}
+@media (max-width: 340px) { .brand span { display: none; } }
