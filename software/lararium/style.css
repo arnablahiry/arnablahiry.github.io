@@ -230,3 +230,12 @@ dialog.zoom p { text-align: center; color: #eee; margin: 14px 0 0; font-size: 14
   .theme svg { width: 17px; height: 17px; }
 }
 @media (max-width: 340px) { .brand span { display: none; } }
+
+/* The app's own light or dark mode, matching the site's: each phone has both screenshots, only one shows (and loads) */
+.phone img.d { display: none; }
+:root[data-theme="dark"] .phone img.l { display: none; }
+:root[data-theme="dark"] .phone img.d { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .phone img.l { display: none; }
+  :root:not([data-theme="light"]) .phone img.d { display: block; }
+}
