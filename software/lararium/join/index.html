@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open in Lararium</title>
+<meta name="description" content="A Lararium group invite: open it in the app to join the group (or add the person who sent it).">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#E3962E">
+<script>
+try { const t = localStorage.getItem('lararium-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="icon" href="../img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .join { min-height: calc(100vh - 64px); display: grid; place-items: center; padding: 32px 16px 56px; }
+  .jcard { width: 100%; max-width: 440px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 24px; text-align: center; }
+  .jcard img.logo { width: 64px; height: 64px; border-radius: 18px; }
+  .jcard h1 { font-family: 'Bitcount', 'Abaddon', monospace; font-weight: 400; font-size: 30px; margin: 14px 0 6px; letter-spacing: .02em; }
+  .jcard p { color: var(--muted); margin: 0 0 20px; line-height: 1.5; }
+  .jcard .btn { width: 100%; justify-content: center; margin-top: 10px; box-sizing: border-box; cursor: pointer; font: inherit; font-weight: 700; }
+  .jcard .tok { margin-top: 18px; font-family: ui-monospace, monospace; font-size: 12px; color: var(--muted); word-break: break-all; background: var(--surface2); border-radius: 12px; padding: 10px 12px; text-align: left; }
+  .jcard .note { font-size: 13px; margin: 16px 0 0; }
+  .bad { color: var(--danger) !important; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../"><img src="../img/logo.svg" alt=""><span>Lararium</span></a>
+</div></header>
+<main class="join">
+  <div class="jcard">
+    <img class="logo" src="../img/logo.svg" alt="">
+    <h1>Lararium invite</h1>
+    <p id="msg">Opening Lararium… If nothing happens, tap the button.</p>
+    <a class="btn primary" id="open" href="#">Open in Lararium</a>
+    <button class="btn ghost" id="copy" type="button">Copy the invite</button>
+    <a class="btn ghost" href="https://github.com/arnablahiry/lararium/releases/latest/download/Lararium.apk">Don't have it? Download for Android</a>
+    <div class="tok" id="tok"></div>
+    <p class="note">The invite stays on your phone: it's after the “#” in this link, which browsers never send to any server.</p>
+  </div>
+</main>
+<script>
+(() => {
+  // The invite is the part after "#": never sent to this site's server.
+  const tok = (decodeURIComponent(location.hash.slice(1)).match(/(LR|FD1)\.[A-Za-z0-9_-]{20,}/) || [])[0];
+  const open = document.getElementById('open'), msg = document.getElementById('msg');
+  if (!tok) {
+    msg.textContent = 'This link has no invite in it. Ask for the whole link again (it ends with LR.…).'; msg.classList.add('bad');
+    open.remove(); document.getElementById('copy').remove(); return;
+  }
+  document.getElementById('tok').textContent = tok;
+  const android = /Android/i.test(navigator.userAgent);
+  // Android: an intent link opens the app straight away (or the download page if it isn't installed).
+  const intent = 'intent://join/' + tok + '#Intent;scheme=lararium;package=com.familydocs.app;S.browser_fallback_url=' +
+    encodeURIComponent('https://arnablahiry.github.io/software/lararium/') + ';end';
+  open.href = android ? intent : 'lararium://join/' + tok;
+  if (android) setTimeout(() => { location.href = intent; }, 250);
+  else msg.textContent = 'Open this link on your Android phone, where Lararium is installed. Or copy the invite and paste it in Lararium › Join group.';
+  document.getElementById('copy').addEventListener('click', async (e) => {
+    try { await navigator.clipboard.writeText(tok); e.target.textContent = 'Copied: paste it in Join group'; } catch (err) { e.target.textContent = 'Select the invite below and copy it'; }
+  });
+})();
+</script>
+</body>
+</html>
