@@ -32,11 +32,11 @@
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: hidden; }
+html { scroll-behavior: smooth; overflow-x: clip; scroll-padding-top: 80px; }
 body {
   margin: 0; background: var(--bg); color: var(--fg);
   font: 300 16px/1.6 'Abaddon', ui-monospace, Menlo, monospace;
-  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased; overflow-x: clip; padding-top: 64px;
 }
 a { color: inherit; }
 b, strong { font-weight: 700; }
@@ -44,7 +44,7 @@ img { max-width: 100%; }
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
 
 /* ---------- top bar ---------- */
-.top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+.top { position: fixed; top: 0; left: 0; right: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
 .top .wrap { display: flex; align-items: center; gap: 14px; height: 64px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand img { width: 38px; height: 38px; border-radius: 11px; }
@@ -240,3 +240,6 @@ dialog.zoom p { text-align: center; color: #eee; margin: 14px 0 0; font-size: 14
   :root:not([data-theme="light"]) .phone img.l { display: none; }
   :root:not([data-theme="light"]) .phone img.d { display: block; }
 }
+
+/* the bar stays at the top while scrolling (fixed); the page starts below it */
+@media (max-width: 480px) { body { padding-top: 58px; } html { scroll-padding-top: 70px; } }
