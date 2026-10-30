@@ -1584,7 +1584,8 @@ body.light-mode .project-clone .project-hero .project-meta{
     margin-right: auto !important;
 }
 body.page-research .project-clone .project-hero .project-title,
-body.page-software .project-clone .project-hero .project-title{
+body.page-software .project-clone .project-hero .project-title,
+body.page-tripblogs .project-clone .project-hero .project-title{
     margin-top: 0 !important;
     margin-bottom: 10px !important;
     font-family: 'Abaddon Bold', sans-serif !important;
@@ -1595,7 +1596,8 @@ body.page-software .project-clone .project-hero .project-title{
     text-shadow: 0 2px 14px rgba(0,0,0,0.55);
 }
 body.page-research .project-clone .project-hero .project-subtitle,
-body.page-software .project-clone .project-hero .project-subtitle{
+body.page-software .project-clone .project-hero .project-subtitle,
+body.page-tripblogs .project-clone .project-hero .project-subtitle{
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     font-family: 'Abaddon Light', sans-serif !important;
@@ -1608,12 +1610,14 @@ body.page-software .project-clone .project-hero .project-subtitle{
 .project-clone .project-hero .project-tags{ margin-top: 14px !important; }
 .project-clone .project-hero .project-tags *{ font-family: 'Abaddon Bold', sans-serif !important; }
 body.light-mode.page-research .project-clone .project-hero .project-title,
-body.light-mode.page-software .project-clone .project-hero .project-title{
+body.light-mode.page-software .project-clone .project-hero .project-title,
+body.light-mode.page-tripblogs .project-clone .project-hero .project-title{
     color: #111 !important;
     text-shadow: 0 1px 12px rgba(255,255,255,0.7);
 }
 body.light-mode.page-research .project-clone .project-hero .project-subtitle,
-body.light-mode.page-software .project-clone .project-hero .project-subtitle{
+body.light-mode.page-software .project-clone .project-hero .project-subtitle,
+body.light-mode.page-tripblogs .project-clone .project-hero .project-subtitle{
     color: rgba(17,17,17,0.82) !important;
     text-shadow: 0 1px 10px rgba(255,255,255,0.7);
 }

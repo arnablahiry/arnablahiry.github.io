@@ -51,6 +51,8 @@
 //   Research & Software cards (scripts/cards-edit.js)
 //     POST /__edit/cards/upload?page=&name=       image -> images/research/ or images/softwares/
 //                              (&kind=icon: a card's icon-link image -> images/icons/)
+//   Trip blogs (scripts/tripblogs-edit.js) use the same two endpoints with
+//     page=tripblogs; uploads take &folder=<post> -> images/trip_blogs/<post>/
 //     POST /__edit/cards/save   {page, html}      replace the cards between the
 //                                              <page>-cards markers (old copy in
 //                                              .edit-trash/<page>/)
@@ -99,7 +101,8 @@ const TALKS_START = /<!-- talks-cards:start[\s\S]*?-->\n?/;
 const TALKS_END = /[ \t]*<!-- talks-cards:end -->/;
 const CARD_PAGES = {
   research: { file: 'research.html', images: 'images/research' },
-  software: { file: 'software.html', images: 'images/softwares' }
+  software: { file: 'software.html', images: 'images/softwares' },
+  tripblogs: { file: 'tripblogs.html', images: 'images/trip_blogs' }
 };
 function cardMarkers(page) {
   return {
@@ -684,7 +687,10 @@ const server = http.createServer(async (req, res) => {
       if (!/\.(jpe?g|png|webp|gif|avif|svg)$/i.test(original)) return send(res, 400, { error: 'Use a .jpg, .png, .svg, .webp, .gif or .avif image' });
       const body = await readBody(req, MAX_UPLOAD_BYTES);
       if (!body.length) return send(res, 400, { error: 'Empty upload' });
-      const folder = url.searchParams.get('kind') === 'icon' ? 'images/icons' : page.images;
+      // trip blog photos go into the post's own folder (images/trip_blogs/<post>/)
+      const post = url.searchParams.get('folder');
+      if (post && (url.searchParams.get('page') !== 'tripblogs' || !FOLDER_RE.test(post))) return send(res, 400, { error: 'Bad folder' });
+      const folder = url.searchParams.get('kind') === 'icon' ? 'images/icons' : post ? `${page.images}/${post}` : page.images;
       const dir = path.join(repoRoot, folder);
       fs.mkdirSync(dir, { recursive: true });
       const name = uniqueImageName(dir, original);

@@ -106,33 +106,31 @@
                              the heading, .project-subtitle the teaser on the card face
                            - the full story goes inside .project-full; plain <p> reads
                              fine and <h3> breaks it into sections
-                         Reorder posts by moving whole <article> blocks. ── -->
+                         Reorder posts by moving whole <article> blocks.
+                         In-post photos written by the editor are
+                         <figure class="tb-fig tb-w1 tb-left">: tb-w1..4 = one to
+                         four quarters of the text column (tb-w4 is full width),
+                         tb-left/right = the side the text wraps around. Two
+                         photos side by side are a <div class="tb-pair tb-wN">
+                         (N = their widths together) around two figures. A
+                         <figure> without these classes is full width. ── -->
+
+                    <!-- tripblogs-cards:start
+                         Everything between these two markers is rewritten by the
+                         trip blog editor (npm run edit, scripts/tripblogs-edit.js);
+                         posts that were not edited are kept exactly as written. -->
 
                     <article class="project-card">
                         <img class="project-image" src="images/trip_blogs/crete26/cover.jpg" alt="Crete cover photo" loading="lazy" decoding="async">
                         <div class="project-meta">
                             <div class="blog-meta">Crete, Greece · 2026</div>
-                            <p class="project-subtitle">Add a one- or two-sentence teaser for this post — it shows on the card face.</p>
+                            <p class="project-subtitle">I mean, not a 'trip' because I live here...</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="tripblog-crete-desc">Read Story</button>
                         <div class="project-full" id="tripblog-crete-desc" hidden>
                             <p>
-                                Write the Crete story here. Replace this paragraph with your own writing — add as many paragraphs as you like, and use &lt;h3&gt; headings to break the post into sections.
+                                <b>hghg</b>
                             </p>
-
-                            <figure>
-                                <img src="images/trip_blogs/crete26/photo_1.jpg" alt="Crete photo 1" loading="lazy" decoding="async">
-                                <figcaption>Caption for the first photo.</figcaption>
-                            </figure>
-
-                            <p>
-                                More of the story goes here.
-                            </p>
-
-                            <figure>
-                                <img src="images/trip_blogs/crete26/photo_2.jpg" alt="Crete photo 2" loading="lazy" decoding="async">
-                                <figcaption>Caption for the second photo.</figcaption>
-                            </figure>
                         </div>
                     </article>
 
@@ -168,55 +166,27 @@
                         <img class="project-image" src="images/trip_blogs/romania26/cover.jpg" alt="Romania cover photo" loading="lazy" decoding="async">
                         <div class="project-meta">
                             <div class="blog-meta">Romania · 2026</div>
-                            <p class="project-subtitle">Add a one- or two-sentence teaser for this post — it shows on the card face.</p>
+                            <p class="project-subtitle">No vampires</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="tripblog-romania26-desc">Read Story</button>
                         <div class="project-full" id="tripblog-romania26-desc" hidden>
                             <p>
-                                Write the Romania story here. Replace this paragraph with your own writing — add as many paragraphs as you like, and use &lt;h3&gt; headings to break the post into sections.
+                                This trip, like many others, began with the classic <em>"Arnab, cheap flights"</em> message from one of my friends, in this case, Diego. Ironically, this happened when I was already on a trip (Bologna) while officially being on a work trip/secondment (Paris). The <i>"cheap flights" </i>turned out to be ridiculously cheap (~25€ for a direct trip from Crete to Transylvania?! Get out of here; Indian flights could never... <i>cough</i> 80€ to go from Kolkata to Delhi <i>cough</i>),<i>&nbsp;</i>so there I was, booking another trip while on a trip, while on a trip. I try not to think about how much work I had (If my supervisor(s) are reading this - don't worry, as you know I am able to manage work and time quite well when a trip is at stake haha). Once again, the flights were booked in one evening, and I had one more thing to look forward to upon my return to Heraklion.
                             </p>
-
-                            <figure>
-                                <img src="images/trip_blogs/romania26/photo_1.jpg" alt="Romania photo 1" loading="lazy" decoding="async">
-                                <figcaption>Caption for the first photo.</figcaption>
-                            </figure>
-
-                            <p>
-                                More of the story goes here.
-                            </p>
-
-                            <figure>
-                                <img src="images/trip_blogs/romania26/photo_2.jpg" alt="Romania photo 2" loading="lazy" decoding="async">
-                                <figcaption>Caption for the second photo.</figcaption>
-                            </figure>
                         </div>
                     </article>
 
                     <article class="project-card">
                         <img class="project-image" src="images/trip_blogs/italy26/cover.jpg" alt="Italy cover photo" loading="lazy" decoding="async">
                         <div class="project-meta">
-                            <div class="blog-meta">Italy · 2026</div>
-                            <p class="project-subtitle">Add a one- or two-sentence teaser for this post — it shows on the card face.</p>
+                            <div class="blog-meta">Venice, Bologna, Florence · 2026</div>
+                            <p class="project-subtitle">Trip within a trip</p>
                         </div>
                         <button class="project-toggle" aria-expanded="false" aria-controls="tripblog-italy26-desc">Read Story</button>
                         <div class="project-full" id="tripblog-italy26-desc" hidden>
                             <p>
-                                Write the Italy story here. Replace this paragraph with your own writing — add as many paragraphs as you like, and use &lt;h3&gt; headings to break the post into sections.
+                                I am convinced by now that half of life in academia is taking advantage of <i>work trips</i> to knock out a solid solo outing (and with a small group, if lucky, which in this case, I was). So there I was, on my usual secondment trip to Paris (as usual as it can get, given the short duration of a European PhD - "oooh, I can get a PhD in 3-4 years, and then I can go for a postdoc...." said my 20-year-old self, ".....pleasegivememoretime" says my 25-year-old self), and my friend, Chai, who I was staying with (since university dorms at this point), casually drops that there is a 1 week Euclid Telescope workshop in Bologna that he has to attend. I didn't know what reaction to give except a crisp "good for you, bro" until he said the key trigger words that would activate the sleeper agent in me: "cheap flights", "free accommodation". Then the gears started spinning, but I was still like, Bologna is cool and all, but what the heck can I do just there? A quick search revealed that that need not be the case; turns out, Bologna is <i>ideally</i>&nbsp;located between 2 bucket list destinations of mine (I played a lot of Assassin's Creed growing up....). So a plan finally began to form - fly from Paris to Venice (or, as our friend Vilasini would refer to it every single time it comes up, in English, by the way, <i>Venezia</i>), cover everything in 1 day, take a quick train to Bologna, where Chai would have funded accommodation, and after the end of his workshop, take another quick train to Florence (Vilasini: <i>Firenze</i>&nbsp;"yeah, we know dude"). Well, the bookings were done by that evening, and officially I was set to go on a trip while on a <s>work</s>&nbsp;trip (there is one more layer if you consider I am from India and temporarily live in Greece...)
                             </p>
-
-                            <figure>
-                                <img src="images/trip_blogs/italy26/photo_1.jpg" alt="Italy photo 1" loading="lazy" decoding="async">
-                                <figcaption>Caption for the first photo.</figcaption>
-                            </figure>
-
-                            <p>
-                                More of the story goes here.
-                            </p>
-
-                            <figure>
-                                <img src="images/trip_blogs/italy26/photo_2.jpg" alt="Italy photo 2" loading="lazy" decoding="async">
-                                <figcaption>Caption for the second photo.</figcaption>
-                            </figure>
                         </div>
                     </article>
 
@@ -360,6 +330,7 @@
                         </div>
                     </article>
 
+                    <!-- tripblogs-cards:end -->
                 </div>
             </div>
         </div>
@@ -415,6 +386,7 @@
         })();
     </script>
     <audio id="my-audio" loop><source src="audio/swtheme.mp3" type="audio/mpeg"></audio>
+<script src="scripts/tripblogs-edit.js"></script>
 <script src="scripts/edit-mode.js"></script>
 </body>
 </html>

@@ -25,7 +25,8 @@
     // Research and Software: the cover becomes a banner across the top of the
     // expanded card, fading into the card's background, with the title and
     // subtitle laid over the fade (styled by .project-hero in research_style.css).
-    var heroPage = document.body.classList.contains('page-research') || document.body.classList.contains('page-software');
+    var heroPage = document.body.classList.contains('page-research') || document.body.classList.contains('page-software')
+      || document.body.classList.contains('page-tripblogs');
     var heroImg = clone.querySelector('.project-image');
     var heroMeta = clone.querySelector('.project-meta');
     var useHero = !!(heroPage && heroImg && heroMeta);
@@ -47,6 +48,17 @@
     if (hideSel) clone.querySelectorAll(hideSel).forEach(function(el){
       el.style.display = 'none';
     });
+
+    // Trip blogs: a photo that is not there (yet) is left out rather than
+    // shown broken (the editor shows it, to replace it)
+    if (document.body.classList.contains('page-tripblogs') && !document.body.classList.contains('tb-editing')) {
+      clone.querySelectorAll('.project-full figure img').forEach(function(im){
+        var fig = im.closest('figure');
+        var hide = function(){ if (fig) fig.style.display = 'none'; };
+        if (im.complete && im.getAttribute('src') && !im.naturalWidth) hide();
+        im.addEventListener('error', hide);
+      });
+    }
 
     // Leave interactive launchers in the clone so the expanded view can show
     // the play button anchored to the image (the original card is hidden).

@@ -54,23 +54,97 @@ body.page-tripblogs .project-clone .project-full img{
   -webkit-filter: none !important;
 }
 
-body.page-tripblogs .project-clone .project-image,
-body.page-tripblogs .project-clone .project-full figure,
-body.page-tripblogs .project-clone .project-full img,
-body.page-tripblogs .project-clone .project-full figcaption{
-  display: none !important;
+/* ==========================================================================
+   OPENED STORY (research.js gives it the Research banner: the cover fading
+   into the card, the place line, title and teaser over the fade)
+   ========================================================================== */
+/* the place line sits above the title like an overline; a post without a
+   title uses it as the title */
+body.page-tripblogs .project-clone .project-hero .blog-meta{
+  margin-bottom: 10px !important;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.5);
 }
+body.page-tripblogs.light-mode .project-clone .project-hero .blog-meta{ text-shadow: 0 1px 10px rgba(255,255,255,0.7); }
+body.page-tripblogs .project-clone .project-hero .project-meta:not(:has(.project-title:not(.tb-empty))) > .blog-meta{
+  font-size: clamp(22px, 2.3vw, 32px) !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #fff !important;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+}
+body.page-tripblogs.light-mode .project-clone .project-hero .project-meta:not(:has(.project-title:not(.tb-empty))) > .blog-meta{
+  color: #111 !important;
+  text-shadow: 0 1px 12px rgba(255,255,255,0.7);
+}
+body.page-tripblogs .project-clone .project-toggle{ display: none !important; }
 
-/* In-post photos inside an opened story. research_style.css only constrains
-   these below 780px, so without this a full-size photo would overflow the
-   expanded card on desktop. */
+/* Photos in the story. The text is one column; think of it as four equal
+   columns: a photo spans one to four of them (tb-w1..4), keeps its aspect
+   ratio, and the narrower ones sit on the left or right (tb-left/right) with
+   the text wrapping around them. Two photos can sit side by side in a
+   div.tb-pair, which is as wide as the two together (two halves fill a row)
+   and is placed like a single photo. A <figure> without these classes
+   (written by hand) is full width. */
+body.page-tripblogs .project-clone .project-full{
+  --tb-gap: 28px;
+  display: flow-root !important;
+  position: relative;
+}
+body.page-tripblogs .project-clone .project-full figure{
+  margin: 6px 0 22px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  text-align: left;
+}
 body.page-tripblogs .project-clone .project-full figure img{
-  display: none !important;
-  width: 100%;
-  max-width: 900px;
-  height: auto;
-  margin: 0 auto;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  margin: 0 !important;
   border-radius: 6px;
+}
+body.page-tripblogs .project-clone .project-full figcaption{
+  margin-top: 8px !important;
+  font-family: 'Abaddon Light', sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  text-align: left !important;
+  color: rgba(255,255,255,0.62) !important;
+}
+body.page-tripblogs.light-mode .project-clone .project-full figcaption{ color: rgba(0,0,0,0.6) !important; }
+/* N of the four columns: N columns plus the N - 1 gaps between them */
+body.page-tripblogs .project-clone .project-full > :is(figure, .tb-pair){
+  width: calc((100% - 3 * var(--tb-gap)) * var(--tb-n, 4) / 4 + (var(--tb-n, 4) - 1) * var(--tb-gap));
+}
+body.page-tripblogs .project-clone .project-full .tb-w1{ --tb-n: 1; }
+body.page-tripblogs .project-clone .project-full .tb-w2{ --tb-n: 2; }
+body.page-tripblogs .project-clone .project-full .tb-w3{ --tb-n: 3; }
+body.page-tripblogs .project-clone .project-full .tb-w4{ --tb-n: 4; }
+body.page-tripblogs .project-clone .project-full > :is(figure.tb-w4, figure:not(.tb-fig), .tb-pair.tb-w4){ clear: both; }
+body.page-tripblogs .project-clone .project-full > .tb-left:not(.tb-w4){ float: left; clear: left; margin-right: var(--tb-gap) !important; }
+body.page-tripblogs .project-clone .project-full > .tb-right:not(.tb-w4){ float: right; clear: right; margin-left: var(--tb-gap) !important; }
+/* a pair: its two photos in a row, each its share of the pair's columns */
+body.page-tripblogs .project-clone .project-full > .tb-pair{
+  --tb-pair-n: var(--tb-n);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tb-gap);
+  margin: 6px 0 22px;
+}
+body.page-tripblogs .project-clone .project-full > .tb-pair > figure{
+  flex: none;
+  float: none !important;
+  margin: 0 !important;
+  width: calc((100% - (var(--tb-pair-n) - 1) * var(--tb-gap)) * var(--tb-n) / var(--tb-pair-n) + (var(--tb-n) - 1) * var(--tb-gap));
+}
+/* phones: a quarter photo becomes half the width, wider ones full width;
+   pairs keep their two photos side by side across the full width */
+@media (max-width: 700px){
+  body.page-tripblogs .project-clone .project-full{ --tb-gap: 14px; }
+  body.page-tripblogs .project-clone .project-full > figure.tb-w1{ width: calc(50% - var(--tb-gap) / 2); }
+  body.page-tripblogs .project-clone .project-full > :is(figure.tb-w2, figure.tb-w3, .tb-pair){ width: 100%; float: none !important; margin-left: 0 !important; margin-right: 0 !important; }
 }
 
 /* ==========================================================================
@@ -155,3 +229,108 @@ body.page-tripblogs #projects-grid .project-subtitle{
     font-size: 13.5px !important;
   }
 }
+
+/* ==========================================================================
+   EDITOR (scripts/tripblogs-edit.js, local editor only)
+   ========================================================================== */
+.tb-new-bar{ grid-column: 1 / -1; display: flex; justify-content: center; margin-bottom: 6px; }
+.tb-new-btn, .tb-tool-btn{
+  font-family: 'Abaddon Bold', sans-serif !important;
+  cursor: pointer;
+}
+.tb-new-btn{ padding: 9px 20px; border: 1px dashed rgba(254,218,74,0.55); border-radius: 999px; background: rgba(15,15,16,0.75); color: #feda4a; font-size: 15px; }
+.tb-new-btn:hover{ background: rgba(254,218,74,0.12); border-style: solid; }
+body.light-mode .tb-new-btn{ background: rgba(255,255,255,0.85) !important; color: #8c761c !important; border: 1px dashed rgba(140,118,28,0.55) !important; }
+
+/* the Edit / remove buttons on each card */
+body.tb-editing #projects-grid .project-card{ position: relative; }
+.tb-card-tools{ position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; gap: 6px; opacity: 0; transition: opacity 160ms ease; }
+body.tb-editing #projects-grid .project-card:hover .tb-card-tools,
+body.tb-editing #projects-grid .project-card:focus-within .tb-card-tools{ opacity: 1; }
+.tb-card-btn{ display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; background: rgba(15,15,16,0.85); color: #fff; font-family: 'Abaddon Bold', sans-serif !important; font-size: 13px; cursor: pointer; }
+.tb-card-btn svg{ width: 13px; height: 13px; }
+.tb-card-btn:hover{ border-color: #feda4a; color: #feda4a; }
+.tb-card-btn.is-remove{ padding: 0; width: 30px; justify-content: center; }
+.tb-card-btn.is-remove:hover{ background: #ee0979; border-color: #ee0979; color: #fff; }
+body.light-mode .tb-card-btn{ background: rgba(255,255,255,0.95) !important; color: #111 !important; border: 1px solid rgba(0,0,0,0.2) !important; }
+.project-clone .tb-card-tools{ display: none !important; }
+
+/* the formatting toolbar, pinned to the top of the opened post */
+.tb-toolbar-wrap{ position: sticky; top: 0; height: 0; z-index: 20; }
+.tb-toolbar{
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 4px; padding: 5px 8px;
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 999px;
+  background: rgba(20,20,22,0.92); box-shadow: 0 6px 22px rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+}
+.tb-tool-btn{ min-width: 32px; height: 30px; padding: 0 9px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #eee; font-size: 14px; }
+.tb-tool-btn:hover{ background: rgba(255,255,255,0.1); }
+.tb-tool-btn.is-active{ background: rgba(254,218,74,0.2); border-color: rgba(254,218,74,0.6); color: #feda4a; }
+.tb-tool-btn.is-photo{ color: #feda4a; border: 1px dashed rgba(254,218,74,0.55); }
+.tb-tool-sep{ width: 1px; height: 18px; margin: 0 4px; background: rgba(255,255,255,0.18); }
+.tb-tool-btn b, .tb-tool-btn i, .tb-tool-btn u, .tb-tool-btn s{ font-family: Georgia, 'Times New Roman', serif; font-size: 15px; }
+body.light-mode .tb-toolbar{ background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.14); box-shadow: 0 6px 22px rgba(0,0,0,0.15); }
+body.light-mode .tb-tool-btn{ background: transparent !important; color: #111 !important; border: 1px solid transparent !important; }
+body.light-mode .tb-tool-btn:hover{ background: rgba(0,0,0,0.06) !important; }
+body.light-mode .tb-tool-btn.is-active{ background: rgba(140,118,28,0.15) !important; border-color: rgba(140,118,28,0.6) !important; color: #6e5b10 !important; }
+body.light-mode .tb-tool-btn.is-photo{ color: #8c761c !important; border: 1px dashed rgba(140,118,28,0.55) !important; }
+body.light-mode .tb-tool-sep{ background: rgba(0,0,0,0.15); }
+
+/* typing in place */
+.tb-edit-clone [contenteditable="true"]{ outline: none; border-radius: 4px; transition: box-shadow 140ms ease; }
+.tb-edit-clone .project-meta [contenteditable="true"]:hover,
+.tb-edit-clone figcaption[contenteditable="true"]:hover{ box-shadow: 0 0 0 1px rgba(255,255,255,0.18); }
+.tb-edit-clone .project-meta [contenteditable="true"]:focus,
+.tb-edit-clone figcaption[contenteditable="true"]:focus{ box-shadow: 0 0 0 1px rgba(254,218,74,0.6); }
+.tb-edit-clone .tb-empty::before{ content: attr(data-placeholder); opacity: 0.45; pointer-events: none; }
+.tb-edit-clone .project-meta .tb-empty{ min-height: 1.2em; }
+.tb-edit-clone .project-full{ cursor: text; min-height: 200px; }
+.tb-edit-clone .project-full.tb-empty-story > p:only-child::before{ content: 'Write the story…'; opacity: 0.45; pointer-events: none; }
+body.light-mode .tb-edit-clone .project-meta [contenteditable="true"]:hover,
+body.light-mode .tb-edit-clone figcaption[contenteditable="true"]:hover{ box-shadow: 0 0 0 1px rgba(0,0,0,0.2); }
+
+/* cover: pencil + albedo on hover */
+.tb-cover-tools{ position: absolute; top: 16px; left: 16px; z-index: 3; display: flex; gap: 6px; opacity: 0; transition: opacity 160ms ease; }
+.tb-edit-clone .project-hero:hover .tb-cover-tools,
+.tb-cover-tools.is-open{ opacity: 1; }
+.tb-edit-clone .project-hero .project-image[src=""]{ background: repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 12px, transparent 12px 24px); }
+
+/* photos: tools on hover, drag by the photo */
+.tb-edit-clone .project-full figure{ position: relative; }
+.tb-edit-clone .project-full figure img{ cursor: grab; user-select: none; -webkit-user-drag: none; }
+.tb-edit-clone .project-full figure.is-dragging{ opacity: 0.35; }
+.tb-fig-tools{ position: absolute; top: 8px; left: 8px; right: 8px; z-index: 3; display: flex; flex-wrap: wrap; gap: 5px; opacity: 0; transition: opacity 140ms ease; pointer-events: none; }
+.tb-edit-clone figure:hover > .tb-fig-tools,
+.tb-fig-tools.is-open{ opacity: 1; pointer-events: auto; }
+.tb-mini{ display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; padding: 0 8px; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; background: rgba(15,15,16,0.85); color: #fff; font-family: 'Abaddon Bold', sans-serif !important; font-size: 13px; line-height: 1; cursor: pointer; }
+.tb-mini svg{ width: 13px; height: 13px; }
+.tb-mini:hover{ border-color: #feda4a; color: #feda4a; }
+.tb-mini:disabled{ opacity: 0.35; pointer-events: none; }
+.tb-mini.is-remove:hover{ background: #ee0979; border-color: #ee0979; color: #fff; }
+.tb-mini.tb-size{ pointer-events: none; background: rgba(15,15,16,0.6); border-style: dashed; }
+body.light-mode .tb-mini{ background: rgba(255,255,255,0.95) !important; color: #111 !important; border: 1px solid rgba(0,0,0,0.2) !important; }
+.tb-pop{ position: absolute; top: 44px; left: 8px; z-index: 4; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; background: rgba(20,20,22,0.96); box-shadow: 0 8px 24px rgba(0,0,0,0.45); min-width: 230px; }
+.tb-pop .albedo-ctl{ margin-top: 0; }
+body.light-mode .tb-pop{ background: rgba(255,255,255,0.98); border-color: rgba(0,0,0,0.14); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.tb-edit-clone .project-full figure.is-missing img{ color: transparent; font-size: 0; min-height: 140px; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 12px, transparent 12px 24px); border: 1px dashed rgba(255,255,255,0.3); }
+.tb-edit-clone .project-full figure.is-missing::after{ content: attr(data-missing); position: absolute; left: 0; right: 0; top: 60px; text-align: center; font-family: 'Abaddon Light', sans-serif; font-size: 13px; opacity: 0.7; pointer-events: none; }
+.tb-edit-clone .project-full > .tb-pair{ position: relative; outline: 1px dashed transparent; outline-offset: 6px; border-radius: 8px; transition: outline-color 140ms ease; }
+.tb-edit-clone .project-full > .tb-pair:hover{ outline-color: rgba(254,218,74,0.45); }
+.tb-edit-clone .project-full > .tb-pair.is-dragging{ opacity: 0.35; }
+.tb-pair-tools{ position: absolute; left: 50%; top: -20px; transform: translateX(-50%); z-index: 4; opacity: 0; transition: opacity 140ms ease; }
+.tb-edit-clone .tb-pair:hover > .tb-pair-tools{ opacity: 1; }
+.tb-grip{ cursor: grab; user-select: none; white-space: nowrap; pointer-events: auto; }
+.tb-drop.is-beside{ border: 0; border-radius: 3px; background: #feda4a; }
+.tb-drop.is-beside::before{ display: none; }
+body.light-mode .tb-drop.is-beside{ background: #8c761c; }
+body.light-mode .tb-edit-clone .project-full > .tb-pair:hover{ outline-color: rgba(140,118,28,0.5); }
+.tb-drop{ position: absolute; z-index: 5; border: 2px dashed #feda4a; border-radius: 8px; background: rgba(254,218,74,0.08); pointer-events: none; box-sizing: border-box; }
+.tb-drop::before{ content: ''; position: absolute; left: -2px; right: -2px; top: -6px; height: 4px; border-radius: 2px; background: #feda4a; }
+body.light-mode .tb-drop{ border-color: #8c761c; background: rgba(140,118,28,0.08); }
+body.light-mode .tb-drop::before{ background: #8c761c; }
+/* light_mode.css inverts every svg inside a .project-card (the opened post is
+   one): keep the editor's own icons as they are */
+body.light-mode .tb-edit-clone .tb-mini svg,
+body.light-mode .tb-card-tools svg{ filter: none !important; -webkit-filter: none !important; }
+body.light-mode .tb-edit-clone .project-full figure.is-missing img{ background: repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0 12px, transparent 12px 24px); border-color: rgba(0,0,0,0.3); }
