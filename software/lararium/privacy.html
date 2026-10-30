@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lararium · Privacy policy</title>
+<meta name="description" content="How Lararium handles your data: everything stays on your phone and in your own Google Drive, encrypted. No ads, no analytics, no server.">
+<meta name="theme-color" content="#E3962E">
+<script>
+try { const t = localStorage.getItem('lararium-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+  .policy { max-width: 760px; margin: 0 auto; padding: 48px 20px 72px; }
+  .policy h1 { font-size: clamp(30px, 5vw, 44px); margin: 0 0 6px; line-height: 1.1; }
+  .policy .updated { color: var(--muted); font-size: 14px; margin: 0 0 30px; }
+  .policy h2 { font-size: 20px; margin: 34px 0 8px; }
+  .policy p, .policy li { color: var(--muted); line-height: 1.7; }
+  .policy b, .policy strong { color: var(--fg); }
+  .policy code { font-size: .9em; background: var(--surface2); padding: 1px 6px; border-radius: 6px; }
+  .policy a { color: var(--fg); }
+  .policy .short { background: var(--accent-soft); border-radius: 18px; padding: 18px 20px; color: var(--fg); }
+  .policy .short p { color: var(--fg); margin: 0; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><img src="img/logo.svg" alt=""><span>Lararium</span></a>
+  <nav><a class="dl" href="https://github.com/arnablahiry/lararium/releases/latest/download/Lararium.apk">Download</a></nav>
+</div></header>
+<main class="policy">
+  <h1>Privacy policy</h1>
+  <p class="updated">Lararium (Android app) · Last updated 31 October 2026</p>
+
+  <div class="short"><p><b>In short:</b> your family's documents stay on your phone and in your own Google Drive, encrypted.
+  Nothing is sent to the developer, and there is no Lararium server at all. No ads, no analytics, no tracking.</p></div>
+
+  <h2>What the app keeps on your phone</h2>
+  <ul>
+    <li>The documents, photos, details and logins you add, the people, groups and events you create, and your settings.</li>
+    <li>All of it is in an encrypted database (SQLCipher) and encrypted files, with keys held in the phone's secure key
+      storage (Android Keystore), behind your passcode or fingerprint.</li>
+    <li>Text is read from your documents on the phone itself (on-device text recognition); nothing is uploaded to be read.</li>
+    <li>When you crop a profile, group or event picture, the original photo is kept (encrypted) on the phone only, so you can
+      re-frame it later. It is never backed up or shared.</li>
+  </ul>
+
+  <h2>Google sign-in and Google Drive</h2>
+  <p>If you choose “Continue with Google”, the app asks Google for:</p>
+  <ul>
+    <li><b>Your name, email address and profile photo</b>, to show on your account and to know which Drive holds your backup.</li>
+    <li><b>Access to files the app creates in your Google Drive</b> (<code>drive.file</code>) and to the app's hidden app folder
+      (<code>drive.appdata</code>). The app cannot see any other files in your Drive.</li>
+  </ul>
+  <p>Backups go to a “Lararium” folder in <b>your own</b> Google Drive. Documents and logins are encrypted (AES-256-GCM) before
+    they leave the phone; the backup key is kept in the app's hidden folder in your Drive so you can restore on a new phone.
+    With the optional backup password, your logins are sealed a second time with a key made from a password only you know.
+    You can delete the backup from the app at any time, or revoke the app's access in your Google Account.</p>
+  <p>Lararium's use of information received from Google APIs adheres to the
+    <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
+    including the Limited Use requirements. The data is used only to provide the backup, restore and group-sharing features
+    you ask for, is not transferred to anyone else, and is never used for advertising.</p>
+
+  <h2>Sharing a group with other people</h2>
+  <p>A group is shared between phones with no server in between. Each member's phone puts an encrypted copy of their own and
+    the group's shared documents in <b>their own</b> Drive, shared by link, and reads the other members' copies. A copy can only
+    be opened with the group's code, which travels inside the invite link you send. You decide who gets an invite.</p>
+  <ul>
+    <li>The invite link opens a page on this website that hands the invite to the app. The invite is after the “#” in the
+      link, which browsers never send to any server, so this website never receives it.</li>
+    <li>Logins are never shared, except the group's Common logins, which are sealed to each member's phone.</li>
+    <li>Your phone checks the other members' copies regularly (about every minute while the app is open, every 15 minutes in
+      the background) and may show a silent notification of what changed (for example “Family: Jane added Passport”).
+      This happens entirely on your phone.</li>
+  </ul>
+
+  <h2>What the developer receives</h2>
+  <p>Nothing. The developer has no server that receives your documents, details, logins, contacts or usage.</p>
+
+  <h2>Updates</h2>
+  <p>The app checks GitHub (github.com) for a newer release and its release notes, and, if you agree, downloads the update
+    from there using Android's download manager. GitHub sees an ordinary request from your phone, like any website visit.</p>
+
+  <h2>Deleting your data</h2>
+  <p>Settings › Delete account removes everything from the phone and, if you choose, the backup from your Drive. You can also
+    revoke Lararium's access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</p>
+
+  <h2>Contact</h2>
+  <p>Questions: open an issue at <a href="https://github.com/arnablahiry/lararium/issues">github.com/arnablahiry/lararium/issues</a>.</p>
+</main>
+<footer><div class="wrap">
+  <span>Made with <span class="heart">♥</span> by <a href="https://arnablahiry.github.io/">Arnab Lahiry</a></span>
+  <a href="./">Lararium</a>
+  <a href="https://github.com/arnablahiry/lararium">Source</a>
+</div></footer>
+</body>
+</html>
