@@ -971,6 +971,10 @@ body.light-mode .site-git-pill.has-changes,
 body.light-mode .site-git-pill.has-ahead,
 body.light-mode .site-git-pill:hover{ border-color: #8c761c !important; color: #6e5b10 !important; }
 body.light-mode .site-git-pill.has-changes::before{ background: #8c761c; box-shadow: none; }
+/* light_mode.css makes every header child position: relative (and pads
+   header buttons 6px on phones), which dropped the pill into the header's
+   row and pushed the whole nav sideways: keep it pinned and the same size */
+body.light-mode header > .site-git-pill{ position: absolute; z-index: 2; padding: 6px 12px 6px 10px !important; }
 
 .site-git-dialog{
     --sg-gold: #feda4a;
@@ -1037,6 +1041,7 @@ body.light-mode .site-git-pill.has-changes::before{ background: #8c761c; box-sha
 .sg-btn.is-primary:hover{ background: #ffe57a; }
 @media (max-width: 520px){
     .site-git-pill{ font-size: 12px; padding: 5px 10px 5px 8px; max-width: calc(100vw - 150px); }
+    body.light-mode header > .site-git-pill{ padding: 5px 10px 5px 8px !important; }
     .sg-buttons{ width: 100%; }
     .sg-btn{ flex: 1 1 auto; padding: 10px 12px; }
 }
