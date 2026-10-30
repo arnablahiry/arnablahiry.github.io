@@ -7,8 +7,11 @@
 //   - the card front: cover (hover, click to replace), title and subtitle
 //     (inline HTML allowed, e.g. <b>N</b>);
 //     Software only: category (personal / collaboration) and type (science,
-//     fun) for the filters and tag chips, badges, and icon links (GitHub,
-//     docs, PyPI, website, Zenodo, CosmoStat; empty = no icon);
+//     fun) for the filters and tag chips, badges, and icon links: the
+//     default buttons (GitHub, docs, PyPI, website, Zenodo; empty = no icon)
+//     plus any number of others ("+ Button"); every button's icon can be
+//     replaced (hover it, click), and an uploaded icon is cropped to a
+//     centred circle;
 //   - the expanded text as HTML source, with "+ Figure" (pick an image; it is
 //     inserted at the cursor and uploaded on save) and "Preview" (renders it,
 //     equations and code included);
@@ -30,9 +33,9 @@
     { kind: 'docs',      label: 'Docs',      icon: 'images/icons/sphinx_software.png',  alt: 'Sphinx',    aria: 'documentation' },
     { kind: 'pypi',      label: 'PyPI',      icon: 'images/icons/pypi_software.png',    alt: 'PyPI',      aria: 'PyPI package' },
     { kind: 'website',   label: 'Website',   icon: 'images/icons/website_software.svg', alt: 'Website',   aria: 'website' },
-    { kind: 'zenodo',    label: 'Zenodo',    icon: 'images/icons/Zenodo.png',           alt: 'Zenodo',    aria: 'Zenodo record' },
-    { kind: 'cosmostat', label: 'CosmoStat', icon: 'images/icons/cosmostat.png',        alt: 'CosmoStat', aria: 'CosmoStat page' }
+    { kind: 'zenodo',    label: 'Zenodo',    icon: 'images/icons/Zenodo.png',           alt: 'Zenodo',    aria: 'Zenodo record' }
   ];
+  var IMAGE_TYPES = 'image/png,image/jpeg,image/svg+xml,image/webp,image/gif,image/avif';
   function iconKind(src){
     var f = String(src || '').split('/').pop();
     for (var i = 0; i < ICONS.length; i++) if (ICONS[i].icon.split('/').pop() === f) return ICONS[i].kind;
@@ -124,15 +127,15 @@
       body: range ? src.slice(range.from, range.to) : '',
       tags: (a.getAttribute('data-tags') || '').split(',').map(function(x){ return x.trim(); }).filter(Boolean),
       badges: [],
-      icons: {}
+      icons: []   // every icon link, in page order: { src, href, alt }
     };
     a.querySelectorAll('.project-badges a').forEach(function(l){
       var i = l.querySelector('img');
       card.badges.push({ img: i ? i.getAttribute('src') : '', alt: i ? i.getAttribute('alt') || '' : '', href: l.getAttribute('href') || '' });
     });
     a.querySelectorAll('.project-icons .project-icon-link').forEach(function(l){
-      var kind = iconKind((l.querySelector('img') || {}).getAttribute ? l.querySelector('img').getAttribute('src') : '');
-      if (kind) card.icons[kind] = l.getAttribute('href') || '';
+      var i = l.querySelector('img');
+      card.icons.push({ src: i ? i.getAttribute('src') || '' : '', href: l.getAttribute('href') || '', alt: i ? i.getAttribute('alt') || '' : '' });
     });
     return card;
   }
@@ -319,17 +322,70 @@
       badges.appendChild(addBadge);
       form.appendChild(field('Badges', badges));
 
-      // icon links
+      // icon links: a row per default button (its link, if the card has one),
+      // then the card's other buttons; row._index is the link's position in
+      // the saved card (-1 = new)
       var icons = el('div', 'ce-icons');
-      ICONS.forEach(function(I){
+      var taken = {};
+      function iconRow(o){
         var row = el('div', 'ce-icon-row');
-        row.dataset.kind = I.kind;
-        row.appendChild(el('img', 'ce-icon-img', { src: I.icon, alt: '' }));
-        var name = el('span', 'ce-icon-name'); name.textContent = I.label; row.appendChild(name);
-        row.appendChild(textBox('ce-icon-href', data.icons[I.kind], 'URL'));
-        icons.appendChild(row);
+        row._kind = o.kind || null;
+        row._index = o.index;
+        row.dataset.src = o.src || '';
+        var pick = el('div', 'ce-icon-pick', { role: 'button', tabindex: '0', title: 'Change icon' });
+        var im = el('img', 'ce-icon-img', { alt: '' });
+        if (o.src) im.src = o.src; else pick.classList.add('is-empty');
+        var over = el('span', 'ce-cover-overlay');
+        over.innerHTML = PENCIL;
+        var f = el('input', '', { type: 'file', accept: IMAGE_TYPES, hidden: '' });
+        pick.appendChild(im);
+        pick.appendChild(over);
+        pick.appendChild(f);
+        pick.addEventListener('click', function(e){ if (e.target !== f) f.click(); });
+        pick.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); f.click(); } });
+        f.addEventListener('change', function(){
+          var file = f.files && f.files[0];
+          f.value = '';
+          if (!file) return;
+          circleCrop(file).then(function(cropped){
+            row._file = cropped;
+            if (row._url) URL.revokeObjectURL(row._url);
+            row._url = URL.createObjectURL(cropped);
+            im.src = row._url;
+            pick.classList.remove('is-empty');
+            changed();
+          }).catch(function(err){ alert('Could not read that image: ' + err.message); });
+        });
+        row.appendChild(pick);
+        if (row._kind) {
+          var name = el('span', 'ce-icon-name'); name.textContent = o.label; row.appendChild(name);
+        } else {
+          row.appendChild(textBox('ce-icon-label', o.label, 'Name (e.g. CosmoStat)'));
+        }
+        row.appendChild(textBox('ce-icon-href', o.href, 'URL'));
+        if (row._kind) row.appendChild(el('span'));
+        else row.appendChild(iconButton(CROSS, 'ce-tool ce-tool-remove', 'Remove button', function(){ row.remove(); changed(); }));
+        return row;
+      }
+      ICONS.forEach(function(I){
+        var at = -1;
+        data.icons.forEach(function(ic, i){ if (at === -1 && !taken[i] && iconKind(ic.src) === I.kind) at = i; });
+        if (at !== -1) taken[at] = true;
+        icons.appendChild(iconRow({ kind: I.kind, label: I.label, index: at, src: at !== -1 ? data.icons[at].src : I.icon, href: at !== -1 ? data.icons[at].href : '' }));
       });
-      form.appendChild(field('Icon links (empty = no icon)', icons));
+      data.icons.forEach(function(ic, i){
+        if (!taken[i]) icons.appendChild(iconRow({ label: ic.alt, index: i, src: ic.src, href: ic.href }));
+      });
+      var addIcon = el('button', 'ce-mini-btn', { type: 'button' });
+      addIcon.textContent = '+ Button';
+      addIcon.addEventListener('click', function(){
+        var row = iconRow({ label: '', index: -1, src: '', href: '' });
+        icons.insertBefore(row, addIcon);
+        changed();
+        row.querySelector('.ce-icon-pick').click();
+      });
+      icons.appendChild(addIcon);
+      form.appendChild(field('Icon links (empty URL = no button; hover an icon to change it)', icons));
     }
 
     // expanded text
@@ -383,20 +439,66 @@
     return card;
   }
 
+  // Lines that start inside a <pre> block: their spaces are part of the code,
+  // so they are never dedented or reindented
+  function preLines(lines){
+    var inside = false;
+    return lines.map(function(l){
+      var was = inside;
+      var open = l.lastIndexOf('<pre'), close = l.lastIndexOf('</pre>');
+      if (open > close) inside = true; else if (close !== -1) inside = false;
+      return was;
+    });
+  }
   function dedent(text){
-    var lines = text.replace(/\t/g, '    ').split('\n');
+    var lines = text.split('\n');
+    var pre = preLines(lines);
+    lines = lines.map(function(l, i){ return pre[i] ? l : l.replace(/^[ \t]+/, function(w){ return w.replace(/\t/g, '    '); }); });
     var indent = Infinity;
-    lines.forEach(function(l){ if (l.trim()) indent = Math.min(indent, l.match(/^ */)[0].length); });
+    lines.forEach(function(l, i){ if (!pre[i] && l.trim()) indent = Math.min(indent, l.match(/^ */)[0].length); });
     if (indent === Infinity) indent = 28;
-    while (lines.length && !lines[0].trim()) lines.shift();
-    while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
-    return { indent: indent, text: lines.map(function(l){ return l.slice(Math.min(indent, l.match(/^ */)[0].length)); }).join('\n') + '\n' };
+    var out = lines.map(function(l, i){ return pre[i] ? l : l.slice(Math.min(indent, l.match(/^ */)[0].length)); });
+    while (out.length && !out[0].trim()) out.shift();
+    while (out.length && !out[out.length - 1].trim()) out.pop();
+    return { indent: indent, text: out.join('\n') + '\n' };
   }
   function reindent(text, indent){
     var pad = new Array(indent + 1).join(' ');
     var lines = text.replace(/\s+$/, '').split('\n');
     while (lines.length && !lines[0].trim()) lines.shift();
-    return '\n' + lines.map(function(l){ return l.trim() ? pad + l : ''; }).join('\n') + '\n' + new Array(Math.max(0, indent - 4) + 1).join(' ');
+    var pre = preLines(lines);
+    return '\n' + lines.map(function(l, i){ return pre[i] ? l : l.trim() ? pad + l : ''; }).join('\n') + '\n' + new Array(Math.max(0, indent - 4) + 1).join(' ');
+  }
+
+  // Crops an image to the circle centred on it (transparent outside), as a
+  // PNG at most 256px across
+  function circleCrop(file){
+    return new Promise(function(resolve, reject){
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function(){
+        var w = img.naturalWidth, h = img.naturalHeight;
+        var side = w && h ? Math.min(w, h) : 256;
+        var size = Math.min(side, 256);
+        var c = document.createElement('canvas');
+        c.width = c.height = size;
+        var ctx = c.getContext('2d');
+        ctx.imageSmoothingQuality = 'high';
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+        ctx.clip();
+        if (w && h) ctx.drawImage(img, (w - side) / 2, (h - side) / 2, side, side, 0, 0, size, size);
+        else ctx.drawImage(img, 0, 0, size, size);
+        URL.revokeObjectURL(url);
+        c.toBlob(function(blob){
+          if (!blob) return reject(new Error('could not crop it'));
+          var stem = file.name.replace(/\.[^.]+$/, '') || 'icon';
+          resolve(new File([blob], stem + '.png', { type: 'image/png' }));
+        }, 'image/png');
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('not an image')); };
+      img.src = url;
+    });
   }
 
   function autoGrow(t){
@@ -480,36 +582,42 @@
         }
       }
 
-      // icon links: existing ones get their link updated in place (unknown
-      // kinds are left alone); new ones are added at the end
+      // icon links: existing ones are updated in place (only what changed),
+      // emptied or removed ones are dropped, new ones are added at the end
       var iconBox = a.querySelector('.project-icons');
+      var links = iconBox ? Array.prototype.slice.call(iconBox.querySelectorAll('.project-icon-link')) : [];
+      var kept = {};
       var short = q('.ce-title').value.replace(/<[^>]+>/g, '').split('[')[0].replace(/\s+/g, ' ').trim();
-      ICONS.forEach(function(I){
-        var href = q('.ce-icon-row[data-kind="' + I.kind + '"] .ce-icon-href').value.trim();
-        if (href === (data.icons[I.kind] || '')) return;
-        var existing = iconBox && Array.prototype.filter.call(iconBox.querySelectorAll('.project-icon-link'), function(l){
-          var im = l.querySelector('img');
-          return im && iconKind(im.getAttribute('src')) === I.kind;
-        })[0];
-        if (existing) {
-          if (href) existing.setAttribute('href', href); else removeWithSpace(existing);
+      card.querySelectorAll('.ce-icon-row').forEach(function(row){
+        var href = row.querySelector('.ce-icon-href').value.trim();
+        var src = row.dataset.src;
+        var I = row._kind && ICONS.filter(function(x){ return x.kind === row._kind; })[0];
+        var name = I ? I.alt : row.querySelector('.ce-icon-label').value.trim();
+        var link = row._index >= 0 ? links[row._index] : null;
+        if (!href || !src) return;
+        if (link) {
+          kept[row._index] = true;
+          var old = data.icons[row._index], im = link.querySelector('img');
+          if (href !== old.href) link.setAttribute('href', href);
+          if (im && src !== old.src) im.setAttribute('src', src);
+          if (im && !I && name !== old.alt) { im.setAttribute('alt', name || 'Link'); link.setAttribute('aria-label', short + ' ' + (name || 'link')); }
           return;
         }
-        if (!href) return;
         if (!iconBox && meta) { iconBox = document.createElement('div'); iconBox.className = 'project-icons'; appendIndented(meta, iconBox, 28); }
         var last = iconBox.lastChild;
         var trailing = last && last.nodeType === 3 ? last : null;
-        var link = document.createElement('template');
-        link.innerHTML = '<a class="project-icon-link" href="' + esc(href) + '" aria-label="' + esc(short + ' ' + I.aria) + '" target="_blank" rel="noopener"><img class="project-icon" src="' + I.icon + '" alt="' + I.alt + '" loading="lazy" decoding="async"></a>';
+        var t = document.createElement('template');
+        t.innerHTML = '<a class="project-icon-link" href="' + esc(href) + '" aria-label="' + esc(short + ' ' + (I ? I.aria : name || 'link')) + '" target="_blank" rel="noopener"><img class="project-icon" src="' + esc(src) + '" alt="' + esc(name || 'Link') + '" loading="lazy" decoding="async"></a>';
         iconBox.insertBefore(document.createTextNode('\n' + new Array(33).join(' ')), trailing);
-        iconBox.insertBefore(link.content.firstChild, trailing);
+        iconBox.insertBefore(t.content.firstChild, trailing);
         if (!trailing) iconBox.appendChild(document.createTextNode('\n' + new Array(29).join(' ')));
       });
+      links.forEach(function(l, i){ if (!kept[i]) removeWithSpace(l); });
       if (iconBox && !iconBox.querySelector('.project-icon-link')) removeWithSpace(iconBox);
     }
 
     var html = a.outerHTML.replace(/ hidden=""/g, ' hidden');
-    var bodyText = reindent(q('.ce-body').value, card._indent || 28);
+    var bodyText = reindent(q('.ce-body').value, card._indent != null ? card._indent : 28);
     return html.indexOf(BODY_MARK) !== -1 ? html.replace(BODY_MARK, function(){ return bodyText; }) : html;
   }
 
@@ -576,8 +684,8 @@
   }
 
   // --- Save ---
-  function upload(file){
-    return fetch('/__edit/cards/upload?page=' + PAGE + '&name=' + encodeURIComponent(file.name), {
+  function upload(file, kind){
+    return fetch('/__edit/cards/upload?page=' + PAGE + (kind ? '&kind=' + kind : '') + '&name=' + encodeURIComponent(file.name), {
       method: 'POST', headers: { 'X-Site-Edit': '1', 'Content-Type': 'application/octet-stream' }, body: file
     }).then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || r.statusText); return j.src; }); });
   }
@@ -590,12 +698,21 @@
       untitled[0].querySelector('.ce-title').focus();
       return Promise.reject(new Error('every card needs a title'));
     }
+    var iconless = Array.prototype.filter.call(list.querySelectorAll('.ce-icon-row'), function(r){
+      return r.querySelector('.ce-icon-href').value.trim() && !r.dataset.src && !r._file;
+    })[0];
+    if (iconless) {
+      iconless.scrollIntoView({ block: 'center' });
+      return Promise.reject(new Error('a button with a link needs an icon (click its empty circle)'));
+    }
     // covers, then figures still waiting in the text boxes
     var used = {};
     cards.forEach(function(c){ Object.keys(pendingImages).forEach(function(k){ if (c.querySelector('.ce-body').value.indexOf(k) !== -1) used[k] = true; }); });
     var jobs = cards.filter(function(c){ return c._file; }).map(function(c){
       return function(){ return upload(c._file).then(function(src){ c.dataset.image = src; c._file = null; }); };
-    }).concat(Object.keys(used).map(function(k){
+    }).concat(Array.prototype.filter.call(list.querySelectorAll('.ce-icon-row'), function(r){ return r._file && r.querySelector('.ce-icon-href').value.trim(); }).map(function(r){
+      return function(){ return upload(r._file, 'icon').then(function(src){ r.dataset.src = src; r._file = null; }); };
+    })).concat(Object.keys(used).map(function(k){
       return function(){ return upload(pendingImages[k].file).then(function(src){
         cards.forEach(function(c){
           var b = c.querySelector('.ce-body');

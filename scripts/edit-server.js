@@ -49,6 +49,7 @@
 //                                              posters (npm run talks:sync)
 //   Research & Software cards (scripts/cards-edit.js)
 //     POST /__edit/cards/upload?page=&name=       image -> images/research/ or images/softwares/
+//                              (&kind=icon: a card's icon-link image -> images/icons/)
 //     POST /__edit/cards/save   {page, html}      replace the cards between the
 //                                              <page>-cards markers (old copy in
 //                                              .edit-trash/<page>/)
@@ -637,12 +638,13 @@ const server = http.createServer(async (req, res) => {
       if (!/\.(jpe?g|png|webp|gif|avif|svg)$/i.test(original)) return send(res, 400, { error: 'Use a .jpg, .png, .svg, .webp, .gif or .avif image' });
       const body = await readBody(req, MAX_UPLOAD_BYTES);
       if (!body.length) return send(res, 400, { error: 'Empty upload' });
-      const dir = path.join(repoRoot, page.images);
+      const folder = url.searchParams.get('kind') === 'icon' ? 'images/icons' : page.images;
+      const dir = path.join(repoRoot, folder);
       fs.mkdirSync(dir, { recursive: true });
       const name = uniqueImageName(dir, original);
       fs.writeFileSync(path.join(dir, name), body);
-      console.log(`Saved ${page.images}/${name}`);
-      return send(res, 200, { src: `${page.images}/${name}` });
+      console.log(`Saved ${folder}/${name}`);
+      return send(res, 200, { src: `${folder}/${name}` });
     }
 
     if (pathname === '/__edit/cards/save') {

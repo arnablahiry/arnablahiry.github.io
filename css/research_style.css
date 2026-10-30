@@ -1786,8 +1786,16 @@ select.ce-input{ width: auto; }
 .ce-badges > .ce-mini-btn{ align-self: flex-start; }
 .ce-badge-row{ display: grid; grid-template-columns: 110px 1fr 1fr 28px; gap: 8px; align-items: center; }
 .ce-badge-preview{ max-width: 110px; height: 20px; object-fit: contain; object-position: left; }
-.ce-icon-row{ display: grid; grid-template-columns: 26px 90px 1fr; gap: 10px; align-items: center; }
-.ce-icon-img{ width: 26px; height: 26px; object-fit: contain; border-radius: 6px; }
+.ce-icons > .ce-mini-btn{ align-self: flex-start; }
+.ce-icon-row{ display: grid; grid-template-columns: 34px 130px 1fr 28px; gap: 10px; align-items: center; }
+.ce-icon-pick{ position: relative; width: 34px; height: 34px; border-radius: 8px; overflow: hidden; cursor: pointer; outline: none; }
+.ce-icon-pick.is-empty{ border: 1px dashed rgba(255,255,255,0.35); border-radius: 50%; box-sizing: border-box; }
+.ce-icon-pick.is-empty .ce-icon-img{ display: none; }
+.ce-icon-img{ display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity 160ms ease; }
+.ce-icon-pick .ce-cover-overlay svg{ width: 14px; height: 14px; padding: 6px; }
+.ce-icon-pick.is-empty .ce-cover-overlay{ opacity: 0.7; }
+.ce-icon-pick:hover .ce-icon-img, .ce-icon-pick:focus-visible .ce-icon-img{ opacity: 0.35; }
+.ce-icon-pick:hover .ce-cover-overlay, .ce-icon-pick:focus-visible .ce-cover-overlay{ opacity: 1; }
 .ce-icon-name{ font-family: 'Abaddon Bold', sans-serif !important; font-size: 13px; }
 .ce-body-wrap{ display: flex; flex-direction: column; gap: 8px; }
 .ce-body-tools{ display: flex; gap: 8px; }
@@ -1797,9 +1805,12 @@ body.light-mode .ce-input{ background: rgba(0,0,0,0.03); border-color: rgba(0,0,
 body.light-mode textarea.ce-title{ color: #111; }
 body.light-mode .ce-label, body.light-mode .ce-hint{ color: rgba(0,0,0,0.55); }
 body.light-mode .ce-tool{ background: #fff; color: #111; border-color: rgba(0,0,0,0.2); }
+body.light-mode .ce-icon-pick.is-empty{ border-color: rgba(0,0,0,0.35); }
 body.light-mode .ce-add-btn, body.light-mode .ce-mini-btn{ background: rgba(255,255,255,0.85); color: #8c761c; border-color: rgba(140,118,28,0.55); }
 
 @media (max-width: 800px){
     .ce-card{ flex-direction: column; }
     .ce-cover{ width: 100%; }
+    .ce-icon-row{ grid-template-columns: 34px 1fr 28px; }
+    .ce-icon-row .ce-icon-href{ grid-column: 2 / 4; }
 }
