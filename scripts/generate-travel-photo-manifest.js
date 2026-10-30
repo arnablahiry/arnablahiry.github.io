@@ -4,6 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const childProcess = require('child_process');
+// Second versions of photos (<photo>.light.<ext> / <photo>.dark.<ext>, set in
+// the site editor; see sync-travel-caption-spreadsheet.js) get a thumbnail
+// but are not listed as photos
+const { isSecondVersion } = require('./sync-travel-caption-spreadsheet.js');
 
 const repoRoot = path.resolve(__dirname, '..');
 const travelRoot = path.join(repoRoot, 'images', 'travels');
@@ -84,16 +88,20 @@ function readManifest() {
     const folderPath = path.join(travelRoot, folder);
     const thumbDir = path.join(folderPath, thumbnailFolderName);
     const cache = readCache(thumbDir);
-    const files = fs.readdirSync(folderPath, { withFileTypes: true })
+    const images = fs.readdirSync(folderPath, { withFileTypes: true })
       .filter((entry) => entry.isFile() && !entry.name.startsWith('.'))
       .filter((entry) => imageExtensions.has(path.extname(entry.name).toLowerCase()))
       .map((entry) => path.join(folderPath, entry.name))
-      .sort(naturalCompare)
+      .sort(naturalCompare);
+    images.filter((sourcePath) => isSecondVersion(path.basename(sourcePath)))
+      .forEach((sourcePath) => ensureThumbnail(sourcePath, cache));
+    const files = images
+      .filter((sourcePath) => !isSecondVersion(path.basename(sourcePath)))
       .map((sourcePath) => ({
         src: toWebPath(sourcePath),
         thumbSrc: toWebPath(ensureThumbnail(sourcePath, cache))
       }));
-    if (files.length > 0) {
+    if (images.length > 0) {
       fs.mkdirSync(thumbDir, { recursive: true });
       writeCache(thumbDir, cache);
     }

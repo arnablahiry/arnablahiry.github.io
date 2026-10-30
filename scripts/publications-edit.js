@@ -3,8 +3,10 @@
 //
 // The cards live in publications.html between the publications markers. Edit
 // mode reads them from the saved file and turns each into a form:
-//   - cover image (hover, click to replace), title, authors (**A. Lahiry**
-//     for bold), journal line;
+//   - cover image (hover, click to replace) with the albedo control under it
+//     (flip it with the theme, or a second version for the other theme: see
+//     SiteAlbedo in scripts/edit-mode.js); title, authors (**A. Lahiry** for
+//     bold), journal line;
 //   - one link per button: arXiv, NASA ADS, journal, project page (pick a
 //     Research card or type any URL); an empty link means no button;
 //   - the BibTeX entry itself (saved as bibtex/<name>.html, which the BibTeX
@@ -12,7 +14,8 @@
 //   - the abstract (blank line = new paragraph);
 //   - "Shown on the site" (off = kept in the page but hidden), move up/down,
 //     remove; "+ New publication" adds one at the top.
-// Save uploads new covers, writes BibTeX pages and rewrites the cards.
+// Save uploads new covers (and second versions), writes BibTeX pages and
+// rewrites the cards.
 (function(){
   var LOCAL = ['localhost', '127.0.0.1', '[::1]', '::1'];
   if (LOCAL.indexOf(location.hostname) === -1) return;
@@ -104,6 +107,7 @@
     var p = {
       hidden: a.hasAttribute('hidden'),
       image: img ? img.getAttribute('src') : '',
+      albedo: img && window.SiteAlbedo ? SiteAlbedo.read(img) : null,
       title: text((a.querySelector('.project-title') || {}).innerHTML || ''),
       authors: '',
       journal: text((a.querySelector('.project-journal') || {}).innerHTML || ''),
@@ -177,6 +181,8 @@
     card._bibSaved = p.bibtexSaved;
     card.dataset.image = p.image || '';
     card.classList.toggle('is-hidden', !!p.hidden);
+    // an existing cover keeps its saved albedo; a new one starts as "off"
+    card._albedo = p.albedo || (window.SiteAlbedo ? SiteAlbedo.fresh() : null);
 
     // cover
     var cover = el('div', 'pub-cover', { role: 'button', tabindex: '0', title: 'Change image' });
@@ -198,9 +204,13 @@
       card._url = URL.createObjectURL(f);
       img.src = card._url;
       cover.classList.remove('is-empty');
+      if (card._albedo) SiteAlbedo.replaced(card._albedo);
       markDirty();
     });
-    card.appendChild(cover);
+    var coverCol = el('div', 'pub-cover-col');
+    coverCol.appendChild(cover);
+    if (card._albedo) coverCol.appendChild(SiteAlbedo.control(card._albedo, { onChange: markDirty, compact: true }));
+    card.appendChild(coverCol);
 
     var meta = el('div', 'project-meta pub-edit-meta');
 
@@ -288,7 +298,7 @@
     var out = [];
     out.push(I(20) + '<!-- Publication ' + n + ' -->');
     out.push(I(20) + '<article class="project-card"' + (c.hidden ? ' hidden' : '') + '>');
-    out.push(I(24) + '<img class="project-image" src="' + esc(c.image) + '" alt="Publication image" loading="lazy" decoding="async">');
+    out.push(I(24) + '<img class="project-image" src="' + esc(c.image) + '"' + (c.albedo ? SiteAlbedo.html(c.albedo) : '') + ' alt="Publication image" loading="lazy" decoding="async">');
     out.push(I(24) + '<div class="project-meta">');
     out.push(I(28) + '<h3 class="project-title">' + esc(c.title) + '</h3>');
     if (c.authors) out.push(I(28) + '<p class="project-authors">' + authorsHtml(c.authors) + '</p>');
@@ -329,6 +339,7 @@
         card: card,
         hidden: card.classList.contains('is-hidden'),
         image: card.dataset.image,
+        albedo: card._albedo,
         title: title,
         authors: card.querySelector('.pub-authors').value.replace(/\s+/g, ' ').trim(),
         journal: card.querySelector('.pub-journal').value.replace(/\s+/g, ' ').trim(),
@@ -341,6 +352,12 @@
     });
   }
 
+  function upload(file){
+    return fetch('/__edit/publications/upload?name=' + encodeURIComponent(file.name), {
+      method: 'POST', headers: { 'X-Site-Edit': '1', 'Content-Type': 'application/octet-stream' }, body: file
+    }).then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || r.statusText); return j.src; }); });
+  }
+
   function save(){
     var untitled = Array.prototype.filter.call(list.children, function(c){ return !c.querySelector('.pub-title').value.trim(); });
     if (untitled.length) {
@@ -348,13 +365,13 @@
       untitled[0].querySelector('.pub-title').focus();
       return Promise.reject(new Error('every publication needs a title'));
     }
-    var uploads = Array.prototype.filter.call(list.children, function(c){ return c._file; });
-    return uploads.reduce(function(chain, card){
+    // each new cover, then its new second version (light / dark mode) if any
+    return Array.prototype.reduce.call(list.children, function(chain, card){
       return chain.then(function(){
-        return fetch('/__edit/publications/upload?name=' + encodeURIComponent(card._file.name), {
-          method: 'POST', headers: { 'X-Site-Edit': '1', 'Content-Type': 'application/octet-stream' }, body: card._file
-        }).then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || r.statusText); return j; }); })
-          .then(function(j){ card.dataset.image = j.src; card._file = null; });
+        if (!card._file) return;
+        return upload(card._file).then(function(src){ card.dataset.image = src; card._file = null; });
+      }).then(function(){
+        if (card._albedo && card.dataset.image) return SiteAlbedo.upload(card._albedo, upload);
       });
     }, Promise.resolve()).then(function(){
       var pubs = collect();

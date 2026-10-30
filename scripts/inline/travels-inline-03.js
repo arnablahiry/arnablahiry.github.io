@@ -422,12 +422,37 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
         const creditImage = (photoEntry && typeof photoEntry === 'object' && photoEntry.creditImage)
             ? photoEntry.creditImage
             : TRAVEL_DEFAULT_CREDIT_IMAGE;
-        return { src, thumbSrc, caption, credit, creditImage };
+        const albedo = (photoEntry && typeof photoEntry === 'object') ? photoEntry : {};
+        return {
+            src, thumbSrc, caption, credit, creditImage,
+            albedo: albedo.albedo || '',
+            srcLight: albedo.srcLight || '', srcDark: albedo.srcDark || '',
+            thumbLight: albedo.thumbLight || '', thumbDark: albedo.thumbDark || ''
+        };
+    }
+
+    // Albedo (site editor, see scripts/travel-database.js): data-albedo and
+    // the second versions (data-src-light / data-src-dark) of a photo on its
+    // <img>; css/utils.css flips and scripts/theme-toggle.js swaps them.
+    // `thumb`: the <img> shows the thumbnail. No meta clears them (the
+    // lightbox <img> is reused for every photo).
+    function setPhotoAlbedo(img, meta, thumb) {
+        if (!img) return;
+        const attrs = {
+            'data-albedo': meta ? meta.albedo : '',
+            'data-src-light': meta ? ((thumb && meta.thumbLight) || meta.srcLight) : '',
+            'data-src-dark': meta ? ((thumb && meta.thumbDark) || meta.srcDark) : ''
+        };
+        Object.keys(attrs).forEach((name) => {
+            if (attrs[name]) img.setAttribute(name, attrs[name]);
+            else img.removeAttribute(name);
+        });
     }
 
     function renderLightboxFrame() {
         if (!lightboxPhotos.length || !lightboxImgEl || !lightboxCaptionEl || !lightboxCreditImageEl || !lightboxCreditNameEl) return;
         const frame = lightboxPhotos[lightboxIndex];
+        setPhotoAlbedo(lightboxImgEl, frame, false);
         lightboxImgEl.src = frame.src;
         lightboxCaptionEl.textContent = frame.caption || '';
         lightboxCreditImageEl.src = frame.creditImage || TRAVEL_DEFAULT_CREDIT_IMAGE;
@@ -469,6 +494,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
             lightboxEl.classList.remove('open');
             lightboxEl.classList.remove('closing');
             lightboxEl.setAttribute('aria-hidden', 'true');
+            setPhotoAlbedo(lightboxImgEl, null);
             if (lightboxImgEl) lightboxImgEl.src = '';
             if (lightboxCaptionEl) lightboxCaptionEl.textContent = '';
             if (lightboxCreditNameEl) lightboxCreditNameEl.textContent = '';
@@ -625,6 +651,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 btn.className = 'photo-card-button';
                 const img = document.createElement('img');
                 img.alt = `${(v && v.name) || 'Country'} ${i + 1}`;
+                setPhotoAlbedo(img, meta, !!window.viewportLazy && !!meta.thumbSrc && meta.thumbSrc !== meta.src);
                 if (window.viewportLazy) {
                     window.viewportLazy.observe(img, { root: focusPhotoGrid, src: meta.thumbSrc || meta.src });
                 } else {
@@ -1398,6 +1425,7 @@ const VISITS = (window.TRAVEL_DATABASE_COUNTRIES && typeof window.TRAVEL_DATABAS
                 btn.className = 'photo-card-button';
                 const img = document.createElement('img');
                 img.alt = v.name + ' ' + (i + 1);
+                setPhotoAlbedo(img, meta, !!window.viewportLazy && !!meta.thumbSrc && meta.thumbSrc !== meta.src);
                 if (window.viewportLazy) {
                     window.viewportLazy.observe(img, { root: grid, src: meta.thumbSrc || meta.src });
                 } else {

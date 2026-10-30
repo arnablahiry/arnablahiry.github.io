@@ -293,6 +293,18 @@ body.light-mode.page-fixations .fixation-pill {
 
 body.light-mode.page-fixations .fixation-cover-empty { background: rgba(0,0,0,0.05); color: rgba(0,0,0,0.4); }
 
+/* The cover with its albedo control (utils.css) below it, no wider than
+   the cover (a percentage max-width would let the cover shrink to the
+   control's width) */
+.page-fixations .fixation-cover-col {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: min-content;
+}
+.page-fixations .fixation-cover-col .fixation-cover { max-width: none; }
+.page-fixations .fixation-cover-col .albedo-ctl { padding: 0 8px 10px; }
+
 /* Remove button (.site-edit-remove in utils.css) sits over the cover's
    top-left corner, clear of the title box */
 .page-fixations .fixation-card > .site-edit-remove { left: 6px; right: auto; }

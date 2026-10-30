@@ -9,10 +9,13 @@
 //     newest first as soon as a date is filled in.
 //   - each entry's blocks (text boxes and images) can be moved up and down
 //     or removed; "+ Text" / "+ Image" under the last block adds another;
-//   - hovering an image shows a pencil to replace it; the field below it is
-//     the image description (alt text).
-// Save uploads new images into images/timeline/, writes the entries back in
-// the page's own markup (year separators and spacing included) and reloads.
+//   - hovering an image shows a pencil to replace it; under it the albedo
+//     control (flip it with the theme, or a second version for the other
+//     theme: see SiteAlbedo in scripts/edit-mode.js), then the image
+//     description (alt text).
+// Save uploads new images (and second versions) into images/timeline/, writes
+// the entries back in the page's own markup (year separators and spacing
+// included) and reloads.
 (function(){
   var LOCAL = ['localhost', '127.0.0.1', '[::1]', '::1'];
   if (LOCAL.indexOf(location.hostname) === -1) return;
@@ -99,7 +102,7 @@
           html: text.innerHTML.replace(/\s+/g, ' ').trim()
         });
       } else if (img) {
-        entry.blocks.push({ type: 'image', src: img.getAttribute('src') || '', alt: img.getAttribute('alt') || '' });
+        entry.blocks.push({ type: 'image', src: img.getAttribute('src') || '', alt: img.getAttribute('alt') || '', albedo: window.SiteAlbedo ? SiteAlbedo.read(img) : null });
       } else if (/^\s*height:\s*4%;?\s*$/.test(child.getAttribute('style') || '') && !child.children.length) {
         // spacing between groups: regenerated on save
       } else {
@@ -249,6 +252,8 @@
         }
       }
       wrap.dataset.src = block.src || '';
+      // existing images keep their saved albedo; a new one starts as "off"
+      wrap._albedo = block.src ? block.albedo : window.SiteAlbedo ? SiteAlbedo.fresh() : null;
       setImage(block.src);
       var overlay = el('span', 'tl-image-overlay');
       overlay.innerHTML = PENCIL;
@@ -263,9 +268,11 @@
         if (wrap._url) URL.revokeObjectURL(wrap._url);
         wrap._url = URL.createObjectURL(f);
         setImage(wrap._url);
+        if (wrap._albedo) SiteAlbedo.replaced(wrap._albedo);
         markDirty();
       });
       wrap.appendChild(frame);
+      if (wrap._albedo) wrap.appendChild(SiteAlbedo.control(wrap._albedo, { onChange: markDirty }));
       var alt = el('input', 'tl-alt', { type: 'text', placeholder: 'Describe the image (alt text)', 'aria-label': 'Image description' });
       alt.value = block.alt || '';
       alt.addEventListener('input', markDirty);
@@ -338,7 +345,7 @@
         out.push(I(28) + '</div>');
       } else if (b.type === 'image') {
         out.push(I(28) + '<div class="timeline-image-wrapper">');
-        out.push(I(32) + '<img src="' + escapeHtml(b.src) + '" alt="' + escapeHtml(b.alt) + '"');
+        out.push(I(32) + '<img src="' + escapeHtml(b.src) + '" alt="' + escapeHtml(b.alt) + '"' + (b.albedo ? SiteAlbedo.html(b.albedo) : ''));
         out.push(I(32) + 'loading="lazy" width="480" decoding="async" />');
         out.push(I(28) + '</div>');
       } else {
@@ -361,7 +368,7 @@
           var text = wrap.querySelector('textarea').value.trim();
           if (text) blocks.push({ type: 'text', margin: wrap.dataset.margin || 'medium', html: text.replace(/\r?\n/g, '<br>') });
         } else if (type === 'image') {
-          if (wrap.dataset.src) blocks.push({ type: 'image', src: wrap.dataset.src, alt: wrap.querySelector('.tl-alt').value.trim() });
+          if (wrap.dataset.src) blocks.push({ type: 'image', src: wrap.dataset.src, alt: wrap.querySelector('.tl-alt').value.trim(), albedo: wrap._albedo });
         } else {
           blocks.push({ type: 'raw', html: wrap._html });
         }
@@ -376,6 +383,12 @@
     });
   }
 
+  function upload(file){
+    var url = '/__edit/timeline/upload?name=' + encodeURIComponent(file.name);
+    return fetch(url, { method: 'POST', headers: { 'X-Site-Edit': '1', 'Content-Type': 'application/octet-stream' }, body: file })
+      .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || r.statusText); return j.src; }); });
+  }
+
   function save(){
     sortEntries();
     var bad = Array.prototype.filter.call(list.children, function(item){
@@ -386,13 +399,14 @@
       bad[0].querySelector('.tl-month').focus();
       return Promise.reject(new Error('every entry needs a month and a 4-digit year'));
     }
-    var uploads = Array.prototype.filter.call(list.querySelectorAll('.tl-block[data-type="image"]'), function(w){ return w._file; });
-    return uploads.reduce(function(chain, wrap){
+    var images = Array.prototype.slice.call(list.querySelectorAll('.tl-block[data-type="image"]'));
+    // each new image, then its new second version (light / dark mode) if any
+    return images.reduce(function(chain, wrap){
       return chain.then(function(){
-        var url = '/__edit/timeline/upload?name=' + encodeURIComponent(wrap._file.name);
-        return fetch(url, { method: 'POST', headers: { 'X-Site-Edit': '1', 'Content-Type': 'application/octet-stream' }, body: wrap._file })
-          .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || r.statusText); return j; }); })
-          .then(function(j){ wrap.dataset.src = j.src; wrap._file = null; });
+        if (!wrap._file) return;
+        return upload(wrap._file).then(function(src){ wrap.dataset.src = src; wrap._file = null; });
+      }).then(function(){
+        if (wrap._albedo && wrap.dataset.src) return SiteAlbedo.upload(wrap._albedo, upload);
       });
     }, Promise.resolve()).then(function(){
       var entries = collect();

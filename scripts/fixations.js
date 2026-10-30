@@ -1,7 +1,8 @@
 // My Current Fixations.
 // - Builds the cards from window.FIXATIONS (scripts/fixations-data.js, which
 //   is generated from data/fixations.xlsx), then each card's hearts
-//   (data-rating, 0-5 in halves) and kind pill (data-kind).
+//   (data-rating, 0-5 in halves) and kind pill (data-kind). A cover's albedo
+//   settings become data-albedo / data-src-light / data-src-dark.
 // - Sizes each cover to the height of its text column, keeping the image's
 //   aspect ratio (CSS cannot derive an image's height from a sibling).
 // - Switches between All / Books / Movies / Shows / Games. The active pill is
@@ -62,6 +63,11 @@
     card.dataset.rating = item.rating;
     if (item.image) {
       var img = el('img', 'fixation-cover');
+      // albedo (set in the editor): flipped in the other theme, or a second
+      // version for one theme that scripts/theme-toggle.js swaps in
+      if (item.albedo) img.setAttribute('data-albedo', item.albedo);
+      if (item.imageLight) img.setAttribute('data-src-light', item.imageLight);
+      if (item.imageDark) img.setAttribute('data-src-dark', item.imageDark);
       img.src = item.image;
       img.alt = item.title;
       img.decoding = 'async';
@@ -334,8 +340,9 @@
       c._fixationsWatched = true;
       var b = c.querySelector('.fixation-body');
       if (ro) { if (b) ro.observe(b); ro.observe(c); }
+      // (also re-sized when the theme swaps in a cover's other version)
       var img = c.querySelector('img.fixation-cover');
-      if (img && !img.complete) img.addEventListener('load', function(){ sizeCover(c); schedulePack(); });
+      if (img) img.addEventListener('load', function(){ sizeCover(c); schedulePack(); });
     });
   }
   if (wide.addEventListener) wide.addEventListener('change', sizeAll);

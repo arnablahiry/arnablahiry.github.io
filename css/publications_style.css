@@ -419,6 +419,14 @@ body.light-mode .legend-item img {
 .pub-edit-card { cursor: default; }
 .pub-edit-card.is-hidden { opacity: 0.55; border-style: dashed !important; }
 
+/* the cover with the albedo control under it, as wide as the cover (150px + its margin) */
+.pub-cover-col { flex: none; display: flex; flex-direction: column; width: 166px; }
+.pub-cover-col .pub-cover.is-empty { min-width: 0; }
+.pub-cover-col .albedo-ctl { margin: 0 16px 14px 0; }
+@media (max-width: 768px) {
+    .pub-cover-col { width: auto; }
+    .pub-cover-col .albedo-ctl { margin: 0 0 14px 0; }
+}
 .pub-cover { position: relative; flex: none; cursor: pointer; outline: none; align-self: stretch; }
 .pub-cover .project-image { transition: opacity 160ms ease; }
 .pub-cover.is-empty { min-width: 220px; min-height: 160px; border: 1px dashed rgba(255, 255, 255, 0.25); border-radius: 8px; }

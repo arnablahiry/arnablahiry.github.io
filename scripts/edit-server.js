@@ -19,7 +19,8 @@
 //   Travel (scripts/travel-edit.js)
 //     GET  /__edit/travel/data                    captions + authors
 //     POST /__edit/travel/upload?folder=&name=    photo -> images/travels/<folder>/
-//     POST /__edit/travel/save {captions, remove}  merge captions, move removed
+//     POST /__edit/travel/save {captions, remove}  merge captions (and albedo,
+//                                              light, dark), move removed
 //                                              photos to .edit-trash/, rebuild
 //   Travel places (scripts/travel-places-edit.js)
 //     GET  /__edit/travel/countries               every country (id, name, continent)
@@ -111,6 +112,9 @@ const PORT = Number(process.env.SITE_EDIT_PORT || process.env.FIXATIONS_EDIT_POR
 const HOST = '127.0.0.1';
 
 const HEADER = ['Kind', 'Image', 'Title', 'Rating', 'Description'];
+// Optional albedo columns (see scripts/sync-fixations-spreadsheet.js), only
+// written when a row uses them
+const ALBEDO_HEADER = ['Albedo', 'Light cover', 'Dark cover'];
 const KINDS = ['books', 'movies', 'shows', 'games'];
 const KIND_LABELS = { books: 'Books', movies: 'Movies', shows: 'Shows', games: 'Games' };
 const IMAGE_EXT = /\.(jpe?g|png|webp|gif|avif)$/i;
@@ -173,6 +177,12 @@ function clampRating(value) {
   return Math.max(0, Math.min(5, Math.round((Number(value) || 0) * 2) / 2));
 }
 
+// Albedo cell: dark | light | off, anything else = page default ('')
+function normalizeAlbedo(value) {
+  const v = String(value || '').trim().toLowerCase();
+  return v === 'dark' || v === 'light' || v === 'off' ? v : '';
+}
+
 // --- Workbook ---
 function readItems() {
   if (!fs.existsSync(workbookPath)) return [];
@@ -187,20 +197,28 @@ function readItems() {
       image: resolveImage(row[1]),
       title: row[2] || '',
       rating: clampRating(row[3]),
-      description: row[4] || ''
+      description: row[4] || '',
+      albedo: normalizeAlbedo(row[5]),
+      imageLight: resolveImage(row[6]),
+      imageDark: resolveImage(row[7])
     }));
 }
 
 function writeItems(items) {
-  const rows = items.map((item) => [
+  let rows = items.map((item) => [
     KIND_LABELS[normalizeKind(item.kind) || 'books'],
     cleanImagePath(item.image),
     String(item.title || '').trim(),
     clampRating(item.rating) || '',
-    String(item.description || '').trim()
+    String(item.description || '').trim(),
+    normalizeAlbedo(item.albedo),
+    cleanImagePath(item.imageLight),
+    cleanImagePath(item.imageDark)
   ]);
-  const ws = XLSX.utils.aoa_to_sheet([HEADER, ...rows]);
-  ws['!cols'] = [{ wch: 10 }, { wch: 28 }, { wch: 40 }, { wch: 8 }, { wch: 90 }];
+  const albedo = rows.some((row) => row.slice(HEADER.length).some(Boolean));
+  if (!albedo) rows = rows.map((row) => row.slice(0, HEADER.length));
+  const ws = XLSX.utils.aoa_to_sheet([albedo ? HEADER.concat(ALBEDO_HEADER) : HEADER, ...rows]);
+  ws['!cols'] = [{ wch: 10 }, { wch: 28 }, { wch: 40 }, { wch: 8 }, { wch: 90 }, { wch: 8 }, { wch: 28 }, { wch: 28 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Fixations');
   fs.mkdirSync(path.dirname(workbookPath), { recursive: true });
@@ -251,19 +269,47 @@ function trashTravelPhoto(folder, file) {
   console.log(`Moved images/travels/${folder}/${file} to .edit-trash/travels/${folder}/`);
 }
 
+// Second versions (<photo>.light.<ext> / <photo>.dark.<ext>, see
+// scripts/sync-travel-caption-spreadsheet.js) that a photo no longer uses go
+// to the trash too; files not named like that are never touched.
+function trashTravelSecondVersion(folder, file) {
+  if (file && travelCaptions.isSecondVersion(file)) trashTravelPhoto(folder, file);
+}
+
 function saveTravel(edits, remove) {
-  (Array.isArray(remove) ? remove : []).forEach((r) => trashTravelPhoto(String(r.folder || ''), String(r.file || '')));
   const captions = travelCaptions.readCaptions();
+  (Array.isArray(remove) ? remove : []).forEach((r) => {
+    const folder = String(r.folder || ''), file = String(r.file || '');
+    const old = (captions[folder] || {})[file] || {};
+    trashTravelPhoto(folder, file);
+    trashTravelSecondVersion(folder, old.light);
+    trashTravelSecondVersion(folder, old.dark);
+  });
+  const secondVersion = (v) => {
+    const name = String(v || '').trim().split('/').pop();
+    return name && IMAGE_EXT.test(name) ? name : '';
+  };
   Object.keys(edits || {}).forEach((folder) => {
     if (!FOLDER_RE.test(folder)) return;
     captions[folder] = captions[folder] || {};
     Object.keys(edits[folder] || {}).forEach((file) => {
       if (file !== path.basename(file) || !IMAGE_EXT.test(file)) return;
       const e = edits[folder][file] || {};
-      captions[folder][file] = {
+      const old = captions[folder][file] || {};
+      const entry = {
         caption: String(e.caption || '').trim(),
         author: String(e.author || '').trim()
       };
+      // Albedo settings: kept as they were when the edit doesn't carry them
+      const albedo = 'albedo' in e ? String(e.albedo || '').trim().toLowerCase() : (old.albedo || '');
+      const light = 'albedo' in e ? secondVersion(e.light) : (old.light || '');
+      const dark = 'albedo' in e ? secondVersion(e.dark) : (old.dark || '');
+      if (['dark', 'light', 'off'].includes(albedo)) entry.albedo = albedo;
+      if (light) entry.light = light;
+      if (dark) entry.dark = dark;
+      if (old.light && old.light !== light) trashTravelSecondVersion(folder, old.light);
+      if (old.dark && old.dark !== dark) trashTravelSecondVersion(folder, old.dark);
+      captions[folder][file] = entry;
     });
   });
   travelCaptions.writeCaptions(captions);

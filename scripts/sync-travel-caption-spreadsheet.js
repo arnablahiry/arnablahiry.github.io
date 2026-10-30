@@ -7,6 +7,16 @@
 //   Photo    file name inside images/travels/<folder>/
 //   Caption  shown under the photo in the lightbox
 //   Author   who took it (empty = Arnab)
+// and, only on sheets where a photo uses them (set in the site editor):
+//   Albedo        dark / light: the photo was made for that theme and is
+//                 flipped (invert + hue-rotate) in the other one; off: never
+//                 flipped; empty: the page default
+//   Light version file name of a second version shown in light mode instead
+//   Dark version  the same for dark mode
+// Second versions sit next to the photos, named <photo>.light.<ext> or
+// <photo>.dark.<ext> (also <photo>.light-2.<ext>, ...): files named like that
+// are never listed as photos of their own (isSecondVersion), but still get a
+// thumbnail (thumbs/<photo>.light.jpg).
 // New photos get a row; rows of photos that no longer exist are dropped.
 // Older workbooks keyed "photo 1", "photo 2", ... are converted on the fly
 // using the photo order of the manifest.
@@ -81,7 +91,53 @@ function clean(value) {
   return value == null ? '' : String(value).trim();
 }
 
-// Captions currently in the workbook, as { folder: { file: {caption, author} } }.
+const ALBEDO_HEADER = ['Albedo', 'Light version', 'Dark version'];
+const SECOND_VERSION_RE = /\.(light|dark)(-\d+)?\.[a-z0-9]+$/i;
+
+function isSecondVersion(file) {
+  return SECOND_VERSION_RE.test(String(file || ''));
+}
+
+function cleanAlbedo(value) {
+  const v = clean(value).toLowerCase();
+  return v === 'dark' || v === 'light' || v === 'off' ? v : '';
+}
+
+// A second version is a file in the photo's own folder: keep the file name
+function cleanFile(value) {
+  return clean(value).split(/[\\/]/).pop();
+}
+
+// { caption, author } plus albedo / light / dark only when set, so photos
+// without albedo settings look exactly as before
+function entryOf(caption, author, albedo, light, dark) {
+  const entry = { caption: clean(caption), author: clean(author) };
+  if (cleanAlbedo(albedo)) entry.albedo = cleanAlbedo(albedo);
+  if (cleanFile(light)) entry.light = cleanFile(light);
+  if (cleanFile(dark)) entry.dark = cleanFile(dark);
+  return entry;
+}
+
+function hasAlbedo(entry) {
+  return !!(entry && (entry.albedo || entry.light || entry.dark));
+}
+
+// Column positions by header name (older sheets: Photo, Caption, Author)
+function columnsOf(header) {
+  const names = (header || []).map((h) => clean(h).toLowerCase());
+  const at = (name, fallback) => (names.indexOf(name) === -1 ? fallback : names.indexOf(name));
+  return {
+    photo: at('photo', 0),
+    caption: at('caption', 1),
+    author: at('author', 2),
+    albedo: at('albedo', -1),
+    light: at('light version', -1),
+    dark: at('dark version', -1)
+  };
+}
+
+// Captions currently in the workbook, as
+// { folder: { file: {caption, author[, albedo, light, dark]} } }.
 // Folders are matched to sheets by title (belgium -> "Belgium").
 function readCaptions(manifest) {
   manifest = manifest || readManifest();
@@ -114,13 +170,15 @@ function readCaptions(manifest) {
 
     if (workbook && sheetBySlug[slug]) {
       const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetBySlug[slug]], { header: 1, raw: false, defval: '' });
+      const col = columnsOf(rows[0]);
+      const cell = (row, i) => (i < 0 ? '' : row[i]);
       rows.slice(1).forEach((row) => {
-        const key = clean(row[0]);
+        const key = clean(row[col.photo]);
         if (!key) return;
         const legacyIndex = key.match(/^photo\s+(\d+)$/i);
         const file = legacyIndex ? files[Number(legacyIndex[1]) - 1] : key;
         if (!file) return;
-        entries[file] = { caption: clean(row[1]), author: clean(row[2]) };
+        entries[file] = entryOf(row[col.caption], row[col.author], cell(row, col.albedo), cell(row, col.light), cell(row, col.dark));
       });
     } else if (Array.isArray(legacy[slug])) {
       legacy[slug].forEach((caption, i) => {
@@ -129,7 +187,7 @@ function readCaptions(manifest) {
     } else if (legacy[slug] && typeof legacy[slug] === 'object') {
       Object.keys(legacy[slug]).forEach((file) => {
         const v = legacy[slug][file] || {};
-        entries[file] = { caption: clean(v.caption), author: clean(v.author) };
+        entries[file] = entryOf(v.caption, v.author, v.albedo, v.light, v.dark);
       });
     }
     result[slug] = entries;
@@ -151,13 +209,17 @@ function writeCaptions(captions, manifest) {
     const files = fileNamesOf(manifest, slug);
     Object.keys(entries).forEach((file) => { if (!files.includes(file) && manifestless(slug, file)) files.push(file); });
     if (!files.length) return;
-    const rows = [['Photo', 'Caption', 'Author']];
+    // the albedo columns only on sheets that use them
+    const albedo = files.some((file) => hasAlbedo(entries[file]));
+    const rows = [['Photo', 'Caption', 'Author'].concat(albedo ? ALBEDO_HEADER : [])];
     files.forEach((file) => {
       const e = entries[file] || {};
-      rows.push([file, clean(e.caption), clean(e.author)]);
+      const row = [file, clean(e.caption), clean(e.author)];
+      if (albedo) row.push(cleanAlbedo(e.albedo), cleanFile(e.light), cleanFile(e.dark));
+      rows.push(row);
     });
     const ws = XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols'] = [{ wch: 24 }, { wch: 90 }, { wch: 14 }];
+    ws['!cols'] = [{ wch: 24 }, { wch: 90 }, { wch: 14 }].concat(albedo ? [{ wch: 8 }, { wch: 24 }, { wch: 24 }] : []);
     XLSX.utils.book_append_sheet(wb, ws, names[slug]);
   });
   fs.mkdirSync(path.dirname(workbookPath), { recursive: true });
@@ -170,16 +232,22 @@ function manifestless(slug, file) {
 }
 
 function writeCaptionJs(captions) {
-  // Only photos with a caption or an author are needed by the page
+  // Only photos with a caption, an author or albedo settings are needed by
+  // the page; second versions that don't exist (yet) are left out
   const out = {};
   Object.keys(captions).sort().forEach((slug) => {
     const entries = {};
     Object.keys(captions[slug]).forEach((file) => {
       const e = captions[slug][file];
-      if (!e.caption && !e.author) return;
+      const light = e.light && manifestless(slug, e.light) ? e.light : '';
+      const dark = e.dark && manifestless(slug, e.dark) ? e.dark : '';
+      if (!e.caption && !e.author && !e.albedo && !light && !dark) return;
       entries[file] = {};
       if (e.caption) entries[file].caption = e.caption;
       if (e.author) entries[file].author = e.author;
+      if (e.albedo) entries[file].albedo = e.albedo;
+      if (light) entries[file].light = light;
+      if (dark) entries[file].dark = dark;
     });
     out[slug] = entries;
   });
@@ -208,6 +276,6 @@ function main() {
   console.log(`Synced ${path.relative(repoRoot, workbookPath)} and ${path.relative(repoRoot, captionJsPath)} (${Object.keys(manifest).length} countries, ${photoCount} photos).`);
 }
 
-module.exports = { readCaptions, writeCaptions, readManifest };
+module.exports = { readCaptions, writeCaptions, readManifest, isSecondVersion };
 
 if (require.main === module) main();

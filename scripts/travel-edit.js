@@ -7,9 +7,15 @@
 //   comment...") and an author picker (including "New author...").
 // - x on a photo marks it for removal (click again to keep it); on Save the
 //   file is moved to .edit-trash/ in the repo, not deleted.
-// Save uploads the new photos into images/travels/<folder>/, writes captions
-// and authors into data/travel-captions.xlsx and rebuilds the photo list
-// and thumbnails.
+// - Under the caption, the albedo control (window.SiteAlbedo, see
+//   scripts/edit-mode.js): albedo inversion on (made for the theme the editor
+//   is in, flipped in the other) or off, with optionally a second version of
+//   the photo for the other theme.
+// Save uploads the new photos into images/travels/<folder>/ (second versions
+// next to them as <photo>.light.<ext> / <photo>.dark.<ext>, which are never
+// listed as photos of their own), writes captions, authors and albedo
+// settings into data/travel-captions.xlsx and rebuilds the photo list and
+// thumbnails.
 (function(){
   var LOCAL = ['localhost', '127.0.0.1', '[::1]', '::1'];
   if (LOCAL.indexOf(location.hostname) === -1) return;
@@ -19,10 +25,10 @@
   var authorImage = window.TRAVEL_AUTHOR_IMAGE || function(){ return 'images/pfp_no_pixel.jpeg'; };
   var NEW_AUTHOR = '__new__';
 
-  var saved = {};      // captions from the workbook: { folder: { file: {caption, author} } }
+  var saved = {};      // captions from the workbook: { folder: { file: {caption, author[, albedo, light, dark]} } }
   var authors = [];
-  var edits = {};      // changed captions, same shape as `saved`
-  var pending = {};    // photos to upload: { folder: [{ file, url, caption, author }] }
+  var edits = {};      // opened photos: { folder: { file: {caption, author, albedo: SiteAlbedo state} } }
+  var pending = {};    // photos to upload: { folder: [{ file, url, caption, author, albedo }] }
   var removed = {};    // photos to remove: { folder: { file: true } }
 
   var CROSS = '<svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
@@ -56,6 +62,76 @@
     return m ? { folder: m[1], file: decodeURIComponent(m[2]) } : null;
   }
 
+  function photoSrc(folder, file){ return file ? 'images/travels/' + folder + '/' + file : null; }
+  function thumbOf(src){ return String(src).replace(/\/([^/]+)\.[^./]+$/, '/thumbs/$1.jpg'); }
+
+  // --- Albedo: one SiteAlbedo state per photo ---
+  function albedoState(folder, s){
+    return window.SiteAlbedo.read({
+      'data-albedo': s.albedo || null,
+      'data-src-light': photoSrc(folder, s.light),
+      'data-src-dark': photoSrc(folder, s.dark)
+    });
+  }
+
+  // Attributes to preview a state with: a second version not uploaded yet
+  // shows from its local copy; saved ones as thumbnails in the grids
+  function previewAttrs(s, thumb){
+    var a = window.SiteAlbedo.attrs(s);
+    var on = s.albedo === 'dark' || s.albedo === 'light';
+    if (!on && s.altFile && s.altMode) a['data-src-' + s.altMode] = s.altUrl;
+    else if (thumb) ['data-src-light', 'data-src-dark'].forEach(function(k){ if (a[k]) a[k] = thumbOf(a[k]); });
+    return a;
+  }
+
+  function setAttrs(img, a){
+    Object.keys(a).forEach(function(k){ if (a[k]) img.setAttribute(k, a[k]); else img.removeAttribute(k); });
+  }
+
+  // The photo on show and its tiles follow the control straight away
+  function preview(item){
+    if (!item || !item.albedo) return;
+    var shown = document.getElementById('lightbox-image');
+    if (shown) setAttrs(shown, previewAttrs(item.albedo, false));
+    document.querySelectorAll('.photo-card .photo-card-button img').forEach(function(img){
+      var card = img.closest('.photo-card');
+      var mine = item.url ? img.getAttribute('data-pending-url') === item.url
+        : card.dataset.src && card.dataset.src === item.src;
+      if (!mine) return;
+      // grid tiles show thumbnails, new photos their own file
+      setAttrs(img, previewAttrs(item.albedo, !item.url && img.hasAttribute('data-albedo-thumb')));
+    });
+  }
+
+  // "images/travels/greece/greece_1.light.png" -> "greece_1.light.png"
+  function fileOf(src){ var k = src && keyOf(src); return k ? k.file : ''; }
+
+  // Uploads a second version next to its photo: <photo>.<mode>.<ext>
+  function uploadSecondVersion(folder, photoFile, s){
+    return window.SiteAlbedo.upload(s, function(file){
+      var dot = file.name.lastIndexOf('.');
+      var name = photoFile.replace(/\.[^.]+$/, '') + '.' + s.altMode + (dot > 0 ? file.name.slice(dot) : '');
+      return uploadFile(folder, name, file).then(function(j){ return photoSrc(folder, j.file); });
+    });
+  }
+
+  function uploadFile(folder, name, body){
+    var url = '/__edit/travel/upload?folder=' + encodeURIComponent(folder) + '&name=' + encodeURIComponent(name);
+    return fetch(url, { method: 'POST', headers: { 'X-Site-Edit': '1', 'Content-Type': 'application/octet-stream' }, body: body })
+      .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || r.statusText); return j; }); });
+  }
+
+  function entryOf(item){
+    var a = window.SiteAlbedo.attrs(item.albedo);
+    return {
+      caption: item.caption || '',
+      author: item.author || '',
+      albedo: a['data-albedo'] || '',
+      light: fileOf(a['data-src-light']),
+      dark: fileOf(a['data-src-dark'])
+    };
+  }
+
   // --- Photo grids: pending photos and the "+" tile ---
   function decorateGrid(grid, countryId){
     var country = window.TRAVEL_DATABASE_COUNTRIES[countryId];
@@ -69,6 +145,11 @@
       if (card.querySelector('.site-edit-remove')) return;
       var key = keyOf(card.dataset.src);
       if (!key) return;
+      var tile = card.querySelector('.photo-card-button img');
+      var thumbAttrs = tile && /\/thumbs\//.test(tile.getAttribute('data-lazy-src') || tile.getAttribute('src') || '');
+      if (thumbAttrs) tile.setAttribute('data-albedo-thumb', '');
+      var opened = edits[key.folder] && edits[key.folder][key.file];
+      if (opened) preview(opened);
       var btn = el('button', 'site-edit-remove', { type: 'button' });
       function show(){
         var gone = !!(removed[key.folder] && removed[key.folder][key.file]);
@@ -96,7 +177,8 @@
     list.forEach(function(p, i){
       var card = el('div', 'photo-card has-photo is-pending');
       var btn = el('button', 'photo-card-button', { type: 'button', title: 'New photo (saved on Save)' });
-      var img = el('img', '', { alt: 'New photo' });
+      var img = el('img', '', { alt: 'New photo', 'data-pending-url': p.url });
+      setAttrs(img, previewAttrs(p.albedo, false));
       img.src = p.url;
       btn.appendChild(img);
       btn.addEventListener('click', function(e){
@@ -132,7 +214,7 @@
       if (!files.length) return;
       pending[folder] = pending[folder] || [];
       files.forEach(function(f){
-        pending[folder].push({ file: f, url: URL.createObjectURL(f), caption: '', author: '' });
+        pending[folder].push({ file: f, url: URL.createObjectURL(f), caption: '', author: '', albedo: window.SiteAlbedo.fresh() });
       });
       redecorate();
     });
@@ -165,6 +247,8 @@
     captionEl.parentNode.insertBefore(ui.caption, captionEl);
     ui.author = el('select', 'lightbox-author-select', { 'aria-label': 'Author' });
     nameEl.parentNode.insertBefore(ui.author, nameEl);
+    ui.albedo = el('div', 'lightbox-albedo');
+    captionEl.parentNode.appendChild(ui.albedo);
 
     ui.caption.addEventListener('input', function(){
       if (target) target.caption = ui.caption.value;
@@ -204,15 +288,28 @@
       target = frame.pending;
     } else {
       var key = keyOf(frame.src);
-      if (!key) { target = null; return; }
+      if (!key) { target = null; ui.albedo.innerHTML = ''; return; }
       edits[key.folder] = edits[key.folder] || {};
       if (!edits[key.folder][key.file]) {
         var s = (saved[key.folder] || {})[key.file] || {};
         // created lazily; dropped again on save if nothing changed
-        edits[key.folder][key.file] = { caption: s.caption || '', author: s.author || '', _orig: (s.caption || '') + '\u0000' + (s.author || '') };
+        edits[key.folder][key.file] = {
+          src: frame.src,
+          caption: s.caption || '',
+          author: s.author || '',
+          albedo: albedoState(key.folder, s),
+          _orig: (s.caption || '') + '\u0000' + (s.author || '')
+        };
       }
       target = edits[key.folder][key.file];
     }
+
+    // albedo control of this photo (one per photo, kept while editing)
+    var item = target;
+    if (!item._albedoCtl) item._albedoCtl = window.SiteAlbedo.control(item.albedo, { compact: true, onChange: function(){ preview(item); } });
+    ui.albedo.innerHTML = '';
+    ui.albedo.appendChild(item._albedoCtl);
+    preview(item);
 
     var who = target.author || DEFAULT_AUTHOR;
     if (authors.indexOf(who) === -1) authors.push(who);
@@ -228,9 +325,9 @@
     Object.keys(edits).forEach(function(folder){
       Object.keys(edits[folder]).forEach(function(file){
         var e = edits[folder][file];
-        if ((e.caption || '') + '\u0000' + (e.author || '') === e._orig) return;
+        if ((e.caption || '') + '\u0000' + (e.author || '') === e._orig && !window.SiteAlbedo.changed(e.albedo)) return;
         out[folder] = out[folder] || {};
-        out[folder][file] = { caption: e.caption || '', author: e.author || '' };
+        out[folder][file] = e;
       });
     });
     return out;
@@ -250,22 +347,33 @@
     return out;
   }
 
-  // --- Save: upload new photos, then send caption changes and removals ---
+  // --- Save: upload new photos and second versions, then send caption and
+  // albedo changes and removals ---
   function save(){
-    var out = changedEdits();
+    var changed = changedEdits();
+    var out = {};
     var uploads = [];
     Object.keys(pending).forEach(function(folder){
       pending[folder].forEach(function(p){ uploads.push({ folder: folder, p: p }); });
     });
+    Object.keys(changed).forEach(function(folder){
+      Object.keys(changed[folder]).forEach(function(file){
+        if (removed[folder] && removed[folder][file]) return;
+        uploads.push({ folder: folder, file: file, e: changed[folder][file] });
+      });
+    });
     return uploads.reduce(function(chain, u){
       return chain.then(function(){
-        var url = '/__edit/travel/upload?folder=' + encodeURIComponent(u.folder) + '&name=' + encodeURIComponent(u.p.file.name);
-        return fetch(url, { method: 'POST', headers: { 'X-Site-Edit': '1', 'Content-Type': 'application/octet-stream' }, body: u.p.file })
-          .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error(j.error || r.statusText); return j; }); })
-          .then(function(j){
+        var item = u.p || u.e;
+        var photo = u.p
+          ? uploadFile(u.folder, u.p.file.name, u.p.file).then(function(j){ return j.file; })
+          : Promise.resolve(u.file);
+        return photo.then(function(file){
+          return uploadSecondVersion(u.folder, file, item.albedo).then(function(){
             out[u.folder] = out[u.folder] || {};
-            out[u.folder][j.file] = { caption: u.p.caption || '', author: u.p.author || '' };
+            out[u.folder][file] = entryOf(item);
           });
+        });
       });
     }, Promise.resolve()).then(function(){
       pending = {};

@@ -10,6 +10,9 @@
 // Each card: kind, date / label, description, cover, image description, the
 // PDF or the link; arrows reorder, x removes, "+ Presentation" / "+ Link" add
 // one at the top; Preview opens a presentation exactly as on the page.
+// Under the cover (custom image or PDF poster) is the albedo control: flip it
+// with the theme, or a second version for the other theme (see SiteAlbedo in
+// scripts/edit-mode.js).
 // Save uploads new PDFs and images, rewrites only the cards that changed, then
 // compresses new PDFs and renders their posters (npm run talks:sync).
 (function(){
@@ -89,6 +92,7 @@
       kind: root.tagName === 'A' ? 'link' : 'pdf',
       image: img ? img.getAttribute('src') : '',
       alt: img ? img.getAttribute('alt') || '' : '',
+      albedo: img && window.SiteAlbedo ? SiteAlbedo.read(img) : null,
       date: date ? date.textContent.trim() : '',
       desc: sub ? sub.textContent.replace(/\s+/g, ' ').trim() : '',
       pdf: root.getAttribute('data-pdf') || '',
@@ -157,6 +161,8 @@
     // a presentation whose cover is its own page-1 poster keeps following the PDF
     card._autoCover = data.kind === 'pdf' && (!data.image || data.image === posterFor(data.pdf));
     card.dataset.image = card._autoCover ? '' : (data.image || '');
+    // an existing cover keeps its saved albedo; a new card starts as "off"
+    card._albedo = data.albedo || (window.SiteAlbedo ? SiteAlbedo.fresh() : null);
     function changed(){ card._changed = true; dirty = true; }
 
     // cover
@@ -180,6 +186,7 @@
       img.src = card._url;
       cover.classList.remove('is-empty');
       autoNote.hidden = true;
+      if (card._albedo) SiteAlbedo.replaced(card._albedo);
       changed();
     });
     var coverCol = el('div', 'tk-cover-col');
@@ -188,6 +195,7 @@
     autoNote.textContent = 'Cover: page 1 of the PDF (click to use your own image)';
     autoNote.hidden = !card._autoCover;
     coverCol.appendChild(autoNote);
+    if (card._albedo) coverCol.appendChild(SiteAlbedo.control(card._albedo, { onChange: changed, compact: true }));
     card.appendChild(coverCol);
 
     var form = el('div', 'ce-form');
@@ -244,7 +252,10 @@
         card._pdfUrl = URL.createObjectURL(f);
         pdfName.textContent = f.name + ' (new — uploaded on save)';
         pdfBtn.textContent = 'Replace PDF';
-        if (card._autoCover) { cover.classList.add('is-empty'); img.removeAttribute('src'); autoNote.textContent = 'Cover: page 1 of the new PDF, made on save'; autoNote.hidden = false; }
+        if (card._autoCover) {
+          cover.classList.add('is-empty'); img.removeAttribute('src'); autoNote.textContent = 'Cover: page 1 of the new PDF, made on save'; autoNote.hidden = false;
+          if (card._albedo) SiteAlbedo.replaced(card._albedo);   // a new poster
+        }
         changed();
       });
       pdfRow.appendChild(pdfName);
@@ -274,7 +285,8 @@
     var image = card._autoCover ? posterFor(card.dataset.pdf) : card.dataset.image;
     var alt = q('.tk-alt').value.trim();
     var dims = card._dims ? ' width="' + card._dims.w + '" height="' + card._dims.h + '"' : '';
-    var imgTag = '<img class="project-image" src="' + esc(image) + '" alt="' + esc(alt) + '"' + dims + ' loading="lazy" decoding="async">';
+    var albedo = card._albedo ? SiteAlbedo.html(card._albedo) : '';
+    var imgTag = '<img class="project-image" src="' + esc(image) + '"' + albedo + ' alt="' + esc(alt) + '"' + dims + ' loading="lazy" decoding="async">';
     var meta = [
       I(24) + '<div class="project-meta">',
       I(28) + '<div class="talk-date">' + esc(q('.tk-date').value.trim()) + '</div>',
@@ -362,6 +374,10 @@
         var im = c.querySelector('.ce-cover img');
         if (im.naturalWidth) c._dims = { w: 1000, h: Math.round(1000 * im.naturalHeight / im.naturalWidth) };
         return upload('image', c._file).then(function(src){ c.dataset.image = src; c._file = null; });
+      });
+      // a new second version of the cover (light / dark mode)
+      if (c._albedo && c._albedo.altFile) jobs.push(function(){
+        return SiteAlbedo.upload(c._albedo, function(f){ return upload('image', f); });
       });
     });
     return jobs.reduce(function(chain, job){ return chain.then(job); }, Promise.resolve()).then(function(){

@@ -1731,7 +1731,8 @@ body.cards-editing #projects-grid{ display: block !important; max-width: 1100px;
     box-shadow: 0 4px 18px rgba(0,0,0,0.5);
     color: #e6e6e6;
 }
-.ce-cover{ position: relative; flex: none; width: 300px; align-self: flex-start; cursor: pointer; outline: none; border-radius: 8px; overflow: hidden; }
+.ce-cover-col{ flex: none; width: 300px; align-self: flex-start; }
+.ce-cover{ position: relative; width: 100%; cursor: pointer; outline: none; border-radius: 8px; overflow: hidden; }
 .ce-cover img{ display: block; width: 100%; height: auto; transition: opacity 160ms ease; }
 .ce-cover.is-empty{ height: 180px; border: 1px dashed rgba(255,255,255,0.25); }
 .ce-cover-overlay{ position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; color: #fff; pointer-events: none; transition: opacity 160ms ease; }
@@ -1799,6 +1800,11 @@ select.ce-input{ width: auto; }
 .ce-icon-name{ font-family: 'Abaddon Bold', sans-serif !important; font-size: 13px; }
 .ce-body-wrap{ display: flex; flex-direction: column; gap: 8px; }
 .ce-body-tools{ display: flex; gap: 8px; }
+.ce-figs{ display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.ce-figs[hidden]{ display: none; }
+.ce-fig{ display: flex; gap: 10px; align-items: flex-start; padding: 8px; border: 1px dashed rgba(255,255,255,0.18); border-radius: 8px; }
+.ce-fig-thumb{ flex: none; width: 64px; height: 48px; object-fit: contain; border-radius: 4px; background: rgba(255,255,255,0.06); filter: none !important; }
+.ce-fig .albedo-ctl{ margin-top: 0; min-width: 0; }
 
 body.light-mode .ce-card{ background: rgba(255,255,255,0.92); color: #111; border-color: rgba(140,118,28,0.38); box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
 body.light-mode .ce-input{ background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.25); color: #111; }
@@ -1806,11 +1812,12 @@ body.light-mode textarea.ce-title{ color: #111; }
 body.light-mode .ce-label, body.light-mode .ce-hint{ color: rgba(0,0,0,0.55); }
 body.light-mode .ce-tool{ background: #fff; color: #111; border-color: rgba(0,0,0,0.2); }
 body.light-mode .ce-icon-pick.is-empty{ border-color: rgba(0,0,0,0.35); }
+body.light-mode .ce-fig{ border-color: rgba(0,0,0,0.18); }
 body.light-mode .ce-add-btn, body.light-mode .ce-mini-btn{ background: rgba(255,255,255,0.85); color: #8c761c; border-color: rgba(140,118,28,0.55); }
 
 @media (max-width: 800px){
     .ce-card{ flex-direction: column; }
-    .ce-cover{ width: 100%; }
+    .ce-cover-col{ width: 100%; }
     .ce-icon-row{ grid-template-columns: 34px 1fr 28px; }
     .ce-icon-row .ce-icon-href{ grid-column: 2 / 4; }
 }

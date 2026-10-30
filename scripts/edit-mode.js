@@ -66,6 +66,153 @@
 
   window.SiteEdit = { editing: editing, toast: toast };
 
+  // --- Albedo: how an image follows the light / dark theme ---
+  // Shared by the page editors: a control under each image they edit.
+  //   on  -> data-albedo="dark|light": the image was made for the theme the
+  //          editor is in, and is flipped (invert + hue-rotate 180deg, as
+  //          Albedo does) in the other theme;
+  //   off -> data-albedo="off": never flipped; optionally a second version for
+  //          the other theme in data-src-light / data-src-dark.
+  // An image without data-albedo keeps the page's own styling ("page
+  // default"). scripts/theme-toggle.js swaps the second versions in and
+  // css/utils.css does the flipping, on the published site too.
+  // An editor keeps one state object per image:
+  //   var s = SiteAlbedo.read(img)          (or SiteAlbedo.fresh() for a new upload)
+  //   form.appendChild(SiteAlbedo.control(s, { onChange: markDirty }))
+  //   SiteAlbedo.replaced(s)                when the image itself is replaced
+  //   SiteAlbedo.upload(s, uploadFn)        on save (uploads a new second version)
+  //   SiteAlbedo.apply(img, s) / SiteAlbedo.html(s) / SiteAlbedo.changed(s)
+  var SiteAlbedo = (function(){
+    var IMAGE_TYPES = 'image/png,image/jpeg,image/webp,image/gif,image/avif';   // no SVG: not every page's upload takes it
+    var controls = [];
+    function theme(){ return document.body.classList.contains('light-mode') ? 'light' : 'dark'; }
+    function other(t){ return t === 'light' ? 'dark' : 'light'; }
+    function snapshot(s){ return [s.albedo || '', s.altMode && s.alt ? s.altMode + ':' + s.alt : ''].join('|'); }
+    function read(node){
+      var get = function(n){ return node && node.getAttribute ? node.getAttribute(n) : node ? node[n] : null; };
+      var a = get('data-albedo');
+      var s = { albedo: a === 'dark' || a === 'light' || a === 'off' ? a : null, alt: '', altMode: null, altFile: null, altUrl: '' };
+      if (get('data-src-light')) { s.alt = get('data-src-light'); s.altMode = 'light'; }
+      else if (get('data-src-dark')) { s.alt = get('data-src-dark'); s.altMode = 'dark'; }
+      s._saved = snapshot(s);
+      return s;
+    }
+    function fresh(){ var s = read(null); s.albedo = 'off'; s._saved = ''; return s; }
+    function attrs(s){
+      var on = s.albedo === 'dark' || s.albedo === 'light';
+      var keepAlt = !on && s.alt && !s.altFile;
+      return {
+        'data-albedo': s.albedo,
+        'data-src-light': keepAlt && s.altMode === 'light' ? s.alt : null,
+        'data-src-dark': keepAlt && s.altMode === 'dark' ? s.alt : null
+      };
+    }
+    function apply(img, s){
+      var a = attrs(s);
+      Object.keys(a).forEach(function(k){ if (a[k]) img.setAttribute(k, a[k]); else img.removeAttribute(k); });
+    }
+    function escAttr(v){ return String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+    function html(s){
+      var a = attrs(s);
+      return Object.keys(a).filter(function(k){ return a[k]; }).map(function(k){ return ' ' + k + '="' + escAttr(a[k]) + '"'; }).join('');
+    }
+    function changed(s){ return snapshot(s) !== s._saved || !!s.altFile; }
+    function replaced(s){ if (s.albedo === 'dark' || s.albedo === 'light') { s.albedo = theme(); refreshAll(); } }
+    function upload(s, uploadFn){
+      if (!s.altFile || s.albedo === 'dark' || s.albedo === 'light') return Promise.resolve();
+      return Promise.resolve(uploadFn(s.altFile)).then(function(src){ s.alt = src; s.altFile = null; });
+    }
+
+    function control(s, opts){
+      opts = opts || {};
+      var box = el('div', 'albedo-ctl' + (opts.compact ? ' is-compact' : ''));
+      var top = el('div', 'albedo-top');
+      var sw = el('button', 'albedo-switch', { type: 'button', role: 'switch' });
+      sw.appendChild(el('span', 'albedo-knob'));
+      var label = el('span', 'albedo-label');
+      label.textContent = 'Albedo inversion';
+      var note = el('span', 'albedo-note');
+      top.appendChild(sw);
+      top.appendChild(label);
+      top.appendChild(note);
+      box.appendChild(top);
+
+      var alt = el('div', 'albedo-alt');
+      var file = el('input', '', { type: 'file', accept: IMAGE_TYPES, hidden: '' });
+      var addBtn = el('button', 'albedo-add', { type: 'button' });
+      var thumb = el('img', 'albedo-thumb', { alt: '' });
+      var altName = el('span', 'albedo-alt-name');
+      var change = el('button', 'albedo-link', { type: 'button' }); change.textContent = 'Change';
+      var remove = el('button', 'albedo-link', { type: 'button' }); remove.textContent = 'Remove';
+      [file, addBtn, thumb, altName, change, remove].forEach(function(n){ alt.appendChild(n); });
+      box.appendChild(alt);
+
+      function changedNow(){ render(); if (opts.onChange) opts.onChange(s); }
+      sw.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        s.albedo = s.albedo === 'dark' || s.albedo === 'light' ? 'off' : theme();
+        changedNow();
+      });
+      function pick(e){ e.preventDefault(); e.stopPropagation(); file.click(); }
+      addBtn.addEventListener('click', pick);
+      change.addEventListener('click', pick);
+      thumb.addEventListener('click', pick);
+      remove.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (s.altUrl) URL.revokeObjectURL(s.altUrl);
+        s.alt = ''; s.altMode = null; s.altFile = null; s.altUrl = '';
+        changedNow();
+      });
+      file.addEventListener('click', function(e){ e.stopPropagation(); });
+      file.addEventListener('change', function(){
+        var f = file.files && file.files[0];
+        file.value = '';
+        if (!f) return;
+        var mode = s.alt || s.altFile ? s.altMode : other(theme());
+        var dot = f.name.lastIndexOf('.');
+        var named = new File([f], (dot > 0 ? f.name.slice(0, dot) : f.name) + '-' + mode + (dot > 0 ? f.name.slice(dot) : ''), { type: f.type });
+        if (s.altUrl) URL.revokeObjectURL(s.altUrl);
+        s.altFile = named;
+        s.altUrl = URL.createObjectURL(named);
+        s.altMode = mode;
+        if (s.albedo == null) s.albedo = 'off';
+        changedNow();
+      });
+      box.addEventListener('click', function(e){ e.stopPropagation(); });
+
+      function render(){
+        var on = s.albedo === 'dark' || s.albedo === 'light';
+        sw.setAttribute('aria-checked', on ? 'true' : 'false');
+        sw.classList.toggle('is-default', s.albedo == null);
+        box.classList.toggle('is-on', on);
+        note.textContent = on ? 'made for ' + s.albedo + ' mode, flipped in ' + other(s.albedo) + ' mode'
+          : s.albedo == null ? 'page default' : 'off';
+        var has = !!(s.altUrl || s.alt);
+        alt.hidden = on;
+        addBtn.hidden = has;
+        thumb.hidden = altName.hidden = change.hidden = remove.hidden = !has;
+        addBtn.textContent = '+ Add ' + other(theme()) + ' mode version';
+        if (has) {
+          thumb.src = s.altUrl || s.alt;
+          altName.textContent = (s.altMode === 'light' ? 'Light' : 'Dark') + ' mode version' + (s.altFile ? ' (new)' : '');
+        }
+      }
+      box.refresh = render;
+      controls.push(box);
+      render();
+      return box;
+    }
+    function refreshAll(){ controls.forEach(function(c){ c.refresh(); }); }
+    // labels follow the theme the editor is in
+    new MutationObserver(refreshAll).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+    return { theme: theme, read: read, fresh: fresh, control: control, replaced: replaced, upload: upload,
+             apply: apply, html: html, attrs: attrs, changed: changed };
+  })();
+  window.SiteAlbedo = SiteAlbedo;
+
   function whenLoaded(fn){
     if (document.readyState === 'complete') fn();
     else window.addEventListener('load', fn);

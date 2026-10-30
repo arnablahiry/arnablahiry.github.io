@@ -66,6 +66,40 @@
   const stored = localStorage.getItem(KEY) || 'dark';
   apply(stored);
 
+  // Albedo: images with a second version for one theme (data-src-light /
+  // data-src-dark, set in the site editor) show it in that theme and their
+  // own src otherwise (remembered in data-src-base; a page that sets a new
+  // src sets a new base). Flipping images with data-albedo is done in
+  // css/utils.css.
+  const ALT = 'img[data-src-light], img[data-src-dark]';
+  // addresses compared without ?query (the local editor's live reload adds one)
+  const bare = function(u){ return u == null ? null : String(u).split('?')[0]; };
+  function swapImage(img){
+    const light = document.body.classList.contains('light-mode');
+    const src = img.getAttribute('src') || '';
+    if (!src) return;   // a page clearing an image (e.g. a closed lightbox)
+    const L = img.getAttribute('data-src-light'), D = img.getAttribute('data-src-dark');
+    let base = img.getAttribute('data-src-base');
+    if (base == null || [base, L, D].map(bare).indexOf(bare(src)) === -1) { base = src; img.setAttribute('data-src-base', base); }
+    const want = (light ? L : D) || base;
+    if (want && bare(src) !== bare(want)) img.setAttribute('src', want);
+  }
+  function swapThemeImages(root){
+    if (root.matches && root.matches(ALT)) swapImage(root);
+    if (root.querySelectorAll) root.querySelectorAll(ALT).forEach(swapImage);
+  }
+  swapThemeImages(document);
+  new MutationObserver(function(records){
+    records.forEach(function(r){
+      if (r.type === 'attributes') {
+        if (r.target === document.body) swapThemeImages(document);
+        else if (r.target.matches && r.target.matches(ALT)) swapImage(r.target);
+        return;
+      }
+      r.addedNodes.forEach(function(n){ if (n.nodeType === 1) swapThemeImages(n); });
+    });
+  }).observe(document.body, { attributes: true, attributeFilter: ['class', 'src', 'data-src-light', 'data-src-dark'], childList: true, subtree: true });
+
   // If there's a toggle button on this page, wire it up. If not, we still
   // applied the stored theme above so pages without a toggle reflect the
   // chosen preference.

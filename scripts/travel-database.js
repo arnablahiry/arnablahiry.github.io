@@ -29,6 +29,22 @@
       creditImage: authorImage(credit)
     };
   };
+
+  // Albedo settings from the site editor (Albedo / Light version / Dark
+  // version columns of data/travel-captions.xlsx): albedo = dark|light|off,
+  // and second versions for one theme, full size and thumbnail. Second
+  // versions live next to the photo and have thumbnails of their own.
+  function withAlbedo(ph, folder, meta) {
+    if (meta.albedo === 'dark' || meta.albedo === 'light' || meta.albedo === 'off') ph.albedo = meta.albedo;
+    ['light', 'dark'].forEach((mode) => {
+      const file = typeof meta[mode] === 'string' ? meta[mode].trim() : '';
+      if (!file) return;
+      const key = mode === 'light' ? 'Light' : 'Dark';
+      ph['src' + key] = `images/travels/${folder}/${file}`;
+      ph['thumb' + key] = `images/travels/${folder}/thumbs/${file.replace(/\.[^.]+$/, '')}.jpg`;
+    });
+    return ph;
+  }
   const manifest = (window.TRAVEL_PHOTO_MANIFEST && typeof window.TRAVEL_PHOTO_MANIFEST === 'object')
     ? window.TRAVEL_PHOTO_MANIFEST
     : {};
@@ -56,7 +72,7 @@
         : (captions[file] || {});
       const captionValue = typeof meta.caption === 'string' ? meta.caption.trim() : '';
       const fallback = `${countryName || titleFromSlug(folder)} photo ${index + 1}`;
-      return photo(entry, captionValue || fallback, meta.author);
+      return withAlbedo(photo(entry, captionValue || fallback, meta.author), folder, meta);
     });
   }
 

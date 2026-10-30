@@ -14,7 +14,11 @@
 //     centred circle;
 //   - the expanded text as HTML source, with "+ Figure" (pick an image; it is
 //     inserted at the cursor and uploaded on save) and "Preview" (renders it,
-//     equations and code included);
+//     equations and code included); under it, every figure in the text with
+//     its own albedo control;
+//   - under the cover and each figure, the albedo control (SiteAlbedo in
+//     scripts/edit-mode.js): flip it with the theme, or keep it and add a
+//     version for the other theme;
 //   - move up / down, remove; "+ New card" adds one at the top.
 // Save rewrites only the cards that were edited; the others are written back
 // exactly as they were.
@@ -122,6 +126,7 @@
     var card = {
       src: src,
       image: img ? img.getAttribute('src') : '',
+      albedo: window.SiteAlbedo ? (img ? SiteAlbedo.read(img) : SiteAlbedo.fresh()) : null,
       title: title ? title.innerHTML.trim() : '',
       subtitle: sub ? sub.innerHTML.replace(/\s+/g, ' ').trim() : '',
       body: range ? src.slice(range.from, range.to) : '',
@@ -204,6 +209,7 @@
     card.gap = '\n\n' + I(20);
     card.body = '\n' + I(28) + '<h3>Overview</h3>\n' + I(28) + '<p>Describe the project here.</p>\n' + I(28) + '\n' + I(24);
     if (SOFTWARE) card.tags = ['end-to-end', 'science'];
+    if (card.albedo) card.albedo = SiteAlbedo.fresh();
     return card;
   }
 
@@ -244,9 +250,13 @@
       card._url = URL.createObjectURL(f);
       img.src = card._url;
       cover.classList.remove('is-empty');
+      if (data.albedo) SiteAlbedo.replaced(data.albedo);
       changed();
     });
-    card.appendChild(cover);
+    var coverCol = el('div', 'ce-cover-col');
+    coverCol.appendChild(cover);
+    if (data.albedo) coverCol.appendChild(SiteAlbedo.control(data.albedo, { onChange: changed }));
+    card.appendChild(coverCol);
 
     var form = el('div', 'ce-form');
     var top = el('div', 'ce-top');
@@ -421,6 +431,7 @@
       body.focus();
       body.selectionStart = body.selectionEnd = at + snippet.length;
       figFile.value = '';
+      renderFigures();
       changed();
     });
     var prevBtn = el('button', 'ce-mini-btn', { type: 'button' }); prevBtn.textContent = 'Preview';
@@ -432,6 +443,56 @@
     var bodyWrap = el('div', 'ce-body-wrap');
     bodyWrap.appendChild(bodyTools);
     bodyWrap.appendChild(body);
+
+    // every <img> in the text, each with its albedo control; a control
+    // rewrites only the data-albedo / data-src-* attributes of its own tag
+    // (a new second version waits in pendingImages like a new figure)
+    var figs = el('div', 'ce-figs');
+    var figTimer = 0;
+    function imgTags(){
+      var out = [], re = /<img\b[^>]*>/gi, m;
+      while ((m = re.exec(body.value))) out.push({ at: m.index, tag: m[0] });
+      return out;
+    }
+    function shown(src){ return src && pendingImages[src] ? pendingImages[src].url : src; }
+    function setTagAttrs(n, st){
+      var t = imgTags()[n];
+      if (!t) return;
+      var a = SiteAlbedo.attrs(st), tag = t.tag;
+      Object.keys(a).forEach(function(k){
+        tag = tag.replace(new RegExp('\\s' + k + '="[^"]*"', 'i'), '');
+        if (a[k]) tag = tag.replace(/\s*\/?>$/, function(end){ return ' ' + k + '="' + esc(a[k]) + '"' + end; });
+      });
+      body.value = body.value.slice(0, t.at) + tag + body.value.slice(t.at + t.tag.length);
+    }
+    function renderFigures(){
+      if (!window.SiteAlbedo) return;
+      figs.innerHTML = '';
+      imgTags().forEach(function(t, n){
+        var tpl = document.createElement('template');
+        tpl.innerHTML = t.tag;
+        var tagImg = tpl.content.querySelector('img');
+        var st = SiteAlbedo.read(tagImg);
+        if (st.alt && pendingImages[st.alt]) st.altUrl = pendingImages[st.alt].url;
+        var item = el('div', 'ce-fig');
+        item.appendChild(el('img', 'ce-fig-thumb', { src: shown(tagImg.getAttribute('src')) || '', alt: '' }));
+        item.appendChild(SiteAlbedo.control(st, { compact: true, onChange: function(){
+          if (st.altFile) {
+            var key = '__pending-image-' + (++pendingCount) + '__';
+            pendingImages[key] = { file: st.altFile, url: st.altUrl };
+            st.alt = key;
+            st.altFile = null;
+          }
+          setTagAttrs(n, st);
+          changed();
+        } }));
+        figs.appendChild(item);
+      });
+      figs.hidden = !figs.children.length;
+    }
+    body.addEventListener('input', function(){ clearTimeout(figTimer); figTimer = setTimeout(renderFigures, 400); });
+    renderFigures();
+    bodyWrap.appendChild(figs);
     form.appendChild(field('Expanded text (HTML)', bodyWrap));
 
     card.appendChild(form);
@@ -532,6 +593,7 @@
 
     var img = a.querySelector('.project-image');
     if (img) img.setAttribute('src', card.dataset.image);
+    if (img && data.albedo && SiteAlbedo.changed(data.albedo)) SiteAlbedo.apply(img, data.albedo);
     var title = a.querySelector('.project-title');
     if (title) title.innerHTML = q('.ce-title').value.trim();
     var sub = a.querySelector('.project-subtitle');
@@ -710,7 +772,9 @@
     cards.forEach(function(c){ Object.keys(pendingImages).forEach(function(k){ if (c.querySelector('.ce-body').value.indexOf(k) !== -1) used[k] = true; }); });
     var jobs = cards.filter(function(c){ return c._file; }).map(function(c){
       return function(){ return upload(c._file).then(function(src){ c.dataset.image = src; c._file = null; }); };
-    }).concat(Array.prototype.filter.call(list.querySelectorAll('.ce-icon-row'), function(r){ return r._file && r.querySelector('.ce-icon-href').value.trim(); }).map(function(r){
+    }).concat(cards.filter(function(c){ return c._data.albedo && c._data.albedo.altFile; }).map(function(c){
+      return function(){ return SiteAlbedo.upload(c._data.albedo, function(f){ return upload(f); }); };
+    })).concat(Array.prototype.filter.call(list.querySelectorAll('.ce-icon-row'), function(r){ return r._file && r.querySelector('.ce-icon-href').value.trim(); }).map(function(r){
       return function(){ return upload(r._file, 'icon').then(function(src){ r.dataset.src = src; r._file = null; }); };
     })).concat(Object.keys(used).map(function(k){
       return function(){ return upload(pendingImages[k].file).then(function(src){
