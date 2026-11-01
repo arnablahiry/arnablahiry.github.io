@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lararium · What's new</title>
+<meta name="description" content="Lararium is a private Android vault for your family's documents and logins: on-device scanning, encrypted Google Drive backups, groups, events and passwords.">
+<meta property="og:title" content="Lararium">
+<meta property="og:description" content="A private vault for your family's documents: passports, IDs, cards, certificates and logins.">
+<meta property="og:image" content="https://arnablahiry.github.io/software/lararium/img/screens/vault-lifted.webp">
+<meta name="theme-color" content="#E3962E">
+<script>
+// the theme you picked last time (else your system's), set before the page draws so it never flashes
+try { const t = localStorage.getItem('lararium-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html"><img src="img/logo.svg" alt=""><span>Lararium</span></a>
+  <nav>
+    <a href="index.html#vault">Vault</a><a href="index.html#groups">Groups</a><a href="index.html#mac">Mac</a><a href="index.html#privacy">Privacy</a><a href="changelog.html">What's new</a>
+    <a class="dl" href="https://github.com/arnablahiry/lararium/releases/latest/download/Lararium.apk">Download</a>
+  </nav>
+  <button class="theme" id="theme" type="button" aria-label="Switch to dark mode"><span class="sun"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0z"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></span><span class="moon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></span></button>
+</div></header>
+
+<main>
+<section class="tour changelog"><div class="wrap">
+  <div class="eyebrow">What's new</div>
+  <h2>Every release, newest first</h2>
+  <p class="intro">The same notes the app shows after it updates. Downloads and older versions are on <a href="https://github.com/arnablahiry/lararium/releases">GitHub</a>.</p>
+  <div class="rels"><article class="rel"><h3>0.9.3 <span>newest</span></h3><ul><li>Renewed a passport, licence or insurance? Adding the new one offers to archive the old one. Archived documents stay at the bottom of the vault and in search, but leave the wallet and the expiry reminders (Archive / Unarchive on any document too)</li><li>Emergency card: add one per person (blood group, allergies, medication, who to call). &quot;Emergency info&quot; on the lock screen shows them without the passcode, so someone helping can read them; everything else stays locked (Settings › Security to turn it off)</li></ul></article><article class="rel"><h3>0.9.2</h3><ul><li>Expiry reminders: a quiet notification about 6 months and a month before a passport, visa, licence or insurance runs out, and an &quot;Expiring soon&quot; list on Home</li><li>Trips warn you when someone going has a passport that expires less than 6 months after the trip</li><li>Home shows whether you&#x27;re synced: &quot;Up to date · just now&quot;, &quot;Sharing…&quot;, or what needs fixing</li><li>Two people editing an event&#x27;s notes at the same time no longer lose each other&#x27;s changes; events show who changed them last</li><li>Invite someone next to you with a QR code (Group settings › Show invite as a QR code)</li><li>Joining (also while making your account): scan someone&#x27;s invite QR code with the camera, or read it from a photo or screenshot</li></ul></article><article class="rel"><h3>0.9.1</h3><ul><li>Much faster group syncing: your changes go out within a second, and while Lararium is open the others&#x27; changes show up within seconds</li><li>Lighter syncs: a member&#x27;s share is only downloaded when something in it changed, and only new files are uploaded (several at once)</li></ul></article><article class="rel"><h3>0.9.0</h3><ul><li>Everyone an event is shared with can change it: name, dates, picture, who&#x27;s going, notes, documents. The newest change shows on every phone</li><li>Only the person who made an event chooses who can see it, and only they can delete it</li><li>Documents anyone uploads to a shared event show up for everyone who can see it</li><li>No more travel document suggestions on events</li></ul></article><article class="rel"><h3>0.8.9</h3><ul><li>Events now show up for everyone they&#x27;re shared with, with their notes and the documents added for them</li><li>The Common vault&#x27;s name and photo stay the same on every phone: the latest change wins</li></ul></article><article class="rel"><h3>0.8.8</h3><ul><li>More kinds of event documents, each with its own icon: bike rental, restaurant booking and drinks (car rental now also covers taxis, car hire and parking).</li><li>An admin&#x27;s changes to someone&#x27;s documents or profile now show on everyone&#x27;s phone straight away, not only once that person&#x27;s phone has taken them over.</li></ul></article><article class="rel"><h3>0.8.7</h3><ul><li>An update that&#x27;s downloading can be stopped with ✕ (on Home or in Settings); it&#x27;s offered again afterwards.</li></ul></article><article class="rel"><h3>0.8.6</h3><ul><li>After joining a group, a sheet shows who you&#x27;re not synced with yet and your link to send them. Swipe it away and a short &quot;Not synced with everyone&quot; box stays on Home until you are; tap it to open the sheet again.</li><li>When someone adds you back, Lararium says so: &quot;You and Lily are now synced!&quot;</li><li>Group settings shows who&#x27;s synced and who isn&#x27;t yet.</li><li>Adding the invite of someone already in the group no longer asks you to send yours back.</li><li>Edit photo: reopen a profile, group or event picture and reframe it (the whole original photo, as you framed it).</li><li>Changes go out to your group within seconds; while Lararium is open, the others&#x27; changes come in within a minute (every 15 minutes in the background).</li><li>&quot;Made with ♥&quot; stays at the very bottom of Home, however little is on it.</li><li>Silent notifications when someone in your group adds, changes or removes documents (&quot;Family: Jane added Passport&quot;).</li><li>Date fields have a calendar to pick from, as well as typing DD/MM/YYYY.</li><li>Logins open more smoothly when you tap one; the password generator button is gone.</li><li>The scanner reads the date of issue as well as the expiry (labels side by side, Greek capitals, &quot;valid from … to …&quot;).</li><li>Auto-read fields aren&#x27;t marked any more.</li><li>Notes: Back or a tap outside ends typing (Back no longer leaves the page while you type).</li><li>After skipping updates, this note lists everything you missed.</li></ul></article><article class="rel"><h3>0.8.5</h3><ul><li>Invites are links now: tapping one opens Lararium and joins the group, or adds the person who sent it if you&#x27;re already in it.</li><li>Right after joining, Lararium opens the share sheet so you can send your invite back in one go.</li><li>Until someone in the group has added you, Home reminds you to send your invite.</li><li>You can also share an invite straight to Lararium from any app.</li></ul></article><article class="rel"><h3>0.8.4</h3><ul><li>Joining a group is invite-only now: no join requests with just the code, and no outside server at all.</li><li>Invites are much shorter (about 70 characters, starting with LR.). Older invites still work.</li><li>After joining, send your invite back once. Group settings shows who hasn&#x27;t added you yet.</li><li>What&#x27;s new appears on Home once after each update, and Settings lists what&#x27;s coming before you download an update.</li></ul></article><article class="rel"><h3>0.8.3</h3><ul><li>Passport cards show the country&#x27;s flag, with the booklet clear of the dates.</li></ul></article><article class="rel"><h3>0.8.2</h3><ul><li>Optional backup password for logins (yours and the Common ones) in Settings › Backup.</li><li>Common logins in shared groups are sealed to each member&#x27;s phone.</li></ul></article><article class="rel"><h3>0.8.1</h3><ul><li>Other members&#x27; logins are never shown on your phone, not even to admins.</li></ul></article><article class="rel"><h3>0.8.0</h3><ul><li>Logins as cards with View, Copy and Delete, and their own PIN.</li><li>Smoother page transitions and back gesture; back from search.</li><li>Multi-page documents resize smoothly between pages.</li></ul></article></div>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <span>Made with <span class="heart">♥</span> by <a href="https://arnablahiry.github.io/">Arnab Lahiry</a></span>
+  <a href="https://arnablahiry.github.io/software.html">More software</a>
+  <a href="changelog.html">What's new</a>
+  <a href="privacy.html">Privacy policy</a>
+  <a href="https://github.com/arnablahiry/lararium">Source</a>
+  <span>Screens show example people (the Doe family) and sample documents.</span>
+  <span>Type: Abaddon (CC BY 3.0, <a href="fonts/FONT_LICENSE.txt">licence</a>) · Bitcount Grid Double (OFL)</span>
+</div></footer>
+
+<script>
+const themeBtn = document.getElementById('theme'), root = document.documentElement;
+const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+themeBtn.addEventListener('click', () => { const next = isDark() ? 'light' : 'dark'; root.dataset.theme = next; try { localStorage.setItem('lararium-theme', next); } catch (e) {} });
+</script>
+</body>
+</html>
