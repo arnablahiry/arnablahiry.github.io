@@ -21,6 +21,8 @@
                         badges.style.marginLeft = '6px';
                     });
                 }
+                // also run by the card editor when it redraws the cards (scripts/cards-edit.js)
+                window.syncProjectBadges = syncBadges;
                 document.addEventListener('DOMContentLoaded', syncBadges);
                 window.addEventListener('load', syncBadges);
                 window.addEventListener('resize', function(){ setTimeout(syncBadges, 80); });

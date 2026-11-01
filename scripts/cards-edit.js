@@ -2,24 +2,30 @@
 // scripts/edit-mode.js and scripts/edit-server.js).
 //
 // The cards live in research.html / software.html between the
-// <page>-cards markers. Edit mode reads them from the saved file and shows a
-// form per card:
-//   - the card front: cover (hover, click to replace), title and subtitle
-//     (inline HTML allowed, e.g. <b>N</b>);
+// <page>-cards markers. Edit mode reads them from the saved file and shows
+// them as readers see them, each with:
+//   - Edit (clicking the card works too): opens the card exactly as readers
+//     see it, and the title, subtitle, cover and text are typed into in
+//     place, with photos sized and placed by dragging (scripts/story-edit.js;
+//     code, equations set apart and the like stay as written, with their
+//     HTML editable). Closing it keeps the changes;
+//   - Details: the card as a form:
+//     the cover (hover, click to replace), title and subtitle (inline HTML
+//     allowed, e.g. <b>N</b>);
 //     Software only: category (personal / collaboration) and type (science,
 //     fun) for the filters and tag chips, badges, and icon links: the
 //     default buttons (GitHub, docs, PyPI, website, Zenodo; empty = no icon)
 //     plus any number of others ("+ Button"); every button's icon can be
 //     replaced (hover it, click), and an uploaded icon is cropped to a
 //     centred circle;
-//   - the expanded text as HTML source, with "+ Figure" (pick an image; it is
+//     the expanded text as HTML source, with "+ Figure" (pick an image; it is
 //     inserted at the cursor and uploaded on save) and "Preview" (renders it,
 //     equations and code included); under it, every figure in the text with
 //     its own albedo control;
-//   - under the cover and each figure, the albedo control (SiteAlbedo in
+//     under the cover and each figure, the albedo control (SiteAlbedo in
 //     scripts/edit-mode.js): flip it with the theme, or keep it and add a
 //     version for the other theme;
-//   - move up / down, remove; "+ New card" adds one at the top.
+//   - move earlier / later, remove; "+ New card" adds one at the top.
 // Save rewrites only the cards that were edited; the others are written back
 // exactly as they were.
 (function(){
@@ -48,14 +54,17 @@
 
   var PENCIL = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>';
   var CROSS = '<svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
-  var UP = '<svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M3 9l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var DOWN = '<svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var LEFT = '<svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M9 3L5 7l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var RIGHT = '<svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M5 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   var BODY_MARK = '<!--CARD-BODY-->';
   var dirty = false;
   var list = null, head = '', tail = '';
   var pendingImages = {};   // "__pending-image-N__" -> { file, url }
   var pendingCount = 0;
+  var urlKey = {};          // the in-memory address of a pending image -> its "__pending-image-N__"
+  var uploaded = {};        // "__pending-image-N__" -> where it was saved
+  var openEdit = null;      // the card open in place: { card, session, base }
 
   function el(tag, className, attrs){
     var node = document.createElement(tag);
@@ -64,6 +73,21 @@
     return node;
   }
   function esc(s){ return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function I(n){ return new Array(n + 1).join(' '); }
+  function addPending(file, url){
+    var key = '__pending-image-' + (++pendingCount) + '__';
+    pendingImages[key] = { file: file, url: url || URL.createObjectURL(file) };
+    urlKey[pendingImages[key].url] = key;
+    return key;
+  }
+  // a button on a card or in the opened card; keeps the text selection
+  function cardButton(cls, html, title, onClick){
+    var b = el('button', cls, { type: 'button', title: title, 'aria-label': title });
+    b.innerHTML = html;
+    b.addEventListener('mousedown', function(e){ e.preventDefault(); });
+    b.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); onClick(e); });
+    return b;
+  }
   function iconButton(icon, className, label, onClick){
     var b = el('button', className, { type: 'button', title: label, 'aria-label': label });
     b.innerHTML = icon;
@@ -74,7 +98,7 @@
   (window.SiteEditors = window.SiteEditors || []).push({
     start: start,
     save: save,
-    isDirty: function(){ return dirty; }
+    isDirty: function(){ return dirty || !!openEdit; }
   });
 
   // --- Reading the saved page ---
@@ -157,32 +181,127 @@
       });
   }
 
-  // --- Edit form ---
+  // --- The cards ---
+  // Each card's state is its form (the Details panel, kept in `list`, which
+  // is shown as a panel over the page with one form at a time); the card in
+  // the grid (form._live) is drawn from it.
   function build(cards){
-    document.body.classList.add('cards-editing');
+    document.body.classList.add('tb-editing');
     grid.querySelectorAll('article.project-card').forEach(function(n){ n.remove(); });
-    var bar = el('div', 'ce-new-bar');
-    var add = el('button', 'ce-add-btn', { type: 'button' });
+    var bar = el('div', 'tb-new-bar');
+    var add = el('button', 'tb-new-btn', { type: 'button' });
     add.textContent = '+ New card';
     add.addEventListener('click', function(){
       var c = cardElement(newCard());
       c._changed = true;
-      list.insertBefore(c, list.firstChild);
+      var first = forms()[0];
+      list.insertBefore(c, first || null);
+      c._live = liveCard(c);
+      grid.insertBefore(c._live, first ? first._live : null);
+      laidOut();
       dirty = true;
-      c.querySelector('.ce-title').focus();
+      open(c);
     });
     bar.appendChild(add);
-    list = el('div', 'ce-list');
-    cards.forEach(function(c){ list.appendChild(cardElement(c)); });
-    grid.insertBefore(list, grid.firstChild);
-    grid.insertBefore(bar, list);
+    list = el('div', 'ce-list ce-panel');
+    list.hidden = true;
+    list.addEventListener('click', function(e){ if (e.target === list) closeDetails(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !list.hidden && !document.querySelector('.project-clone')) closeDetails();
+    });
+    document.body.appendChild(list);
+    grid.insertBefore(bar, grid.firstChild);
+    cards.forEach(function(c){
+      var f = cardElement(c);
+      list.appendChild(f);
+      f._live = liveCard(f);
+      grid.appendChild(f._live);
+    });
+    laidOut();
+    document.execCommand('defaultParagraphSeparator', false, 'p');
+  }
+  function forms(){ return Array.prototype.slice.call(list.querySelectorAll(':scope > .ce-card')); }
+
+  // The card as it would be saved, images not saved yet shown from memory
+  function shownHtml(card){
+    var savedImage = card.dataset.image;
+    if (card._file && card._url) card.dataset.image = card._url;
+    var html = rebuild(card);
+    card.dataset.image = savedImage;
+    Object.keys(pendingImages).forEach(function(k){ html = html.split(k).join(pendingImages[k].url); });
+    return html;
+  }
+
+  // The card in the grid, with Edit, Details, move and remove
+  function liveCard(card){
+    var a = document.importNode(parseArticle(shownHtml(card)), true);
+    a.setAttribute('tabindex', '0');
+    // the cover's albedo is the one the form shows under the cover
+    var img = a.querySelector('.project-image');
+    if (img && card._data.albedo && window.StoryEdit) StoryEdit.register(img, card._data.albedo);
+    var tools = el('div', 'tb-card-tools');
+    if (window.StoryEdit) tools.appendChild(cardButton('tb-card-btn', PENCIL + '<span>Edit</span>', 'Edit this card in place', function(){ open(card); }));
+    tools.appendChild(cardButton('tb-card-btn', '<span>Details</span>',
+      SOFTWARE ? 'Category, badges, icon links and the HTML source' : 'The card as a form, with its HTML source', function(){ details(card); }));
+    tools.appendChild(cardButton('tb-card-btn is-round', LEFT, 'Move earlier', function(){ move(card, -1); }));
+    tools.appendChild(cardButton('tb-card-btn is-round', RIGHT, 'Move later', function(){ move(card, 1); }));
+    tools.appendChild(cardButton('tb-card-btn is-remove', CROSS, 'Remove this card', function(){
+      var name = card.querySelector('.ce-title').value.replace(/<[^>]+>/g, '').trim();
+      if (!confirm('Remove ' + (name ? '"' + name + '"' : 'this card') + '?')) return;
+      card._live.remove();
+      card.remove();
+      dirty = true;
+    }));
+    a.appendChild(tools);
+    a.addEventListener('click', function(e){
+      if (e.target.closest('.tb-card-tools')) return;
+      e.preventDefault();   // links on the card don't leave the editor
+      open(card);
+    });
+    a.addEventListener('keydown', function(e){
+      if (e.target === a && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(card); }
+    });
+    return a;
+  }
+  function refreshLive(card){
+    if (!card._live) return;
+    var fresh = liveCard(card);
+    if (card._live.parentNode) card._live.parentNode.replaceChild(fresh, card._live);
+    card._live = fresh;
+    laidOut();
+  }
+  // the page sizes some parts of the cards once they are on it (Software:
+  // the badges, to the height of the tag chips)
+  function laidOut(){ if (window.syncProjectBadges) window.syncProjectBadges(); }
+
+  function move(card, d){
+    var all = forms(), i = all.indexOf(card), other = all[i + d];
+    if (!other) return;
+    if (d < 0) { list.insertBefore(card, other); grid.insertBefore(card._live, other._live); }
+    else { list.insertBefore(other, card); grid.insertBefore(other._live, card._live); }
+    dirty = true;
+  }
+
+  // --- Details: the card's form, over the page ---
+  function details(card){
+    if (openEdit) return;
+    forms().forEach(function(f){ f.classList.toggle('is-open', f === card); });
+    list.hidden = false;
+    list.scrollTop = 0;
+    document.body.classList.add('ce-panel-open');
+    card.querySelectorAll('textarea:not(.ce-body)').forEach(autoGrow);
+  }
+  function closeDetails(){
+    var card = list.querySelector(':scope > .ce-card.is-open');
+    list.hidden = true;
+    document.body.classList.remove('ce-panel-open');
+    if (card) { card.classList.remove('is-open'); refreshLive(card); }
   }
 
   function newCard(){
     var ids = Array.prototype.map.call(list.querySelectorAll('.ce-card'), function(c){ return c._data.src; }).join(' ');
     var n = 1;
     if (!SOFTWARE) { while (ids.indexOf('id="proj-' + n + '"') !== -1) n++; }
-    var I = function(k){ return new Array(k + 1).join(' '); };
     var src = SOFTWARE
       ? [
         '<article class="project-card" data-tags="end-to-end, science">',
@@ -207,7 +326,7 @@
     var card = readCard(src.replace(BODY_MARK, ''));
     card.src = src.replace(BODY_MARK, '');
     card.gap = '\n\n' + I(20);
-    card.body = '\n' + I(28) + '<h3>Overview</h3>\n' + I(28) + '<p>Describe the project here.</p>\n' + I(28) + '\n' + I(24);
+    card.body = '\n' + I(28) + '<p></p>\n' + I(24);
     if (SOFTWARE) card.tags = ['end-to-end', 'science'];
     if (card.albedo) card.albedo = SiteAlbedo.fresh();
     return card;
@@ -260,19 +379,14 @@
 
     var form = el('div', 'ce-form');
     var top = el('div', 'ce-top');
+    var heading = el('span', 'ce-panel-title');
+    heading.textContent = 'Card details';
+    top.appendChild(heading);
     var tools = el('div', 'ce-tools');
-    tools.appendChild(iconButton(UP, 'ce-tool', 'Move up', function(){
-      if (card.previousElementSibling) { list.insertBefore(card, card.previousElementSibling); dirty = true; }
-    }));
-    tools.appendChild(iconButton(DOWN, 'ce-tool', 'Move down', function(){
-      if (card.nextElementSibling) { list.insertBefore(card.nextElementSibling, card); dirty = true; }
-    }));
-    tools.appendChild(iconButton(CROSS, 'ce-tool ce-tool-remove', 'Remove card', function(){
-      var name = card.querySelector('.ce-title').value.replace(/<[^>]+>/g, '').trim();
-      if (!confirm('Remove ' + (name ? '"' + name + '"' : 'this card') + '?')) return;
-      card.remove();
-      dirty = true;
-    }));
+    var doneBtn = el('button', 'ce-mini-btn ce-done', { type: 'button' });
+    doneBtn.textContent = 'Done';
+    doneBtn.addEventListener('click', closeDetails);
+    tools.appendChild(doneBtn);
     top.appendChild(tools);
     form.appendChild(top);
 
@@ -412,8 +526,7 @@
     figFile.addEventListener('change', function(){
       var f = figFile.files && figFile.files[0];
       if (!f) return;
-      var key = '__pending-image-' + (++pendingCount) + '__';
-      pendingImages[key] = { file: f, url: URL.createObjectURL(f) };
+      var key = addPending(f);
       var snippet = SOFTWARE
         ? '<div class="image-wrapper no-invert">\n    <img src="' + key + '" alt="" loading="lazy" decoding="async">\n</div>\n<p style="text-align:center;"><em>Caption</em></p>\n'
         : '<figure style="text-align: center; margin: 20px 0;">\n    <img src="' + key + '" alt="" style="max-width: 100%; height: auto;" loading="lazy" decoding="async">\n    <figcaption>Fig. Caption</figcaption>\n</figure>\n';
@@ -440,6 +553,64 @@
     bodyTools.appendChild(figBtn);
     bodyTools.appendChild(figFile);
     bodyTools.appendChild(prevBtn);
+
+    // What came back from the card opened in place (r) against how it was
+    // when it opened or was last saved (base). Run on close and on save, so
+    // a photo not saved yet keeps one placeholder however often it runs.
+    card._apply = function(r, base){
+      var S = window.StoryEdit;
+      [['.project-title', '.ce-title'], ['.project-subtitle', '.ce-subtitle']].forEach(function(f){
+        var v = r.fields[f[0]] || '';
+        if (v === (base.fields[f[0]] || '')) return;
+        var t = card.querySelector(f[1]);
+        t.value = v;
+        autoGrow(t);
+        changed();
+      });
+      var key = r.cover && r.cover.getAttribute('data-pending');
+      if (key && S.pending[key] && key !== card._coverKey) {
+        card._coverKey = key;
+        card._file = S.pending[key];
+        if (card._url) URL.revokeObjectURL(card._url);
+        card._url = r.cover.getAttribute('src');
+        img.src = card._url;
+        cover.classList.remove('is-empty');
+        changed();
+      }
+      var ctl = coverCol.querySelector('.albedo-ctl');
+      if (ctl && ctl.refresh) ctl.refresh();
+      if (data.albedo && SiteAlbedo.changed(data.albedo)) changed();
+      // new photos and new second versions wait in pendingImages, like "+ Figure"
+      card._keys = card._keys || {};
+      r.story.querySelectorAll('img').forEach(function(im){
+        var dp = im.getAttribute('data-pending');
+        if (dp && S.pending[dp]) {
+          if (!card._keys[dp]) card._keys[dp] = addPending(S.pending[dp], im.getAttribute('src'));
+          im.setAttribute('src', card._keys[dp]);
+          im.removeAttribute('data-pending');
+        }
+        var st = S.albedo[im.getAttribute('data-tb-id')];
+        if (st && st.altFile) {
+          st.alt = addPending(st.altFile, st.altUrl);
+          st.altFile = null;
+          SiteAlbedo.apply(im, st);
+        }
+      });
+      // written at the page's indentation (blocks kept as written carry it),
+      // then shown without it like the rest of the text box
+      function text(story){
+        var out = dedent(S.storyLines(story, card._indent != null ? card._indent : 28).join('\n')).text;
+        Object.keys(urlKey).forEach(function(u){ out = out.split(u).join(urlKey[u]); });
+        Object.keys(uploaded).forEach(function(k){ out = out.split(k).join(uploaded[k]); });
+        return out;
+      }
+      var now = text(r.story);
+      if (now !== text(base.story)) {
+        body.value = now;
+        renderFigures();
+        changed();
+      }
+    };
     var bodyWrap = el('div', 'ce-body-wrap');
     bodyWrap.appendChild(bodyTools);
     bodyWrap.appendChild(body);
@@ -478,9 +649,7 @@
         item.appendChild(el('img', 'ce-fig-thumb', { src: shown(tagImg.getAttribute('src')) || '', alt: '' }));
         item.appendChild(SiteAlbedo.control(st, { compact: true, onChange: function(){
           if (st.altFile) {
-            var key = '__pending-image-' + (++pendingCount) + '__';
-            pendingImages[key] = { file: st.altFile, url: st.altUrl };
-            st.alt = key;
+            st.alt = addPending(st.altFile, st.altUrl);
             st.altFile = null;
           }
           setTagAttrs(n, st);
@@ -683,6 +852,46 @@
     return html.indexOf(BODY_MARK) !== -1 ? html.replace(BODY_MARK, function(){ return bodyText; }) : html;
   }
 
+  // --- Editing in place: the card opened and typed into ---
+  // The card opens with the page's own expand code, not typeset, so
+  // equations stay editable TeX; StoryEdit turns it into the editor. Closing
+  // it brings the title, subtitle, cover and text back into the card's form.
+  function open(card){
+    if (openEdit || !window.openProjectCard || !window.StoryEdit) return;
+    var live = card._live;
+    document.addEventListener('project-card:expanded', function opened(e){
+      if (!e.detail || e.detail.originalCard !== live) return;
+      document.removeEventListener('project-card:expanded', opened);
+      var clone = e.detail.clone;
+      clone.querySelectorAll('.tb-card-tools').forEach(function(n){ n.remove(); });
+      var session = StoryEdit.attach(clone, {
+        fields: [
+          { sel: '.project-title', tag: 'h3', placeholder: 'Title' },
+          { sel: '.project-subtitle', tag: 'p', placeholder: 'Subtitle (also shown on the card)', after: '.project-title' }
+        ],
+        onDirty: function(){ dirty = true; }
+      });
+      openEdit = { card: card, session: session, base: session.capture() };
+    });
+    document.addEventListener('project-card:closed', function done(e){
+      if (!e.detail || e.detail.originalCard !== live) return;
+      document.removeEventListener('project-card:closed', done);
+      if (openEdit && openEdit.card === card) {
+        syncOpen();
+        openEdit.session.done();
+        openEdit = null;
+      }
+      refreshLive(card);
+    });
+    window.openProjectCard(live);
+  }
+  // the open card's changes, into its form
+  function syncOpen(){
+    if (!openEdit) return;
+    openEdit.card._apply(openEdit.session.capture(), openEdit.base);
+    openEdit.base = openEdit.session.capture();
+  }
+
   // --- Preview: the real expanded card ---
   // Builds the card as it would be saved (unsaved cover and figures shown from
   // memory), places it over the editor card's cover and opens it with the
@@ -753,17 +962,20 @@
   }
 
   function save(){
-    var cards = Array.prototype.slice.call(list.querySelectorAll('.ce-card'));
+    // a card still open is saved as it is now
+    syncOpen();
+    var cards = forms();
     var untitled = cards.filter(function(c){ return !c.querySelector('.ce-title').value.trim(); });
     if (untitled.length) {
-      untitled[0].scrollIntoView({ block: 'center' });
-      untitled[0].querySelector('.ce-title').focus();
+      if (!openEdit) untitled[0]._live.scrollIntoView({ block: 'center' });
       return Promise.reject(new Error('every card needs a title'));
     }
     var iconless = Array.prototype.filter.call(list.querySelectorAll('.ce-icon-row'), function(r){
       return r.querySelector('.ce-icon-href').value.trim() && !r.dataset.src && !r._file;
     })[0];
     if (iconless) {
+      var owner = iconless.closest('.ce-card');
+      details(owner);
       iconless.scrollIntoView({ block: 'center' });
       return Promise.reject(new Error('a button with a link needs an icon (click its empty circle)'));
     }
@@ -782,6 +994,7 @@
           var b = c.querySelector('.ce-body');
           if (b.value.indexOf(k) !== -1) { b.value = b.value.split(k).join(src); c._changed = true; }
         });
+        uploaded[k] = src;
         delete pendingImages[k];
       }); };
     }));

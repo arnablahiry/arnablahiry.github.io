@@ -738,6 +738,9 @@ body.page-software .project-subtitle {
   max-height: 480px;
 }
 
+/* screenshots stacked one under the other (e.g. the Albedo web app) */
+.page-software .project-full > .image-wrapper + .image-wrapper { margin-top: 16px; }
+
 /* Snitch launcher button positioned at the bottom-right of the image wrapper */
 .image-wrapper { position: relative; display: block; }
 .image-wrapper .snitch-launch {
